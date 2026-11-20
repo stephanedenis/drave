@@ -17282,3 +17282,538 @@ porte-melange 1 105
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"| dernière passe | **19/11 13 h 12 → 15 h 16** : **91** portes, **89/2** ; seules `indice` (859 s) et `melange` (106 s) **str … [1955 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   8f935886..8c581925  s/v7 -> s/v7
+ven 20 nov 2026 08:01:28 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | wc -l; git status -sb | head -1; python3 tools/taille_documents.py >/dev/null 2>&1; echo \"budget=$?\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; git l … [135 caractères tronqués]`
+
+  ```
+0
+## s/v7...origin/s/v7
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+11
+ven 20 nov 2026 08:01:35 EST
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-50e1ce95-48ff-47ec-bd31-15edebc32d53","revision":1,"objective":"De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes d'A2.6 (le scan des clusters, les bandes de `materiel.rs`) et les tester ; (3) fiche, état, commit et push pour chaque résultat ; bilan à 8 h.","phase":"active","roundsStarted":18,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-50e1ce95-48ff-47ec-bd31-15edebc32d53", "revision": 1}`
+
+> **Objectif** (complete) : De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes d'A2.6 (le scan des clusters, les bandes de `materiel.rs`) et les tester ; (3) fiche, état, commit et push pour chaque résultat ; bilan à 8 h.
+
+
+  ```
+{"goal":{"id":"goal-50e1ce95-48ff-47ec-bd31-15edebc32d53","revision":2,"objective":"De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes d'A2.6 (le scan des clusters, les bandes de `materiel.rs`) et les tester ; (3) fiche, état, commit et push pour chaque résultat ; bilan à 8 h.","phase":"complete","roundsStarted":18,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes d'A2.6 (le scan des clusters, les bandes de `materiel.rs`) et les tester ; (3) fiche, état, commit et push pour chaque résultat ; bilan à 8 h."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Bilan de 8 h — la nuit `wiki_big` a tranché la sélection du contenu, A2.6 est close, la passe de clôture est verte
+
+# La nuit du 19-20/11 — ce qui est fait et vérifié
+
+**11 commits poussés (HEAD `8c581925`), arbre propre, revue verte, passe de clôture à 91 portes, 89 vertes et 2 rouges (les deux structurelles).**
+
+## 1. La sélection du contenu — ✅ tranchée
+
+Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et la **PPL sur wikitext2 après chaque tranche** :
+
+| pas | `wiki_big` seul (831 Mo) | long-forme (4,79 Go) |
+|---:|---|---|
+| 10 000 | 8,86 / 3,53 | 9,94 / 3,67 |
+| 50 000 | 6,93 / 2,99 | 7,80 / 3,17 |
+| 90 000 | **6,81** / 2,92 | 7,70 / 3,15 |
+| 110 000 | **6,8349** / 2,9102 | **7,7479** / 3,1525 |
+
+*(wikitext2 / PPL du val de v1)*
+
+**`wiki_big` seul fait 6,8349 à 110 000 pas** — au niveau du mélange v1 (6,867) et devant le plein texte v2 (7,093), avec **1 Go de données et 1/7 de celle de v2**. Le **long-forme** (les lignes ≥ 200 o du plein texte, extrait et épinglé `a50f6045…`) finit à 7,7479 : **filtrer les lignes longues ne remplace pas la préparation de `wiki_big`**.
+
+**Le contrôle qui compte** : le rejeu de `wiki_big` donne 7,3531 à 30 000 pas contre 7,2237 l'après-midi, alors que le **pas 1 est bit-identique** (5,6191 / 185,706) — la **variance du run-à-run est de ±1,8 %** et vient de l'entraînement (non-déterminisme GPU), pas de l'initialisation. L'écart `wiki_big`/v1 (−0,5 %) est donc **dans le bruit** : match nul avec v1, victoire sur v2. La fiche de sélection de l'après-midi a été **corrigée** en conséquence. Fiche : `reports/rapport-nuit-wikibig.md`.
+
+## 2. A2.6 — ✅ close (deux pièces)
+
+- **Les bandes** : `materiel::cout_par_jeton` lit désormais une seule table (celle de `placement.rs`) et la bande **mesurée** des experts (7,0 Go/s), au lieu de ses trois constantes (dont un NVMe à 31 Go/s qui n'est pas le chemin par défaut) ; le coût estimé du 30B passe de ~160 à **231 ms**.
+- **Les clusters** : un scan vide ne tranche plus (le message le dit, les drapeaux restent maîtres) ; **lire** réellement les clusters demanderait d'ouvrir leurs GGUF au démarrage — c'est dit au backlog, pas fait.
+- **146 tests**, `porte-a2.6-experts`, `porte-ressources`, `porte-flux`, `porte-pont`, `porte-coupe`, `porte-echange-experts` vertes.
+
+## 3. La passe de clôture — ✅
+
+**91 portes, 89 vertes, 2 rouges** (`indice` 836 s, `melange` 105 s, les deux structurelles connues), machine au repos. Record dans `references-non-regression.md` et dans l'état.
+
+## Ce que vous devriez regarder en premier
+
+1. **`reports/rapport-nuit-wikibig.md`** — le résultat de la nuit : un corpus propre de 831 Mo vaut le mélange de 1 Go et bat le plein texte de 6,9 Go.
+2. **`reports/rapport-selection-contenu.md`** — la version corrigée : les écarts fins sont dans le bruit (±1,8 %), seuls les résumés et les lignes filtrées décrochent.
+3. **La prochaine expérience désignée** : le corpus du palier 1 bâti sur `wiki_big` (et des sources longues préparées comme lui), à époques égales, avec **2-3 graines par corpus** pour sortir du bruit du run-à-run — c'est le chemin mesuré, et le seul qui reste pour le palier 1.
+
+Tout est committé et poussé ; le dépôt est vert et reprenable. Rien n'est en attente de vous.
+
+
+## Tour 83
+
+### 👤 Utilisateur
+
+"en-cours.md" montre 3 sessions en pause. Peux-tu les reprendre, ou tu as des choses a terminer avant?
+
+### 🤖 Assistant
+
+⏵ Lecture des trois sessions en pause et de leurs prochaines actions
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Sessions en cours/,/## Ce qui est en cours/p' docs/pilotage/en-cours.md | head -50", "description": "Read the paused sessions in the state"}`
+
+  ```
+## Sessions en cours
+
+> Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+> [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+> `plan.md` (`python3 tools/sessions.py --status`). **Une session écrit l'état à la fois** :
+> le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
+>
+> **Règle 11** : serveurs locaux arrêtés ; professeurs par l'**API DeepSeek** ; GPU à Drave.
+
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures *(en pause)*
+
+- **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
+- **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
+- **Plan** : validation.
+- **Ambition** : rôles.
+- **Stratégie** : contrôles.
+- **Objectif final** : gold 60.
+- **Fait** : types **61/61**, rôles **144/144** ; page **`/paragraphes`**, **19/19 verdicts `389b99f`** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [limites](../../reports/rapport-s-limites-v6.md), [fait divers](../../reports/rapport-s-fait-divers.md).
+- **Ce 
+… [2328 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --status 2>&1 | head -14; echo \"=== plan S ===\"; grep -n \"Prochaine action\\|État\\|Heartbeat\" journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md | head -6", "description": "Check the session  … [23 caractères tronqués]`
+
+  ```
+sessions · plans de mandat
+    0733c5bb-f90b-4f58 · terminé  · 21477 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0, chargement du corpus) et `rope2048` (gpu1, en cours) ; puis mesurer et committer ; ensuite la **porte propre (0,29)**.
+    0b0a6a0d-05f5-4308 · terminé  · 27344 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 29418 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+      → clôture reprise par la session `22e518ee` — commit, archives, état.
+    1e7ef596-93e6-45f1 · en pause · 21984 min · docs/pilotage/` (en-cours, roadmap, chantiers, plan-travail, références), journal/` (hors `sessions/<id>/`), reports/README.md, reports/INDEX.md, tools/sessions.py, tools/ressources.py, tools/index_reports.py, tools/surveille_sessions.py, l'index git.
+      → **suivi docs** (N3 intégré, état au 04/11), puis la **passe** après les runs.
+    22e518ee-81b8-4081 · terminé  · 28589 min · a
+… [976 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"a001\" --include=*.md --include=*.json --include=*.py reports/ docs/ tools/ 2>/dev/null | head -5; ls reports/ | grep -i \"paragraphe\" | head -5", "description": "Find the /paragraphes validation cases"}`
+
+  ```
+reports/corpus-wiki-zh.json:47: "sha256_train": "17fd9a7dbdd9307176ed5bc10a90d0297a91df9aaaa0ac5a0012dee6706e855b",
+reports/rapport-s-traductions.md:25:| a001 | Elle | She | Alice | Alice | ✓ |
+reports/rapport-s-traductions.md:26:| a001 | se (se donner) | herself | Alice | Alice (candidat) | ✓ |
+reports/rapport-s-traductions.md:27:| a001 | elle (bien qu'elle) | she | Alice | Alice | ✓ |
+reports/rapport-s-traductions.md:28:| a001 | **les** (les suivît) | **it** | **les conseils** | **absent (DET)** | **trouvé** |
+rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old,  … [697 caractères tronqués]`
+
+  ```
+ok
+  ✅ plans cohérents
+# S — La traduction contrôle le sens : 14/14 référents anaphoriques confirmés par l'anglais, le « les » → « it » retrouvé
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-03 · **Verdict** : les trois paragraphes français
+> sont des traductions d'*Alice's Adventures in Wonderland* (1865) ; l'original anglais, qui dit
+> explicitement *she / her / herself / it*, tranche les référents que le français laisse flotter.
+> Les **14 formes anaphoriques** des trois paragraphes sont confirmées — les **2 que l'outil
+> manquait** sont retrouvées (« les » → *it* → les conseils ; « l' » → *it* → la boîte) — et la
+> traduction **corrige le contexte** de a003, où Alice n'était pas nommée. La page
+> `/paragraphes` affiche désormais la source anglaise à côté du français.
+
+## Le dispositif
+
+Le corpus français (`data/corpus_fr_litterature.txt`) contient la traduction d'Alice ; la source
+anglaise est l'original de Lewis Carroll, dans l'édition du Project Gutenberg (#11,
+[`gutenberg.org/files/11/11-0.txt`](https://www.gutenberg.org/files/11/11-0.txt)). Les trois
+paragraphes de `donnees/paragraphes.json` portent maintenant leur `source_en` (la phrase cible en
+anglais) et leur `contex
+… [1449 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls donnees/paragraphes.json 2>/dev/null && python3 -c \"\nimport json\nd = json.load(open('donnees/paragraphes.json'))\nprint(type(d), len(d) if hasattr(d,'__len__') else '')\nif isinstance(d, dict):\n    for k in list(d)[:12]: print … [215 caractères tronqués]`
+
+  ```
+(no output)
+[exit code: 2]
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Original: "aurait-on un intérêt pour le FPGA maintenant?" then revealed 4 Stratix V cards in a mining rig + QSFP+ 40Gbps loop → asks if FPGA has value.
+- "considérant que certains modules ont des équivalents heuristiques ou logique floue, peut-on ajouter les différentes options d'implémentation pour chaque module et avoir un routage flexible entre les modules".
+- "commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucoup de subagents au besoin".
+- "la machine est dédiée à ton travail. N'hésites pas à travailler sur plusieurs chantiers simultanément".
+- "continue en mode IA léger pendant la période plein tarif tout en exploitant au maximul les ressources locales. Sois autonome jusqu'à 8h demain".
+- "continue avec les prochaines actions" (after the 8h night goal completed).
+- **CURRENT**: "continue avec les prochaines actions jusqu'à 17h" — continue the designated next actions until 17:00 on 19/11.
+
+## Key Technical Concepts
+- Drave: event-bus AI architecture; activations as pushed weighted lists; "structure beats size"; blocks substitutable via contract + trace + cost.
+- DRVM v0 format: 92-byte header, canonical JSON manifest, 64-byte-aligned tensors; closed key sets; both readers (Rust `drvm.rs`, Python `tools/drvm.py`) refuse what they don't execute.
+- Profiles: `defaut`, `bloque`, `flou`, `court`; `graph.routes` `{id, bloc, si:{kind:"position",seuil}, alors, sinon?}`.
+- Byte-level native LM: `NativeConfig(d_model, expert_hidden)`, `--tranches`, 256-vocab, AMP with GradScaler, lr 1e-4 for 142M (3e-4 diverges), `--val` ÉPINGLÉ + `--epingle` provenance.
+- Corpus pinning: sha256 + manifest hash via `tools/epingle_corpus.py`; `--verifie` recompute.
+- Tariff (rule 12): DeepSeek discounted UTC 16:30–00:30 = EST 11:30–19:30 (API); full tariff EST 19:30–11:30 (local GPU/CPU).
+- Gates: `tools/toutes-les-portes.sh`, registry read via `awk '$2 != 0'`, **91 gates**, tolerated reds `indice` + `melange` (structural).
+- Hook `verifie_etat_a_jour.py --index`: any reports/roadmap/backlog change requires an `en-cours` change in same commit.
+- Budget: T0 = AGENTS + en-cours + one task doc ≤ 4 000 words (`tools/taille_documents.py`); en-cours ≤ 2 000; `porte-tableaux.sh` requires en-cours "Mis à jour : YYYY-MM-DD" = last commit date.
+
+## Files and Code
+- `tools/entrainer_native.py`: loader now `torch.frombuffer(bytearray(b), dtype=torch.uint8)`; `lot()` adds `.long()`; `--val`, `--epingle`; logs `échelle {scaler.get_scale()}`. Control: PPL r4 = 3.0628 = recorded value (bit-identical).
+- `tools/epingle_corpus.py`: pin/`--verifie`/`--autotest`; `manifeste_sha256` excludes mtime.
+- `tools/ppl_ckpt.py` (NEW): PPL of any checkpoint on any val, arch read from checkpoint, `n_lots = len(val)//(lot*seq)` (whole val).
+- `tools/courbe_chaine.py` (NEW): table/JSON of chain tranches (PPL, precision, greedy/top40/top20).
+- `tools/nettoyer_corpus.py` (NEW): streaming wikitext cleaner (liens, modèles, tableaux, refs, balises, italiques, titres isolés, blanks); autotest 7/7.
+- `tools/reflow_corpus.py` (NEW): joins paragraph lines; 349.6 B/line; autotest ok.
+- `tools/collecter_wikisource.py` (NEW, draft): Wikisource collector; does NOT resolve transclusions; committed as starting point only.
+- `tools/porte-a2.6-experts.sh` (NEW, 91st gate): runs `cargo test --release placement`, greps 5 test names `placement::tests::<name>`.
+- `drave-core/src/placement.rs`: `BANDE_EXPERTS_8=6.99e9`, `BANDE_EXPERTS_4=4.93e9`, `LECTEURS_SATURATION=8`, `bande_experts()`, `cout_experts()`, `choisir_experts() -> Result<Support,String>` (named refusal incl. NVMe 313.4 ms), `trace_experts()`, `TETE_Q8_0/TETE_Q6_K`, `precision_tete`, `choisir_tete`, `octets_experts(total,n,n_used)`. 15 placement tests.
+- `drave-core/src/model.rs`: `octets_experts_par_jeton(g,&cfg,n_layer)` (sums `blk.N.ffn_{gate,up,down}_exps.weight` via `Gguf::octets_tensor`); **decision branch** at experts VRAM cache site un
+… [4729 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Original: "aurait-on un intérêt pour le FPGA maintenant?" then revealed 4 Stratix V cards in a mining rig + QSFP+ 40Gbps loop → asks if FPGA has value.
+- "considérant que certains modules ont des équivalents heuristiques ou logique floue, peut-on ajouter les différentes options d'implémentation pour chaque module et avoir un routage flexible entre les modules".
+- "commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucoup de subagents au besoin".
+- "la machine est dédiée à ton travail. N'hésites pas à travailler sur plusieurs chantiers simultanément".
+- "continue en mode IA léger pendant la période plein tarif tout en exploitant au maximul les ressources locales. Sois autonome jusqu'à 8h demain".
+- "continue avec les prochaines actions" (after the 8h night goal completed).
+- **CURRENT**: "continue avec les prochaines actions jusqu'à 17h" — continue the designated next actions until 17:00 on 19/11.
+
+## Key Technical Concepts
+- Drave: event-bus AI architecture; activations as pushed weighted lists; "structure beats size"; blocks substitutable via contract + trace + cost.
+- DRVM v0 format: 92-byte header, canonical JSON manifest, 64-byte-aligned tensors; closed key sets; both readers (Rust `drvm.rs`, Python `tools/drvm.py`) refuse what they don't execute.
+- Profiles: `defaut`, `bloque`, `flou`, `court`; `graph.routes` `{id, bloc, si:{kind:"position",seuil}, alors, sinon?}`.
+- Byte-level native LM: `NativeConfig(d_model, expert_hidden)`, `--tranches`, 256-vocab, AMP with GradScaler, lr 1e-4 for 142M (3e-4 diverges), `--val` ÉPINGLÉ + `--epingle` provenance.
+- Corpus pinning: sha256 + manifest hash via `tools/epingle_corpus.py`; `--verifie` recompute.
+- Tariff (rule 12): DeepSeek discounted UTC 16:30–00:30 = EST 11:30–19:30 (API); full tariff EST 19:30–11:30 (local GPU/CPU).
+- Gates: `tools/toutes-les-portes.sh`, registry read via `awk '$2 != 0'`, **91 gates**, tolerated reds `indice` + `melange` (structural).
+- Hook `verifie_etat_a_jour.py --index`: any reports/roadmap/backlog change requires an `en-cours` change in same commit.
+- Budget: T0 = AGENTS + en-cours + one task doc ≤ 4 000 words (`tools/taille_documents.py`); en-cours ≤ 2 000; `porte-tableaux.sh` requires en-cours "Mis à jour : YYYY-MM-DD" = last commit date.
+
+## Files and Code
+- `tools/entrainer_native.py`: loader now `torch.frombuffer(bytearray(b), dtype=torch.uint8)`; `lot()` adds `.long()`; `--val`, `--epingle`; logs `échelle {scaler.get_scale()}`. Control: PPL r4 = 3.0628 = recorded value (bit-identical).
+- `tools/epingle_corpus.py`: pin/`--verifie`/`--autotest`; `manifeste_sha256` excludes mtime.
+- `tools/ppl_ckpt.py` (NEW): PPL of any checkpoint on any val, arch read from checkpoint, `n_lots = len(val)//(lot*seq)` (whole val).
+- `tools/courbe_chaine.py` (NEW): table/JSON of chain tranches (PPL, precision, greedy/top40/top20).
+- `tools/nettoyer_corpus.py` (NEW): streaming wikitext cleaner (liens, modèles, tableaux, refs, balises, italiques, titres isolés, blanks); autotest 7/7.
+- `tools/reflow_corpus.py` (NEW): joins paragraph lines; 349.6 B/line; autotest ok.
+- `tools/collecter_wikisource.py` (NEW, draft): Wikisource collector; does NOT resolve transclusions; committed as starting point only.
+- `tools/porte-a2.6-experts.sh` (NEW, 91st gate): runs `cargo test --release placement`, greps 5 test names `placement::tests::<name>`.
+- `drave-core/src/placement.rs`: `BANDE_EXPERTS_8=6.99e9`, `BANDE_EXPERTS_4=4.93e9`, `LECTEURS_SATURATION=8`, `bande_experts()`, `cout_experts()`, `choisir_experts() -> Result<Support,String>` (named refusal incl. NVMe 313.4 ms), `trace_experts()`, `TETE_Q8_0/TETE_Q6_K`, `precision_tete`, `choisir_tete`, `octets_experts(total,n,n_used)`. 15 placement tests.
+- `drave-core/src/model.rs`: `octets_experts_par_jeton(g,&cfg,n_layer)` (sums `blk.N.ffn_{gate,up,down}_exps.weight` via `Gguf::octets_tensor`); **decision branch** at experts VRAM cache site under `DRAVE_PERTE_MAX`: `choisir_experts(...)`, on `Err` → no cache + `[gpu] cache d'experts REFUSÉ par la règle de placement`, on Ok → single trace + cache. 146 tests.
+- `reports/`: `rapport-150m-lr.md`, `rapport-150m-nuit.md`, `rapport-corpus-v2.md`, `rapport-val-tiers.md`, `rapport-nettoyage-corpus.md`, `rapport-diversite-sources.md`, `rapport-a2.6-branchement.md`, `corpus-epingle-v2.json` (`9861fb39…`), `corpus-epingle-clean.json` (`2f79f863…`), `corpus-epingle-reflow.json` (`f9214450…`), `ppl-wikitext2.json`, `courbe-150m.json`, `sonde-lr-150m.json`, 44+ bench JSONs.
+- `data/wiki_mix_v2/train.txt`: 6 900 585 097 o, sha `e3112a84…`; `work/clean/train.txt` 6 894 225 744 o sha `860aeb6a…`; `work/reflow/train.txt` 6 893 866 028 o sha `9a5ca658…`.
+- `work/n4/chaine.sh <gpu> <corpus> <prefix> <n> <lr>`: chained 10k-step runs + bench after each.
+
+## Errors and Fixes
+- `torch.tensor(list(b))` OOM for 6.9 GB → `torch.frombuffer` uint8.
+- lr 3e-4 on 142M: loss plateau 2.5 + val PPL rising 12.07→13.12 → killed chains, probes showed lr 1e-4 breaks through at ~1 550 steps (11.56→7.60); relaunched 17:24.
+- `pkill -f "pattern"` killed own bash command (self-match) → avoid patterns present in the command line.
+- `tests_vars::les_vars_lues_sont_completes` failed from a `DRAVE_*` name in a doc comment → reworded.
+- `cargo test` placement gate grep used `tests::` not `placement::tests::` → fixed.
+- `--autotest` required `--entree/--sortie` → made optional.
+- `sizeof` of T0 exceeded repeatedly (4001-4010) → trims; current 3 997/4 000.
+- `porte-tableaux` red: en-cours "Mis à jour : 2026-11-18" vs last commit 19/11 → header updated to "2026-11-19, 06 h 50 HNE".
+- Commit message said "COMPTEURS À 963 JSON" while disk had 959 — noted, not amended (pushed).
+
+## Pending Jobs
+- **Until 17:00 on 19/11** (goal `goal-a47b8dea-dba9-4164-8b43-322146de3247`, active): (1) decompose content selection — 30k-step runs on `data/wiki_big/propre/train.txt` (prefix `wb`, GPU 0) and `data/wiki_fr/propre/train.txt` (prefix `wf`, GPU 1), compare on wikitext2; (2) finish A2.6 decision (DONE, needs fiche/commit); (3) fiche + état + commit + push each result.
+- A2.6 remaining after decision: clusters case (scan yields 0 when experts are in separate files), consolidation of 3 band tables in `materiel.rs`.
+- Diversity harvester (dump Wikisource + transclusion resolver) — blocked today (Gutenberg 503, Wikisource portal pages 1 241 o raw for 40 pages).
+
+## Current Work
+- A2.6 **decision** branch implemented in `model.rs` (cache experts sized/refused by `choisir_experts` under `DRAVE_PERTE_MAX`), duplicate trace removed, `cargo test` **146 passed**, 5 gates green (`a2.6-experts`, `flux`, `pont`, `coupe`, `echange-experts`), live test on 30B printed exactly one trace `experts : 1.10 Go/jeton · 8 lecteurs · 6.99 Go/s · 156.9 ms/jeton → VRAM` + `[gpu] cache d'experts : budget 2.0 Go`.
+- Runs `wb`/`wf` launched 11:56, 3 tranches each, ETA ~15:30.
+- Reference at 30k on wikitext2: v1 corpus (`v13`) **7.3987**; v2 raw (`v23`) **7.4277**; clean (`cl3`) **7.6189**; reflow (`rf3`) **7.7476**. Verdict: form does not explain v1>v2; content selection remains.
+- Last pushed commit: `e4cd1953` (état T0 repassé). Uncommitted: `drave-core/src/model.rs` (decision branch).
+
+## Next Step
+- Commit the A2.6 decision branch: update `reports/rapport-a2.6-branchement.md` + backlog (step 6 ✅) + en-cours A2.6 bullet, run `revue_documentation.py`/`taille_documents.py` (keep T0 ≤ 4 000), `git add` explicit, commit + `git push origin s/v7`.
+
+## Critical Context
+- Tariff: full until 11:30 EST, then **remised 11:30–19:30 EST** (current 12:06 = remised window; API lots allowed if needed, but user asked "IA léger" earlier and no paid lot since the tagger).
+- Rule 10: subagents must not touch `en-cours`/`roadmap`/`AGENTS`; explicit `git add`.
+- Rule 11: GPUs reserved for Drave.
+- Results need: number, device, negative control, what could falsify, commit, fiche in `reports/`, journal, état line, roadmap line.
+- Counters (en-cours): portes **91**, fiches **812**, JSON **965**; last big check green: revue, verifie_en_cours, verifie_journal, budget exit 0, tree synced.
+- Night's final numbers: 150M v1 (1 GB) PPL **2.8440** vs v2 (6.9 GB) **3.0381** on v1-val; wikitext2 at 110k: **6.8674** vs **7.0930**; 73M **7.3508**; tokenizer/decoding: top-40/T=0.5 beats greedy (0.907 vs 0.902, répetition 1.7 vs 5.7).
+- Pass 19/11 03:44–05:47: **91 portes, 89/2**, reds `indice` 870 s, `melange` 108 s; `roue-1119-0345/registre.txt`.
+- Machine: 2× Quadro RTX 5000 (16 GB), 40 threads, 125 GB RAM; 1.9 TB free disk.
+- The tagger API lot (18/11 11:30) result: POS **0,9572** vs heuristic 0,8625, 608 calls, 87 550 tokens, 0,01869 $ remisé, 0 refus.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+12. **La tarification de l'API a deux fenêtres** : **remisé** pendant **UTC 16:30 → 00:30**
+    (la Chine 00:30 → 08:30), soit au Canada **11:30 → 19:30** ; **plein tarif** le reste.
+    **L'API en remisée** (le tagger, la distillation), **le local en pleine** (l'entraînement, les
+    tests, les docs) ; **deux files** par chantier. → [`plans-tarif.md`](docs/pilotage/plans-tarif.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma** | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `en-cours`, `roadmap`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche** : le fichier de tâche suffit. Charger « pour être
+> complet » coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `en-cours` + **un** document de tâche
+> ([`docs/methode/contexte.md`](docs/methode/contexte.md) ; vérifier `tools/taille_documents.py`).
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `tools/verifie_en_cours.py` ; journal : `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"État\\|Heartbeat\\|Prochaine action\" journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md | head -4; grep -n \"État\\|Heartbeat\\|Prochaine action\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md |  … [230 caractères tronqués]`
+
+  ```
+15:- **Heartbeat** : 2026-11-05 10:22 HAE
+34:- **Prochaine action** : **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0, chargement du
+36:- **État** : terminé
+18:- **Heartbeat** : 2026-11-18 09:15 EST
+19:- **Prochaine action** : le diagnostic du natif est livré ; le corpus est **épinglé** (18/11, `reports/rapport-corpus-epingle.md`) et le 100 M est mesuré ; la suite est l'entraînement long sur le corpus épinglé.
+23:- **État** : en pause
+17:- **Prochaine action** : **reprise** : poursuivre la validation sur `/paragraphes` (a001–a003
+50:- **Prochaine action (après le cycle)** : la **validation humaine** de la banque (le mode `banque`
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\n# N2 : son plan est « terminé » — le bloc sort de l'état, la porte propre passe à la ligne N\ndebut = s.index(\"### Session `0733c5bb … [844 caractères tronqués]`
+
+  ```
+✅ état court, structuré, multi-session et reprenable
+  ✅ plans cohérents
+budget=0
+4
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+ValueError: substring not found
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"### Session\" docs/pilotage/en-cours.md", "description": "List the session headings in the state"}`
+
+  ```
+7:### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11 *(en pause)*
+25:### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures *(actif)*
+40:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(en pause)*
+52:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(en pause)*
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md')\nlignes = p.read_text().splitlines(keepends=True)\ndef retire(id_session):\n    debut = next(i for i, l in enumerate(lignes) if l.startswith(\"### Sessio … [707 caractères tronqués]`
+
+  ```
+blocs restants : 2
+     · « Ce qui reste » ne nomme aucune prochaine action (A/B/C/N/R)
+  ✅ plans cohérents
+budget=0
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures *(actif)*
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(en pause)*
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"prochaine action\\|A/B/C/N/R\\|Ce qui reste\" tools/verifie_en_cours.py | head -5", "description": "Read the state verifier's next-action rule"}`
+
+  ```
+15:  7. une **prochaine action nommée** dans « Ce qui reste » (A/B/C/N/R) ;
+31:    "Ce qui reste",
+136:    reste = corps_section(texte, "Ce qui reste")
+138:        alertes.append("« Ce qui reste » ne nomme aucune prochaine action (A/B/C/N/R)")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '130,140p' tools/verifie_en_cours.py", "description": "Read the exact next-action regex"}`
+
+  ```
+if len(questions) > 5:
+        alertes.append(f"{len(questions)} questions ouvertes > 5")
+    for q in questions:
+        if "→" not in q:
+            alertes.append(f"question sans ce qui la débloque (`→`) : {q[:60]}")
+
+    reste = corps_section(texte, "Ce qui reste")
+    if not re.search(r"\b([ABCNR]\d|C[1-7])", reste):
+        alertes.append("« Ce qui reste » ne nomme aucune prochaine action (A/B/C/N/R)")
+
+    if re.search(r"^- \*\*A7\.\d", texte, re.M):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Ce qui reste/,/## Les questions/p' docs/pilotage/en-cours.md", "description": "Read the current remaining-work section"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout -- docs/pilotage/en-cours.md && grep -c \"### Session\" docs/pilotage/en-cours.md; sed -n '/## Ce qui reste/,/## Les questions/p' docs/pilotage/en-cours.md | head -3", "description": "Restore the state from HEAD"}`
+
+  ```
+4
+## Ce qui reste
+
+**N** : le corpus du palier 1 sur `wiki_big` + textes longs, à époques égales ; la porte propre (0,29) ; N4.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md')\nlignes = p.read_text().splitlines(keepends=True)\ndef retire(id_session):\n    debut = next(i for i, l in enumerate(lignes) if l.startswith(\"### Sessio … [1286 caractères tronqués]`
+
+  ```
+blocs : 2
+  ✅ état court, structuré, multi-session et reprenable
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures *(actif)*
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(en pause)*
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nSESSIONS — S REPRISE (LE HUB ET N2 SORTENT DE L'ÉTAT), PENSÉE ATTEN … [803 caractères tronqués]`

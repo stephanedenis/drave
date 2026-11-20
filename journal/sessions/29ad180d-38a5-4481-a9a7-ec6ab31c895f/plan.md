@@ -13,10 +13,10 @@
 - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
 - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
   `reports/s-banque-*` ; `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/`.
-- **Heartbeat** : 2026-11-04 16:30 EST
+- **Heartbeat** : 2026-11-20 08:10 EST
 - **Prochaine action** : **reprise** : poursuivre la validation sur `/paragraphes` (a001–a003
   faits, 8 restants), puis la rétro-traduction API et les 71 langues.
-- **État** : en pause
+- **État** : actif
 - **Clôture** : le 04/11 16 h 30 ; le cycle v7 (fait divers, 61/61, 144/144, 56 tests) est
   poussé ; la fiche et l'état sont sur la branche `s/v7`, à fusionner ; la reprise est la
   validation des paragraphes.

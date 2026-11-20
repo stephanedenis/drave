@@ -4,15 +4,6 @@
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
-### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11 *(en pause)*
-
-- **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
-- **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
-- **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs.
-- **Prochaine action** : **suivi docs**, puis la **passe**.
-- **État** : **en pause** depuis le 05/11 ; la clôture J14.1 est portée par `e181ce02`.
-- **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
-
 ## Sessions en cours
 
 > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
@@ -22,7 +13,7 @@
 >
 > **Règle 11** : serveurs locaux arrêtés ; professeurs par l'**API DeepSeek** ; GPU à Drave.
 
-### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures *(en pause)*
+### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures *(actif)*
 
 - **Id** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — [`plan.md`](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md).
 - **Rôle** : **S — les structures** : le banc, l'analyseur rôles/subordonnées et l'export.
@@ -45,23 +36,9 @@
 - **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**.
 - **Ce qu'elle fait** : **W5** v3 (gold S **144/144**) ; **U1** 4,0 → 0,82 s ; **U2** roue 1 727 201 o ; **U3** profils 20/20 ; **V1** 0,8625/0,8891 ; **V2** **27/27** ; **V3** la clôture — **86/82/4** → **84/2**, tag `exploitable-2026-11-16` ([bilan 2](../../reports/rapport-bilan-exploitable-2.md)).
 - **Ce que font les autres** : N2.
-- **Prochaine action** : **J4** ; T132/T133 ; la décision `auto`.
+- **Prochaine action** : **J4** (fenêtre remisée 11 h 30-19 h 30) ; T132/T133 ; la décision `auto`. L'entraînement long qu'elle attendait est **fait** (150 M, 19-20/11).
 - **Bloquants** : 7B locales interdites (règle 11) ; **gold de pensée**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
-
-### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(en pause)*
-
-- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
-- **Rôle** : **N2** — la production et la capacité.
-- **Plan** : fenêtre.
-- **Ambition** : la longueur et la capacité.
-- **Stratégie** : budgets contrôlés, mêmes bancs.
-- **Objectif final** : la production qui tient.
-- **Ce qu'elle fait** : erratum 04/11 — la distillation ne gagne rien à parité stricte ; `kd2`/`rope2048` arrêtés ; **paire propre 3,1500 → 3,1119**
-- **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Bloquants** : aucun.
-- **Prochaine action** : la **porte propre (0,29)** ; le **2 048** est fini.
-- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
 ## Ce qui est en cours
 

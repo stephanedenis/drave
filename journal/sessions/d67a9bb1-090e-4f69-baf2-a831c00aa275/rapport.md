@@ -7,15 +7,15 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 70.1 h |
-| Tours | 82 |
-| Messages | 1215 |
-| Appels d'outils | 1045 |
+| Durée | 70.5 h |
+| Tours | 83 |
+| Messages | 1240 |
+| Appels d'outils | 1063 |
 | Fichiers touchés | 44 |
-| Commandes | 900 |
+| Commandes | 916 |
 | Sous-agents | 7 |
-| Commits | 82 |
-| Compactages de contexte | 1 |
+| Commits | 83 |
+| Compactages de contexte | 2 |
 
 ## Objectifs déclarés
 
@@ -52,6 +52,8 @@
 - **complete** — D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec l
 … [65 caractères tronqués]
 - **create** — De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec é
+… [217 caractères tronqués]
+- **complete** — De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec é
 … [217 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -219,6 +221,8 @@
 **Tour 81** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
 
 **Tour 82** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
+
+**Tour 83** — "en-cours.md" montre 3 sessions en pause. Peux-tu les reprendre, ou tu as des choses a terminer avant?
 
 ## 2. Déroulé, étape par étape
 
@@ -1945,7 +1949,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 
 ### Tour 82 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [968 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — Fill the long-form's final rows in the fiche
 - bash — Ten-minute pause and progress
@@ -1961,7 +1965,67 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - bash — Ten-minute pause and pass tail
 - bash — Ten-minute pause and pass end
 - bash — Read the closing pass verdict
+- … et 4 autres
+
+**Synthèse produite :**
+
+⏵ Bilan de 8 h — la nuit `wiki_big` a tranché la sélection du contenu, A2.6 est close, la passe de clôture est verte
+
+\# La nuit du 19-20/11 — ce qui est fait et vérifié
+
+**11 commits poussés (HEAD `8c581925`), arbre propre, revue verte, passe de clôture à 91 portes, 89 vertes et 2 rouges (les deux structurelles).**
+
+\## 1. La sélection du contenu — ✅ tranchée
+
+Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et la **PPL sur wikitext2 après chaque tranche** :
+
+| pas | `wiki_big` seul (831 Mo) | long-forme (4,79 Go) |
+|---:|---|---|
+| 10 000 | 8,86 / 3,53 | 9,94 / 3,67 |
+| 50 000 | 6,93 / 2,99 | 7,80 / 3,17 |
+| 90 000 | **6,81** / 2,92 | 7,70 / 3,15 |
+| 110 000 | **6,8349** / 2,9102 | **7,7479** / 3,1525 |
+
+*(wikitext2 / PPL du val de v1)*
+
+**`wiki_big` seul fait 6,8349 à 110 000 pas** — au niveau du mélange v1 (6,867) et devant le plein texte v2 (7,093), avec **1 Go de données et 1/7 de celle de v2**. Le **long-forme** (les lignes ≥ 200 o du plein texte, extrait et épinglé `a50f6045…`) finit à 7,7479 : **filtrer les lignes longues ne remplace pas la préparation de `wiki_big`**.
+
+**Le contrôle qui compte** : le rejeu de `wiki_big` donne 7,3531 à 30 000 pas contre 7,2237 l'après-midi, alors que le **pas 1 est bit-identique** (5,6191 / 185,706) — la **variance du run-à-run est de ±1,8 %** et vient de l'entraînement (non-déterminisme GPU), pas de l'initialisation. L'écart `wiki_big`/v1 (−0,5 %) est donc **dans le bruit** : match nul avec v1, victoire sur v2. La fiche de sélection de l'après-midi a été **corrigée** en conséquence. Fiche : `reports/rapport-nuit-wikibig.md`.
+
+\## 2. A2.6 — ✅ close (deux pièces)
+
+- **Les bandes** : `materiel::cout_par_jeton` lit désormais une seule table (celle de `placement.rs`) et la bande **mesurée** des experts (7,0 Go/s), au lieu de ses trois constantes (dont un NVMe à 31 Go/s qui n'est pas le chemin par défaut) ; le coût estimé du 30B passe de ~160 à **231 ms**.
+- **Les clusters** : un scan vide ne tranche plus (le message le dit, les drapeaux restent maîtres) ; **lire** réellement les clusters demanderait d'ouvrir leurs GGUF au démarrage — c'est dit au backlog, pas fait.
+- **146 tests**, `porte-a2.6-experts`, `porte-ressources`, `porte-flux`, `porte-pont`, `porte-coupe`, `porte-echange-experts` vertes.
+
+\## 3. La passe de clôture — ✅
+
+**91 portes, 89 vertes, 2 rouges** (`indice` 836 s, `melange` 105 s, les deux structurelles connues), machine au repos. Record dans `references-non-regression.md` et dans
+… [747 caractères tronqués]
+
+### Tour 83 — "en-cours.md" montre 3 sessions en pause. Peux-tu les reprendre, ou tu as des choses a terminer avant?
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Read the paused sessions in the state
+- bash — Check the session statuses and S's plan
+- bash — Find the /paragraphes validation cases
+- bash — Resume session S and read its validation fiche
+- bash — Inspect the paragraphs data for the S validation
+- bash — Check the N2 and Pensée plans and the paragraphs file
+- bash — Reconcile the session blocks in the state
+- bash — List the session headings in the state
+- bash — Remove the terminated session blocks
+- bash — Read the state verifier's next-action rule
+- bash — Read the exact next-action regex
+- bash — Read the current remaining-work section
+- bash — Restore the state from HEAD
+- bash — Redo the session reconciliation safely
 - … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Lecture des trois sessions en pause et de leurs prochaines actions
 
 ## 3. Travail accompli
 
@@ -2066,7 +2130,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 860 autres
+- … et 876 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2194,7 +2258,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 
 ## 5. Erreurs rencontrées
 
-24 sorties en erreur ou divergentes. Les premières :
+25 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -2296,4 +2360,5 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - ÉTAT — LA PAGE VIVANTE PASSE AU 20/11 (LA NUIT wiki_big)" && git push origin s/v7 2>&1 | tail -1; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-nuit-wikibig.md reports/banc-generation-nb11.json reports/banc-grammaticalite-nb11
 - PASSE DE CLÔTURE — 91 PORTES, 89 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES), MACHINE AU REPOS" && git push origin s/v7 2>&1 | tail -1; date
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md && git com
 
