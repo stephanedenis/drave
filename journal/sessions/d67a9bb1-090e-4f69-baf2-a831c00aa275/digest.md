@@ -19021,3 +19021,170 @@ fed7ad31 S — LA LIGNE DE ROADMAP DIT CE QUI EST FAIT (MIGRATION / v7 324/36
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**rétro-traduction** — s … [1505 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   171bfa34..450cbb6c  s/v7 -> s/v7
+ven 20 nov 2026 10:40:07 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g22','g32'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"", "descriptio … [70 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 10:50:16 EST
+g22 -
+g32 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/g2.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/g3.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 11:00:10 EST
+pas 4250
+pas 5100
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/g2.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/g3.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 11:10:08 EST
+pas 5650
+pas 6600
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g22','g32'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"", "descriptio … [73 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 11:20:04 EST
+g22 -
+g32 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g22','g32'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('g22 … [254 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 11:29:59 EST
+g22 -
+g32 -
+g22 wikitext2 -
+g32 wikitext2 -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/g2.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; tail -1 work/n4/g3.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; date", "description": "Check the variance runs' progress"}`
+
+  ```
+ven 20 nov 2026 11:30:04 EST
+pas 8500 · perte 1.0607
+pas 9650 · perte 1.1799
+ven 20 nov 2026 11:30:04 EST
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g22','g32'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('g22 … [254 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 11:40:03 EST
+g22 -
+g32 ppl v1 3.2909
+g22 wikitext2 -
+g32 wikitext2 8.17
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g22','g32'):\n    try:\n        d=json.load(open(f'reports/ppl-wikitext2-{f}.json')); print(f, 'wikitext2', round(d['ppl'],4))\n    except FileNotFoundError: print(f, 'wikitext2 … [209 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 11:50:03 EST
+g22 wikitext2 7.8909
+g32 wikitext2 8.17
+g22 3.2402
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,25p' reports/rapport-tagger-612.md", "description": "Read the tagger fiche's summary"}`
+
+  ```
+# R0.7 — le tagger API sur le gold 612 : POS 0,9572 contre 0,8625 (heuristique), +9,47
+
+> **Ligne de roadmap** : R0.7 (le lecteur) · **Date** : 2026-11-18 11 h 30 → 11 h 40 EST (fenêtre
+> remisée) · **Verdict** : ✅ **le tagger API gagne** — POS **0,9572** contre **0,8625** pour
+> l'heuristique (**+9,47 points**), porté par les classes **ouvertes** (**0,978** contre 0,7918,
+> **+18,6**) ; les classes fermées sont à parité (0,9353 contre 0,9373, −0,2). **0 refus.**
+>
+> **Dispositif** : [`rapport-tagger-lot-612-prep.md`](rapport-tagger-lot-612-prep.md) (la commande,
+> le gold, le coût prédit) · `analyser --jsonl --tagger` puis `evaluer --tagger --json` · gold
+> **612 phrases** (hand + reel + synthétique), 3 179 tokens · données
+> [`tagger-612-api.json`](tagger-612-api.json).
+
+## Les chiffres
+
+| | heuristique | **tagger API** | Δ |
+|---|---:|---:|---:|
+| **POS (exactitude)** | 0,8625 | **0,9572** | **+9,47** |
+| classes fermées | 0,9373 | 0,9353 | −0,20 |
+| **classes ouvertes** | 0,7918 | **0,9780** | **+18,62** |
+| attachement, exact | 0,9958 | 0,9958 | 0 |
+| refus | — | **0** | — |
+
+**Le coût réel** : 611 appels (608 réseau, 3 cache), **87 550 tokens**, **0,01869 $** remisé
+(0,03738 
+… [142 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-r0.7-decision.md <<'MD'\n# R0.7 — la décision de routage du tagger : les options, les chiffres, la recommandation\n\n> **Ligne de roadmap** : R0.7 · **Date** : 2026-11-20 · **Verdict** : **recommandation (b)** — … [2898 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 1056 JSON, le disque en a 1062
+ven 20 nov 2026 11:50:38 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"R0.7[^|]*\" docs/pilotage/roadmap.md | head -1 | cut -c1-200", "description": "Read the roadmap's R0.7 text"}`
+
+  ```
+R0.7 — bloc linguistique** (398 langues, 0,9687) ; **W2 — tagger 402/H50 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), fermé 402 −1,55** ([fiche](../../reports/rapport-tagger-h50.md)) ; **W3 — matrice du
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tagger auto\" docs/pilotage/roadmap.md | cut -c1-160", "description": "Find the tagger auto line"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**R** : la **décision de … [1583 caractères tronqués]`
+
+  ```
+budget=0
+     · compteurs : en-cours.md dit 1056 JSON, le disque en a 1062
+ven 20 nov 2026 11:51:08 EST
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: **R** : la **décision de routage** du tagger (+9,47 mesuré) 
+  ❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/rapport-r0.7-decision.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"décision de routage\" docs/pilotage/en-cours.md | cut -c1-150; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Read the current remaining-work lines"}`
+
+  ```
+87:décision de routage du tagger (+9,47 mesuré) ; J4. **S** : migrer `/` vers la v7 (41 à re-juger).
+64:| fichiers / JSON de résultats | **817** / **1056** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '84,90p' docs/pilotage/en-cours.md", "description": "Read the remaining-work section"}`
+
+  ```
+**N** : le corpus du palier 1 (résumés, **3,69 Go**, épinglé) — le run à époques égales ; la porte propre (0,29) ; N4.
+**A** : les clusters et les bandes d'A2.6 ; A3.4 (Colab), A5.4 (FPGA : P2 + RTL), A6.2. **R** : la
+décision de routage du tagger (+9,47 mesuré) ; J4. **S** : migrer `/` vers la v7 (41 à re-juger).
+**B** : B13 (gold neuronal) ; B10.3. **Panini** : 26 signatures V14, calibration 42/44. **L** : la
+pragmatique, r353. **D** : la diversité — bloquée (Gutenberg 503, Wikisource).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"décision de routage du t … [1481 caractères tronqués]`
