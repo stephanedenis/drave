@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 72.1 h |
 | Tours | 84 |
-| Messages | 1305 |
-| Appels d'outils | 1128 |
+| Messages | 1310 |
+| Appels d'outils | 1133 |
 | Fichiers touchés | 44 |
-| Commandes | 979 |
+| Commandes | 984 |
 | Sous-agents | 7 |
-| Commits | 88 |
+| Commits | 91 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2046,7 +2046,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 ### Tour 84 — prends tâches qui demandent plus de raisonnement pendant le jour et les tâches plus légères en LLM pendant le tarif élev … [34 caractères tronqués]
 
-*65 appels d'outils.* Actions notables :
+*70 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create the goal and find the paragraphs data
@@ -2062,7 +2062,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - bash — Read the data loader and the analyzer output
 - bash — Inspect the stored bank's shape
 - bash — Compare the stored and fresh analyzer outputs
-- … et 51 autres
+- … et 56 autres
 
 ## 3. Travail accompli
 
@@ -2167,7 +2167,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 939 autres
+- … et 944 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2403,4 +2403,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-corpus-palier1.md <<'MD' # Le corpus du palier 1 : les résumés Wikipédia, 3,69 Go à 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-s-retro-traduction.md <<'MD' # S — La rétro-traduction existe : 9/9 paragraphes trad
 - S — LA RÉTRO-TRADUCTION : LE SCRIPT (9 PARAGRAPHES, 39 PAIRES, 18 ACCORDS DE CLASSE) ET SON TÉMOIN SANS API" && git push origin master 2>&1 | tail -1; cd ../.. 
+- S — LA LIGNE DE ROADMAP DIT CE QUI EST FAIT : LA MIGRATION / v7 (324/369) ET LA RÉTRO-TRADUCTION (9/9, ALIGNEMENT À RAFFINER)" && git push origin s/v7 2>&1 | ta
+- S — LA LIGNE DE ROADMAP DIT CE QUI EST FAIT : LA MIGRATION / v7 (324/369) ET LA RÉTRO-TRADUCTION (9/9, ALIGNEMENT À RAFFINER) ; L'ÉTAT PASSE AU 20/11 09 H 58" &
+- S — LA LIGNE DE ROADMAP DIT CE QUI EST FAIT (MIGRATION / v7 324/369, RÉTRO-TRADUCTION 9/9) ; L'ÉTAT AJOUTE CES FAITS À SON EN-TÊTE" && git push origin s/v7 2>&1
 

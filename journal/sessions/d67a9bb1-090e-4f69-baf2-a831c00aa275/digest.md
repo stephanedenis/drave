@@ -18777,3 +18777,61 @@ M  journal/2026-11-20/portes.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add retro_traduction.py && git commit -q -m \"S — LA RÉTRO-TRADUCTION : LE SCRIPT (9 PARAGRAPHES, 39 PAIRES, 18 ACCORDS DE CLASSE) ET SON TÉMOIN SANS API\" && git push origin master 2>&1 | tail -1; cd ../.. && gi … [325 caractères tronqués]`
+
+  ```
+578e836..f15ab58  master -> master
+   b1b1e26e..ff8fa0ff  s/v7 -> s/v7
+ven 20 nov 2026 09:58:07 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"migrer \\`/\\`[^|]*\" docs/pilotage/roadmap.md | head -1", "description": "Read the roadmap's S next action"}`
+
+  ```
+migrer `/` vers la v7** (106 paires sauvées, **41** à re-juger) ; corriger les référents ; rétro-traduction API
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\nold = \"migrer `/` vers la v7** (106 paires sauvées, **41** à re-juger) ; corriger les référents ; rétro-traduction API\"\nnew = \"la  … [699 caractères tronqués]`
+
+  ```
+roadmap ok
+    8998    522   T1   9000  docs/pilotage/roadmap.md
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ven 20 nov 2026 09:58:32 EST
+[stderr]
+  ❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"**Mis à jour : 2026-11-20, 05 h 00 HNE (la nuit `wiki_big` : 6,81 sur wikitext2 à 90 000 pas, le long-forme à 7,78 · la sélec … [966 caractères tronqués]`
+
+  ```
+budget=0
+  T0 max : 3812 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ven 20 nov 2026 09:58:45 EST
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError
+  ❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · docs/pilotage/roadmap.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3p' docs/pilotage/en-cours.md", "description": "Read the current state header"}`
+
+  ```
+**Mis à jour : 2026-11-20, 10 h 00 HNE (le README racine réécrit : la vision, l'état du 20/11, la vulgarisation)**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"**Mis à jour : 2026-11-20, 10 h 00 HNE (le README racine réécrit : la vision, l'état du 20/11, la vulgarisation)**\"\nnew = \ … [840 caractères tronqués]`

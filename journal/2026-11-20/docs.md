@@ -4,13 +4,14 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (3)
+## Commits du jour (4)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 04:48 | `718c9cef` | ÉTAT — LA FICHE DE LA NUIT COMPTE (814 FICHES) | `en-cours.md`, `README.md`, `mesures.md` (+5) |
 | 04:51 | `6f98a193` | ÉTAT — LA PAGE VIVANTE PASSE AU 20/11 (LA NUIT wiki_big) | `en-cours.md`, `README.md`, `docs.md` (+5) |
 | 09:48 | `b1b1e26e` | README — LA VULGARISATION ET L'ÉTAT RÉEL : « CE QUE C'EST, EN CLAIR » (LE PROBLÈME, L'IDÉE, CE QUE ÇA CHANGE), LES CHIFFRES DU 20/11 (86,25 / 95,75 / 0,7902 / 238/239), L'ÉTAT DU NATIF (IL APPREND, IL NE COMPOSE PAS) ; 3 195 MOTS | `README.md`, `en-cours.md`, `roadmap.md` (+15) |
+| 09:55 | `ff8fa0ff` | S — LE POINTEUR DU SOUS-MODULE ENTRE LA RÉTRO-TRADUCTION (SOUS-MODULE f15ab58) | `README.md`, `attention.md`, `docs.md` (+11) |
 
 ## Chiffres du jour
 
