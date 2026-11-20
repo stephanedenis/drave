@@ -18996,3 +18996,28 @@ fiche ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**rétro-traduction** — s … [1564 caractères tronqués]`
+
+  ```
+budget=0
+     · compteurs : en-cours.md dit 1055 JSON, le disque en a 1056
+ven 20 nov 2026 10:37:08 EST
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: | fichiers / JSON de résultats | **817** / **1049** |
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 171bfa34d12df1e5dd0937e84ff3068c0524fcfc but expected 5ba387d659b095ae061eb2ae3369c199dcd5fe65
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -3 --oneline | cut -c1-75; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; grep -n \"rétro-traduction\" docs/pilotage/en-cours.md | head -2", "description": "Check the concurrent commits and the state lines"}`
+
+  ```
+171bfa34 GLOSSAIRE — LE PARCOURS DE LECTURE EST ENTIÈREMENT LIÉ (16 DOCUMEN
+5ba387d6 GLOSSAIRE — CHAQUE FICHE OUVRE SUR UN TL;DR (OUTIL POUR LES TOOLTI
+fed7ad31 S — LA LIGNE DE ROADMAP DIT CE QUI EST FAIT (MIGRATION / v7 324/36
+64:| fichiers / JSON de résultats | **817** / **1055** | `reports/*.md` / `reports/*.json` |
+27:- **Prochaine action** : **rétro-traduction** — script + 9/9, l'alignement à raffiner ; les **71 langues** ; la migration `/` est faite (324/369).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**rétro-traduction** — s … [1505 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 72.7 h |
+| Durée | 72.8 h |
 | Tours | 85 |
-| Messages | 1326 |
-| Appels d'outils | 1145 |
+| Messages | 1328 |
+| Appels d'outils | 1147 |
 | Fichiers touchés | 44 |
-| Commandes | 995 |
+| Commandes | 997 |
 | Sous-agents | 7 |
-| Commits | 93 |
+| Commits | 94 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2076,13 +2076,15 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 ### Tour 85 — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches  … [938 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Read the N2 clean-gate context
 - bash — Run the retro-translation v2
 - bash — Inspect the v2 pairs against the gold paragraphs
 - bash — Update the retro-translation fiche with the v2 analysis
 - bash — Commit the retro-translation v2 analysis
+- bash — Check the concurrent commits and the state lines
+- bash — Retry the retro-translation commit
 
 ## 3. Travail accompli
 
@@ -2187,7 +2189,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 955 autres
+- … et 957 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2427,5 +2429,6 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - S — LA LIGNE DE ROADMAP DIT CE QUI EST FAIT : LA MIGRATION / v7 (324/369) ET LA RÉTRO-TRADUCTION (9/9, ALIGNEMENT À RAFFINER) ; L'ÉTAT PASSE AU 20/11 09 H 58" &
 - S — LA LIGNE DE ROADMAP DIT CE QUI EST FAIT (MIGRATION / v7 324/369, RÉTRO-TRADUCTION 9/9) ; L'ÉTAT AJOUTE CES FAITS À SON EN-TÊTE" && git push origin s/v7 2>&1
 - S — RÉTRO-TRADUCTION v2 : LES ANAPHORES NUMÉROTÉES PAR L'ANALYSEUR (LE MODÈLE LES REND DANS L'ORDRE)" && git push origin master 2>&1 | tail -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 

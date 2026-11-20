@@ -9,7 +9,7 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 473.9 h |
 | Tours | 220 |
-| Messages | 4432 |
+| Messages | 4433 |
 | Appels d'outils | 3954 |
 | Fichiers touchés | 25 |
 | Commandes | 3282 |
@@ -11652,6 +11652,37 @@ C'est un travail de fond (335 entrées × ~10 min = plusieurs jours d'agent). Je
 - bash — Vérifier l'existence des documents cités
 - bash — Lier les documents du parcours
 - bash — Committer les liens du parcours
+
+**Synthèse produite :**
+
+⏵ Corrigé : les 16 documents du parcours de lecture sont maintenant liés
+
+\## Ce qui a été fait
+
+Dans `docs/theorie/glossaire.md`, la section **« Parcours de lecture conseillé »** citait 16 documents en **noms nus** (entre backticks) — ils sont maintenant des **liens markdown** :
+
+| avant (nom nu) | après (lien) |
+|---|---|
+| `docs/theorie/vision.md` | [la vision](docs/theorie/vision.md) |
+| `docs/theorie/histoire.md` | [l'histoire du nom](docs/theorie/histoire.md) |
+| `docs/pilotage/roadmap.md` | [la roadmap](docs/pilotage/roadmap.md) |
+| `docs/implantation/format-flux.md` | [le format DRVF](docs/implantation/format-flux.md) |
+| `docs/methode/resultats.md` | [la méthode des résultats](docs/methode/resultats.md) |
+| `reports/rapport-inference.md` | [la mesure fondatrice](reports/rapport-inference.md) |
+| `reports/rapport-croisement-push-pull.md` | [la frontière push/pull](reports/rapport-croisement-push-pull.md) |
+| `docs/implantation/contexte-long.md` | [le contexte long](docs/implantation/contexte-long.md) |
+| `docs/implantation/format-clusters.md` | [les grappes](docs/implantation/format-clusters.md) |
+| `docs/theorie/synthese/index.md` | [la synthèse en huit chapitres](docs/theorie/synthese/index.md) |
+| les 5 archives + l'audit | liés aussi |
+
+**16/16 liés** — plus aucun nom de fichier nu dans le parcours.
+
+\## La vérification
+
+- `porte-tableaux.sh` : **5 136 liens relatifs résolvent** (dont les 16 nouveaux, les chemins relatifs vérifiés depuis `docs/theorie/`).
+- `revue_documentation` : ✅ ; `taille_documents` : ✅.
+
+Committé `171bfa34`, poussé.
 
 ## 3. Travail accompli
 

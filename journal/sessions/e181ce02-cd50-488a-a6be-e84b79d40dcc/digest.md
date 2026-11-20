@@ -71868,3 +71868,46 @@ Ensuite, dans cet ordre :
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [916 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 18 files changed, 631 insertions(+), 65 deletions(-)
+ create mode 100644 reports/retro-traduction-v2.json
+171bfa34 GLOSSAIRE — LE PARCOURS DE LECTURE EST ENTIÈREMENT LIÉ (16 DOCUMENTS, DE LA 
+   5ba387d6..171bfa34  s/v7 -> s/v7
+   5ba387d6..171bfa34  master -> master
+ven 20 nov 2026 10:35:48 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrigé : les 16 documents du parcours de lecture sont maintenant liés
+
+## Ce qui a été fait
+
+Dans `docs/theorie/glossaire.md`, la section **« Parcours de lecture conseillé »** citait 16 documents en **noms nus** (entre backticks) — ils sont maintenant des **liens markdown** :
+
+| avant (nom nu) | après (lien) |
+|---|---|
+| `docs/theorie/vision.md` | [la vision](docs/theorie/vision.md) |
+| `docs/theorie/histoire.md` | [l'histoire du nom](docs/theorie/histoire.md) |
+| `docs/pilotage/roadmap.md` | [la roadmap](docs/pilotage/roadmap.md) |
+| `docs/implantation/format-flux.md` | [le format DRVF](docs/implantation/format-flux.md) |
+| `docs/methode/resultats.md` | [la méthode des résultats](docs/methode/resultats.md) |
+| `reports/rapport-inference.md` | [la mesure fondatrice](reports/rapport-inference.md) |
+| `reports/rapport-croisement-push-pull.md` | [la frontière push/pull](reports/rapport-croisement-push-pull.md) |
+| `docs/implantation/contexte-long.md` | [le contexte long](docs/implantation/contexte-long.md) |
+| `docs/implantation/format-clusters.md` | [les grappes](docs/implantation/format-clusters.md) |
+| `docs/theorie/synthese/index.md` | [la synthèse en huit chapitres](docs/theorie/synthese/index.md) |
+| les 5 archives + l'audit | liés aussi |
+
+**16/16 liés** — plus aucun nom de fichier nu dans le parcours.
+
+## La vérification
+
+- `porte-tableaux.sh` : **5 136 liens relatifs résolvent** (dont les 16 nouveaux, les chemins relatifs vérifiés depuis `docs/theorie/`).
+- `revue_documentation` : ✅ ; `taille_documents` : ✅.
+
+Committé `171bfa34`, poussé.
+
