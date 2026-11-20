@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 71.5 h |
+| Durée | 71.9 h |
 | Tours | 84 |
-| Messages | 1271 |
-| Appels d'outils | 1093 |
+| Messages | 1288 |
+| Appels d'outils | 1111 |
 | Fichiers touchés | 44 |
-| Commandes | 945 |
+| Commandes | 962 |
 | Sous-agents | 7 |
-| Commits | 85 |
+| Commits | 86 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2046,7 +2046,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 ### Tour 84 — prends tâches qui demandent plus de raisonnement pendant le jour et les tâches plus légères en LLM pendant le tarif élev … [34 caractères tronqués]
 
-*30 appels d'outils.* Actions notables :
+*48 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create the goal and find the paragraphs data
@@ -2062,7 +2062,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - bash — Read the data loader and the analyzer output
 - bash — Inspect the stored bank's shape
 - bash — Compare the stored and fresh analyzer outputs
-- … et 16 autres
+- … et 34 autres
 
 ## 3. Travail accompli
 
@@ -2167,7 +2167,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 905 autres
+- … et 922 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2400,4 +2400,5 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md && git com
 - S — LA PROFONDEUR ENTRE DANS LA BANQUE : 324/369 CANDIDATS APPARIÉS, 95 À PROFONDEUR ≥ 3 (MIGRATION NON DESTRUCTIVE, LES 150 VERDICTS INTACTS)" && git push orig
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-corpus-palier1.md <<'MD' # Le corpus du palier 1 : les résumés Wikipédia, 3,69 Go à 
 

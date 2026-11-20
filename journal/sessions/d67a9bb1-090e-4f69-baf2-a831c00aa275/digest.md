@@ -18297,3 +18297,243 @@ A  reports/banque-profondeur.json
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - \"$n\" <<'PY'\nimport pathlib, sys\nn = sys.argv[1]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60] … [1564 caractères tronqués]`
+
+  ```
+ok 1047
+  T0 max : 3817 mots (budget 4 000)
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+   e0fd67e7..1ab77d52  s/v7 -> s/v7
+ven 20 nov 2026 09:25:53 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"porte propre\" docs/pilotage/roadmap.md docs/pilotage/backlog/*.md reports/*.md 2>/dev/null | head -4", "description": "Find the definition of the clean gate"}`
+
+  ```
+docs/pilotage/roadmap.md:32:| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; **N0.1 6/6** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k pas : val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00** ; **fenêtre 1 024 : 2,4759 / 2,4373 au grand corpus — sous 2,5** ; porte propre **2,7856** ; **N3 couvert** (22 portes, inventaire ; deux conditions) ; N4 partiel | **N2** : **clôturée** le 03/11 11 h 25, la **fenêtre est la recette de production** ; **paire propre de distillation** (04/11) ; **corpus épinglé** (18/11), **150 M** (19/11 : v1 **2,844** / v2 **3,038**), **sélection** (`wiki_big` seul **7,2237** bat le mélange et le plein texte) ; **le corpus du palier 1 sur `wiki_big` + textes longs, à époques égales** ; la **porte propre (0,29)** ; **N4** |
+docs/pilotage/backlog/N2-distillation.md:43:**La fenêtre est la recette ; il reste la porte propre.** Prochaine action : la **porte propre**
+reports/rapport-bilan-chantier.md:240:| **D9** | **Ne pas livrer `--rope` seul** ; valider `--rope --canal-dir` et `eval_longueur
+… [371 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '35,60p' docs/pilotage/backlog/N2-distillation.md", "description": "Read the N2 backlog's clean-gate next action"}`
+
+  ```
+## Contrôles négatifs
+
+- jeu tenu à l'écart ; contrôle par permutation
+- même budget de calcul entre tailles
+- les négatifs 130–256 sont rejoués dans le même tableau
+
+## Prochaine action
+
+**La fenêtre est la recette ; il reste la porte propre.** Prochaine action : la **porte propre**
+(0,29 manquant à 2,7856) — données ou capacité — puis **R1.2 à 1 024** entraînée et **N4**. Les
+200 k pas seuls ne suffisent pas (3,16) ; la longueur reste le levier de la largeur (positions
+aléatoires : 256 octets de 14,11 à 3,25).
+
+## Voir aussi
+
+- [Programme N](../roadmap.md#programme-n--le-natif-drvm-drave-n0-distillation)
+- [Programme R, R1](../roadmap.md#r1--la-fenêtre-native)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"wiki_big\" docs/ reports/*.md 2>/dev/null | head -6", "description": "Find the wiki_big corpus provenance"}`
+
+  ```
+docs/pilotage/roadmap.md:32:| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; **N0.1 6/6** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k pas : val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00** ; **fenêtre 1 024 : 2,4759 / 2,4373 au grand corpus — sous 2,5** ; porte propre **2,7856** ; **N3 couvert** (22 portes, inventaire ; deux conditions) ; N4 partiel | **N2** : **clôturée** le 03/11 11 h 25, la **fenêtre est la recette de production** ; **paire propre de distillation** (04/11) ; **corpus épinglé** (18/11), **150 M** (19/11 : v1 **2,844** / v2 **3,038**), **sélection** (`wiki_big` seul **7,2237** bat le mélange et le plein texte) ; **le corpus du palier 1 sur `wiki_big` + textes longs, à époques égales** ; la **porte propre (0,29)** ; **N4** |
+docs/pilotage/en-cours.md:3:**Mis à jour : 2026-11-20, 05 h 00 HNE (la nuit `wiki_big` : 6,81 sur wikitext2 à 90 000 pas, le long-forme à 7,78 · la sélection du contenu confirmée · A2.6 close (bandes, clusters) · 91 portes, 89/2)**
+docs/pilotage/en-cours.md:52:- **N — l
+… [995 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la data/wiki_big/ | head -8; ls tools/ | grep -i \"prepar\\|wiki\\|nettoy\" | head -6", "description": "Inspect the wiki_big corpus and its preparation tooling"}`
+
+  ```
+total 1022976
+drwxr-xr-x. 1 stephane stephane         28  2 nov 10:03 .
+drwxr-xr-x. 1 stephane stephane       2686 18 nov 16:37 ..
+-rw-r--r--. 1 stephane stephane 1047525530  2 nov 09:13 brut.txt
+drwxr-xr-x. 1 stephane stephane         88  2 nov 10:28 propre
+collecter_wikisource.py
+corpus_pidgin_wiki_local.py
+corpus_wikimatrix.py
+corpus_wikipedia.py
+corpus_wikipedia_texte.py
+extrait_wikipedia.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -ln \"propre\\|brut\" tools/corpus_wikipedia*.py tools/extrait_wikipedia.py 2>/dev/null; grep -n \"propre\\|brut\" tools/corpus_wikipedia.py 2>/dev/null | head -4; head -15 tools/corpus_wikipedia.py 2>/dev/null", "description":  … [39 caractères tronqués]`
+
+  ```
+tools/corpus_wikipedia.py
+tools/corpus_wikipedia_texte.py
+6:français, 7,0 Go de résumés en texte déjà débalisé. Ce script en fait des corpus **propres,
+#!/usr/bin/env python3
+"""corpus_wikipedia.py — des corpus de prose par langue depuis les bases Wikipédia v14.
+
+POURQUOI CE FICHIER. L'inventaire du disque a montré que le seul stock local d'un autre ordre de
+grandeur que le dépôt est Wikipédia : 10 bases `xxwiki_v14.db`, ~2,75 M d'articles pour le seul
+français, 7,0 Go de résumés en texte déjà débalisé. Ce script en fait des corpus **propres,
+dédupliqués et découpés** — un par langue — avec leur provenance et leurs limites écrites.
+
+CE QUE LE CORPUS EST. Le champ `summary` de la base est le **début** de l'article (tronqué à
+8 000 caractères), déjà débalisé (les dates des modèles ont disparu, quelques artefacts de
+templates restent). C'est de la **prose de lead**, pas l'article entier : c'est dit dans chaque
+manifeste. Le texte intégral demanderait le dump `xml.bz2` et un débaliseur complet.
+
+CE QUE LE SCRIPT FAIT, PAR LANGUE :
+1. lit `articles(page_id, title, summary, n_chars)` en lecture seule ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"argparse\\|add_argument\\|MIN\\|min_\\|dedup\\|def \" tools/corpus_wikipedia.py | head -16; ls data/*wiki*/ -d 2>/dev/null | head -4", "description": "Read the corpus builder's parameters"}`
+
+  ```
+29:import argparse
+48:def nettoie(texte: str) -> str:
+62:def empreinte(texte: str, taille: int = 16) -> str:
+66:def troncons(texte: str, taille: int):
+80:def construire(db: pathlib.Path, sortie: pathlib.Path, manifeste: pathlib.Path,
+81:               langue: str, min_chars: int, chunk: int, val: float, test: float,
+100:            "where n_chars >= ? and summary is not null order by page_id", (min_chars,)):
+105:        if len(texte) < min_chars // 2:
+157:            "filtre": f"n_chars >= {min_chars}",
+159:            "deduplication_articles": "empreinte BLAKE2b du texte normalisé, première occurrence gardée",
+160:            "deduplication_troncons": f"tronçons de {chunk} caractères coupés aux mots, BLAKE2b, première occurrence gardée (train seulement)",
+178:def main() -> int:
+179:    ap = argparse.ArgumentParser(description=__doc__)
+180:    ap.add_argument("--db", type=pathlib.Path, default=BASE_DB / "frwiki_v14.db")
+181:    ap.add_argument("--sortie", type=pathlib.Path)
+182:    ap.add_argument("--manifeste", type=pathlib.Path)
+data/corpus_wiki_ar/
+data/corpus_wiki_ar_texte/
+data/corpus_wiki_de/
+data/corpus_wiki_de_texte/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && find / -name \"frwiki_v14.db\" -not -path \"*/.git/*\" 2>/dev/null | head -2; ls data/corpus_wiki_fr/ 2>/dev/null | head -4; python3 -c \"\nimport json, glob\nfor f in glob.glob('data/corpus_wiki_fr*/manifeste.json'):\n    d = json.l … [221 caractères tronqués]`
+
+  ```
+[still running after 120000ms; moved to background job bash-1392]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_kill** `{"job_id": "bash-1392", "reason": "recherche trop large"}`
+
+  ```
+requested cancellation of job bash-1392
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls data/ | grep -i \"wiki_fr\" | head -5; ls -la data/wiki_fr/ | head -5; cat data/wiki_fr/manifeste.json 2>/dev/null | head -12; ls data/*.db 2>/dev/null | head -3", "description": "Targeted check of the French corpus and DBs", "tim … [16 caractères tronqués]`
+
+  ```
+corpus_wiki_fr
+corpus_wiki_fr_texte
+wiki_fr
+total 231928
+drwxr-xr-x. 1 stephane stephane        36  1 nov 11:54 .
+drwxr-xr-x. 1 stephane stephane      2686 18 nov 16:37 ..
+-rw-r--r--. 1 stephane stephane 237491315  1 nov 11:41 articles.txt
+drwxr-xr-x. 1 stephane stephane       160  1 nov 18:42 propre
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"BASE_DB\" tools/corpus_wikipedia.py | head -2; ls -la $(grep -o 'BASE_DB = .*' tools/corpus_wikipedia.py | cut -d'=' -f2 | tr -d ' ')/ 2>/dev/null | head -5; ls -la data/wiki_big/brut.txt; head -c 200 data/wiki_big/brut.txt … [72 caractères tronqués]`
+
+  ```
+38:BASE_DB = pathlib.Path("/home/stephane/Data13TB/stephane/data/wikipedia/db")
+180:    ap.add_argument("--db", type=pathlib.Path, default=BASE_DB / "frwiki_v14.db")
+-rw-r--r--. 1 stephane stephane 1047525530  2 nov 09:13 data/wiki_big/brut.txt
+Jean Henri Le Febvre
+
+Jean Henri Le Febvre, né le  à Montpellier (Hérault) et mort le  à Fleury-les-Aubrais (Loiret), est un homme politique français. Biographie Licencié en droit, il entre à l
+  ```
+
+- **bash** `{"command": "ls -la /home/stephane/Data13TB/stephane/data/wikipedia/db/ 2>/dev/null | head -6; sqlite3 /home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db \"select count(*), sum(length(summary)) from articles;\" 2>/dev/null | head -1; date", "description": "Check the French Wikipedia da … [29 caractères tronqués]`
+
+  ```
+total 68722292
+drwxr-xr-x. 1 stephane stephane         940  1 nov 11:41 .
+drwxr-xr-x. 1 stephane stephane          14 25 mai 14:39 ..
+-rw-r--r--. 1 stephane stephane  3505520640 26 mai 10:48 arwiki_v14.db
+-rw-r--r--. 1 stephane stephane       32768  1 nov 13:26 arwiki_v14.db-shm
+-rw-r--r--. 1 stephane stephane           0  6 oct 13:49 arwiki_v14.db-wal
+2755035|3739202646
+ven 20 nov 2026 09:30:56 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat data/wiki_big/propre/manifeste.json 2>/dev/null | head -14; ls data/wiki_big/propre/", "description": "Read the wiki_big preparation manifest"}`
+
+  ```
+test.txt
+train.canal
+train.txt
+val.canal
+val.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/corpus_wikipedia.py --help 2>&1 | grep -A1 \"min-chars\\|chunk\\|sortie\" | head -8; nohup python3 tools/corpus_wikipedia.py --db /home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db --sortie data/corpus_wik … [257 caractères tronqués]`
+
+  ```
+usage: corpus_wikipedia.py [-h] [--db DB] [--sortie SORTIE]
+                           [--manifeste MANIFESTE] [--langue LANGUE]
+--
+                           [--min-chars MIN_CHARS] [--chunk CHUNK] [--val VAL]
+                           [--test TEST] [--graine GRAINE]
+--
+n_chars)` en lecture seule ; 2. filtre (n_chars >= --min-chars), nettoie les
+espaces et les balises résiduelles ; 3. déduplique les **articles** (empreinte
+build lancé 09:31
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls -la data/corpus_wiki_fr_palier1/ 2>/dev/null | head -5; tail -3 /tmp/palier1-build.log; ps -eo pid,args | grep corpus_wikipedia | grep -v grep | head -1 | cut -c1-40", "description": "Check the palier-1 corpus bui … [25 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 09:38:36 EST
+total 2875872
+drwxr-xr-x. 1 stephane stephane         48 20 nov 09:31 .
+drwxr-xr-x. 1 stephane stephane       2730 20 nov 09:31 ..
+-rw-r--r--. 1 stephane stephane   29489888 20 nov 09:38 test.txt
+-rw-r--r--. 1 stephane stephane 2856209400 20 nov 09:38 train.txt
+  [fr] 1400000/2755035 lus · 1399950 gardés · 1399950 tronçons
+  [fr] 1600000/2755035 lus · 1599920 gardés · 1599920 tronçons
+  [fr] 1800000/2755035 lus · 1799898 gardés · 1799898 tronçons
+ 125517 python3 tools/corpus_wikipedia.p
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 /tmp/palier1-build.log; ls -la data/corpus_wiki_fr_palier1/ | head -4; ps -eo pid,args | grep corpus_wikipedia | grep -v grep | head -1 | cut -c1-30", "description": "Wait for the palier-1 corpus build", "tim … [16 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 09:43:43 EST
+ }
+}
+total 3717160
+drwxr-xr-x. 1 stephane stephane         48 20 nov 09:31 .
+drwxr-xr-x. 1 stephane stephane       2730 20 nov 09:31 ..
+-rw-r--r--. 1 stephane stephane   38220407 20 nov 09:40 test.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la data/corpus_wiki_fr_palier1/; python3 -c \"\nimport json\nd = json.load(open('data/corpus_wiki_fr_palier1/manifeste.json'))\nprint({k: d.get(k) for k in ('langue','filtre','articles','octets_train','troncons','val','test') if  … [239 caractères tronqués]`
+
+  ```
+total 3717160
+drwxr-xr-x. 1 stephane stephane         48 20 nov 09:31 .
+drwxr-xr-x. 1 stephane stephane       2730 20 nov 09:31 ..
+-rw-r--r--. 1 stephane stephane   38220407 20 nov 09:40 test.txt
+-rw-r--r--. 1 stephane stephane 3691727067 20 nov 09:40 train.txt
+-rw-r--r--. 1 stephane stephane   76417263 20 nov 09:40 val.txt
+  train.txt    469a6d78676a3771…    3691727067 o      4899962 lignes  2026-11-20T09:40:46
+  val.txt      a0b3fa1ed6b8602e…      76417263 o       101142 lignes  2026-11-20T09:40:46
+  manifeste : f0ff49d760c77288… → reports/corpus-epingle-palier1.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && (python3 serveur.py --port 9000 > /tmp/serveur-s.log 2>&1 &) ; sleep 3; curl -s http://127.0.0.1:9000/api/phrases | python3 -c \"\nimport json, sys\nd = json.load(sys.stdin)\nps = d['phrases']\nc = next(c for p in ps … [379 caractères tronqués]`
+
+  ```
+phrases: 207 · profondeur dans la réponse: [0, 1]
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-corpus-palier1.md <<'MD'\n# Le corpus du palier 1 : les résumés Wikipédia, 3,69 Go à 753 o/ligne\n\n> **Ligne de roadmap** : N · **Date** : 2026-11-20 · **Verdict** : le corpus du palier 1 est\n> construit — les … [3082 caractères tronqués]`

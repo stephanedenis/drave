@@ -1,0 +1,28 @@
+{
+ "schema": "drave.corpus-epingle",
+ "version": 1,
+ "date": "2026-11-20T09:44:01",
+ "corpus": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/corpus_wiki_fr_palier1",
+ "note": "sha256 du train, du val et des canaux ; --verifie recalcule et compare l'empreinte de chaque fichier et l'empreinte du manifeste",
+ "fichiers": {
+  "test.txt": {
+   "sha256": "3ec7d2890388e5c7b0dd9aae6566860e7358239939b7ef5378a59ecc0395e875",
+   "octets": 38220407,
+   "lignes": 50700,
+   "mtime": "2026-11-20T09:40:46"
+  },
+  "train.txt": {
+   "sha256": "469a6d78676a3771a35782894a1f38fdf44da5dfaa5079f89a6d33b1542df3b0",
+   "octets": 3691727067,
+   "lignes": 4899962,
+   "mtime": "2026-11-20T09:40:46"
+  },
+  "val.txt": {
+   "sha256": "a0b3fa1ed6b8602efbd9cec49bc581340edbdf07effbd9b727c57c41919b097b",
+   "octets": 76417263,
+   "lignes": 101142,
+   "mtime": "2026-11-20T09:40:46"
+  }
+ },
+ "manifeste_sha256": "f0ff49d760c77288429dceb200d24ae44f10e03a9cc1772ba1df734c31fe2d3d"
+}
