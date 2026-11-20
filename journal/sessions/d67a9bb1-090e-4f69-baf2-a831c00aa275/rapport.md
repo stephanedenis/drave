@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 72.0 h |
+| Durée | 72.1 h |
 | Tours | 84 |
-| Messages | 1298 |
-| Appels d'outils | 1121 |
+| Messages | 1305 |
+| Appels d'outils | 1128 |
 | Fichiers touchés | 44 |
-| Commandes | 972 |
+| Commandes | 979 |
 | Sous-agents | 7 |
-| Commits | 86 |
+| Commits | 88 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2046,7 +2046,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 ### Tour 84 — prends tâches qui demandent plus de raisonnement pendant le jour et les tâches plus légères en LLM pendant le tarif élev … [34 caractères tronqués]
 
-*58 appels d'outils.* Actions notables :
+*65 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create the goal and find the paragraphs data
@@ -2062,7 +2062,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - bash — Read the data loader and the analyzer output
 - bash — Inspect the stored bank's shape
 - bash — Compare the stored and fresh analyzer outputs
-- … et 44 autres
+- … et 51 autres
 
 ## 3. Travail accompli
 
@@ -2167,7 +2167,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 932 autres
+- … et 939 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2401,4 +2401,6 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - S — LA PROFONDEUR ENTRE DANS LA BANQUE : 324/369 CANDIDATS APPARIÉS, 95 À PROFONDEUR ≥ 3 (MIGRATION NON DESTRUCTIVE, LES 150 VERDICTS INTACTS)" && git push orig
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-corpus-palier1.md <<'MD' # Le corpus du palier 1 : les résumés Wikipédia, 3,69 Go à 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-s-retro-traduction.md <<'MD' # S — La rétro-traduction existe : 9/9 paragraphes trad
+- S — LA RÉTRO-TRADUCTION : LE SCRIPT (9 PARAGRAPHES, 39 PAIRES, 18 ACCORDS DE CLASSE) ET SON TÉMOIN SANS API" && git push origin master 2>&1 | tail -1; cd ../.. 
 

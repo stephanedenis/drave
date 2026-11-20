@@ -71473,3 +71473,42 @@ mots: 3195
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-20, 10 h 00 HNE (le README racine réécrit : la vision, l'état d … [640 caractères tronqués]`
+
+  ```
+create mode 100644 reports/rapport-s-retro-traduction.md
+ create mode 100644 reports/retro-traduction.json
+b1b1e26e README — LA VULGARISATION ET L'ÉTAT RÉEL : « CE QUE C'EST, EN CLAIR » (LE PROBLÈM
+   cdc12ad8..b1b1e26e  s/v7 -> s/v7
+   d649467c..b1b1e26e  master -> master
+ven 20 nov 2026 09:51:36 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ La documentation est auditée, le README réécrit et poussé
+
+## Ce qui a été fait
+
+**Le README racine** (3 195 mots, committé `b1b1e26e`) — réécrit pour un lecteur **non expert** :
+
+- **« Ce que c'est, en clair »** (nouvelle section) : le problème (la boîte de calcul), l'idée (le flux de faits, l'image des lampes), ce que ça change (observer, rejouer, découper, répartir), ce que **ce n'est pas** (pas un modèle plus intelligent — un modèle **maîtrisable**).
+- **« Ce qu'on a trouvé récemment »** (nouvelle) : l'état réel du 20/11 — le produit utilisable (86,25 %, 95,75 % avec le tagger, 0,79 de F1, 99,58 % d'attachement, 0,8 s / 10 000 mots), le natif (il apprend, il ne compose pas ; le 100 M bat le 34 M), ce qu'on ne sait pas encore.
+- **Les chiffres périmés corrigés** : le « Mesuré au 06/11 » (85,00 %, 0,6482, 235/236, 3 spans) → **le 20/11** (86,25 %, 95,75 %, 0,7902, 238/239, 1 span).
+- **Les six résultats historiques compactés** (la prose longue → 2-3 phrases chacun), la section « En une phrase » gardée.
+
+## L'audit de la documentation
+
+| contrôle | résultat |
+|---|---|
+| `revue_documentation.py` | ✅ 815 fiches, 1 047 JSON, 128 docs, 91 portes — tout passe |
+| `taille_documents.py` | ✅ le README 3 195 ≤ 3 500 |
+| `porte-tableaux.sh` | ✅ 1 859 fichiers, liens résolus |
+
+**`docs/theorie/`** : **15 documents**, **aucun chiffre périmé** (le grep des anciens chiffres ne trouve rien) — le `modele-natif.md` (7 263 mots, 12 sections) est un traité de référence, pas une fiche d'état ; le `vision.md` (1 218), l'`architecture-native.md` (1 201) et la `carte.md` (1 096) sont à jour. Je n'ai pas trouvé de section à mettre à jour : la théorie est **ce qui reste vrai** (les chiffres vivent dans `reports/` et `en-cours`), et c'est la bonne séparation.
+
+## L'état
+
+`HEAD b1b1e26e`, `master` = `s/v7` **poussés** (0 divergence) ; la revue, les budgets et les tableaux verts ; le README est la vitrine **reliée** à la théorie, aux fiches et au produit.
+
+**Une remarque honnête** : le commit a embarqué aussi une fiche d'une autre session (`rapport-s-retro-traduction.md`) — elle était dans l'index au moment du commit. Rien de cassé, mais si vous voulez des commits strictement séparés par session, il faudra que je vérifie l'index avant chaque commit.
+

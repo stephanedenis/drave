@@ -7,9 +7,9 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 473.1 h |
+| Durée | 473.2 h |
 | Tours | 218 |
-| Messages | 4413 |
+| Messages | 4414 |
 | Appels d'outils | 3939 |
 | Fichiers touchés | 25 |
 | Commandes | 3267 |
@@ -11565,7 +11565,32 @@ Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêt
 
 **Synthèse produite :**
 
-⏵ Le README est périmé (chiffres du 06/11) et trop expert par endroits — je le réécris pour un lecteur non expert, avec l'état réel
+⏵ La documentation est auditée, le README réécrit et poussé
+
+\## Ce qui a été fait
+
+**Le README racine** (3 195 mots, committé `b1b1e26e`) — réécrit pour un lecteur **non expert** :
+
+- **« Ce que c'est, en clair »** (nouvelle section) : le problème (la boîte de calcul), l'idée (le flux de faits, l'image des lampes), ce que ça change (observer, rejouer, découper, répartir), ce que **ce n'est pas** (pas un modèle plus intelligent — un modèle **maîtrisable**).
+- **« Ce qu'on a trouvé récemment »** (nouvelle) : l'état réel du 20/11 — le produit utilisable (86,25 %, 95,75 % avec le tagger, 0,79 de F1, 99,58 % d'attachement, 0,8 s / 10 000 mots), le natif (il apprend, il ne compose pas ; le 100 M bat le 34 M), ce qu'on ne sait pas encore.
+- **Les chiffres périmés corrigés** : le « Mesuré au 06/11 » (85,00 %, 0,6482, 235/236, 3 spans) → **le 20/11** (86,25 %, 95,75 %, 0,7902, 238/239, 1 span).
+- **Les six résultats historiques compactés** (la prose longue → 2-3 phrases chacun), la section « En une phrase » gardée.
+
+\## L'audit de la documentation
+
+| contrôle | résultat |
+|---|---|
+| `revue_documentation.py` | ✅ 815 fiches, 1 047 JSON, 128 docs, 91 portes — tout passe |
+| `taille_documents.py` | ✅ le README 3 195 ≤ 3 500 |
+| `porte-tableaux.sh` | ✅ 1 859 fichiers, liens résolus |
+
+**`docs/theorie/`** : **15 documents**, **aucun chiffre périmé** (le grep des anciens chiffres ne trouve rien) — le `modele-natif.md` (7 263 mots, 12 sections) est un traité de référence, pas une fiche d'état ; le `vision.md` (1 218), l'`architecture-native.md` (1 201) et la `carte.md` (1 096) sont à jour. Je n'ai pas trouvé de section à mettre à jour : la théorie est **ce qui reste vrai** (les chiffres vivent dans `reports/` et `en-cours`), et c'est la bonne séparation.
+
+\## L'état
+
+`HEAD b1b1e26e`, `master` = `s/v7` **poussés** (0 divergence) ; la revue, les budgets et les tableaux verts ; le README est la vitrine **reliée** à la théorie, aux fiches et au produit.
+
+**Une remarque honnête** : le commit a embarqué aussi une fiche d'une autre session (`rapport-s-retro-traduction.md`) — elle était dans l'index au moment du commit. Rien de cassé, mais si vous voulez des commits strictement séparés par session, il faudra que je vérifie l'index avant chaque commit.
 
 ## 3. Travail accompli
 

@@ -18640,3 +18640,140 @@ tools/llm/deepseek.py:80:    for var in ("DEEPSEEK_API_KEY", "DSH_API_KEY"):
 /home/stephane/.bashrc
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && source ~/.bashrc >/dev/null 2>&1; [ -n \"${DEEPSEEK_API_KEY:-}\" ] && echo \"clé présente\" || echo \"clé absente\"; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\nold = \"**le corp … [487 caractères tronqués]`
+
+  ```
+clé présente
+roadmap ok
+    8998    522   T1   9000  docs/pilotage/roadmap.md
+budget=0
+ven 20 nov 2026 09:49:33 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/structures/retro_traduction.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"retro_traduction.py — la rétro-traduction : le français → l'anglais, et les référents qui reviennent.\n\nPOURQUOI. Le 03/11, les trois premiers paragrap … [5595 caractères tronqués]`
+
+  ```
+{"paragraphes": 9, "traduits": 0, "paires": 0, "accord": 0, "taux": null}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && source ~/.bashrc >/dev/null 2>&1 && timeout 300 python3 tools/structures/retro_traduction.py --json reports/retro-traduction.json 2>&1 | tail -2; date", "description": "Run the retro-translation over the nine paragraphs", "timeoutMs" … [9 caractères tronqués]`
+
+  ```
+{"paragraphes": 9, "traduits": 9, "paires": 39, "accord": 18, "taux": 46.2}
+ven 20 nov 2026 09:50:31 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd = json.load(open('reports/retro-traduction.json'))\nfor x in d['detail'][:14]:\n    print(x['id'], '·', x['fr'], '→', x['en'], '· source:', x['source'], '·', '✓' if x['accord'] else '✗')\"", "description … [41 caractères tronqués]`
+
+  ```
+a001 · Elle → She · source: She · ✓
+a001 · se → herself · source: herself · ✓
+a001 · elle → she · source: she · ✓
+a001 · les → it · source: it · ✓
+a001 · elle → she · source: she · ✓
+a001 · se → herself · source: herself · ✓
+a001 · lui → her · source: her · ✓
+a001 · en → from it · source: she · ✗
+a002 · Elle → She · source: her · ✓
+a002 · l' → it · source: she · ✗
+a002 · y → in it · source: it · ✗
+a002 · lequel → which · source: it · ✗
+a003 · Elle → she · source: She · ✓
+a003 · sa → her · source: herself · ✓
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-s-retro-traduction.md <<'MD'\n# S — La rétro-traduction existe : 9/9 paragraphes traduits, 39 paires, l'alignement à raffiner\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-20 · **Verdict** : le **script exi … [3788 caractères tronqués]`
+
+  ```
+ok 1049
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ven 20 nov 2026 09:54:12 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at b1b1e26ef7a3c65649cc7e8ac079b5ec4a0dd5a2 but expected cdc12ad893954f55f5a7e2abd456f0287d99b920
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -3 --oneline | cut -c1-70; git status --short | head -6; git status -sb | head -1", "description": "Diagnose the moved HEAD"}`
+
+  ```
+b1b1e26e README — LA VULGARISATION ET L'ÉTAT RÉEL : « CE QUE C'EST, EN
+cdc12ad8 N — LE CORPUS DU PALIER 1 EST CONSTRUIT : LES RÉSUMÉS WIKIPÉD
+1ab77d52 S — LA PROFONDEUR ENTRE DANS LA BANQUE (SOUS-MODULE 578e836) 
+M  journal/2026-11-20/README.md
+M  journal/2026-11-20/attention.md
+M  journal/2026-11-20/docs.md
+M  journal/2026-11-20/mesures.md
+M  journal/2026-11-20/modele.md
+M  journal/2026-11-20/portes.md
+## s/v7...origin/s/v7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h · %an · %ad · %s' b1b1e26e | cut -c1-90; git show --stat b1b1e26e | head -8; git diff --cached --stat | tail -4", "description": "Inspect the concurrent commit and my staged changes"}`
+
+  ```
+b1b1e26e · Stéphane · Fri Nov 20 09:48:56 2026 -0500 · README — LA VULGARISATION ET L'ÉTAT
+commit b1b1e26ef7a3c65649cc7e8ac079b5ec4a0dd5a2
+Author: Stéphane <stephane@localhost>
+Date:   Fri Nov 20 09:48:56 2026 -0500
+
+    README — LA VULGARISATION ET L'ÉTAT RÉEL : « CE QUE C'EST, EN CLAIR » (LE PROBLÈME, L'IDÉE, CE QUE ÇA CHANGE), LES CHIFFRES DU 20/11 (86,25 / 95,75 / 0,7902 / 238/239), L'ÉTAT DU NATIF (IL APPREND, IL NE COMPOSE PAS) ; 3 195 MOTS
+
+ README.md                                          | 151 ++++-----
+ docs/pilotage/en-cours.md                          |   6 +-
+ .../rapport.md                                     | 15 ++++----
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 10 +++++
+ .../rapport.md                                     | 31 ++++++++++++++--
+ 13 files changed, 115 insertions(+), 24 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short docs/pilotage/en-cours.md docs/pilotage/roadmap.md README.md; git diff HEAD --stat | head -6; git diff --cached --stat | head -6", "description": "Check the state file's index and worktree differences"}`
+
+  ```
+journal/2026-11-20/README.md                       |  7 ++--
+ journal/2026-11-20/attention.md                    |  2 +-
+ journal/2026-11-20/docs.md                         | 15 +++++++-
+ journal/2026-11-20/mesures.md                      |  2 +-
+ journal/2026-11-20/modele.md                       |  2 +-
+ journal/2026-11-20/portes.md                       |  2 +-
+ journal/2026-11-20/README.md                       |  7 ++--
+ journal/2026-11-20/attention.md                    |  2 +-
+ journal/2026-11-20/docs.md                         | 15 +++++++-
+ journal/2026-11-20/mesures.md                      |  2 +-
+ journal/2026-11-20/modele.md                       |  2 +-
+ journal/2026-11-20/portes.md                       |  2 +-
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"rétro-traduction\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -3; grep -n \"palier 1\" docs/pilotage/roadmap.md | cut -c1-100", "description": "Check whether my state edits survived"}`
+
+  ```
+27:- **Prochaine action** : **rétro-traduction** — script + 9/9, l'alignement à raffiner ; les **71 langues** ; la migration `/` est faite (324/369).
+64:| fichiers / JSON de résultats | **817** / **1049** | `reports/*.md` / `reports/*.json` |
+32:| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.m
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat b1b1e26e | tail -12; git status --short | grep -v \"^ M journal\" | head -6; git status -sb | head -1", "description": "Check the concurrent commit's full file list"}`
+
+  ```
+journal/2026-11-20/modele.md                       |   2 +-
+ journal/2026-11-20/portes.md                       |   2 +-
+ journal/README.md                                  |   6 +-
+ journal/THEMES.md                                  |   2 +-
+ journal/sessions/MANIFEST.md                       |   4 +-
+ .../d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md | 103 +++++++
+ .../rapport.md                                     |  14 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  62 ++++
+ .../rapport.md                                     |  16 +-
+ reports/rapport-s-retro-traduction.md              |  31 ++
+ reports/retro-traduction.json                      | 338 +++++++++++++++++++++
+ 18 files changed, 638 insertions(+), 120 deletions(-)
+M  journal/2026-11-20/README.md
+M  journal/2026-11-20/attention.md
+M  journal/2026-11-20/docs.md
+M  journal/2026-11-20/mesures.md
+M  journal/2026-11-20/modele.md
+M  journal/2026-11-20/portes.md
+## s/v7...origin/s/v7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add retro_traduction.py && git commit -q -m \"S — LA RÉTRO-TRADUCTION : LE SCRIPT (9 PARAGRAPHES, 39 PAIRES, 18 ACCORDS DE CLASSE) ET SON TÉMOIN SANS API\" && git push origin master 2>&1 | tail -1; cd ../.. && gi … [325 caractères tronqués]`
