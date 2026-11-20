@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 64.5 h |
-| Tours | 78 |
-| Messages | 1163 |
-| Appels d'outils | 1002 |
+| Durée | 66.9 h |
+| Tours | 81 |
+| Messages | 1186 |
+| Appels d'outils | 1019 |
 | Fichiers touchés | 44 |
-| Commandes | 857 |
+| Commandes | 874 |
 | Sous-agents | 7 |
-| Commits | 77 |
+| Commits | 78 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -211,6 +211,12 @@
 **Tour 77** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
 
 **Tour 78** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
+
+**Tour 79** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
+
+**Tour 80** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
+
+**Tour 81** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1871,9 +1877,60 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 
 ### Tour 78 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [968 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Commit the 80k milestone
+- bash — Ten-minute pause
+- bash — Ten-minute pause and progress
+- bash — Ten-minute pause and health check
+- bash — Read the ninth tranche (90k)
+- bash — Read the 90k milestone
+- bash — Read the wiki_big ninth tranche
+
+**Synthèse produite :**
+
+⏵ 90 000 pas : `wiki_big` **6,8072** (PPL v1 2,9203) — nouveau meilleur ; le long-forme redescend à 7,6991
+
+**Le point** : `wiki_big` continue de gagner un peu (6,86 → 6,81) ; le long-forme stagne (7,60-7,70). À 90 000 pas, `wiki_big` seul fait déjà **mieux que le 150 M v1 à 110 000 pas** (6,867) avec 20 000 pas de moins. Il reste deux tranches (100k et 110k, vers 5 h 50), puis la fiche de la nuit et le bilan de 8 h.
+
+### Tour 79 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [968 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Draft the night's fiche
+
+**Synthèse produite :**
+
+⏵ La fiche de la nuit est rédigée (courbes jusqu'à 90 000 pas, variance, limites) — il reste à remplir les deux dernières tranches vers 5 h 50
+
+**Fait** : `reports/rapport-nuit-wikibig.md` est écrit — les deux courbes (10k → 90k), la lecture (`wiki_big` 6,807 à 90k bat le v1 6,867 à 110k, avec 1 Go et 20k pas de moins ; le long-forme à 7,70), la variance du run-à-run (±1,8 %, le pas 1 bit-identique) et les limites. Non committée : les tranches 100k et 110k doivent y entrer, vers 5 h 50.
+
+**En cours** : `wiki_big` et le long-forme dans leurs deux dernières tranches ; GPU à 87/76 °C, tout est nominal.
+
+### Tour 80 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [968 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and progress
+- bash — Ten-minute pause
+- bash — Ten-minute pause and tranche count
+- bash — Read the long-form 100k tranche
+
+**Synthèse produite :**
+
+⏵ 100 000 pas du long-forme : **7,7758** (PPL v1 3,1476) — il se dégrade légèrement sur ses dernières tranches ; `wiki_big` (100k) arrive vers 4 h 40
+
+**Le point** : le long-forme ne progresse plus (7,60 → 7,70 → 7,78 aux tranches 80k-100k) alors que `wiki_big` continuait de gagner (6,81 à 90k). La sélection par `wiki_big` est donc nette. Il reste la tranche 100k de `wiki_big` (≈ 4 h 40), sa tranche 110k et celle du long-forme (≈ 5 h 50), puis la fiche et le bilan de 8 h.
+
+### Tour 81 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [968 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause
+- bash — Ten-minute pause and progress
+- bash — Read the 100k milestone
+- bash — Read the wiki_big 100k tranche
+- bash — Commit the 100k milestone
 
 ## 3. Travail accompli
 
@@ -1978,7 +2035,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 817 autres
+- … et 834 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2202,5 +2259,6 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - N — LA NUIT, TRANCHE 1 : wiki_big 8,86 SUR WIKITEXT2 (PPL v1 3,53) CONTRE 9,94 POUR LE LONG-FORME (3,67) ; LA COURBE SAIT LIRE WIKITEXT2" && git push origin s/v
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-selection-contenu.md reports/banc-generation-nb2.json reports/banc-generation-nl2.
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); echo "JSON: $n"; python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1]
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
 

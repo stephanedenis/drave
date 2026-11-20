@@ -84,7 +84,7 @@
 |---|---|---|
 | portes | **91** (dont `porte-a2.6-experts` le 18/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **813** / **1028** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **813** / **1040** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **128** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **19/11 13 h 12 → 15 h 16** : **91** portes, **89/2** ; seules `indice` (859 s) et `melange` (106 s) **structurelles** ; `sessions` **verte** ; machine chargée (deux runs de sources), verdict seul | `work/portes/roue-1119-1316/registre.txt` |
 
