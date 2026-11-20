@@ -1,10 +1,10 @@
 # La sélection du contenu : `wiki_big` seul, `wiki_fr` seul, le mélange — à pas égal sur wikitext2
 
-> **Ligne de roadmap** : N (le palier 1) · **Date** : 2026-11-19 · **Verdict** : ✅ mesuré — la
+> **Ligne de roadmap** : N (le palier 1) · **Date** : 2026-11-19 · **Verdict** : ⚠️ **partiellement tranché** — la
 > **sélection du contenu** est bien la variable : sur wikitext2, `wiki_big` **seul** rend **7,2237**,
-> mieux que le mélange v1 (**7,3987**) et que le plein texte v2 (**7,4277**) ; `wiki_fr` seul, le
+> v1 **7,3987** et v2 **7,4277** : ces trois-là sont **au même niveau** (le rejeu de la nuit donne **7,3531**, soit ±1,8 % de run-à-run) ; `wiki_fr` seul, le
 > meilleur sur le val de v1 (2,8973), est le **pire** sur le val tiers (**8,0876**). Les résumés
-> sur-apprennent leur distribution, et leur ajout au mélange **coûte 2,4 %** sur wikitext2.
+> sur-apprennent leur distribution ; le long-forme (**8,1943**) est du même ordre. Seuls ces deux-là sont nettement décrochés (+9-11 %).
 >
 > **Dispositif** : deux chaînes `entrainer_native.py` (GPU 0 = `wiki_big`, GPU 1 = `wiki_fr`),
 > 3 tranches de 10 000 pas, même recette que les runs précédents (lr 1e-4, AMP, `d=896`, graine 1,
@@ -32,6 +32,18 @@ v1 (7,3987 contre 7,4277 à pas égal, 3,2 % à 110 000 pas) vient-il d'une **so
 | v1 (wiki_big + wiki_fr) | 7,3987 | 3,0763 |
 | v2 (plein texte) | 7,4277 | 3,1922 |
 | `wiki_fr` seul (186 Mo) | 8,0876 | **2,8973** |
+
+## La réplication de la nuit (19-20/11) — et le bruit du run-à-run
+
+La nuit a **rejoué `wiki_big` seul** (même recette, même graine, même corpus) : le pas 1 est
+**bit-identique** (perte 5,6191, PPL 185,706), mais à 30 000 pas le run rend **7,3531** contre
+**7,2237** l'après-midi — **+1,8 %**. La PPL du val de v1, elle, reste stable (3,1196 contre 3,1144,
++0,17 %). La dispersion vient donc de l'**entraînement** (non-déterminisme GPU), pas de
+l'initialisation — et elle porte sur le **val tiers**, celui qui juge la sélection.
+
+**Conséquence** : les écarts fins (`wiki_big` **7,22-7,35**, v1 **7,3987**, v2 **7,4277**) sont
+**dans le bruit** du run-à-run (±1,8 %) ; seuls le **long-forme** (**8,1943**) et `wiki_fr` seul
+(**8,0876**), à +9-11 %, en sortent. Une comparaison fine demanderait **2-3 graines par corpus**.
 
 ## La lecture
 

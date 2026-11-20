@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,6 +18,7 @@
 | 10:33 | `8392a482` | N — LE TEST À TROIS SUR WIKITEXT2 À 20 000 PAS : LE BRUT GAGNE ENCORE (7,8688 CONTRE 7,9091 ET 8,0378) | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 11:42 | `8de4b3d8` | N — LE TEST À TROIS EST TRANCHE : NI LE NETTOYAGE NI LE RECOLLEMENT NE PAYENT (WIKITEXT2 À 30 000 PAS : 7,4277 BRUT, 7,6189 NETTOYÉ, 7,7476 RECOLLÉ) | `en-cours.md`, `README.md`, `distribue.md` (+16) |
 | 15:39 | `10a3e49c` | N — LA SÉLECTION DU CONTENU EST LA VARIABLE : `wiki_big` SEUL BAT LE MÉLANGE ET LE PLEIN TEXTE (7,2237 CONTRE 7,3987 ET 7,4277) | `en-cours.md`, `references-non-regression.md`, `README.md` (+26) |
+| 18:05 | `92055c57` | N — LA NUIT, TRANCHE 1 : wiki_big 8,86 SUR WIKITEXT2 (PPL v1 3,53) CONTRE 9,94 POUR LE LONG-FORME (3,67) ; LA COURBE SAIT LIRE WIKITEXT2 | `en-cours.md`, `README.md`, `distribue.md` (+18) |
 
 ## Chiffres du jour
 
@@ -27,7 +28,7 @@
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 56.3 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 58.5 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 
 ## Mesures et rapports touchés
 

@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 56.3 h |
-| Tours | 72 |
-| Messages | 1082 |
-| Appels d'outils | 937 |
+| Durée | 58.5 h |
+| Tours | 74 |
+| Messages | 1109 |
+| Appels d'outils | 959 |
 | Fichiers touchés | 44 |
-| Commandes | 793 |
+| Commandes | 815 |
 | Sous-agents | 7 |
-| Commits | 74 |
+| Commits | 75 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -199,6 +199,10 @@
 **Tour 71** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [687 caractères tronqués]
 
 **Tour 72** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [687 caractères tronqués]
+
+**Tour 73** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [687 caractères tronqués]
+
+**Tour 74** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1750,10 +1754,50 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 
 ### Tour 72 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [967 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Commit the first night tranche's data
 - bash — Commit the first night tranche with the corrected counter
+- bash — Ten-minute pause
+- bash — Ten-minute pause and check
+- bash — Check the second night tranche
+- bash — Read the second night tranche's wikitext2
+
+**Synthèse produite :**
+
+⏵ Deuxième tranche : `wiki_big` **7,83** sur wikitext2 (PPL v1 3,23) contre **8,50** pour le long-forme (3,41) — l'écart tient
+
+**Le point** : à 20 000 pas, `wiki_big` mène sur les deux juges (wikitext2 7,83 contre 8,50 ; val de v1 3,23 contre 3,41). Le point à 30 000 pas (≈ 20 h 15) sera doublement intéressant : il doit **reproduire** le 7,2237 de la référence `wiki_big` seul de cet après-midi (même recette, même graine — un contrôle de reproductibilité), et il donnera le premier vrai chiffre du corpus long-forme.
+
+### Tour 73 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [967 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause
+- bash — Ten-minute pause and check
+- bash — Check the third tranche (the 30k point)
+- bash — Read the 30k point
+
+**Synthèse produite :**
+
+⏵ Le long-forme à 30 000 pas : **8,19** sur wikitext2 (PPL v1 3,30) — le pire des corpus ; `wiki_big` (la réplication) arrive dans ~10 minutes
+
+**Le point** : le corpus « long-forme » (les lignes ≥ 200 o du plein texte) rend **8,1943** à 30 000 pas sur wikitext2, contre 7,2237 pour `wiki_big` seul, 7,3987 pour le mélange v1 et 7,4277 pour le plein texte. Filtrer les lignes longues du plein texte ne retrouve donc pas la qualité de `wiki_big` : la sélection ne se réduit pas à la longueur des lignes. Le run `wiki_big` (même recette que la référence de l'après-midi) doit rendre ~7,22 — c'est le contrôle de reproductibilité de la nuit.
+
+### Tour 74 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [968 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Read the wiki_big 30k point
+- bash — Compare the initial states of the replayed runs
+- bash — Add the replication and the variance caveat to the selection fiche
+- bash — Read the fiche's current verdict
+- bash — Apply the replication caveat correctly
+- bash — Update the state with the replication caveat
+- bash — Read the exact state strings
+- bash — Apply the state edits with the exact anchors
+- bash — Trim the N bullet under 80 words
+- bash — Commit the 30k milestone and the replication finding
 
 ## 3. Travail accompli
 
@@ -1858,7 +1902,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 753 autres
+- … et 775 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2080,4 +2124,5 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp work/n4/nuit.sh bench/chaine_nuit.sh && git add drave-core/src/model.rs drave-core/src/materiel.rs tool
 - N — LA NUIT, TRANCHE 1 : wiki_big 8,86 SUR WIKITEXT2 (PPL v1 3,53) CONTRE 9,94 POUR LE LONG-FORME (3,67) ; LA COURBE SAIT LIRE WIKITEXT2" && git push origin s/v
 - N — LA NUIT, TRANCHE 1 : wiki_big 8,86 SUR WIKITEXT2 (PPL v1 3,53) CONTRE 9,94 POUR LE LONG-FORME (3,67) ; LA COURBE SAIT LIRE WIKITEXT2" && git push origin s/v
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-selection-contenu.md reports/banc-generation-nb2.json reports/banc-generation-nl2.
 

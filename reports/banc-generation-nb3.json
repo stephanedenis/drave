@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/nb3.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9489,
+   "distinct_2": 0.456,
+   "repetition": 13,
+   "echo": 0.1318,
+   "octets": 2560,
+   "secondes": 23.32,
+   "octets_s": 109.8,
+   "echantillons": [
+    {
+     "mots": 31,
+     "mots_valides": 0.9032,
+     "distinct_2": 0.7333,
+     "repetition": 2,
+     "echo": 0.3076923076923077,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays français de la commune de La France en 1930 par le commune de La France en 1930. Il est considéré comme un parc de la commun",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9286,
+     "distinct_2": 0.7407,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le premier arrêt de la communauté de communes de la commune de Corée du Sud et de la communauté de communes de la communau",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.48,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le processus de la communauté de communes de la communauté de communes de la communauté de communes de la communauté de",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 31,
+     "mots_valides": 0.9032,
+     "distinct_2": 0.7333,
+     "repetition": 2,
+     "echo": 0.3076923076923077,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays français de la commune de La France en 1930 par le commune de La France en 1930. Il est considéré comme un parc de la commun",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9286,
+     "distinct_2": 0.7407,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le premier arrêt de la communauté de communes de la commune de Corée du Sud et de la communauté de communes de la communau",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.48,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le processus de la communauté de communes de la communauté de communes de la communauté de communes de la communauté de",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2857,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de la commune de La Charité de la commune de La Charité de la commune de La Charité de la commune de La Charité de la commu",
+     "octets": 128
+    },
+    {
+     "mots": 41,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1,
+     "repetition": 13,
+     "echo": 0.6410256410256411,
+     "prompt": "La mer",
+     "texte": "La mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la m",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8929,
+     "distinct_2": 0.6667,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent au profit de la province de Colombie en 1973. Le , le projet de la province de Colombie et de la province de Colombie en 1974. ",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2667,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de la province de La Province de La Province de La Province de La Province de La Province de La Province de La Province de La P",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 0.9091,
+     "repetition": 2,
+     "echo": 0.047619047619047616,
+     "prompt": "Paris est",
+     "texte": "Paris est un petit professeur de photographie à l'université de Cologne et de l'université de Cologne en 1960. Il est le petit profess",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4667,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de la chanson est de 10 minutes de long et de large de large de large de large de large de large de large de large de large de ",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2857,
+     "repetition": 8,
+     "echo": 0.2962962962962963,
+     "prompt": "La musique",
+     "texte": "La musique de la chanson est une chanson de la chanson de la chanson de la chanson de la chanson de la chanson de la chanson de la chanson",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2667,
+     "repetition": 12,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la commune de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Ma",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.6875,
+     "distinct_2": 0.5333,
+     "repetition": 3,
+     "echo": 0.2857142857142857,
+     "prompt": "La guerre",
+     "texte": "La guerre de Saint-Laurent de la Sainte-Croix-de-Laurent de la Sainte-Croix-de-Laurent de la Sainte-Croix-de-Laurent de la Sainte-Croix-d",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2593,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la commune de La Charité de la commune de La Charité de la commune de La Charité de la commune de La Charité de la commu",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 0.5714,
+     "repetition": 3,
+     "echo": 0.05,
+     "prompt": "Le sport",
+     "texte": "Le sport de la commune de Saint-Pétersbourg est un sport de la commune de Saint-Pétersbourg et de la commune de Saint-Pétersbourg en ",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5667,
+     "repetition": 5,
+     "echo": 0.03333333333333333,
+     "prompt": "La science",
+     "texte": "La science de la chanson est de  de long et  de long et  de long et  de long et  de long et  de large. Le , le conseil d'un conseil d'un c",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.6522,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "La ville",
+     "texte": "La ville de Saint-Laurent est une ville de Saint-Laurent en 1883 par le comté de Saint-Laurent en 1884 par le comté de Saint-Laurent e",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6071,
+     "repetition": 2,
+     "echo": 0.1111111111111111,
+     "prompt": "Le temps",
+     "texte": "Le temps de la commune de La Chambre des communes de 1990 à 1990. Le temps de la commune de La Chambre des communes de 1991 à 1993, le",
+     "octets": 128
+    },
+    {
+     "mots": 35,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1765,
+     "repetition": 6,
+     "echo": 0.48484848484848486,
+     "prompt": "La vie",
+     "texte": "La vie de la commune de La Vie de la commune de La Vie de la commune de La Vie de la commune de La Vie de la commune de La Vie de la c",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2667,
+     "repetition": 12,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de la commune de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Maria de Ma",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2857,
+     "repetition": 4,
+     "echo": 0.3333333333333333,
+     "prompt": "La question",
+     "texte": "La question de la commune de La Charité de la commune de La Charité de la commune de La Charité de la commune de La Charité de la commu",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.8701,
+   "distinct_2": 0.9598,
+   "repetition": 2,
+   "echo": 0.0392,
+   "octets": 2533,
+   "secondes": 23.54,
+   "octets_s": 107.6,
+   "echantillons": [
+    {
+     "mots": 19,
+     "mots_valides": 0.6842,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays sur les esqualifications ; technique des systèmes : Blanc, Marchine et Winchester and A FAD. Compo\n",
+     "octets": 101
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1950 une diffusion de 1950 à 1951, elle est retournée mais nommée principale de Paris-Bonaparte (née Exécution) comme c",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois internationale de 2,2 près de 10 ans, de l'équipe de Pologne de Pologne. Le , il annonce la division signale d'un an plus tar",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 19,
+     "mots_valides": 0.6842,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays sur les esqualifications ; technique des systèmes : Blanc, Marchine et Winchester and A FAD. Compo\n",
+     "octets": 101
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1950 une diffusion de 1950 à 1951, elle est retournée mais nommée principale de Paris-Bonaparte (née Exécution) comme c",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois internationale de 2,2 près de 10 ans, de l'équipe de Pologne de Pologne. Le , il annonce la division signale d'un an plus tar",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Le chat",
+     "texte": "Le chat de la moitié du . À partir de 2008, l'année au , le clocher fondé dirigé par sa propre secrétaire d'un internationale mil",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9048,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "La mer",
+     "texte": "La mer propose une association de carburants ainsi que le carburant sur l'évolutipation est une partie de la milicence de carburants ",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9,
+     "distinct_2": 0.8966,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent au Sud en 2015 à Los Angeles et en 2016 à Toronto (1919) est remarquable au Sud en Russie du Sud en 2017 dans la catégorie d",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.8077,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé à la mort de son père à pourvoir construit à la mort de son père. Il forme une majeure d'une substitutionnelle et contempo",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.8095,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est actif insulter la sentière internationale. Dans un parc, d'alléger différent six anciens de la nuit pour la période. L'anci",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Un homme",
+     "texte": "Un homme le , l'ancien premier album comporte une personne dans un titre mondial sur le site de la Couleur. L'ancien premier pratique im",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.8571,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "La musique",
+     "texte": "La musique de vente ce sont lessus d'un des titres à occasion de la psychologie illustratrice.. Données par Choline HilldegaAlessandra L",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8966,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07407407407407407,
+     "prompt": "Le livre",
+     "texte": "Le livre de la Crucie à San Francisco est un livre du même nom sous le presbytère du film Jean. Il est aussi à la rive du football c",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre est construite entre 1530 et 1533, entre 1682 et 1684. Il obtient un doctorat à l'université de Dantavisia, dont le présiden",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.9,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie américaine de football pour voir l'échelle, elle est la présence d'une fauteuse d'oiseaux. Le , la viction éloignée par el",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.68,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport du pays de Tokyo Fatsheater lors de l'invasion : sorti en 2013. Synopsis Nams Tokyo Fatsheater of the Daith Roin of Palmes of N",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.9444,
+     "distinct_2": 0.9412,
+     "repetition": 1,
+     "echo": 0.11764705882352941,
+     "prompt": "La science",
+     "texte": "La science-fiction est la plus royale. La science-fiction également est l'une des science-fiction orientale du sculpteur d'artistes anima",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "La ville",
+     "texte": "La ville  est promée en 1925 avec la Bretagne sur le débarquement de l'arrière du pays du cloué en 1976. Ce boulant soit créé par ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Le temps",
+     "texte": "Le temps ne joue pas de course dans un équipement imposant au moins 2 années par un mois par une division. Le gouvernement de concepti",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.5,
+     "distinct_2": 0.8095,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie française de Tosi Moyse, ainsi que les langues géographiques de Tosi Moyse Moyse Charles Moyse Moyse Aimon Moyse Moyse Notes ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.038461538461538464,
+     "prompt": "Le monde",
+     "texte": "Le monde le  à Lanaval, ainsi que vers 1755 « Je tu lana » () pour voir une science-fiction de pop au musée de l'eau à Lanaval). En",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.13043478260869565,
+     "prompt": "La question",
+     "texte": "La question de la Los voiles (2018), conçue en 1973. À la suite de la bande provinciale, il joue un couple en second maître d'entre-deux",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.8809,
+   "distinct_2": 0.7852,
+   "repetition": 5,
+   "echo": 0.0714,
+   "octets": 2560,
+   "secondes": 23.84,
+   "octets_s": 107.4,
+   "echantillons": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 0.88,
+     "repetition": 1,
+     "echo": 0.13636363636363635,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de modèle situé à l'extrême droite et situé à l'extrémité de l'arrondissement de La France, mais il s'agit de la sup",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, l'architecte de l'église de l'État de l'Alberta en 1951 le plus vieux proche de la protection de l'Église anglaise et le pa",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de cinq enfants de fonctions de l'université de St Brooke le . Synopsis En 1932, le , Shadows est le premier but de créer le ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 0.88,
+     "repetition": 1,
+     "echo": 0.13636363636363635,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de modèle situé à l'extrême droite et situé à l'extrémité de l'arrondissement de La France, mais il s'agit de la sup",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, l'architecte de l'église de l'État de l'Alberta en 1951 le plus vieux proche de la protection de l'Église anglaise et le pa",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de cinq enfants de fonctions de l'université de St Brooke le . Synopsis En 1932, le , Shadows est le premier but de créer le ",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8214,
+     "distinct_2": 0.4444,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de Lisa Herbert de la Réserve de la Réserve de la région de Lisa Herbert de la Réserve de la Réserve de la région du Cana",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.875,
+     "repetition": 2,
+     "echo": 0.13043478260869565,
+     "prompt": "La mer",
+     "texte": "La mer de la chanson est située à  au sud de la commune de France en Angleterre, en France. Composition La chanson est construite da",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.19047619047619047,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent avec les enfants de l'armée américaine et d'autres enfants en demi-finale par les forces de la guerre en Allemagne. Il devien",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.7692,
+     "repetition": 2,
+     "echo": 0.17391304347826086,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de la commune de Bourgogne en 1970 pour le transfert du gouvernement de la commune de Bourgogne en 1975. Le gouvernement fut re",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 0.6,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un membre de la construction de la présence de l'armée des Alpes de l'Armée des Alpes de l'Armée des Alpes de l'Armée du S",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9167,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de l'exposition de l'année 1977 est le commandant de la région de San Calvaire (1982) et le conseil d'adjoint de la région d",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.7857,
+     "distinct_2": 0.4444,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique de champions de France de coupe de France de coupe de France de coupe de France des coupes de France de coupe de France de coup",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.95,
+     "distinct_2": 0.7895,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la chaîne de construction de l'église Saint-Maquette-le-Seine à la chaîne de construction de l'artiste paroissial de con",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.17391304347826086,
+     "prompt": "La guerre",
+     "texte": "La guerre de Bourgogne est constituée de fils. La guerre de Bourgogne se trouve une plateforme de la ville de Bourgogne et de la rivièr",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "L'économie",
+     "texte": "L'économie est un outil de six chants et tels que la série de l'économie est souvent désignée par des lignes du réseau de la concepti",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.4583,
+     "distinct_2": 0.5652,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport de la montagne Charles Sarah de Martin (1922-1932) de Martin Andrew de Martin Andrew de Martin Andrew de Martin Andrew de Marti",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "La science",
+     "texte": "La science est présentée à la chambre des communes de 1773 à 1785. Le , le grand-père de l'autonomie de 1878 à 1888 est l'autonomist",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 0.72,
+     "repetition": 2,
+     "echo": 0.08333333333333333,
+     "prompt": "La ville",
+     "texte": "La ville de Sergueï (La ville de Sergueï et de Sergueï et de Sergueï) est un ancien journaliste russe. Il est situé à l'est de l'a",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8929,
+     "distinct_2": 0.7037,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la mer du Nord est une poisson de la région de la région de Marianne Au cours de la région de Marianne. Depuis la premiè",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.64,
+     "repetition": 2,
+     "echo": 0.3333333333333333,
+     "prompt": "La vie",
+     "texte": "La vie de la baie, la vie et la vie de la sous-famille est constituée de la commune de Bretagne (détruite de la commune de Bretagne)",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.875,
+     "repetition": 2,
+     "echo": 0.043478260869565216,
+     "prompt": "Le monde",
+     "texte": "Le monde comprend la première fois en 1997 par le premier tour de la chanson Rodrigues de la chanson Saline des chanteuses de la chanso",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8148,
+     "repetition": 2,
+     "echo": 0.07692307692307693,
+     "prompt": "La question",
+     "texte": "La question est l'ancien chemin de fer de la deuxième place et de la saison de 2018 à 2019. L'ancien chemin de fer de Paris, le dernier d",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**27 commits** · **1 session(s)** · **7 thème(s)**
+**28 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 10 | [mesures.md](mesures.md) |
+| mesures | 11 | [mesures.md](mesures.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 2 | [portes.md](portes.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 56.3 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 58.5 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -56,6 +56,7 @@
 | 15:39 | `10a3e49c` | N — LA SÉLECTION DU CONTENU EST LA VARIABLE : `wiki_big` SEUL BAT LE MÉLANGE ET LE PLEIN TEXTE (7,2237 CONTRE 7,3987 ET 7,4277) |
 | 16:28 | `62719c32` | PILOTAGE — LA FILE REDEVIENT EXACTE : ROADMAP AU 19/11 ET « CE QUI RESTE » RÉÉCRIT |
 | 16:43 | `c932aa35` | A2.6 — LES DEUX DERNIÈRES PIÈCES (BANDES CONSOLIDÉES, GARDE DES CLUSTERS) ET LA NUIT LANCÉE |
+| 18:05 | `92055c57` | N — LA NUIT, TRANCHE 1 : wiki_big 8,86 SUR WIKITEXT2 (PPL v1 3,53) CONTRE 9,94 POUR LE LONG-FORME (3,67) ; LA COURBE SAIT LIRE WIKITEXT2 |
 
 ## Le récit de la journée (écrit à la main)
 

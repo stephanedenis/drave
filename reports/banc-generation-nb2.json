@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/nb2.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.8735,
+   "distinct_2": 0.3927,
+   "repetition": 9,
+   "echo": 0.1259,
+   "octets": 2560,
+   "secondes": 23.39,
+   "octets_s": 109.5,
+   "echantillons": [
+    {
+     "mots": 35,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.3235,
+     "repetition": 4,
+     "echo": 0.5,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la commune de La France et de la commune de La France et de la commune de La France est un pays de la commune de La France e",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.48,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le principal de la communauté de communes de la communauté de communes de communes de communes de communes de communes de co",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4583,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le principal de la communication de la communication de la communication de la communication de la communication de la comm",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 35,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.3235,
+     "repetition": 4,
+     "echo": 0.5,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la commune de La France et de la commune de La France et de la commune de La France est un pays de la commune de La France e",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.48,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le principal de la communauté de communes de la communauté de communes de communes de communes de communes de communes de co",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4583,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le principal de la communication de la communication de la communication de la communication de la communication de la comm",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 0.4516,
+     "distinct_2": 0.2667,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de la commune de Louis XIV de Louis XIV de Louis XIV de Louis XIV de Louis XIV de Louis XIV de Louis XIV de Louis XIV de Louis ",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 0.2414,
+     "repetition": 8,
+     "echo": 0.3103448275862069,
+     "prompt": "La mer",
+     "texte": "La mercation de la commune de La Marine de La Marine de La Marine de La Marine de La Marine de La Marine de La Marine de La Marine de ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4167,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent au conservatoire de la commune de La Cathédrale de La Cathédrale de La Cathédrale de La Cathédrale de La Cathédrale de La ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.52,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de de se rendre à la construction de la construction de la construction de la construction de la construction de la constructi",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4231,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un petit conservateur de la commune de La Charité de la Charité de la Charité de la Charité de la Charité de la Charité d",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme qui a été décrit par le conseil de la commune de Saint-Laurent et le communication de la commune de Saint-Laurent et de Sain",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2857,
+     "repetition": 4,
+     "echo": 0.3333333333333333,
+     "prompt": "La musique",
+     "texte": "La musique de la commune de La Charité de la commune de La Charité de la commune de La Charité de la commune de La Charité de la commu",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.4483,
+     "distinct_2": 0.3929,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la commune de Louis XIII de Louis XIII de Louis XIII de Louis XIIII de Louis XIIII de Louis XIII de Louis XIIII de Louis XII",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1935,
+     "repetition": 9,
+     "echo": 0.3333333333333333,
+     "prompt": "La guerre",
+     "texte": "La guerre de la Course de la Course de la Course de la Course de la Course de la Course de la Course de la Course de la Course de la Cour",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.25,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la commune de La Chambre de la commune de La Chambre de la commune de La Chambre de la commune de La Chambre de la commune d",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.4643,
+     "distinct_2": 0.4074,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport de la commune de Louis XVIII de Louis XVIII de Louis XVIII de Louis XVIII de Louis XVIII de Louis XVIII de Louis XVIIII de Loui",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2963,
+     "repetition": 6,
+     "echo": 0.2692307692307692,
+     "prompt": "La science",
+     "texte": "La science de la commune de La Sainte Commune de La Sainte Commune de La Sainte Commune de La Sainte Commune de La Sainte Commune de La Sa",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9524,
+     "distinct_2": 0.85,
+     "repetition": 2,
+     "echo": 0.10526315789473684,
+     "prompt": "La ville",
+     "texte": "La ville de Saint-Laurent (1978) est un ancien compositeur et compositeur français de théâtre de la composition de la composition de ",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.4483,
+     "distinct_2": 0.3571,
+     "repetition": 7,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la commune de Louis XIII de Louis XIII de Louis XIII de Louis XIII de Louis XIII de Louis XIII de Louis XIIII de Louis XIII ",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2857,
+     "repetition": 4,
+     "echo": 0.3333333333333333,
+     "prompt": "La vie",
+     "texte": "La vie de la commune de La Charité de la commune de La Charité de la commune de La Charité de la commune de La Charité de la commu",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3333,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de commerce de la commune de La Charité de la commune de La Charité de la commune de La Charité de la commune de La Charité",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.28,
+     "repetition": 4,
+     "echo": 0.3333333333333333,
+     "prompt": "La question",
+     "texte": "La question de la commune de La Révolution de la commune de La Révolution de la commune de La Révolution de la commune de La Révolution",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.8814,
+   "distinct_2": 0.9661,
+   "repetition": 2,
+   "echo": 0.0571,
+   "octets": 2538,
+   "secondes": 23.33,
+   "octets_s": 108.8,
+   "echantillons": [
+    {
+     "mots": 31,
+     "mots_valides": 0.9677,
+     "distinct_2": 0.9667,
+     "repetition": 1,
+     "echo": 0.2222222222222222,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays, valide de la Chambre des anciens de danse, pour la suite de la marque en 1860, ce qui est la plus établissant à la partie in",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.75,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le cinégula se concident, le travail était attracté de la ville de Ostegar dans la canson architecturale dans le départeme",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de 1910 à 1911, à l'âge de 19 ans, puis le train de guerre civillaire de l'histoire de l'université de Louis Mecuratour de ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 31,
+     "mots_valides": 0.9677,
+     "distinct_2": 0.9667,
+     "repetition": 1,
+     "echo": 0.2222222222222222,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays, valide de la Chambre des anciens de danse, pour la suite de la marque en 1860, ce qui est la plus établissant à la partie in",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.75,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le cinégula se concident, le travail était attracté de la ville de Ostegar dans la canson architecturale dans le départeme",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de 1910 à 1911, à l'âge de 19 ans, puis le train de guerre civillaire de l'histoire de l'université de Louis Mecuratour de ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Le chat",
+     "texte": "Le chat possède un site en service sélectionné à Göttsburg, sur le terrain. Il est ensuite de spécialisation de l'art de sa commu",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.7826,
+     "repetition": 2,
+     "echo": 0.17391304347826086,
+     "prompt": "La mer",
+     "texte": "La merciie est située à la France lente de la Ligue de distance de la capitale Saint-Jean de la Ligue de distance entre l'Allemagne ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.038461538461538464,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent aux troupes de la veille et aux troupes des enfants ; il mentionne au cas de concurrence par deux passions de shet ; il est dev",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé d'accider à une hauteur de préface récurrente à consommer des gouvernements politiques à un Dan Brossommène restauré dan",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.8,
+     "distinct_2": 0.8947,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est le calteur de l'Église catale en 1937 lors des Roses de l'Église catale et de l'université de Sotanis\n",
+     "octets": 106
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9048,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme qui-même possible aux élevages de cette saison (première fois de cette commande contrôlée avec les récifs polis..) Ce der",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.13043478260869565,
+     "prompt": "La musique",
+     "texte": "La musique a été conçue en 1911 en 1944 par un succès de décret en tête celle-ci. Marie, après la mort. La construction de musique ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "Le livre",
+     "texte": "Le livre L'agression et le sous-compos emménagé d'un garais de groupe magique et d'un élu. La rivière agression a déclaré lors de ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre sacrée est tuée à une course. En 1939, le parc avait été construit en arrivés du ministère qui était diffusé en 1940 p",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de l'assiste pour les économies protégées au Les Sarah au théâtre Samara et il en est joué à la société d'un thème de",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8421,
+     "distinct_2": 0.9444,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport a été découvert du . Statistics L'indépendant et les articles supertages de la communauté de la révolution indépendante ",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.7647,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.06666666666666667,
+     "prompt": "La science",
+     "texte": "La science Isslamin Catégorie:Obtent par mention d'infanterie de la meilleure compétition électorale du lac Catégorie:Naissance en sep",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.8235,
+     "distinct_2": 0.875,
+     "repetition": 2,
+     "echo": 0.13333333333333333,
+     "prompt": "La ville",
+     "texte": "La ville de Barner-Barner-Barner-Barner-Barner-Barner-Barner-Barner Barner, en service en 2015. La ville de Barner-Barner est le fils de",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "Le temps",
+     "texte": "Le temps en tant que matchs quinze matchs europées de cinq six enfants. Le tour a été utilisé par Gills Leber de l'équipage de la F",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.7826,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie à Madrid SiduCampagne Anciens publiésLe lac de sœufs Partie Tike a diffusé une ou un prolongé son régime de prometteurs s",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.9,
+     "distinct_2": 0.9474,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde soit son fils La réalisation saint Maison sur l’édifice (des Affaires validations et Lesouse Alliés) et l’édifice (des ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.14285714285714285,
+     "prompt": "La question",
+     "texte": "La question de la chaîne Saint-Martin-du-de-Galafranche. Le jour est constitué pour la langue par la saison 2020. Elle est une place de t",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9298,
+   "distinct_2": 0.6974,
+   "repetition": 8,
+   "echo": 0.0864,
+   "octets": 2560,
+   "secondes": 23.47,
+   "octets_s": 109.1,
+   "echantillons": [
+    {
+     "mots": 29,
+     "mots_valides": 0.931,
+     "distinct_2": 0.8571,
+     "repetition": 2,
+     "echo": 0.16666666666666666,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays moderne au conseil le  au Conseil d'État de la Révolution et la  de la Révolution en 1958 à Paris et de la Conseil Scénari",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8966,
+     "distinct_2": 0.8929,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, ce qui est le conseil de l'équipe de France pour la première fois par l'équipe de France en 1960 en 2005, ce qui doit assum",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8276,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le port du rock pour le contributeur de la construction de la port de la construction du capital de la mort de la porte du ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 29,
+     "mots_valides": 0.931,
+     "distinct_2": 0.8571,
+     "repetition": 2,
+     "echo": 0.16666666666666666,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays moderne au conseil le  au Conseil d'État de la Révolution et la  de la Révolution en 1958 à Paris et de la Conseil Scénari",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8966,
+     "distinct_2": 0.8929,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, ce qui est le conseil de l'équipe de France pour la première fois par l'équipe de France en 1960 en 2005, ce qui doit assum",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8276,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le port du rock pour le contributeur de la construction de la port de la construction du capital de la mort de la porte du ",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8929,
+     "distinct_2": 0.8519,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de la méthode de Nancy, de la marine de la même pierre de Roland III de La Marine à l'âge de 7 ans. Les premières études ",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 0.9091,
+     "distinct_2": 0.2812,
+     "repetition": 8,
+     "echo": 0.3125,
+     "prompt": "La mer",
+     "texte": "La merciie Saint-Joseph de La Morette de la Cour de la Cour de la Cour de la Cour de la Cour de la Cour de la Cour de la Cour de la Co",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7692,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent le prix de la série suisse de la construction de catalogues de la série suisse. La série a suivi le constructeur de la ville",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.6667,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé d'abord à l'abbaye de la restauration de l'ancien artiste de la restauration de la colonie de la restauration de la restaurati",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6087,
+     "repetition": 4,
+     "echo": 0.045454545454545456,
+     "prompt": "Paris est",
+     "texte": "Paris est un établissement de la communauté de la Communauté de Paris au Conseil des affaires de la Communauté de la Communauté de m",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.7308,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de composition de l'amour de l'amour de la censure de l'amour de la route de la Cologne de la Serbie. En 1974, la composition d",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "La musique",
+     "texte": "La musique est construite et important dans les événements et de recherche les musiciens de l'artisanat de la construction de la ville d",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3333,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la Seconde Guerre mondiale de la Seconde Guerre mondiale de la Seconde Guerre mondiale de la Seconde Guerre mondiale de la S",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.625,
+     "distinct_2": 0.7333,
+     "repetition": 2,
+     "echo": 0.14285714285714285,
+     "prompt": "La guerre",
+     "texte": "La guerre de Saint-Pierre de Saint-Pierre-de-Disours (1874-1881) est la guerre de Saint-Pierre de Saint-Pierre-de-Colombes de Saint-Pierr",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.9,
+     "distinct_2": 0.6316,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie est une commune de Louise de l'Union européenne de l'Union européenne de l'Union européenne du Louis de l'Union européenne ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.7692,
+     "repetition": 2,
+     "echo": 0.11538461538461539,
+     "prompt": "Le sport",
+     "texte": "Le sport est construit en 1986 par la radio de la ville de La Bouverne de Labourne. Le sport est construit le . La commune de la commune",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5217,
+     "repetition": 3,
+     "echo": 0.3181818181818182,
+     "prompt": "La science",
+     "texte": "La science de la science de la science-fiction de la science-fiction de l'Art de la Science-Fiction de la Société de la province de Comp",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "La ville",
+     "texte": "La ville de La Carne de Lausanne est actuellement visitée à plusieurs reprises et en particulier le marché en langue où le traitemen",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.5652,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la capitale de la capitale des capitalistes de la capitale des capitales de la capitale des capitales militaires de la capit",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "La vie",
+     "texte": "La vie de la vie a été décrite par le gouvernement en 1975. Aux élections législatives des années 1980, des élections législat",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.5,
+     "repetition": 3,
+     "echo": 0.08,
+     "prompt": "Le monde",
+     "texte": "Le monde de la localité de la localité de la localité de l'Allemagne sur le site de la Société de l'Allemagne sur le site de la loc",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5,
+     "repetition": 4,
+     "echo": 0.30434782608695654,
+     "prompt": "La question",
+     "texte": "La question de la construction de la construction de la construction de la construction de la ville de Paris (Situation de la région de la",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

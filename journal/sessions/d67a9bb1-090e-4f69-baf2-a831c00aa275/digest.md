@@ -16134,3 +16134,262 @@ NameError: name 'n' is not defined
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **813** / **980** |'\nnew = '| fichiers / JSON de résultats | **813** / **986** |'\nassert s. … [685 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   c932aa35..92055c57  s/v7 -> s/v7
+jeu 19 nov 2026 18:08:08 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 18:18:05 EST
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/nl.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 18:28:00 EST
+pas 5550
+pas 6400
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 18:37:53 EST
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1223 (bash: sleep 6000; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c "
+import json
+for f in ('nb1','nl1','nb2','nl2'):
+    try:
+        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))
+    except FileNotFoundError: print(f, '-')
+for f in ('nb1','nl1'):
+    try:
+        d=json.load(open(f'reports/ppl-wikitext2-{f}.json')); print(f, 'wikitext2', round(d['ppl'],4))
+    except FileNotFoundError: print(f, 'wikitext2 -')") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -c \"=== tranche\" work/n4/nb.chaine.log work/n4/nl.chaine.log; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 18:47:48 EST
+work/n4/nb.chaine.log:2
+work/n4/nl.chaine.log:2
+pas 8400
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb2','nl2'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"", "descriptio … [58 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 18:57:44 EST
+nb2 -
+nl2 ppl v1 3.4124
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb2','nl2'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('nb2 … [263 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 19:07:39 EST
+nb2 ppl v1 3.2334
+nl2 ppl v1 3.4124
+nb2 wikitext2 7.834
+nl2 wikitext2 8.499
+  ```
+
+### 🤖 Assistant
+
+⏵ Deuxième tranche : `wiki_big` **7,83** sur wikitext2 (PPL v1 3,23) contre **8,50** pour le long-forme (3,41) — l'écart tient
+
+**Le point** : à 20 000 pas, `wiki_big` mène sur les deux juges (wikitext2 7,83 contre 8,50 ; val de v1 3,23 contre 3,41). Le point à 30 000 pas (≈ 20 h 15) sera doublement intéressant : il doit **reproduire** le 7,2237 de la référence `wiki_big` seul de cet après-midi (même recette, même graine — un contrôle de reproductibilité), et il donnera le premier vrai chiffre du corpus long-forme.
+
+
+## Tour 73
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes d'A2.6 (le scan des clusters, les bandes de `materiel.rs`) et les tester ; (3) fiche, état, commit et push pour chaque résultat ; bilan à 8 h."
+Round: 9/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 19:17:49 EST
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/nl.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 19:27:44 EST
+pas 3750
+pas 5100
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 19:37:40 EST
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/nl.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 19:47:35 EST
+pas 6600
+pas 8100
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb3','nl3'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"", "descriptio … [67 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 19:57:31 EST
+nb3 -
+nl3 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb3','nl3'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('nb3 … [240 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 20:07:26 EST
+nb3 -
+nl3 ppl v1 3.2969
+nb3 wikitext2 -
+nl3 wikitext2 8.1943
+  ```
+
+### 🤖 Assistant
+
+⏵ Le long-forme à 30 000 pas : **8,19** sur wikitext2 (PPL v1 3,30) — le pire des corpus ; `wiki_big` (la réplication) arrive dans ~10 minutes
+
+**Le point** : le corpus « long-forme » (les lignes ≥ 200 o du plein texte) rend **8,1943** à 30 000 pas sur wikitext2, contre 7,2237 pour `wiki_big` seul, 7,3987 pour le mélange v1 et 7,4277 pour le plein texte. Filtrer les lignes longues du plein texte ne retrouve donc pas la qualité de `wiki_big` : la sélection ne se réduit pas à la longueur des lignes. Le run `wiki_big` (même recette que la référence de l'après-midi) doit rendre ~7,22 — c'est le contrôle de reproductibilité de la nuit.
+
+
+## Tour 74
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes d'A2.6 (le scan des clusters, les bandes de `materiel.rs`) et les tester ; (3) fiche, état, commit et push pour chaque résultat ; bilan à 8 h."
+Round: 10/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb3','nl3'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('nb3 … [249 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 20:16:00 EST
+nb3 ppl v1 3.1196
+nl3 ppl v1 3.2969
+nb3 wikitext2 7.3531
+nl3 wikitext2 8.1943
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"wb (après-midi) :\"; grep -m1 \"pas    1 \" work/n4/wb.chaine.log | grep -o \"perte [0-9.]* · PPL val [0-9.]*\"; echo \"nb (nuit) :\"; grep -m1 \"pas    1 \" work/n4/nb.chaine.log | grep -o \"perte [0-9.]* · PPL val [0-9.]*\"; … [187 caractères tronqués]`
+
+  ```
+wb (après-midi) :
+perte 5.6191 · PPL val 185.706
+nb (nuit) :
+perte 5.6191 · PPL val 185.706
+nl (nuit) :
+perte 5.6245 · PPL val 185.457
+jeu 19 nov 2026 20:16:25 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-selection-contenu.md'); s = p.read_text()\nold = \"## La lecture\"\nnew = \"\"\"## La réplication de la nuit (19-20/11) — et le bruit du run-à-run\n\nLa nuit a **rej … [2320 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 986 JSON, le disque en a 998
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 24, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,20p' reports/rapport-selection-contenu.md", "description": "Read the fiche's current verdict"}`
+
+  ```
+# La sélection du contenu : `wiki_big` seul, `wiki_fr` seul, le mélange — à pas égal sur wikitext2
+
+> **Ligne de roadmap** : N (le palier 1) · **Date** : 2026-11-19 · **Verdict** : ✅ mesuré — la
+> **sélection du contenu** est bien la variable : sur wikitext2, `wiki_big` **seul** rend **7,2237**,
+> mieux que le mélange v1 (**7,3987**) et que le plein texte v2 (**7,4277**) ; `wiki_fr` seul, le
+> meilleur sur le val de v1 (2,8973), est le **pire** sur le val tiers (**8,0876**). Les résumés
+> sur-apprennent leur distribution, et leur ajout au mélange **coûte 2,4 %** sur wikitext2.
+>
+> **Dispositif** : deux chaînes `entrainer_native.py` (GPU 0 = `wiki_big`, GPU 1 = `wiki_fr`),
+> 3 tranches de 10 000 pas, même recette que les runs précédents (lr 1e-4, AMP, `d=896`, graine 1,
+> val de v1 épinglé) · banc complet après chaque tranche.
+
+## Les sources
+
+| corpus | octets | lignes | octets/ligne | nature |
+|---|---:|---:|---:|---|
+| `data/wiki_big/propre/train.txt` | 831 397 620 | 2 040 058 | **407,5** | articles longs, texte propre |
+| `data/wiki_fr/propre/train.txt` | 186 089 472 | 440 709 | **422,3** | résumés, texte propre |
+| `data/wiki_mix_v2/train.txt` (plein texte) | 6 900 585 097 | 63
+… [42 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-selection-contenu.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**Verdict** : … [1644 caractères tronqués]`
+
+  ```
+ok
+     · compteurs : en-cours.md dit 986 JSON, le disque en a 998
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**sélection** : `wiki_bi … [976 caractères tronqués]`
+
+  ```
+T0 max : 3997 mots (budget 4 000)
+budget=0
+     · compteurs : en-cours.md dit 986 JSON, le disque en a 998
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: dédup **par ligne** **8,042 %** (161 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"sélection\\*\\* : [^;]*;\" docs/pilotage/en-cours.md | head -1; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md | head -1", "description": "Read the exact state strings"}`
+
+  ```
+sélection** : `wiki_big` seul **7,2237** bat le mélange (7,3987) et le plein texte (7,4277), `wiki_fr` seul **8,0876** — la forme est écartée ;
+87:| fichiers / JSON de résultats | **813** / **986** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"sélection** : `wiki_big` … [788 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 4003 mots (budget 4 000)
+budget=1
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · puce > 80 mots : **N — l'entraînement, les corpus et le décodage** (18-19/11)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \" ; **nuit** : `wiki_big` et le long-forme (4,79 Go) sur les GPU\"\nassert s.count(old) == 1\np.write_text(s.replace(old, \"\" … [325 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  T0 max : 3991 mots (budget 4 000)
+  en-cours · 1620 mots · 7 sections · 3 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-selection-contenu.md reports/banc-generation-nb2.json reports/banc-generation-nl2.json reports/banc-generation-nb3.json reports/banc-generation-nl3.json reports/banc-grammaticalite-nb2.json reports/banc-gramma … [1520 caractères tronqués]`
