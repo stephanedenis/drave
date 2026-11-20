@@ -7,12 +7,12 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 71.9 h |
+| Durée | 72.0 h |
 | Tours | 84 |
-| Messages | 1288 |
-| Appels d'outils | 1111 |
+| Messages | 1298 |
+| Appels d'outils | 1121 |
 | Fichiers touchés | 44 |
-| Commandes | 962 |
+| Commandes | 972 |
 | Sous-agents | 7 |
 | Commits | 86 |
 | Compactages de contexte | 2 |
@@ -2046,7 +2046,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 ### Tour 84 — prends tâches qui demandent plus de raisonnement pendant le jour et les tâches plus légères en LLM pendant le tarif élev … [34 caractères tronqués]
 
-*48 appels d'outils.* Actions notables :
+*58 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create the goal and find the paragraphs data
@@ -2062,7 +2062,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - bash — Read the data loader and the analyzer output
 - bash — Inspect the stored bank's shape
 - bash — Compare the stored and fresh analyzer outputs
-- … et 34 autres
+- … et 44 autres
 
 ## 3. Travail accompli
 
@@ -2167,7 +2167,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 922 autres
+- … et 932 autres
 
 ## 4. Mesures et résultats marquants
 

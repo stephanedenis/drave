@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**8 commits** · **2 session(s)** · **5 thème(s)**
+**9 commits** · **2 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | docs | 2 | [docs.md](docs.md) |
-| mesures | 3 | [mesures.md](mesures.md) |
+| mesures | 4 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -21,7 +21,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 71.9 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 72.0 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 473.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -36,6 +36,7 @@
 | 07:58 | `8c581925` | PASSE DE CLÔTURE — 91 PORTES, 89 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES), MACHINE AU REPOS |
 | 08:22 | `e0fd67e7` | SESSIONS — S REPRISE (LE HUB ET N2 SORTENT DE L'ÉTAT), PENSÉE ATTEND LA FENÊTRE |
 | 09:23 | `1ab77d52` | S — LA PROFONDEUR ENTRE DANS LA BANQUE (SOUS-MODULE 578e836) : 324/369 CANDIDATS APPARIÉS, 95 À ≥3, LES 150 VERDICTS INTACTS |
+| 09:45 | `cdc12ad8` | N — LE CORPUS DU PALIER 1 EST CONSTRUIT : LES RÉSUMÉS WIKIPÉDIA, 3,69 Go À 753 o/LIGNE (ÉPINGLÉ) |
 
 ## Le récit de la journée (écrit à la main)
 

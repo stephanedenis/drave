@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 473.1 h |
 | Tours | 218 |
-| Messages | 4410 |
-| Appels d'outils | 3936 |
+| Messages | 4413 |
+| Appels d'outils | 3939 |
 | Fichiers touchés | 25 |
-| Commandes | 3264 |
+| Commandes | 3267 |
 | Sous-agents | 43 |
-| Commits | 522 |
+| Commits | 523 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11549,7 +11549,7 @@ Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêt
 
 ### Tour 218 — compacte la session et reprends
 
-*8 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Lire le README racine
 - bash — Voir les sections et les chiffres périmés
@@ -11559,6 +11559,9 @@ Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêt
 - bash — Lire les dernières sections du README
 - bash — Ajouter l'état récent au README
 - bash — Compacter la section des résultats
+- bash — Auditer la théorie
+- bash — Voir la structure du modele-natif
+- bash — Committer le README
 
 **Synthèse produite :**
 
@@ -11684,7 +11687,7 @@ Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêt
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3224 autres
+- … et 3227 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12354,4 +12357,5 @@ Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêt
 - GPU — L'AMP LIVRÉ (autocast + GradScaler dans entrainer_native), LE PAS RÉEL MESURÉ : 1 S SANS LES TÊTES (2,4× LE CPU NU), 9 S AVEC — LE 34 M RESTE TROP PETIT, 
 - PLANS — LES FILES PAR FENÊTRE TARIFAIRE : L'API EN REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE (19 h 30 → 11 h 30) ; LES TROIS CHANTIERS QUI GAGNENT (N,
 - CONSIGNES — LA RÈGLE 12 POUR TOUS LES AGENTS : L'API EN FENÊTRE REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE, DEUX FILES PAR CHANTIER ; LE PLAN DÉTAILLÉ 
+- README — LA VULGARISATION ET L'ÉTAT RÉEL : « CE QUE C'EST, EN CLAIR » (LE PROBLÈME, L'IDÉE, CE QUE ÇA CHANGE), LES CHIFFRES DU 20/11 (86,25 / 95,75 / 0,7902 / 2
 

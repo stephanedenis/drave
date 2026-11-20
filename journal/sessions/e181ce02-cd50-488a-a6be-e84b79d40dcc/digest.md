@@ -71411,3 +71411,65 @@ les 71 langues et les maîtres (B
 … [1931 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('README.md'); t = p.read_text()\n# 1) « Ce qu'on a trouvé » : ajouter l'état du 20/11 (le produit, le natif, le tagger)\nt = t.replace(\"\"\"## Ce qu'on a trouvé (expliqué sans jargo … [1691 caractères tronqués]`
+
+  ```
+section récente ajoutée
+mots: 3967
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · README.md : 3967 mots > budget 3500 (T1)
+  ✅ la page vivante date du dernier commit (2026-11-20)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('README.md'); t = p.read_text()\ndebut = t.find(\"## Ce qu'on a trouvé (expliqué sans jargon)\")\nfin = t.find(\"## Comment on le sait\")\nif debut > 0 and fin > debut:\n    nouv … [2482 caractères tronqués]`
+
+  ```
+section « trouvé » compactée
+mots: 3195
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-20)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in docs/theorie/vision.md docs/theorie/architecture-native.md docs/theorie/modele-natif.md docs/theorie/carte.md; do echo \"=== $f\"; head -1 $f; python3 -c \"\nimport pathlib, re\nprint(' mots:', len(re.findall(r'\\S+', pathli … [222 caractères tronqués]`
+
+  ```
+=== docs/theorie/vision.md
+# [Drave](../theorie/glossaire/entrees/drave.md) — la vision
+ mots: 1218
+=== docs/theorie/architecture-native.md
+# Architecture native Drave — le format et le modèle
+ mots: 1201
+=== docs/theorie/modele-natif.md
+# Le modèle Drave natif — un graphe, un flux, trois niveaux
+ mots: 7263
+=== docs/theorie/carte.md
+# La carte de [Drave](../theorie/glossaire/entrees/drave.md) — l'index des sujets
+ mots: 1096
+=== les chiffres périmés dans la théorie :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"^## \" docs/theorie/modele-natif.md | head -12 | cut -c1-100; echo \"=== la dernière ligne du fichier :\"; tail -3 docs/theorie/modele-natif.md | cut -c1-120; echo \"=== les autres docs :\"; ls docs/theorie/*.md | wc -l",  … [51 caractères tronqués]`
+
+  ```
+19:## 1. Ce qu'on appelle « natif »
+44:## 2. Les trois niveaux — surface, RSN, pensée
+239:## 3. Le bus — des faits, pas des matrices
+264:## 4. Le graphe — blocs, régions, routes, têtes
+415:## 5. DRVM — le conteneur
+445:## 6. Le régime d'exécution
+494:## 7. L'objectif d'entraînement
+515:## 8. Ce qui est original
+576:## 9. Les portes N
+597:## 10. Les anti-patrons
+615:## 11. Ce qui pourrait rendre ce document faux
+630:## 12. Les questions ouvertes
+=== la dernière ligne du fichier :
+  Diehl & Cook (2015) devient un bloc Drave sans franchir les niveaux.
+- **La pensée itérative** : [`pensee-iterative.md`](pensee-iterative.md) — la RSN plurielle, l'arbre d'états et
+  le portefeuille de stratégies.
+=== les autres docs :
+15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-20, 10 h 00 HNE (le README racine réécrit : la vision, l'état d … [640 caractères tronqués]`

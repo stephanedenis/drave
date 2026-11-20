@@ -18537,3 +18537,106 @@ phrases: 207 · profondeur dans la réponse: [0, 1]
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-corpus-palier1.md <<'MD'\n# Le corpus du palier 1 : les résumés Wikipédia, 3,69 Go à 753 o/ligne\n\n> **Ligne de roadmap** : N · **Date** : 2026-11-20 · **Verdict** : le corpus du palier 1 est\n> construit — les … [3082 caractères tronqués]`
+
+  ```
+ok 1048
+budget=1
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   1ab77d52..cdc12ad8  s/v7 -> s/v7
+ven 20 nov 2026 09:47:46 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|> budget\" | head -3", "description": "Check the budget overrun", "timeoutMs": 120000}`
+
+  ```
+T0 max : 3819 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,30p' tools/structures/llm.py; grep -c \"\" tools/structures/donnees/llm.jsonl 2>/dev/null", "description": "Read the structures' LLM client"}`
+
+  ```
+"""llm.py — l'évaluation des interprétations par un grand modèle, **avec le contexte**.
+
+Le niveau pragmatique : une phrase hors contexte est ambiguë ; c'est le contexte qui tranche, et
+parfois l'ambiguïté est **voulue** (humour, double sens). Le modèle rend donc :
+  · une liste de lectures, chacune avec un statut (resolu / compatible / exclu) ;
+  · une intention (serieux / humour / ambigu / inconnu) ;
+  · une justification.
+
+Deux fournisseurs :
+  · « baseline »  — attachement au plus proche, **aveugle au contexte** : c'est le témoin ;
+  · « deepseek »  — l'API DeepSeek (`DEEPSEEK_API_KEY`) ; sans clé, la baseline est rendue et le
+    mode est marqué « sans-clé » — on ne simule pas.
+"""
+from __future__ import annotations
+
+import json
+import os
+import urllib.request
+
+MODELE_DEFAUT = "deepseek-chat"
+
+
+def baseline(phrase, candidats, contexte=""):
+    """Attachement à la cible la plus proche — **sans lire le contexte** (le témoin)."""
+    meilleur, meilleure_distance, sans_signal = None, 10**9, True
+    for c in candidats:
+        a = c.get("attachement") or {}
+        if not a or a.get("genre") == "role":
+            d = 0
+        else:
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -A4 \"rétro-traduction\" reports/rapport-etat-s.md | head -16", "description": "Read the retro-translation protocol in the S state"}`
+
+  ```
+1:# S — 9/9 paragraphes jugés (19/19), 150 verdicts de banque ; la page `/` sert encore l'ancien arbre plat et la rétro-traduction n'existe pas
+2-
+3-> **Ligne de roadmap** : S · **Date** : 2026-11-06 · **Verdict** : le chantier S a deux couches
+4-> désormais séparées. La passe de validation des candidats sur **`/paragraphes`** est **finie** :
+5-> 9 paragraphes, 19 candidats,
+--
+12:> résultat **côté traduction**, pas une validation humaine. La **rétro-traduction n'existe pas** :
+13-> 0 script, 0 mesure, 0/9 paragraphe, et `DEEPSEEK_API_KEY` est absente. Enfin, les **71 langues**
+14-> sont le **lexique B7** (35 concepts, 1 433 couples), **pas l'UDHR** (456 langues) et **pas un
+15-> corpus de référents** : **0/71** testée par S.
+16-
+--
+28:| rétro-traduction | **0/9**, 0 script, 0 mesure, clé absente | `grep`, environnement |
+29-| analyseur | **61/61** types, **144/144** rôles, **50/50** compléments, **56 tests** | `mesure-analyseur.json`, tests |
+30-
+31-Le dépôt est sur **`s/v7`**, HEAD **`de7c9113`** au moment de l'audit ; un commit concurrent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def \\|DEEPSEEK_API_KEY\\|api.deepseek\" tools/structures/llm.py | head -10", "description": "Read the LLM client's functions"}`
+
+  ```
+11:  · « deepseek »  — l'API DeepSeek (`DEEPSEEK_API_KEY`) ; sans clé, la baseline est rendue et le
+23:def baseline(phrase, candidats, contexte=""):
+51:def _prompt(phrase, candidats, contexte, niveau=0):
+68:def deepseek(phrase, candidats, modele=MODELE_DEFAUT, contexte="", niveau=0, delai=30):
+69:    clé = os.environ.get("DEEPSEEK_API_KEY")
+73:        r["justification"] = "Pas de DEEPSEEK_API_KEY : baseline locale rendue à la place. " + r["justification"]
+78:        "https://api.deepseek.com/chat/completions", data=corps,
+93:def evaluer(phrase, candidats, fournisseur="baseline", contexte="", niveau=0):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && [ -n \"${DEEPSEEK_API_KEY:-}\" ] && echo \"clé présente\" || (grep -l \"DEEPSEEK_API_KEY\" .env* 2>/dev/null | head -1; ls -la .env 2>/dev/null | head -1)", "description": "Check the API key's presence"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"DEEPSEEK_API_KEY\" tools/llm/enseignant.py 2>/dev/null | head -3; grep -n \"DEEPSEEK_API_KEY\" tools/llm/*.py 2>/dev/null | grep -v \"getenv\\|environ\" | head -3; ls ~/.deepseek* ~/.config/deepseek* 2>/dev/null | head -2;  … [118 caractères tronqués]`
+
+  ```
+17:    DEEPSEEK_API_KEY=... python3 tools/llm/enseignant.py \
+tools/llm/deepseek.py:27:    DEEPSEEK_API_KEY=... python3 tools/llm/deepseek.py --prompt ... --json
+tools/llm/deepseek.py:76:    `DEEPSEEK_API_KEY` / `DSH_API_KEY` d'abord ; sinon `DEEPSEEK_KEY_FILE` /
+tools/llm/deepseek.py:80:    for var in ("DEEPSEEK_API_KEY", "DSH_API_KEY"):
+/home/stephane/.bashrc
+  ```
+

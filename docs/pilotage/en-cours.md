@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-20, 05 h 00 HNE (la nuit `wiki_big` : 6,81 sur wikitext2 à 90 000 pas, le long-forme à 7,78 · la sélection du contenu confirmée · A2.6 close (bandes, clusters) · 91 portes, 89/2)**
+**Mis à jour : 2026-11-20, 10 h 00 HNE (le README racine réécrit : la vision, l'état du 20/11, la vulgarisation)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -24,7 +24,7 @@
 - **Fait** : types **61/61**, rôles **144/144** ; page **`/paragraphes`**, **19/19 verdicts `389b99f`** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [limites](../../reports/rapport-s-limites-v6.md), [fait divers](../../reports/rapport-s-fait-divers.md).
 - **Ce qu'elle fait** : **session close** ; **`/paragraphes`** v7, **`/`** 369 + **profondeur** (324 appariés, **95** à ≥3) ; **`s/v7`** à fusionner.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**.
-- **Prochaine action** : **migration `/` v7** (106/41) ; référents ; rétro-traduction.
+- **Prochaine action** : **rétro-traduction** — script + 9/9, l'alignement à raffiner ; les **71 langues** ; la migration `/` est faite (324/369).
 - **Bloquants** : aucun ; 8765 pris (lancer 9000) ; migration = choix.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
 
@@ -61,7 +61,7 @@
 |---|---|---|
 | portes | **91** (dont `porte-a2.6-experts` le 18/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **816** / **1048** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **817** / **1049** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **128** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **20/11 05 h 58 → 07 h 58** : **91** portes, **89/2** ; seules `indice` (836 s) et `melange` (105 s) **structurelles** ; `sessions` **verte** ; machine au repos (les runs de la nuit finis) | `work/portes/roue-1120-0558/registre.txt` |
 

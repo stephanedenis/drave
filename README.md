@@ -33,9 +33,34 @@ complète est [`docs/produit/README.md`](docs/produit/README.md), les exemples v
 [`docs/produit/exemples.md`](docs/produit/exemples.md), et la porte produit
 `bash tools/porte-produit.sh` (10 contrôles, ~2 min).
 
-**Mesuré au 06/11** : POS **85,00 %**, syntagmes F1 **0,6482**, attachement **235/236**
-(couverture **0,9874**), 183/183 portes. Les limites sont dites : 3 spans inatteignables, la
-restitution et la traduction ne sont pas encore là.
+**Mesuré au 20/11** : POS **86,25 %** en français (**95,75 %** avec l'option `--tagger`),
+syntagmes F1 **0,7902**, attachement **238/239** (couverture **99,58 %**), 183/183 portes.
+Sur les **452 phrases réelles** (hors synthétique) : POS 88,91 %, F1 79,06 %, attachement
+99,46 %. Les limites sont dites : **1 span inatteignable** (`g017`), la génération du modèle
+natif ne produit que des collages, et la traduction n'est pas là.
+
+
+## Ce que c'est, en clair
+
+**Le problème.** Un modèle d'IA (un « réseau de neurones ») est aujourd'hui une grosse boîte de
+calcul : pour lire une phrase, il refait des milliards de multiplications, même si la plupart des
+neurones ne servent à rien sur cette phrase. Conséquence : il faut des machines énormes, on ne
+sait pas ce qui se passe dedans, et on ne peut ni le découper ni le répartir.
+
+**L'idée.** Au lieu de voir le modèle comme une **grille de nombres** qu'on multiplie en entier,
+Drave le voit comme un **flux de faits** : « le neurone 2 539 de la couche 23 a valu 27,8 ». On ne
+calcule que ce qui **s'active** — le coût suit l'**activité**, pas la taille du modèle. Une image :
+au lieu d'allumer toutes les lampes d'un immeuble pour trouver la bonne pièce, on suit les
+personnes qui s'y déplacent.
+
+**Ce que ça change, concrètement** : un modèle qu'on peut **observer** (compter, tracer), **rejouer**
+(la même entrée redonne la même sortie, au bit près), **découper** en morceaux et **répartir** sur
+plusieurs machines ou plusieurs cartes — et, si la densité d'activité est assez faible (sous
+~22 %), **plus rapide** que le calcul classique.
+
+**Ce que ce n'est pas.** Drave ne promet pas un modèle plus intelligent ; il promet un modèle
+**maîtrisable** : on sait ce qu'il fait, on peut le mesurer et le corriger, et il tient sur du
+matériel modeste.
 
 ## L'origine
 
@@ -140,101 +165,53 @@ là que la recherche sur l'intelligence intervient. Deux étages :
 demande pas au modèle d'écrire sa réponse ; on la lit dans son état, avec une sonde — un classifieur linéaire aussi
 simple que possible.*
 
+## Ce qu'on a trouvé récemment (20/11)
+
+**Le produit est utilisable.** `drave analyser` lit un texte, en français ou en anglais, et rend
+la langue, les classes de mots, les groupes (sujet, verbe, complément) et **à quoi chaque groupe
+se rattache** — le tout **hors ligne, sur CPU, en 0,8 s pour 10 000 mots**. Il s'installe
+(`pip install -e .`), se mesure (`drave evaluer`) et se rejoue à l'identique (`drave rejouer`).
+Sur le gold de 612 phrases : POS **86,25 %**, segmentation F1 **0,79**, attachement **99,58 %**.
+Avec l'option `--tagger` (l'API DeepSeek), le POS monte à **95,75 %** pour ~0,02 $ les 612 phrases.
+
+**Le modèle natif apprend, mais ne compose pas encore.** Le petit modèle maison (34 M) a une
+perplexité de 2,40 sur son corpus ; il **écrit des mots réels** (87 %) mais **répète** (la
+cohérence s'arrête à ~3 mots). Un modèle **100 M**, entraîné 10× moins longtemps, fait **mieux**
+(88 % de mots, répétition ÷2,5) : **l'échelle paie**, et c'est le prochain chantier.
+
+**Ce qu'on ne sait pas encore.** Le modèle natif ne tient pas une phrase ; la génération reste un
+prototype. C'est mesuré, écrit, et le plan est dans [`natif-plan.md`](docs/pilotage/natif-plan.md).
+
 ## Ce qu'on a trouvé (expliqué sans jargon)
 
-Six résultats. Les mots techniques sont définis en passant ; les chiffres sont là pour être vérifiés, pas pour
-impressionner.
+**1. Traduire : correct, jamais parfait.** Sur 532 langues de l'UDHR, 398 sont détectées à 96,87 % ;
+l'allemand et l'arabe portent ; le chinois et le coréen restent faibles. La traduction marche
+(34,0 % exacte sur 8 langues), mais c'est le **domaine** qui la fait progresser, pas le volume.
 
-### 1. Traduire : correct, jamais parfait
+**2. Le raisonnement est déjà là.** Sur une énigme de positions, une simple lecture des nombres
+internes retrouve la bonne réponse **100 fois sur 100** (2 personnes) et **51/100** (6) — le hasard
+est à 5. L'information est dans l'état, avant l'écriture.
 
-**Le test.** Un vrai règlement européen de 2025, que le modèle n'a jamais vu, avec sa traduction humaine officielle.
-On lui fait traduire le texte, puis on compare sa sortie à la traduction humaine **caractère par caractère** — une
-note de 0 à 100, comme une dictée corrigée lettre par lettre.
+**3. Le français et l'anglais sont rangés différemment.** Un détecteur entraîné en français tombe
+au hasard en anglais (5,8 %) ; un **pont** (une grille de conversion apprise) le remonte à 100 %
+(2 personnes), 46 % (6). Il marche sur d'autres langues et d'autres relations — mais **doit rester
+simple** : un réseau plus puissant fait moins bien.
 
-**Le repère qui compte.** Si on se contente de **recopier la phrase source sans traduire**, on obtient déjà **20 à 35
-sur 100** (le français et l'anglais partagent des mots et des lettres). Le modèle obtient **55 à 76** : il traduit
-donc vraiment, avec une avance de **30 à 40 points** sur la simple copie.
+**4. On peut apprendre au modèle à ranger ses deux langues ensemble.** Entraîné sur les deux, le
+détecteur lit l'anglais à 65,6 % ; avec l'objectif contrastif, 74,2 % (plafond 75,3 %). Le prix :
+le modèle devient un peu moins bon dans sa propre langue (98,7 → 77,6 %).
 
-**Ce que ça dit.** Le modèle est meilleur sur la presse et les discours préparés, plus faible sur la **littérature**
-(le style, les images) et la **prose technique** (longue et dense). Et **doubler la taille** (de 7 à 14 milliards de
-paramètres) n'apporte qu'**un point de plus** : la taille n'est pas le levier principal.
+**5. Mais le fil d'une histoire ne se traduit pas.** Deviner la 5ᵉ phrase d'une histoire : 43 % en
+français, et **aucune** méthode ne transfère à l'anglais. C'est le **contre-exemple** qui donne sa
+valeur au pont.
 
-### 2. Le raisonnement est déjà dans la tête du modèle
+**6. Sur de vraies phrases, le même schéma.** Sur XNLI (2 490 paires réelles), le détecteur lit la
+réponse à 69 % (fr) / 78 % (en) contre 33 % au hasard ; le pont transfère à 83 %.
 
-**La devinette.** « Alice est devant Bob. Bob est devant Carl. Qui est devant tout le monde ? » Les phrases sont
-mélangées : il faut les remettre en ordre pour répondre.
-
-**Le tour de passe-passe.** On ne demande **pas** au modèle d'écrire sa réponse. On lit directement **les nombres
-internes** qu'il calcule après avoir lu (son « état »), avec un détecteur volontairement simple : une règle de calcul
-linéaire, comme une balance à plusieurs plateaux.
-
-**Pourquoi c'est étonnant.** Ce détecteur retrouve la bonne réponse **100 fois sur 100** pour deux personnes, **51
-fois sur 100** pour six — alors que le hasard est à **5**. Autrement dit : **l'information est déjà là, avant
-l'écriture**. Le modèle a « compris » la chaîne, même s'il ne l'a pas encore dite. C'est tout le sens de « penser
-sans verbaliser ».
-
-### 3. Le français et l'anglais sont rangés dans deux espaces différents
-
-**L'expérience.** On entraîne le détecteur en français, puis on le fait lire **l'anglais** : il tombe à **5,8 %**,
-c'est-à-dire le hasard. Ce n'est pas que l'anglais manque d'information : c'est que les nombres internes sont
-**organisés autrement**. Image : deux bibliothèques qui possèdent les mêmes livres, mais les rangent selon deux
-systèmes incompatibles — le catalogue de l'une ne sert pas dans l'autre.
-
-**La solution.** Un **pont** : une **grille de conversion** (une simple règle linéaire, apprise sur des phrases dont
-on possède la version française et anglaise). Cette grille transforme les nombres anglais en nombres « à la
-française » ; le détecteur français lit alors l'anglais : **100 %** pour 2 personnes, **91 %** pour 3, **68 %** pour
-4, **52 %** pour 5, **46 %** pour 6.
-
-**Ce que le pont n'est pas.** Une baguette magique. Il **marche** pour d'autres relations (comparer des tailles),
-pour d'autres langues (l'espagnol, l'allemand, et même l'**arabe** — autre famille, autre écriture), à d'autres
-couches du réseau, jusqu'à **12 personnes**, et à toutes les échelles testées (3, 7 et 14 milliards de paramètres).
-Il **doit rester simple** : un réseau de neurones plus puissant fait **moins bien** — la grille linéaire suffit, et
-c'est ce qui rend l'idée élégante.
-
-### 4. On peut apprendre au modèle à ranger ses deux langues ensemble
-
-**L'expérience.** Le pont est une pièce rapportée. On a donc **entraîné le modèle lui-même** sur les deux langues à
-la fois : le détecteur français lit alors l'anglais à **65,6 %**. Mieux : en montrant au modèle la phrase française
-et son équivalent anglais **côte à côte**, en lui demandant de rapprocher leurs nombres internes (l'« objectif
-contrastif »), on monte à **74,2 %**. Au-delà, plus de progrès : **75,3 %**, c'est le plafond de cette méthode.
-
-**Le prix.** Le modèle devient un peu moins bon **dans sa propre langue** (le détecteur français passe de 98,7 % à
-77,6 %). Comme un bilingue qui mélange un peu ses deux langues : l'alignement a un coût, et il est mesurable.
-
-### 5. Mais le fil d'une histoire, lui, ne se traduit pas
-
-**L'expérience.** On donne au modèle les **quatre premières phrases** d'une histoire et on lui demande de **deviner
-la cinquième** parmi huit candidates (une sur huit au hasard). Pour réussir, il doit garder le **fil** du récit —
-ce qu'on appelle le « plan ».
-
-**Le résultat.** En français, le fil est là (43 % de réussite). Mais **aucune** des méthodes qui ont marché pour le
-raisonnement ne le transfère à l'anglais : ni le pont, ni l'apprentissage bilingue, ni le contraste, ni une mémoire
-récurrente. L'apparent transfert qu'on avait cru voir était un **artefact** : l'entraînement rendait simplement les
-bonnes réponses françaises plus faciles à retrouver, sans aligner les langues.
-
-**Pourquoi c'est important.** C'est le **contre-exemple** qui donne sa valeur au pont. Toutes les capacités ne se
-rangent pas de la même façon ; le pont n'est pas une clé universelle, et le dire est plus utile que de le croire.
-
-### 6. Sur de vraies phrases, le même schéma
-
-**Le test.** Les énigmes précédentes sont fabriquées. On a donc refait le travail sur **XNLI**, un corpus de **vraies
-phrases** (2 490 paires français/anglais) : on donne une affirmation et une conséquence possible, et il faut dire si
-elle est **vraie, fausse ou indécidable**.
-
-**Le résultat.** Le détecteur lit la réponse dans l'état : **69 % en français, 78 % en anglais** (le 1,5 B), contre
-**33 %** au hasard ; le **pont** transfère à **83 %**. Et le 3 B, à sa meilleure couche, lit **87 %** (le 1,5 B 81 % à la sienne) : *la lecture dépend du point de mesure
-autant que du modèle ; la sonde mesure l'accès à l'état, pas la qualité.*
-
-**Ce que ça dit.** Le schéma du pont n'est pas un artefact des énigmes : il tient sur du langage réel. Et le même
-enseignement que la traduction : **c'est le domaine qui compte, pas le volume** — 13 394 paires d'entraînement
-prises ailleurs n'ont pas amélioré la lecture, alors que des données du bon domaine, si.
-
-### En une phrase
-
-L'intelligence d'un modèle est **dans ses nombres internes**, pas seulement dans ce qu'il écrit ; ces nombres sont
-**rangés différemment selon la langue**, mais une **grille de conversion simple** — qu'on peut apprendre — relie les
-deux ; et certaines capacités, comme le fil d'une histoire, restent **collées à la langue**. La taille n'est pas le
-levier : la structure, si.
+**En une phrase.** L'intelligence d'un modèle est **dans ses nombres internes**, pas seulement dans
+ce qu'il écrit ; ces nombres sont **rangés différemment selon la langue**, mais une **grille simple**
+relie les deux ; certaines capacités, comme le fil d'une histoire, restent **collées à la langue**.
+La taille n'est pas le levier : la structure, si.
 
 ## Comment on le sait (et pourquoi on peut nous croire)
 
