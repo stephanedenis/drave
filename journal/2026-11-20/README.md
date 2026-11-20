@@ -5,12 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**2 commits** · **1 session(s)** · **1 thème(s)**
+**3 commits** · **1 session(s)** · **2 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
+| docs | 1 | [docs.md](docs.md) |
 | mesures | 2 | [mesures.md](mesures.md) |
 
 ## Sessions DSH
@@ -25,6 +26,7 @@
 |---|---|---|
 | 02:21 | `9c1094e4` | N — LA NUIT, 80 000 PAS : `wiki_big` PLAFONNE À 6,8590 (PPL v1 2,9327), LE LONG-FORME À 7,6053 |
 | 04:46 | `d5c78fa9` | N — LA NUIT, 100 000 PAS : `wiki_big` 6,8448 (PPL v1 2,9167), LE LONG-FORME SE DÉGRADE (7,7758) |
+| 04:48 | `718c9cef` | ÉTAT — LA FICHE DE LA NUIT COMPTE (814 FICHES) |
 
 ## Le récit de la journée (écrit à la main)
 

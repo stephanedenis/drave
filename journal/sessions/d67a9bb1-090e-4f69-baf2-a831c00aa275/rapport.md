@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 67.0 h |
 | Tours | 81 |
-| Messages | 1187 |
-| Appels d'outils | 1020 |
+| Messages | 1188 |
+| Appels d'outils | 1021 |
 | Fichiers touchés | 44 |
-| Commandes | 875 |
+| Commandes | 876 |
 | Sous-agents | 7 |
-| Commits | 79 |
+| Commits | 80 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1924,7 +1924,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 
 ### Tour 81 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [968 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Ten-minute pause
 - bash — Ten-minute pause and progress
@@ -1932,6 +1932,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - bash — Read the wiki_big 100k tranche
 - bash — Commit the 100k milestone
 - bash — Fix the fiche counter
+- bash — Update the state header to the 20/11
 
 ## 3. Travail accompli
 
@@ -2036,7 +2037,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 835 autres
+- … et 836 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2263,4 +2264,5 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
 - ÉTAT — LA FICHE DE LA NUIT COMPTE (814 FICHES)" && git push origin s/v7 2>&1 | tail -1; date
+- ÉTAT — LA PAGE VIVANTE PASSE AU 20/11 (LA NUIT wiki_big)" && git push origin s/v7 2>&1 | tail -1; date
 

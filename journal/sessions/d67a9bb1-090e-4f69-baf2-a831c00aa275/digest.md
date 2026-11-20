@@ -17038,3 +17038,15 @@ ven 20 nov 2026 04:48:38 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **813** / **1040** |'\nnew = '| fichiers / JSON de résultats | **814** / **1040** |'\nassert  … [386 caractères tronqués]`
+
+  ```
+ok
+     · fraîcheur : en-cours.md dit 2026-11-19, le dernier commit date du 2026-11-20
+  ✅ état court, structuré, multi-session et reprenable
+   d5c78fa9..718c9cef  s/v7 -> s/v7
+ven 20 nov 2026 04:51:22 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"**Mis à jour : 2026-11-19, 06 h 50 HNE (la nuit du palier 1 : deux 142 M sur deux corpus, 110 000 pas — v1 2,844 contre v2 3, … [774 caractères tronqués]`
