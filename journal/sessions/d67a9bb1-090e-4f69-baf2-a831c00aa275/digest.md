@@ -16393,3 +16393,271 @@ budget=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-selection-contenu.md reports/banc-generation-nb2.json reports/banc-generation-nl2.json reports/banc-generation-nb3.json reports/banc-generation-nl3.json reports/banc-grammaticalite-nb2.json reports/banc-gramma … [1520 caractères tronqués]`
+
+  ```
+92055c57..ed9d71f9  s/v7 -> s/v7
+jeu 19 nov 2026 20:20:47 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 20:30:44 EST
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/nl.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 20:40:40 EST
+pas 3850
+pas 5750
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 20:50:38 EST
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 21:00:32 EST
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; tail -1 work/n4/nl.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"", "description": "Ten-minute pause and check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 21:10:27 EST
+pas 8100 · perte 1.0769
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb4','nl4'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('nb4 … [251 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 21:20:23 EST
+nb4 -
+nl4 ppl v1 3.2371
+nb4 wikitext2 -
+nl4 wikitext2 7.9337
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb4','nl4'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('nb4 … [254 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 21:30:20 EST
+nb4 ppl v1 3.0419
+nl4 ppl v1 3.2371
+nb4 wikitext2 7.1105
+nl4 wikitext2 7.9337
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 21:40:16 EST
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 21:50:11 EST
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/nl.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 22:00:06 EST
+pas 4800
+pas 7400
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 22:10:01 EST
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 22:19:55 EST
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 22:29:51 EST
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **bash** `{"command": "sleep 605; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]* · PPL val [0-9.]*\"; tail -1 work/n4/nl.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]* · PPL val [0-9.]*\"; nvidia-smi --query-gpu=index,tempe … [124 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-1269]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Pause longue en cours (le relevé de la tranche 5 arrive vers 22 h 45) — les runs tournent, GPU à ~87/75 °C
+
+**Le point** : les deux chaînes sont dans leur cinquième tranche (50 000 pas) ; le relevé complet — PPL val, wikitext2, banc — tombe vers 22 h 50. Ensuite les tranches 6 à 11 s'enchaînent jusqu'à ~5 h 30, avec un point de commit à 60 000 pas (~23 h 50) et la fiche finale vers 6 h. Rien n'est en attente de vous.
+
+### 👤 Utilisateur
+
+background job bash-1269 (bash: sleep 605; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nb.chaine.log | grep -o "pas *[0-9]* · perte [0-9.]* · PPL val [0-9.]*"; tail -1 work/n4/nl.chaine.log | grep -o "pas *[0-9]* · perte [0-9.]* · PPL val [0-9.]*"; nvidia-smi --query-gpu=index,temperature.gpu --format=csv,noheader) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1269"}`
+
+  ```
+jeu 19 nov 2026 22:40:04 EST
+pas  150 · perte 0.9950 · PPL val 3.198
+pas 3100 · perte 0.9021 · PPL val 3.280
+0, 87
+1, 76
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb4','nl4','nb5'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('nb4','nl … [257 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 22:40:15 EST
+nb4 ppl v1 3.0419
+nl4 ppl v1 3.2371
+nb5 ppl v1 2.9942
+nb4 wikitext2 7.1105
+nl4 wikitext2 7.9337
+nb5 wikitext2 6.9299
+  ```
+
+### 🤖 Assistant
+
+⏵ `wiki_big` passe sous 7 : **6,9299** à 50 000 pas (PPL v1 2,9942) — il bat déjà les 150 M de la nuit dernière (v1 6,867 à 110 000 pas est à sa portée)
+
+**Le point** : la courbe `wiki_big` de la nuit est nette — 8,86 (10k) → 7,83 → 7,35 → 7,11 → **6,93 (50k)** sur wikitext2. Le long-forme suit de loin (7,93 à 40k). Si la tendance tient, `wiki_big` seul dépassera à 110 000 pas les deux 150 M de la nuit dernière (v1 6,867, v2 7,093) — la sélection du contenu serait confirmée au-delà du bruit. Prochain point : la tranche 6 (60k) vers 23 h 50.
+
+
+## Tour 75
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes d'A2.6 (le scan des clusters, les bandes de `materiel.rs`) et les tester ; (3) fiche, état, commit et push pour chaque résultat ; bilan à 8 h."
+Round: 11/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 595; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nl.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\"; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 6600 … [3 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 22:50:29 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/nl.chaine.log | cut -c1-60; tail -1 work/n4/nb.chaine.log | cut -c1-60; date", "description": "Read the chain tails"}`
+
+  ```
+pas 4700 · perte 0.9701 · PPL val 3.285 · 1856 s · échelle 2
+pas 1650 · perte 1.1299 · PPL val 3.202 · 691 s · échelle 65
+jeu 19 nov 2026 22:50:34 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nfor f in ('nb5','nl5'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('nb5','nl5'):\n    tr … [222 caractères tronqués]`
+
+  ```
+nb5 ppl v1 2.9942
+nl5 ppl v1 3.1691
+nb5 wikitext2 6.9299
+nl5 wikitext2 7.8008
+jeu 19 nov 2026 22:50:40 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ 50 000 pas : `wiki_big` **6,93** contre **7,80** pour le long-forme (PPL val 2,99 contre 3,17) — l'écart se creuse
+
+**Le point** : le long-forme ne rattrape pas (7,80 contre 6,93 à 50 000 pas) ; la sélection par la longueur des lignes est donc bien insuffisante face à `wiki_big`. Les deux runs sont dans leur sixième tranche (60 000 pas), qui s'achève vers 23 h 30-50 — point de commit suivant.
+
+
+## Tour 76
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes d'A2.6 (le scan des clusters, les bandes de `materiel.rs`) et les tester ; (3) fiche, état, commit et push pour chaque résultat ; bilan à 8 h."
+Round: 12/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 597; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\" || tail -1 work/n4/nb.chaine.log | cut -c1-40; tail -1 work/n4/nl.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\" || tail -1 work/n4/nl … [101 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 23:00:48 EST
+pas 3150 · perte 1.0207 · PPL val 3.186 
+pas 6250 · perte 0.8993 · PPL val 3.255
+  ```
+
+- **bash** `{"command": "sleep 597; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]*\" ; tail -1 work/n4/nl.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+jeu 19 nov 2026 23:10:51 EST
+pas 4600
+pas 7750
+  ```
+
+- **bash** `{"command": "sleep 597; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/nb.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/nl.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+jeu 19 nov 2026 23:20:53 EST
+pas 6000
+pas 9300
+  ```
+
+- **bash** `{"command": "sleep 597; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb6','nl6'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('nb6 … [250 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 23:30:55 EST
+nb6 -
+nl6 ppl v1 3.1607
+nb6 wikitext2 -
+nl6 wikitext2 7.6831
+  ```
+
+- **bash** `{"command": "sleep 597; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb6','nl6'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('nb6 … [253 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 23:41:00 EST
+nb6 -
+nl6 ppl v1 3.1607
+nb6 wikitext2 -
+nl6 wikitext2 7.6831
+  ```
+
+- **bash** `{"command": "sleep 597; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb6','nl6'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('nb6 … [244 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 23:51:03 EST
+nb6 ppl v1 2.9547
+nl6 ppl v1 3.1607
+nb6 wikitext2 -
+nl6 wikitext2 7.6831
+  ```
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('nb6','nl6'):\n    try:\n        d=json.load(open(f'reports/ppl-wikitext2-{f}.json')); print(f, 'wikitext2', round(d['ppl'],4))\n    except FileNotFoundError: print(f, 'wikitext2 … [79 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 23:57:51 EST
+nb6 wikitext2 6.8916
+nl6 wikitext2 7.6831
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); echo \"JSON: $n\"; python3 - \"$n\" <<'PY'\nimport pathlib, sys\nn = sys.argv[1]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **813** / **9 … [1417 caractères tronqués]`

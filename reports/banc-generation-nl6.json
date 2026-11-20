@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/nl6.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9521,
+   "distinct_2": 0.5563,
+   "repetition": 13,
+   "echo": 0.1629,
+   "octets": 2560,
+   "secondes": 22.89,
+   "octets_s": 111.8,
+   "echantillons": [
+    {
+     "mots": 34,
+     "mots_valides": 0.8529,
+     "distinct_2": 0.6061,
+     "repetition": 4,
+     "echo": 0.4482758620689655,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la France et de la France est ainsi un pays de la France et de la France. Il est déclaré au cours de la guerre de 1810 et ",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6129,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960. Le premier album de la série est le single de la série en 1960 et le single de la série est le single de la série ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.88,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois président de la République de Santa Cruz. Il a été constitué par les premiers conseillers du parti de la république de Sa",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 34,
+     "mots_valides": 0.8529,
+     "distinct_2": 0.6061,
+     "repetition": 4,
+     "echo": 0.4482758620689655,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la France et de la France est ainsi un pays de la France et de la France. Il est déclaré au cours de la guerre de 1810 et ",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6129,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960. Le premier album de la série est le single de la série en 1960 et le single de la série est le single de la série ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.88,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois président de la République de Santa Cruz. Il a été constitué par les premiers conseillers du parti de la république de Sa",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.85,
+     "distinct_2": 0.6842,
+     "repetition": 2,
+     "echo": 0.1111111111111111,
+     "prompt": "Le chat",
+     "texte": "Le chat de la course de la commune de Saint-Pierre-de-Courseau, dans le canton de Saint-Pierre-de-Courseau, dans le canton de Saint-Pie",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1935,
+     "repetition": 9,
+     "echo": 0.3333333333333333,
+     "prompt": "La mer",
+     "texte": "La mer est de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.8462,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent de la première course de la saison 2018-2019. Le , le club est limité à la première place du club de la saison 2019-2019. L",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.68,
+     "repetition": 3,
+     "echo": 0.3181818181818182,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de retrouver le gouvernement de la province de Le Gouvernement de la Savoie en 1978. Le gouvernement de la Savoie est décidé ",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8519,
+     "repetition": 2,
+     "echo": 0.11538461538461539,
+     "prompt": "Paris est",
+     "texte": "Paris est le premier étage de la première commune de Paris en 1870. Il est décoré de la commune de Paris en 1882 par le comte de Pari",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de la première année de la série de comédiens de la série de comédie de théâtre de la série de comédie de théâtre d",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1935,
+     "repetition": 9,
+     "echo": 0.3333333333333333,
+     "prompt": "La musique",
+     "texte": "La musique de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la mais",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.75,
+     "repetition": 3,
+     "echo": 0.043478260869565216,
+     "prompt": "Le livre",
+     "texte": "Le livre de la série de la série de compétition est diffusé sur le site de la série de compétitions et de séries télévisées de",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.8,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre de Sécession est de nouveau construite en 1890 par le général de Gaulle et le général de Gaulle en 1892. Le général de G",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8214,
+     "distinct_2": 0.7407,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la province de la Savoie et de la Savoie en Angleterre et en Angleterre. Le projet de loi de la province de Londres est de l",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7391,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport de la série de télévision est de plus en plus profondeur et de découvertes de la série de télévision et de télévision ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.5714,
+     "repetition": 4,
+     "echo": 0.25,
+     "prompt": "La science",
+     "texte": "La science et le service de la science-fiction de la science-fiction de la science-fiction. Le scénario de la science-fiction de la scien",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 0.875,
+     "distinct_2": 0.5484,
+     "repetition": 3,
+     "echo": 0.3,
+     "prompt": "La ville",
+     "texte": "La ville de La Marina est le plus grand projet de loi de la population de la ville de La Marina et de la ville de La Marina et de la vil",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.2727,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la construction de la construction de la construction de la construction de la construction de la construction de la constru",
+     "octets": 128
+    },
+    {
+     "mots": 41,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1,
+     "repetition": 13,
+     "echo": 0.6410256410256411,
+     "prompt": "La vie",
+     "texte": "La vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la v",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1935,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la mais",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2609,
+     "repetition": 7,
+     "echo": 0.3181818181818182,
+     "prompt": "La question",
+     "texte": "La question de la propriété de la propriété de la propriété de la propriété de la propriété de la propriété de la propriété d",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.9092,
+   "distinct_2": 0.9809,
+   "repetition": 1,
+   "echo": 0.0487,
+   "octets": 2426,
+   "secondes": 21.91,
+   "octets_s": 110.7,
+   "echantillons": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays moderne d'espace situé dans le sud du Nord du Nord. Par cette maison, ils redécoupent les variations agricoles par an, notamm",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, avant de partir à quelques années plus tard, il renonça en 1960 au fils de la même année des anciennes religieuses à Rem",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois à la recherche de la société. C'est le qu'il considérait comme un vaste palais français témoignant de la famille Carla, q",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays moderne d'espace situé dans le sud du Nord du Nord. Par cette maison, ils redécoupent les variations agricoles par an, notamm",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, avant de partir à quelques années plus tard, il renonça en 1960 au fils de la même année des anciennes religieuses à Rem",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois à la recherche de la société. C'est le qu'il considérait comme un vaste palais français témoignant de la famille Carla, q",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.9444,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.058823529411764705,
+     "prompt": "Le chat",
+     "texte": "Le chat interne de l'avant-garde-référence qui se lance en maintenant encore plusieurs mesures : statistiques, qui lui confèrent le ",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.8235,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.06666666666666667,
+     "prompt": "La mer",
+     "texte": "La mer marchande du monarchis vise à reconnaître les noyautés de la Seine et l'Asie et l'étranger.\n",
+     "octets": 97
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.9412,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07142857142857142,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent plusieurs fois dans des échappées sans les cartes de sujets géographiques prônant des cartes.\n",
+     "octets": 99
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8261,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de s'adresser à l'égénéreur qui a débuté plus tard. L'avis et la bibliothèque de Jean Philadelphiaire ont annulé leurs ",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est le plus au sein du pays, puis de la Baie-des-Maures.\n",
+     "octets": 54
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme commandé par Olivier Lieckher. Il disposait d'un athlète en mélangeant les membres de la Coupe de la pole et de ses coéquip",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.8,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07692307692307693,
+     "prompt": "La musique",
+     "texte": "La musique aux États-Unis, le nom de la ' de ' de l'Indochine Egen sur la vie d'Egen Kaja n'a pas collaboré aux ' de l'époque pour les ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8261,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Le livre",
+     "texte": "Le livre de la première version du soldat de la Macaba en 1524. Le personnage aux mêmes interrogatoires s'est implanté dans les anné",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "La guerre",
+     "texte": "La guerre en est enterrée au gouvernement le plus fréquenté. La fin de la loi sur le contrôle de l'opposition vise à coupler les con",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la politique est créée en 1999 par le gouvernement du Groupe de Pennsylvanie et du gouvernement de cité des Forces armée",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "Le sport",
+     "texte": "Le sportif comportent un temps, soit ainsi que de l'interstation de la définition de la FSA, même si le concept est selon le modèle d",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.913,
+     "repetition": 1,
+     "echo": 0.18181818181818182,
+     "prompt": "La science",
+     "texte": "La science Internationale CMC possède la conception de la graphite dans les règles de la technologie et de la recherche du sexe, Grand S",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.04,
+     "prompt": "La ville",
+     "texte": "La ville de The Buigas, est un pour personne et se donne sur trente balles le long de la Seconde Guerre mondiale. Après que le port du ",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9643,
+     "distinct_2": 0.963,
+     "repetition": 1,
+     "echo": 0.07692307692307693,
+     "prompt": "Le temps",
+     "texte": "Le temps qui est celui de la scène en France entre 1965 et 1976 le candidat pour la première fois de suite. Le président de la Cour s",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "La vie",
+     "texte": "La vie et Hugenot de Wittelsbach le . L'intrigue est créée en 1728 à la suite des cours de l'intrigue de restauration visant à ré",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.95,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de mathématiques augmente une consongolation de cibles nomades et une pratique très différente (augmentée de 700 millions d",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "La question",
+     "texte": "La question se voit innégalement positivement au cinéma sur le marin, le même rouge et la musique se voit « développer par cette bouti",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9446,
+   "distinct_2": 0.8728,
+   "repetition": 6,
+   "echo": 0.1099,
+   "octets": 2510,
+   "secondes": 22.65,
+   "octets_s": 110.8,
+   "echantillons": [
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.17391304347826086,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays d'action automobile le . Le pays se déroule dans le pays indépendant d'action au sein du pays d'Algérie en fonction de la pr",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, il est député de la circonscription de Mansouri et administrative de l'Ain en 1960. Il a été le candidat de la coalition a",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois connu dans l'art de la ville de Mandebourg en 1970. Il a été successivement connu pour avoir été installé à Saint-Étienn",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.17391304347826086,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays d'action automobile le . Le pays se déroule dans le pays indépendant d'action au sein du pays d'Algérie en fonction de la pr",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, il est député de la circonscription de Mansouri et administrative de l'Ain en 1960. Il a été le candidat de la coalition a",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois connu dans l'art de la ville de Mandebourg en 1970. Il a été successivement connu pour avoir été installé à Saint-Étienn",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.76,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat est disponible en 2 pour la première fois au cours des années 2010 et en 2011 est disponible pour la première fois au cours ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer est aussi une plate-forme de bande dessinée et dessinée par des personnages de films et de distribution de ces plates-formes ",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.9655,
+     "distinct_2": 0.9643,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent d'entrée en 1976. Il est suivi par la suite de son père. Il est libéré en 1970 et reste le premier acharnier de la saison 1",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.875,
+     "repetition": 2,
+     "echo": 0.23809523809523808,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé d'associer le secrétaire du gouvernement de la République de League. Le gouvernement a signé un contrat de défense de la pr",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Paris est",
+     "texte": "Paris est devenue la première femme à être reprise en 1947 par la construction de la place Charles Leroy. Cette même année, elle est",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8621,
+     "distinct_2": 0.9643,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme sous le nom de Super Lake Sandra et en France. Il se défend alors en chef au poste de conseiller de la région de la France de",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.13043478260869565,
+     "prompt": "La musique",
+     "texte": "La musique est plus petite que les deux parties sur le plan de la musique de police et de la famille des Caraïbes. Les caractéristiques ",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9444,
+     "repetition": 1,
+     "echo": 0.058823529411764705,
+     "prompt": "Le livre",
+     "texte": "Le livre de la mort de son père, le gouverneur de la reine est à la fin du conflit.\n",
+     "octets": 78
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.9655,
+     "distinct_2": 0.8929,
+     "repetition": 2,
+     "echo": 0.18518518518518517,
+     "prompt": "La guerre",
+     "texte": "La guerre du Nord et la guerre de Saôge. Il se déclare en 1867 au sein de la guerre de Sécession pour la première fois en 1875 et en ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7143,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la construction des données en 1980 au niveau de la construction. Les constructions de la structure de la construction des ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.84,
+     "repetition": 2,
+     "echo": 0.08,
+     "prompt": "Le sport",
+     "texte": "Le sportif a été rejoint par la suite. Le gouvernement a été retiré à la recherche et a été créé en 1946 par le gouvernement a",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 1.0,
+     "distinct_2": 0.75,
+     "repetition": 3,
+     "echo": 0.2631578947368421,
+     "prompt": "La science",
+     "texte": "La science de la science-fiction et de la science-fiction à la science-fiction de la science-fiction. Ce programme est pour la première ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.6923,
+     "repetition": 2,
+     "echo": 0.32,
+     "prompt": "La ville",
+     "texte": "La ville est une ville de la région de Toulouse. Sa ville de Canada est la première ville de la ville de Canada. Sa ville est située ",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 0.7931,
+     "repetition": 3,
+     "echo": 0.03571428571428571,
+     "prompt": "Le temps",
+     "texte": "Le temps passé à l'aide des berges de la ville. Les berges de la ville sont aussi des piles de part et de la ville. Le chef de la vill",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 0.5172,
+     "repetition": 6,
+     "echo": 0.42857142857142855,
+     "prompt": "La vie",
+     "texte": "La vie que les éléments de la vie de la vie sont considérés comme un casque anomalier de la vie de la vie de la vie de la vie mais",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.7083,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde est produite par Albert Scheer et Bill Deless. La fille de George Scheer est connue pour ses premiers contes de leurs producteu",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9091,
+     "repetition": 1,
+     "echo": 0.19047619047619047,
+     "prompt": "La question",
+     "texte": "La question de la politique contribue à la recherche de la démocratie et de l'administration de l'entreprise. En 1975, la politique du Co",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}
