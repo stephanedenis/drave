@@ -19311,3 +19311,43 @@ budget=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **818** / **1068** |'\nnew = '| fichiers / JSON de résultats | **819** / **1068** |'\nassert  … [1656 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   fc9c77be..24b14905  s/v7 -> s/v7
+ven 20 nov 2026 13:03:25 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/structures/gold-retro-traduction.json <<'JSON'\n{\n \"note\": \"Le gold de la rétro-traduction : les 3 premiers paragraphes, jugés à la main le 03/11 (rapport-s-traductions.md). 16 formes, dont 2 non référents (« en » par … [5829 caractères tronqués]`
+
+  ```
+script ok
+{"formes_gold": 14, "presentes": 14, "accord": 12}
+a001 Elle · modèle: She · gold: She · ✓ classe
+a001 se · modèle: herself · gold: herself · ✓ classe
+a001 elle · modèle: she · gold: she · ✓ classe
+a001 se · modèle: herself · gold: herself · ✓ classe
+a001 lui · modèle: her · gold: her · ✓ classe
+a001 en · modèle: from it · gold: None · ✗ classe différente
+a002 Elle · modèle: She · gold: her · ✓ classe
+a002 y · modèle: in it · gold: in it · ✓ classe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 -c \"\nimport json, retro_traduction as r\nd = json.load(open('../../reports/retro-traduction-v2.json'))\ng = r.comparer_gold(d['detail'])\nfor x in g['detail']:\n    if not x['accord'] or x['modele'] is None … [150 caractères tronqués]`
+
+  ```
+a001 en · modèle: from it · gold: None · classe différente
+a002 en · modèle: in it · gold: None · classe différente
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/structures/retro_traduction.py'); s = p.read_text()\nold = '''            attendu = g[\"en\"] or \"\"\n            en = trouve.get(\"en\") or \"\"\n            accord = bool(a … [1044 caractères tronqués]`
+
+  ```
+ok
+{"formes_gold": 14, "presentes": 14, "accord": 14}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-s-retro-traduction.md'); s = p.read_text()\nold = \"## Ce que le premier passage montre déjà\"\nnew = \"\"\"## Le gold, mesuré par le script (20/11)\n\n`--gold` appa … [2325 caractères tronqués]`

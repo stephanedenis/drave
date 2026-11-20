@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,10 +14,11 @@
 | 09:45 | `cdc12ad8` | N — LE CORPUS DU PALIER 1 EST CONSTRUIT : LES RÉSUMÉS WIKIPÉDIA, 3,69 Go À 753 o/LIGNE (ÉPINGLÉ) | `en-cours.md`, `README.md`, `attention.md` (+13) |
 | 10:37 | `450cbb6c` | S — LA RÉTRO-TRADUCTION v2 : 13/13 SUR LE GOLD DES a001-a003 (LE TAUX BRUT DU SCRIPT EST FAUX COMME MESURE) | `en-cours.md`, `README.md`, `attention.md` (+11) |
 | 11:51 | `fc9c77be` | R0.7 — LA DÉCISION DE ROUTAGE DU TAGGER EST PRÉPARÉE : OPTION (b) RECOMMANDÉE — LES OUVERTES À L'API (+18,6), LES FERMÉES À L'HEURISTIQUE (PARITÉ), LE DÉFAUT HORS LIGNE | `en-cours.md`, `README.md`, `attention.md` (+10) |
+| 13:00 | `24b14905` | N — LA VARIANCE DU RUN-À-RUN EST MESURÉE : 7,22 / 7,35 / 7,42 / 7,56 À 30 000 PAS (ÉTENDUE 4,7 %) — UNE SEULE GRAINE NE TRANCHE PAS | `en-cours.md`, `README.md`, `attention.md` (+28) |
 
 ## Chiffres du jour
 
-`3,69 Go` · `6,8349` · `6,867` · `7,093` · `6,8448` · `2,9167` · `7,7758` · `6,8590` · `2,9327` · `7,6053`
+`4,7 %` · `3,69 Go` · `6,8349` · `6,867` · `7,093` · `6,8448` · `2,9167` · `7,7758` · `6,8590` · `2,9327` · `7,6053`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -31,6 +32,7 @@
 - [reports/rapport-corpus-palier1.md](../../reports/rapport-corpus-palier1.md)
 - [reports/rapport-nuit-wikibig.md](../../reports/rapport-nuit-wikibig.md)
 - [reports/rapport-r0.7-decision.md](../../reports/rapport-r0.7-decision.md)
+- [reports/rapport-variance-graines.md](../../reports/rapport-variance-graines.md)
 
 <!-- notes -->
 

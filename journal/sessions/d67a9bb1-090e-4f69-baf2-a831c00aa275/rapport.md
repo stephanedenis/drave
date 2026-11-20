@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 75.2 h |
 | Tours | 86 |
-| Messages | 1357 |
-| Appels d'outils | 1174 |
+| Messages | 1361 |
+| Appels d'outils | 1178 |
 | Fichiers touchés | 44 |
-| Commandes | 1024 |
+| Commandes | 1028 |
 | Sous-agents | 7 |
-| Commits | 97 |
+| Commits | 98 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2104,13 +2104,17 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 ### Tour 86 — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches  … [938 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Read the seed-2 final tranche
 - bash — Read the seed-2 final results
 - bash — Launch the palier-1 runs (two seeds)
 - bash — Finalize the variance fiche and the state
 - bash — Commit the variance result
+- bash — Add the gold comparison to the retro-translation script
+- bash — List the gold disagreements
+- bash — Fix the non-referent handling and re-run the comparison
+- bash — Commit the gold comparison
 
 ## 3. Travail accompli
 
@@ -2215,7 +2219,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 984 autres
+- … et 988 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2460,4 +2464,5 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = '| 
+- S — LE GOLD MESURÉ PAR LE SCRIPT : 14/14 (12 RÉFÉRENTS + 2 NON-RÉFÉRENTS), L'APPARIEMENT PAR FORME ET OCCURRENCE" && git push origin master 2>&1 | tail -1; cd .
 

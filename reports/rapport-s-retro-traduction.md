@@ -33,6 +33,14 @@ dans cet ordre. Sur les trois paragraphes du gold :
   n-ième anaphore à la n-ième forme de la source, et les deux listes n'ont pas la même longueur.
   La mesure juste est **par anaphore de l'analyseur, contre le gold** — 13/13.
 
+## Le gold, mesuré par le script (20/11)
+
+`--gold` apparie par **forme française et occurrence**, pas par position : **14 formes du gold,
+14 présentes, 14 accords**. Les **12 référents** (Alice, la boîte, les conseils) ont la même classe
+dans la traduction et dans la source ; les **2 « en »** (partitif de a001, préposition de a002) sont
+rendus *from it* / *in it* — le gold les dit **non référents**, le modèle ne les traite pas comme des
+personnes : accord sur le fond. Le gold est dans `tools/structures/gold-retro-traduction.json`.
+
 ## Ce que le premier passage montre déjà
 
 - a001 : 6 accords sur 7 — les formes du gold (She, herself, she, it, herself, her) reviennent ;
