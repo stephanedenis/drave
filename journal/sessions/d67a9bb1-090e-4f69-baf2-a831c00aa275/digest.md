@@ -19670,3 +19670,121 @@ AssertionError: | fichiers / JSON de résultats | **820** / **1069** |
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - \"$n\" <<'PY'\nimport pathlib, sys\nn = sys.argv[1]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60] … [1995 caractères tronqués]`
+
+  ```
+ok 1081
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   d0cf6cf1..25e65ad0  s/v7 -> s/v7
+ven 20 nov 2026 15:52:53 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | wc -l; git status -sb | head -1; python3 tools/taille_documents.py >/dev/null 2>&1; echo \"budget=$?\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; git l … [138 caractères tronqués]`
+
+  ```
+1
+## s/v7...origin/s/v7
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+15
+ven 20 nov 2026 15:53:05 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan de 16 h — six résultats mesurés, committés et poussés, un seul item du goal non fait (la porte propre de N2)
+
+# Bilan de la journée (08 h 30 → 16 h) — 15 commits, tête `25e65ad0`
+
+## Ce qui a été mesuré, écrit et poussé
+
+| # | Résultat | Le chiffre | Fiche |
+|---|---|---|---|
+| 1 | **S — la profondeur entre dans la banque** | **324/369** candidats appariés, **95 à ≥ 3**, les 150 verdicts intacts | `rapport-s-migration-profondeur.md` |
+| 2 | **S — la rétro-traduction existe** | 9/9 traduits, **14/14** contre le gold (12 référents + 2 non-référents) | `rapport-s-retro-traduction.md` |
+| 3 | **N — le corpus du palier 1** | les résumés `frwiki_v14` : **3,69 Go**, 4,9 M lignes, 753 o/ligne, épinglé `469a6d78…` | `rapport-corpus-palier1.md` |
+| 4 | **N — le palier 1 à 20 000 pas** | **7,70-7,97** contre 7,83-8,17 pour `wiki_big` — il mène de 1-2 % | `rapport-palier1-resumes.md` |
+| 5 | **N — la variance du run-à-run** | 4 runs de `wiki_big` à 30k : **7,22 / 7,35 / 7,42 / 7,56**, étendue **4,7 %** | `rapport-variance-graines.md` |
+| 6 | **R0.7 + J4** | la note de décision (**option b** recommandée) ; l'or de rôles : second annotateur **F1 0,71**, et des erreurs de l'or | `rapport-r0.7-decision.md`, `rapport-j4-seconds-cadres.md` |
+
+## L'état du goal (les six items)
+
+- ✅ **la validation de S sur `/paragraphes`** — elle était **déjà finie** (9/9, 19/19 depuis le 06/11) ; le « 8 restants » du plan était périmé ;
+- ❌ **la porte propre (0,29) de N2** — **non faite** : c'est un écart de PPL (2,8566 contre une cible ~2,57 au val 1024) qui demande les runs N2 (le correctif, le ré-épinglage) — pas faisable dans la fenêtre avec les GPU occupés par le palier 1 ;
+- ✅ **le corpus du palier 1** + son run (deux graines) ;
+- ✅ **J4** (les seconds cadres), ✅ **la rétro-traduction**, ✅ **la décision de routage du tagger** (la note ; la décision reste la vôtre).
+
+## Ce qui tourne encore
+
+Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce sera le point qui compare ses deux graines aux quatre mesures de `wiki_big` — et, avec la variance de 4,7 %, le seul chiffre qui puisse trancher le palier 1.
+
+## Ce que je retiens pour la suite
+
+1. **La variance commande** : à 30 000 pas, une seule graine ne tranche pas un écart de 1-2 %. Toute comparaison de corpus doit être **multi-graines** — c'est désormais écrit.
+2. **Le registre compte plus que le volume** : les résumés (831 Mo ou 3,69 Go) se valent ; le plein texte et les lignes filtrées décrochent.
+3. **L'or de rôles est un brouillon** : le second annotateur trouve des erreurs dans l'or (or-f47, or-f45) et un schéma troué (le complément, F1 0,28). L'adjudication des 10 désaccords est la prochaine action de J4.
+
+**Prochaines actions désignées** : l'intégration du 30k du palier 1 (~16 h 30), l'adjudication de J4, la porte propre de N2 (les runs), et la décision de routage du tagger — qui vous revient.
+
+
+## Tour 87
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-traduction de S, la décision de routage du tagger ; fiches, état, commits et push pour chaque résultat, bilan à 16 h."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Wait for the palier-1 final tranche", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 16:03:47 EST
+pas 5550
+pas 7100
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Wait for the palier-1 final tranche", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 16:13:41 EST
+pas 7000
+pas 8600
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p13','p23'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"", "descriptio … [60 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 16:23:35 EST
+p13 -
+p23 ppl v1 3.0874
+  ```
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p13','p23'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('p13 … [253 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 16:30:20 EST
+p13 -
+p23 ppl v1 3.0874
+p13 wikitext2 -
+p23 wikitext2 7.279
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p13','p23'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('p13 … [304 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 16:40:18 EST
+p13 ppl v1 3.1486
+p23 ppl v1 3.0874
+p13 wikitext2 7.7044
+p23 wikitext2 7.279
+}
+=== chaîne p1 finie 16:37 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-palier1-resumes.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"> **Ligne de ro … [4043 caractères tronqués]`

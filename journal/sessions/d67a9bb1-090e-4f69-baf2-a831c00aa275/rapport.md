@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 78.0 h |
-| Tours | 86 |
-| Messages | 1394 |
-| Appels d'outils | 1211 |
+| Durée | 78.8 h |
+| Tours | 87 |
+| Messages | 1403 |
+| Appels d'outils | 1218 |
 | Fichiers touchés | 44 |
-| Commandes | 1061 |
+| Commandes | 1068 |
 | Sous-agents | 7 |
-| Commits | 101 |
+| Commits | 102 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -231,6 +231,8 @@
 **Tour 85** — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-trad … [658 caractères tronqués]
 
 **Tour 86** — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-trad … [658 caractères tronqués]
+
+**Tour 87** — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-trad … [658 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2104,7 +2106,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 ### Tour 86 — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches  … [938 caractères tronqués]
 
-*42 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - bash — Read the seed-2 final tranche
 - bash — Read the seed-2 final results
@@ -2120,7 +2122,52 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - bash — Inspect the roles gold
 - bash — Read the roles gold's structure fully
 - bash — Read the roles gold's frame format
-- … et 19 autres
+- … et 20 autres
+
+**Synthèse produite :**
+
+⏵ Bilan de 16 h — six résultats mesurés, committés et poussés, un seul item du goal non fait (la porte propre de N2)
+
+\# Bilan de la journée (08 h 30 → 16 h) — 15 commits, tête `25e65ad0`
+
+\## Ce qui a été mesuré, écrit et poussé
+
+| # | Résultat | Le chiffre | Fiche |
+|---|---|---|---|
+| 1 | **S — la profondeur entre dans la banque** | **324/369** candidats appariés, **95 à ≥ 3**, les 150 verdicts intacts | `rapport-s-migration-profondeur.md` |
+| 2 | **S — la rétro-traduction existe** | 9/9 traduits, **14/14** contre le gold (12 référents + 2 non-référents) | `rapport-s-retro-traduction.md` |
+| 3 | **N — le corpus du palier 1** | les résumés `frwiki_v14` : **3,69 Go**, 4,9 M lignes, 753 o/ligne, épinglé `469a6d78…` | `rapport-corpus-palier1.md` |
+| 4 | **N — le palier 1 à 20 000 pas** | **7,70-7,97** contre 7,83-8,17 pour `wiki_big` — il mène de 1-2 % | `rapport-palier1-resumes.md` |
+| 5 | **N — la variance du run-à-run** | 4 runs de `wiki_big` à 30k : **7,22 / 7,35 / 7,42 / 7,56**, étendue **4,7 %** | `rapport-variance-graines.md` |
+| 6 | **R0.7 + J4** | la note de décision (**option b** recommandée) ; l'or de rôles : second annotateur **F1 0,71**, et des erreurs de l'or | `rapport-r0.7-decision.md`, `rapport-j4-seconds-cadres.md` |
+
+\## L'état du goal (les six items)
+
+- ✅ **la validation de S sur `/paragraphes`** — elle était **déjà finie** (9/9, 19/19 depuis le 06/11) ; le « 8 restants » du plan était périmé ;
+- ❌ **la porte propre (0,29) de N2** — **non faite** : c'est un écart de PPL (2,8566 contre une cible ~2,57 au val 1024) qui demande les runs N2 (le correctif, le ré-épinglage) — pas faisable dans la fenêtre avec les GPU occupés par le palier 1 ;
+- ✅ **le corpus du palier 1** + son run (deux graines) ;
+- ✅ **J4** (les seconds cadres), ✅ **la rétro-traduction**, ✅ **la décision de routage du tagger** (la note ; la décision reste la vôtre).
+
+\## Ce qui tourne encore
+
+Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce sera le point qui compare ses deux graines aux quatre mesures de `wiki_big` — et, avec la variance de 4,7 %, le seul chiffre qui puisse trancher le palier 1.
+
+\## Ce que je retiens pour la suite
+
+1. **La variance commande** : à 30 000 pas, une seule graine ne tranche pas un écart de 1-2 %. Toute comparaison de corpus doit être **multi-graines** — c'est désormais écrit.
+2. **Le registre compte plus que le volume** : les résumés (831 Mo ou 3,69 Go) se valent ; le plein texte et les lignes filtrées décrochent.
+3. *
+… [404 caractères tronqués]
+
+### Tour 87 — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches  … [938 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Wait for the palier-1 final tranche
+- bash — Check the palier-1 final tranche
+- bash — Read the palier-1 final results
+- bash — Read the palier-1 seed-1 final tranche
+- bash — Commit the palier-1 final results
 
 ## 3. Travail accompli
 
@@ -2225,7 +2272,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1021 autres
+- … et 1028 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2474,4 +2521,5 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-palier1-resumes.md'); s = p.read_text() 
 
