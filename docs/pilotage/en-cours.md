@@ -86,7 +86,7 @@
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **814** / **1046** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **128** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **19/11 13 h 12 → 15 h 16** : **91** portes, **89/2** ; seules `indice` (859 s) et `melange` (106 s) **structurelles** ; `sessions` **verte** ; machine chargée (deux runs de sources), verdict seul | `work/portes/roue-1119-1316/registre.txt` |
+| dernière passe | **20/11 05 h 58 → 07 h 58** : **91** portes, **89/2** ; seules `indice` (836 s) et `melange` (105 s) **structurelles** ; `sessions` **verte** ; machine au repos (les runs de la nuit finis) | `work/portes/roue-1120-0558/registre.txt` |
 
 ## Les chantiers et leurs bloquants
 

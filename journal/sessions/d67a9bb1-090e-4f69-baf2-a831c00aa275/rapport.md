@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 68.1 h |
+| Durée | 70.1 h |
 | Tours | 82 |
-| Messages | 1200 |
-| Appels d'outils | 1031 |
+| Messages | 1215 |
+| Appels d'outils | 1045 |
 | Fichiers touchés | 44 |
-| Commandes | 886 |
+| Commandes | 900 |
 | Sous-agents | 7 |
-| Commits | 81 |
+| Commits | 82 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1945,7 +1945,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 
 ### Tour 82 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [968 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - bash — Fill the long-form's final rows in the fiche
 - bash — Ten-minute pause and progress
@@ -1955,6 +1955,13 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - bash — Finalize the night's fiche
 - bash — Update the state with the night's final results
 - bash — Commit the night's final results
+- bash — Launch the closing gate pass
+- bash — Ten-minute pause and pass progress
+- bash — Ten-minute pause
+- bash — Ten-minute pause and pass tail
+- bash — Ten-minute pause and pass end
+- bash — Read the closing pass verdict
+- … et 1 autres
 
 ## 3. Travail accompli
 
@@ -2059,7 +2066,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 846 autres
+- … et 860 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2288,4 +2295,5 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - ÉTAT — LA FICHE DE LA NUIT COMPTE (814 FICHES)" && git push origin s/v7 2>&1 | tail -1; date
 - ÉTAT — LA PAGE VIVANTE PASSE AU 20/11 (LA NUIT wiki_big)" && git push origin s/v7 2>&1 | tail -1; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-nuit-wikibig.md reports/banc-generation-nb11.json reports/banc-grammaticalite-nb11
+- PASSE DE CLÔTURE — 91 PORTES, 89 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES), MACHINE AU REPOS" && git push origin s/v7 2>&1 | tail -1; date
 
