@@ -17027,3 +17027,14 @@ nl10 wikitext2 7.7758
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - \"$n\" <<'PY'\nimport pathlib, sys\nn = sys.argv[1]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **813** / **1028** |'\nnew = f'| … [1459 caractères tronqués]`
+
+  ```
+compteur 1040
+     · compteurs : en-cours.md dit 813 fichiers, le disque en a 814
+   9c1094e4..d5c78fa9  s/v7 -> s/v7
+ven 20 nov 2026 04:48:38 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **813** / **1040** |'\nnew = '| fichiers / JSON de résultats | **814** / **1040** |'\nassert  … [386 caractères tronqués]`
