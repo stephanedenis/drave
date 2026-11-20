@@ -7,12 +7,12 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 77.0 h |
+| Durée | 77.7 h |
 | Tours | 86 |
-| Messages | 1384 |
-| Appels d'outils | 1201 |
+| Messages | 1389 |
+| Appels d'outils | 1206 |
 | Fichiers touchés | 44 |
-| Commandes | 1051 |
+| Commandes | 1056 |
 | Sous-agents | 7 |
 | Commits | 99 |
 | Compactages de contexte | 2 |
@@ -2104,7 +2104,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 ### Tour 86 — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches  … [938 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*37 appels d'outils.* Actions notables :
 
 - bash — Read the seed-2 final tranche
 - bash — Read the seed-2 final results
@@ -2120,7 +2120,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - bash — Inspect the roles gold
 - bash — Read the roles gold's structure fully
 - bash — Read the roles gold's frame format
-- … et 12 autres
+- … et 15 autres
 
 ## 3. Travail accompli
 
@@ -2225,7 +2225,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1011 autres
+- … et 1016 autres
 
 ## 4. Mesures et résultats marquants
 

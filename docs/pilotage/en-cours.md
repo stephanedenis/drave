@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-20, 15 h 05 HNE (l'architecture documentée : le README, la vision, et les schémas liés)**
+**Mis à jour : 2026-11-20, 15 h 35 HNE (les cinq parcours de lecture : un guidon pour chaque profil, moins de documents)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -61,8 +61,8 @@
 |---|---|---|
 | portes | **91** (dont `porte-a2.6-experts` le 18/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **820** / **1075** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **128** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **820** / **1081** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **129** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **20/11 05 h 58 → 07 h 58** : **91** portes, **89/2** ; seules `indice` (836 s) et `melange` (105 s) **structurelles** ; `sessions` **verte** ; machine au repos (les runs de la nuit finis) | `work/portes/roue-1120-0558/registre.txt` |
 
 ## Les chantiers et leurs bloquants

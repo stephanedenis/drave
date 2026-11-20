@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 478.3 h |
-| Tours | 221 |
-| Messages | 4451 |
-| Appels d'outils | 3967 |
+| Durée | 478.8 h |
+| Tours | 222 |
+| Messages | 4464 |
+| Appels d'outils | 3978 |
 | Fichiers touchés | 25 |
-| Commandes | 3295 |
+| Commandes | 3306 |
 | Sous-agents | 43 |
-| Commits | 526 |
+| Commits | 527 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -515,6 +515,8 @@
 **Tour 220** — Parcours de lecture conseillé dans glossaire.md mentionne des documents sans les lier
 
 **Tour 221** — documente l'architecture dans le readme et vision et là où c'est pertinent. réfère toi à docs/methode/illustrations.md avant de commencer
+
+**Tour 222** — Pourrait-on rendre la documentation plus claire et moins redondante? On y mélange plein de choses de différentes perspectives. le readme présente des profils de lecteurs. on devrait organiser des parcours de lecture qui vont dans ce sens pour couvrir toute la théorie evec moins de documents.
 
 ## 2. Déroulé, étape par étape
 
@@ -11704,6 +11706,55 @@ Committé `171bfa34`, poussé.
 - bash — Insérer l'illustration dans architecture-native
 - bash — Committer l'architecture
 
+**Synthèse produite :**
+
+⏵ L'architecture est documentée — README, vision, et `architecture-native.md`, avec les schémas existants liés
+
+\## Ce qui a été fait (après avoir relu `docs/methode/illustrations.md`)
+
+**La règle respectée** : SVG obligatoire, `viewBox`, `<title>`, `<desc>`, liens relatifs, aucune ressource externe — j'ai **réutilisé les trois schémas existants** de la synthèse plutôt que d'en créer des doublons.
+
+\### 1. Le README — nouvelle section « L'architecture — une image, trois niveaux »
+
+- [`vue-ensemble.svg`](docs/theorie/synthese/schemas/vue-ensemble.svg) : le texte → les jetons → les régions → le bus → la sortie.
+- Les **trois niveaux** : la **surface** (les octets, les mots), la **RSN** (les faits structurés, lisibles et rejouables), la **pensée** (l'itération sur la RSN).
+- [`etages.svg`](docs/theorie/synthese/schemas/etages.svg) : le miroir entrée/sortie.
+- [`bus-evenements.svg`](docs/theorie/synthese/schemas/bus-evenements.svg) : une activation est un fait, poussé vers ses lecteurs.
+- Le **produit** (le bloc linguistique) : la surface seule, neuf niveaux, deux implémentations.
+- Les liens vers le traité (`modele-natif.md`), le format (`architecture-native.md`) et la synthèse.
+
+\### 2. La vision — nouvelle section « L'architecture — le bus, les régions, trois niveaux »
+
+Le **trajet d'un texte** (surface → RSN → pensée → surface, le miroir), le **bus** (le fait, la liste valuée, le coût qui suit l'activité), le **graphe** (les régions, le cerveau contrôleur) et le **DRVM** (le conteneur).
+
+\### 3. `architecture-native.md` — l'illustration du miroir
+
+[`etages.svg`](docs/theorie/synthese/schemas/etages.svg) inséré avant le § 2 (le DRVM).
+
+\## Les vérifications
+
+- `verifier_schemas.py` : ✅ SVG valides, référencés, images relatives, aucun ASCII art.
+- `porte-tableaux.sh` : ✅ les liens résolvent.
+- `revue_documentation` : ✅ ; `taille_documents` : ✅ (README 3 480 ≤ 3 500).
+
+Committé `c0126f88`, poussé (`master` = `s/v7`).
+
+### Tour 222 — Pourrait-on rendre la documentation plus claire et moins redondante? On y mélange plein de choses de différentes perspec … [172 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Auditer la documentation
+- bash — Voir le « Par où commencer » du README
+- bash — Créer les parcours de lecture
+- bash — Trim le README et corriger les compteurs
+- bash — Trim docs/README et corriger les compteurs
+- bash — Corriger le compte et trimmer docs/README
+- bash — Voir les lignes longues de docs/README
+- bash — Voir les 3 lignes à trimmer
+- bash — Trimmer les lignes
+- bash — Trimmer les 2 mots
+- bash — Committer les parcours
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -11824,7 +11875,7 @@ Committé `171bfa34`, poussé.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3255 autres
+- … et 3266 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12498,4 +12549,5 @@ Committé `171bfa34`, poussé.
 - GLOSSAIRE — CHAQUE FICHE OUVRE SUR UN TL;DR (OUTIL POUR LES TOOLTIPS ET LE DÉBUT DE FICHE WEB), AVEC UNE PLACE POUR « CE QUE C'EST, EN CLAIR » ET LES RÉFÉRENCES
 - GLOSSAIRE — LE PARCOURS DE LECTURE EST ENTIÈREMENT LIÉ (16 DOCUMENTS, DE LA VISION À L'AUDIT) : PLUS UN NOM DE FICHIER NU" 2>&1 | tail -2; git log -1 --format='
 - ARCHITECTURE — DOCUMENTÉE DANS LE README (TROIS NIVEAUX, LE BUS, LE PRODUIT) ET DANS LA VISION (LE TRAJET D'UN TEXTE, LE BUS, LE GRAPHE) ; LES SCHÉMAS DE LA SYN
+- PARCOURS DE LECTURE — CINQ PROFILS, CINQ CHEMINS (CURIEUX 20 MIN, UTILISATEUR 15, INGÉNIEUR 2 H, CHERCHEUR 1 H, AGENT 10), NEUF DOCUMENTS DE THÉORIE AU TOTAL, L
 

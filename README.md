@@ -283,13 +283,13 @@ La méthode complète et ses sept leçons : [`docs/theorie/synthese/06-comment-s
 `git submodule update --init --recursive`. Les évolutions de l'outil se font dans ce dépôt, puis le pointeur est
 commité dans Drave.
 
-**Le vocabulaire, en trois lignes** : une **couche** est une couche de neurones ; un **étage** est un niveau
-d'architecture (étage 1 entrée-sortie, étage 2 pensée) ; une **unité de sens** est un élément de la représentation
-neutre (la « RSN »), jamais un « jeton » de tokeniseur. Le glossaire : [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md).
+**Le vocabulaire, en trois lignes** : une **couche** est une couche de neurones ; un **étage** est un
+niveau d'architecture ; une **unité de sens** est un élément de la RSN, jamais un « jeton ». Le glossaire : [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md).
 
 ## Par où commencer
 
-0. [`docs/theorie/carte.md`](docs/theorie/carte.md) — **la carte** : trouver un sujet (un concept, un chantier, une phase)
+0. [`docs/theorie/parcours.md`](docs/theorie/parcours.md) — **les cinq parcours de lecture** (curieux 20 min, utilisateur 15, ingénieur 2 h, chercheur 1 h, agent 10) : chaque profil a **son** chemin ;
+1. [`docs/theorie/carte.md`](docs/theorie/carte.md) — **la carte** : trouver un sujet (un concept, un chantier, une phase)
    directement, fichier par fichier ;
 1. [`docs/theorie/vision.md`](docs/theorie/vision.md) — la vision complète (le cœur et les cinq axes) ;
 2. [`AGENTS.md`](AGENTS.md) — la mission et les règles non négociables ;

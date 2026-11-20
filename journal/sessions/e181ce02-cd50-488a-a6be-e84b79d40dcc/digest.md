@@ -72403,3 +72403,158 @@ README mots: 3480
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add README.md docs/theorie/vision.md docs/theorie/architecture-native.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"ARCHITECTURE — DOCUMENTÉE DANS LE README (TROIS NIVEAUX, LE BUS, LE PRODUIT) ET DANS LA … [414 caractères tronqués]`
+
+  ```
+[s/v7 c0126f88] ARCHITECTURE — DOCUMENTÉE DANS LE README (TROIS NIVEAUX, LE BUS, LE PRODUIT) ET DANS LA VISION (LE TRAJET D'UN TEXTE, LE BUS, LE GRAPHE) ; LES SCHÉMAS DE LA SYNTHÈSE LIÉS (vue-ensemble, étages, bus) ET L'ILLUSTRATION DANS architecture-native
+ 17 files changed, 719 insertions(+), 39 deletions(-)
+c0126f88 ARCHITECTURE — DOCUMENTÉE DANS LE README (TROIS NIVEAUX, LE BUS, LE PRODUIT)
+   36b5dbda..c0126f88  s/v7 -> s/v7
+   171bfa34..c0126f88  master -> master
+ven 20 nov 2026 15:00:30 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ L'architecture est documentée — README, vision, et `architecture-native.md`, avec les schémas existants liés
+
+## Ce qui a été fait (après avoir relu `docs/methode/illustrations.md`)
+
+**La règle respectée** : SVG obligatoire, `viewBox`, `<title>`, `<desc>`, liens relatifs, aucune ressource externe — j'ai **réutilisé les trois schémas existants** de la synthèse plutôt que d'en créer des doublons.
+
+### 1. Le README — nouvelle section « L'architecture — une image, trois niveaux »
+
+- [`vue-ensemble.svg`](docs/theorie/synthese/schemas/vue-ensemble.svg) : le texte → les jetons → les régions → le bus → la sortie.
+- Les **trois niveaux** : la **surface** (les octets, les mots), la **RSN** (les faits structurés, lisibles et rejouables), la **pensée** (l'itération sur la RSN).
+- [`etages.svg`](docs/theorie/synthese/schemas/etages.svg) : le miroir entrée/sortie.
+- [`bus-evenements.svg`](docs/theorie/synthese/schemas/bus-evenements.svg) : une activation est un fait, poussé vers ses lecteurs.
+- Le **produit** (le bloc linguistique) : la surface seule, neuf niveaux, deux implémentations.
+- Les liens vers le traité (`modele-natif.md`), le format (`architecture-native.md`) et la synthèse.
+
+### 2. La vision — nouvelle section « L'architecture — le bus, les régions, trois niveaux »
+
+Le **trajet d'un texte** (surface → RSN → pensée → surface, le miroir), le **bus** (le fait, la liste valuée, le coût qui suit l'activité), le **graphe** (les régions, le cerveau contrôleur) et le **DRVM** (le conteneur).
+
+### 3. `architecture-native.md` — l'illustration du miroir
+
+[`etages.svg`](docs/theorie/synthese/schemas/etages.svg) inséré avant le § 2 (le DRVM).
+
+## Les vérifications
+
+- `verifier_schemas.py` : ✅ SVG valides, référencés, images relatives, aucun ASCII art.
+- `porte-tableaux.sh` : ✅ les liens résolvent.
+- `revue_documentation` : ✅ ; `taille_documents` : ✅ (README 3 480 ≤ 3 500).
+
+Committé `c0126f88`, poussé (`master` = `s/v7`).
+
+
+## Tour 222
+
+### 👤 Utilisateur
+
+Pourrait-on rendre la documentation plus claire et moins redondante? On y mélange plein de choses de différentes perspectives. le readme présente des profils de lecteurs. on devrait organiser des parcours de lecture qui vont dans ce sens pour couvrir toute la théorie evec moins de documents.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport pathlib, re\nps = sorted(pathlib.Path('docs').rglob('*.md'))\nprint('docs:', len(ps))\nfor d in ['docs/theorie','docs/methode','docs/pilotage','docs/produit','docs/implantation','docs/archive']:\n    print … [176 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 15:25:20 EST
+docs: 509
+  docs/theorie 373
+  docs/methode 15
+  docs/pilotage 53
+  docs/produit 4
+  docs/implantation 21
+  docs/archive 41
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '258,300p' README.md | cut -c1-120; echo \"=== docs/README : les sections\"; grep -nE \"^## \" docs/README.md | head -10 | cut -c1-110", "description": "Voir le « Par où commencer » du README"}`
+
+  ```
+fiche.
+
+La méthode complète et ses sept leçons : [`docs/theorie/synthese/06-comment-savoir.md`](docs/theorie/synthese/06-comment
+
+---
+
+## Ce que contient le dépôt
+
+| vous cherchez… | allez à |
+|---|---|
+| **l'état courant** (ce qui est vrai aujourd'hui) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| **la vision complète** (les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| **la roadmap** (les quatre chantiers A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](d
+| **les résultats**, mesure par mesure, avec les contrôles | [`reports/README.md`](reports/README.md) · [`reports/`](rep
+| **la théorie** (8 chapitres) et la carte du raisonnement | [`docs/theorie/synthese/index.md`](docs/theorie/synthese/in
+| **la méthode** et ses pièges | [`docs/theorie/synthese/06-comment-savoir.md`](docs/theorie/synthese/06-comment-savoir.
+| le **récit daté** de la recherche | [`journal/`](journal/) |
+| les **instruments** (les expériences sont rejouables) | [`tools/`](tools/) |
+| le **serveur de documentation** (sous-module) | [`tools/docwatch/`](tools/docwatch/) · [dépôt public](https://github.c
+| les **corpus** | [
+… [1924 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/theorie/parcours.md <<'MD'\n# Les parcours de lecture — cinq profils, cinq chemins, un seul corpus\n\n> **Ce que ce document est.** Le **guidon** de la documentation : cinq **profils de lecteurs**, et\n> pour chacun un **c … [7293 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 1075 JSON, le disque en a 1081
+  ✅ la page vivante date du dernier commit (2026-11-20)
+     · README.md : 3519 mots > budget 3500 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('README.md'); t=p.read_text()\n# trim 25 mots : la ligne du parcours et la ligne « vocabulaire »\nt=t.replace(\"0. [`docs/theorie/parcours.md`](docs/theorie/parcours.md) — **les ci … [1808 caractères tronqués]`
+
+  ```
+README mots: 3495
+     · docs/README.md : 1014 mots > budget 1000 (T1)
+     · compteurs : en-cours.md dit 128 documents, le disque en a 129
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`theorie/parcours.md`](theorie/parcours.md) | **les cinq parcours de lecture** (curieux, utilisateur, ingénieur, chercheur, age … [587 caractères tronqués]`
+
+  ```
+· docs/README.md : 1009 mots > budget 1000 (T1)
+     · compteurs : en-cours.md dit 510 documents, le disque en a 129
+  ✅ la page vivante date du dernier commit (2026-11-20)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| documents de `docs/` \\| \\*\\*\\d+\\*\\*\", \"| documents de `docs/` | **129**\", t)\np.write_text(t)\np=pathlib.Pat … [394 caractères tronqués]`
+
+  ```
+· docs/README.md : 1009 mots > budget 1000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-20)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/README.md'); lignes=p.read_text().splitlines(keepends=True)\nidx=sorted(range(len(lignes)), key=lambda i: -len(re.findall(r\"\\S+\", lignes[i])))[:4]\nfor i in idx: print(i,  … [118 caractères tronqués]`
+
+  ```
+2 28 > **`docs/` dit ce qui reste vrai** : la méthode, l'[état](theorie/glossaire/entrees/etat.md), la théorie, l'i
+30 17 | [`methode/contexte.md`](methode/contexte.md) | le budget de [contexte](theorie/glossaire/entrees/contexte.md
+70 17 | [`theorie/modele-natif.md`](theorie/modele-natif.md) | le modèle natif, le bus, les blocs et la séparation à
+72 17 | [`theorie/lecture-rapide.md`](theorie/lecture-rapide.md) | la [lecture rapide](theorie/glossaire/entrees/lec
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2p;70p;72p' docs/README.md | cut -c1-260", "description": "Voir les 3 lignes à trimmer"}`
+
+  ```
+| [`theorie/architecture-native.md`](theorie/architecture-native.md) | [DRVM](theorie/glossaire/entrees/drvm.md), `drave-n0` : le format et le modèle natifs |
+| [`theorie/pensee-iterative.md`](theorie/pensee-iterative.md) | la RSN plurielle, l'arbre d'états et les stratégies de pensée |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`theorie/architecture-native.md`](theorie/architecture-native.md) | [DRVM](theorie/glossaire/entrees/drvm.md), `drave-n0` : le form … [623 caractères tronqués]`
+
+  ```
+· docs/README.md : 1002 mots > budget 1000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-20)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| les **cinq parcours de lecture** |\", \"| les **cinq parcours** |\")\np.write_text(t)\nPY\npython3 tools/taille_documents.py 2>&1 |  … [194 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-20)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add docs/theorie/parcours.md docs/README.md README.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"PARCOURS DE LECTURE — CINQ PROFILS, CINQ CHEMINS (CURIEUX 20 MIN, UTILISATEUR 15, INGÉNIEUR 2 H, CHERCHEUR … [396 caractères tronqués]`

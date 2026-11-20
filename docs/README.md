@@ -56,6 +56,7 @@
 
 | document | pour quoi |
 |---|---|
+| [`theorie/parcours.md`](theorie/parcours.md) | les **cinq parcours** |
 | [`theorie/vision.md`](theorie/vision.md) | la vision : les flots, les cinq axes, ce qu'elle n'est pas |
 | [`theorie/carte.md`](theorie/carte.md) | la carte des sujets, bloc par bloc |
 | [`theorie/histoire.md`](theorie/histoire.md) | [Qtrinet](theorie/glossaire/entrees/qtrinet.md) → Drave, les trois âges |
@@ -66,9 +67,9 @@
 | [`theorie/genealogie-des-langues.md`](theorie/genealogie-des-langues.md) | la [généalogie](theorie/glossaire/entrees/genealogie.md) et l'avertissement époque/filiation |
 | [`theorie/synthese/index.md`](theorie/synthese/index.md) | la synthèse en 8 chapitres |
 | [`theorie/glossaire.md`](theorie/glossaire.md) | le vocabulaire : [couche](theorie/glossaire/entrees/couche.md) vs étage, [unité](theorie/glossaire/entrees/unite.md) de sens, RSN |
-| [`theorie/architecture-native.md`](theorie/architecture-native.md) | [DRVM](theorie/glossaire/entrees/drvm.md), `drave-n0` : le format et le modèle natifs |
+| [`theorie/architecture-native.md`](theorie/architecture-native.md) | le format et le modèle natifs |
 | [`theorie/modele-natif.md`](theorie/modele-natif.md) | le modèle natif, le bus, les blocs et la séparation à trois niveaux |
-| [`theorie/pensee-iterative.md`](theorie/pensee-iterative.md) | la RSN plurielle, l'arbre d'états et les stratégies de pensée |
+| [`theorie/pensee-iterative.md`](theorie/pensee-iterative.md) | la RSN plurielle et les stratégies |
 | [`theorie/lecture-rapide.md`](theorie/lecture-rapide.md) | la [lecture rapide](theorie/glossaire/entrees/lecture-rapide.md) humaine, les 14 techniques et les cinq couches qui manquent |
 | [`theorie/pre-traitement-linguistique.md`](theorie/pre-traitement-linguistique.md) | la couche heuristique : niveaux, cascade, coloration, coût et protocole |
 | [`theorie/glossaire/README.md`](theorie/glossaire/README.md) | les 316 fiches du glossaire |

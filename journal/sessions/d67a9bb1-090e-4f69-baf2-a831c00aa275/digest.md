@@ -19570,3 +19570,48 @@ pas 6700
   ```
 
 - **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p12','p22'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"", "descriptio … [61 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 15:02:36 EST
+p12 -
+p22 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p12','p22'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('p12 … [262 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 15:12:32 EST
+p12 -
+p22 -
+p12 wikitext2 -
+p22 wikitext2 -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | cut -c1-45; tail -1 work/n4/p2.chaine.log | cut -c1-45", "description": "Check the palier-1 runs' tails"}`
+
+  ```
+ven 20 nov 2026 15:12:36 EST
+pas 8600 · perte 1.1432 · PPL val 3.470 · 359
+pas 9750 · perte 1.0186 · PPL val 3.412 · 384
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p12','p22'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('p12 … [262 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 15:22:31 EST
+p12 ppl v1 3.2572
+p22 ppl v1 3.2196
+p12 wikitext2 -
+p22 wikitext2 7.7017
+  ```
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p12','p22'):\n    try:\n        d=json.load(open(f'reports/ppl-wikitext2-{f}.json')); print(f, 'wikitext2', round(d['ppl'],4))\n    except FileNotFoundError: print(f, 'wikitext2 … [144 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 15:29:20 EST
+p12 wikitext2 7.97
+p22 wikitext2 7.7017
+pas  600
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
