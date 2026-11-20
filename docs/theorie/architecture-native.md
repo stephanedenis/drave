@@ -26,6 +26,8 @@ GGUF sait stocker des **tenseurs** et des **métadonnées** ; il ne sait pas dir
 exécuteur : ce n'est plus GGUF. On garde GGUF comme **format d'import/export** pour les modèles
 existants, et on crée **DRVM**.
 
+![Les deux étages et le miroir : la surface, la RSN, la pensée, et le retour à la surface](synthese/schemas/etages.svg)
+
 ## 2. DRVM — le conteneur du modèle
 
 **DRVM** (Drave Model) est un conteneur **versionné**, **mmap-able**, **par bloc**, avec quatre

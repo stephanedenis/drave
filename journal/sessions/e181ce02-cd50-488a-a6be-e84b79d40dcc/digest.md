@@ -71911,3 +71911,495 @@ Dans `docs/theorie/glossaire.md`, la section **« Parcours de lecture conseillé
 
 Committé `171bfa34`, poussé.
 
+
+## Tour 221
+
+### 👤 Utilisateur
+
+documente l'architecture dans le readme et vision et là où c'est pertinent. réfère toi à docs/methode/illustrations.md avant de commencer
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; head -60 docs/methode/illustrations.md | cut -c1-140", "description": "Lire la règle des illustrations"}`
+
+  ```
+ven 20 nov 2026 14:51:37 EST
+# Les illustrations — SVG obligatoire, jamais d'ASCII art
+
+> **Règle non négociable.** Un schéma, une architecture, un flux, un arbre, une carte : c'est un
+> **fichier SVG**. **Jamais** d'ASCII art, jamais de boîtes en `┌─┬─┐`, jamais de flèches en
+> `──►` dans un bloc de code. Un agent qui dessine en ASCII est en faute.
+>
+> **Pourquoi.** Un SVG se rend, se zoome, s'imprime, se cite et se vérifie ; l'ASCII art dépend de
+> la police, casse au moindre changement de largeur et ne peut pas être validé. Le dépôt est lu par
+> des humains **et** des agents : une illustration doit être un objet, pas une suite de caractères.
+
+## Les quatre voies autorisées
+
+1. **SVG direct** — un fichier `.svg` écrit à la main, avec `viewBox`.
+2. **Mermaid → SVG** — source `.mmd` ; **docwatch** génère `<source>.mmd.svg` ; l'image Markdown
+   pointe vers ce SVG.
+3. **PlantUML → SVG** — source `.puml` ; **docwatch** génère `<source>.puml.svg`.
+4. **Bloc inline** — un bloc ` ```plantuml ` ou ` ```mermaid ` **dans le Markdown** ; docwatch le rend
+   en SVG mis en cache, sans fichier à côté. La source vit dans la page : elle se révise avec le texte.
+
+Le **SVG généré n'a pas besoin d'
+… [1937 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/schemas/ | head -10; ls docs/theorie/synthese/schemas/ | head -8; echo \"=== l'exemple :\"; head -25 docs/schemas/README.md 2>/dev/null | cut -c1-120; echo \"=== un SVG :\"; ls docs/schemas/*.svg | head -1 | xargs head -12 2> … [70 caractères tronqués]`
+
+  ```
+arbre-referents.svg
+backlog-dependances.svg
+bloc-linguistique-niveaux.svg
+bloc-linguistique-substitution.svg
+chantiers-decision.svg
+chantiers-vision.svg
+decision.puml
+decision.puml.svg
+diehl-cook-architecture.svg
+diehl-cook-banc.svg
+anatomie-coupe.svg
+bus-evenements.svg
+couche-commune.svg
+etages.svg
+facultes.svg
+fiche-concept.svg
+glossaire.svg
+methode.svg
+=== l'exemple :
+# Les schémas — index et convention
+
+> **Ce que ce dossier est.** Les **illustrations** de Drave, en **SVG** : les schémas directs
+> des concepts, les schémas du natif et de l'impulsionnel, deux sources générées par docwatch et
+> les quatorze schémas de la synthèse
+> (`docs/theorie/synthese/schemas/`). Chaque SVG direct a un `viewBox`, un `<title>`, un `<desc>` et
+> `role="img"` ; aucun n'utilise de ressource externe.
+>
+> **La règle.** Pas d'ASCII art. Un schéma est un SVG, directement, converti depuis Mermaid ou
+> PlantUML, ou un **bloc inline** rendu par docwatch. Voir
+> [`docs/methode/illustrations.md`](../methode/illustrations.md) ; vérifier avec
+> `python3 tools/verifier_schemas.py`.
+
+## Les schémas des concepts
+
+| schéma | ce qu'il montre | où il est utilisé |
+|---|---|---|
+| [modules-cerveau-langage.svg](mod
+… [2053 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in etages.svg bus-evenements.svg bloc-linguistique-niveaux.svg couche-commune.svg; do echo \"=== $f\"; head -3 docs/schemas/$f 2>/dev/null | grep -o \"<title>[^<]*</title>\" | head -1; grep -o \"<desc>[^<]*</desc>\" docs/schema … [299 caractères tronqués]`
+
+  ```
+=== etages.svg
+=== bus-evenements.svg
+=== bloc-linguistique-niveaux.svg
+<title>Le bloc linguistique — neuf niveaux, deux implémentations</title>
+<desc>L&#x27;heuristique CPU étiquette la surface ; le neuronal couvre l&#x27;ambigu ; les barres sont des confiances déclarées, pas des précisions mesurées.</d
+=== couche-commune.svg
+=== les références dans les docs :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -6 docs/schemas/etages.svg | cut -c1-300; echo \"=== les tailles :\"; ls -la docs/schemas/etages.svg docs/schemas/bus-evenements.svg docs/schemas/couche-commune.svg | awk '{print $5, $9}'", "description": "Voir etages.svg"}`
+
+  ```
+=== les tailles :
+[stderr]
+head: cannot open 'docs/schemas/etages.svg' for reading: No such file or directory
+ls: cannot access 'docs/schemas/etages.svg': No such file or directory
+ls: cannot access 'docs/schemas/bus-evenements.svg': No such file or directory
+ls: cannot access 'docs/schemas/couche-commune.svg': No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/theorie/synthese/schemas/ | head -16; echo \"=== etages :\"; head -8 docs/theorie/synthese/schemas/etages.svg 2>/dev/null | cut -c1-250; echo \"=== bus :\"; head -8 docs/theorie/synthese/schemas/bus-evenements.svg 2>/dev/null … [66 caractères tronqués]`
+
+  ```
+anatomie-coupe.svg
+bus-evenements.svg
+couche-commune.svg
+etages.svg
+facultes.svg
+fiche-concept.svg
+glossaire.svg
+methode.svg
+modes.svg
+operations.svg
+parcours.svg
+pensee.svg
+portes.svg
+vue-ensemble.svg
+=== etages :
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="DejaVu Sans, Arial, sans-serif">
+  <title>Les deux étages, et le miroir</title>
+  <desc>Surface, RSN, pensée, RSN, surface ; la sortie valide l'entrée.</desc>
+  <defs>
+    <marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#334155"/></marker>
+    <marker id="fr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#b91c1c"/></marker>
+  </defs>
+  <rect width="900" height="420" fill="#f8fafc"/>
+=== bus :
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="DejaVu Sans, Arial, sans-serif">
+  <title>Le bus : des faits, pas des matrices</title>
+  <desc>Une activation est un fait ; les faits forment une liste valuée poussée sur le bus vers les régions.</desc>
+  <defs>
+    <marker id="f" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"
+… [251 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -5 docs/theorie/synthese/schemas/vue-ensemble.svg | cut -c1-280; echo \"=== les références à ces schémas dans la théorie :\"; grep -rn \"vue-ensemble\\|etages.svg\\|bus-evenements\" docs/theorie/*.md docs/theorie/synthese/*.md 2 … [95 caractères tronqués]`
+
+  ```
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="DejaVu Sans, Arial, sans-serif">
+  <title>Drave en une image</title>
+  <desc>Texte, jetons, modèle découpé en régions, bus et sortie ; le cerveau organise les régions plutôt que de calculer les couches.</desc>
+  <defs>
+    <marker id="fleche" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+=== les références à ces schémas dans la théorie :
+docs/theorie/carte.md:68:- [les schémas](synthese/schemas/vue-ensemble.svg) — la vue d'ensemble, l'anatomie, les facultés, les modes, la
+docs/theorie/synthese/01-le-cerveau-drave.md:9:> **Illustration :** ![Le bus et les régions](schemas/bus-evenements.svg)
+docs/theorie/synthese/01-le-cerveau-drave.md:22:![Drave en une image](schemas/vue-ensemble.svg)
+docs/theorie/synthese/02-anatomie-interne.md:10:> **Illustration :** ![Le bus](schemas/bus-evenements.svg)
+docs/theorie/synthese/05-la-pensee-sans-verbaliser.md:17:> **Illustration :** ![Les deux étages](schemas/etages.svg)
+docs/theorie/synthese/index.md:61:| 1 | [le cerveau Drave](01-le-cerveau-drave.md) | région · coupe tardive | l'idée fondatrice, et pourquoi
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"^## |^### \" docs/theorie/vision.md | head -14; echo \"=== le README :\"; grep -nE \"^## \" README.md | head -14", "description": "Voir la structure de la vision et du README"}`
+
+  ```
+11:## La raison d'être
+27:## Le bus, en cinq propriétés
+49:## Deux programmes, un seul projet
+51:### Le moteur
+57:### L'intelligence
+71:## Ce que la mesure a déjà tranché
+87:## Ce que la vision n'est pas
+98:## Comment on saura que c'est tenu
+107:## Le nom
+113:## Où lire la suite
+=== le README :
+17:## Essayez — le premier produit
+43:## Ce que c'est, en clair
+65:## L'origine
+79:## Le cœur : des listes, pas des matrices
+100:## Les cinq axes de la vision
+154:## L'intelligence : deux étages, par-dessus les flux
+168:## Ce qu'on a trouvé récemment (20/11)
+185:## Ce qu'on a trouvé (expliqué sans jargon)
+216:## Comment on le sait (et pourquoi on peut nous croire)
+232:## Ce que contient le dépôt
+258:## Par où commencer
+277:## Ce qui est fait, et ce qui reste ouvert
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '154,168p' README.md | cut -c1-140; echo \"=== la vision :\"; sed -n '49,71p' docs/theorie/vision.md | cut -c1-140", "description": "Lire les sections à compléter"}`
+
+  ```
+## L'intelligence : deux étages, par-dessus les flux
+
+La vision des flux ne dit pas seulement comment **exécuter** un modèle ; elle dit comment **l'observer** — et c'est
+là que la recherche sur l'intelligence intervient. Deux étages :
+
+1. **L'entrée-sortie linguistique** — lire et produire toutes les langues, dans tous les registres. On la juge en
+   **qualité de traducteur** : la traduction est-elle fidèle, et le sens passe-t-il ?
+2. **La pensée abstraite** — lire l'**état** interne du modèle (le vecteur qu'il calcule après avoir lu un texte) et
+   voir ce qu'il porte : le sens, la composition, le raisonnement — et si c'est **indépendant de la langue**.
+
+*Le pont entre les deux est la même idée que le moteur : une représentation faite de faits, qu'on peut lire. On ne
+demande pas au modèle d'écrire sa réponse ; on la lit dans son état, avec une sonde — un classifieur linéaire aussi
+simple que possible.*
+
+## Ce qu'on a trouvé récemment (20/11)
+=== la vision :
+## Deux programmes, un seul projet
+
+### Le moteur
+
+Le bus, les blocs, l'ordonnanceur, le transport, les formats, le rejeu, les portes. Il avance par ses propres
+mesures et ne dépend pas de l'avancement de l'intelligence. Ses ci
+… [1093 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('README.md'); t = p.read_text()\nbloc = \"\"\"\n## L'architecture — une image, trois niveaux\n\n![Drave en une image : le texte entre, le modèle se découpe en régions qui échangent d … [2543 caractères tronqués]`
+
+  ```
+section architecture ajoutée au README
+mots: 3480
+     · compteurs : en-cours.md dit 1069 JSON, le disque en a 1075
+  ✅ la page vivante date du dernier commit (2026-11-20)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Long autonomous-run program on the Drave repo (`/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, branch `s/v7`, master fast-forwarded, always pushed).
+- Successive user windows: "continue pour une autre tranche", "autonomie jusqu'à demain 8h", "go semaine 2, travaille en autonomie jusqu'à 16h", "avance les travaux jusqu'à 9h", "en autonomie jusqu'à 17h".
+- Decision round: user answered "1A, 2A, 3B, 4A, 5A, 6A puis c et B" (tagger as option; g017 unattainable; commit S verdicts; send Panini note; defer A6.2; product → coordination → Panini).
+- Then: "que manque-t-il pour que le modèle drave natif soit exploitable" → full native-model diagnostic.
+- Latest request (in progress): "maintenant, étudie ce qui peut être optimisé avec nos 2 gpu en tandem nvlink vs cpu. peut-on décharger le cpu du gros de sa charge ou même plus ?" — study of 2×GPU NVLink tandem vs CPU, whether CPU load can be offloaded "or even more".
+
+## Key Technical Concepts
+- **Hardware (measured today)**: 2× Quadro RTX 5000, 16 GB each, compute 7.5 (Turing, no TF32/BF16, FP16 tensor ~89 TFLOPS); NVLink 25.78 GB/s spec, **23.1 GB/s measured** (256 MB cross-copy), P2P active both ways; HBM copy 177.9 GB/s. CPU: 2× Xeon E5-2687W v3 (20 cores/40 threads, AVX2, no AVX-512), 125 GB RAM; **load average 15/40, top consumer `vcam3d-studio` at 1005% (10 cores) + `kinect2-bridge` 135%** (user's own apps, not Drave). `hauru-gpu-guard` service **inactive (dead)**.
+- **GPU benchmark results**: 34M native train step (lot 8 × seq 1024): CPU 5.218 s/step (1,570 tok/s) under load; ~0.44 s idle; GPU fp32 0.416 s (19,696 tok/s, ×12.5); GPU fp16 autocast **0.134 s (61,156 tok/s, ×39)**; 2-GPU parallel 0.136 s (**120,578 tok/s, ×77**); grad exchange 137.2 MB = 7.32 ms (18.8 GB/s) = **5.5 % of step**. Inference: prefill 42,430–49,284 tok/s GPU vs ~1,500 CPU (×12); single-token forward 24 ms GPU vs ~28 ms CPU; forward cost context 32/128/512/1024 = 11.4/11.4/12.3/**23.6 ms** → **34M is launch-bound, GPU underutilized**; generation latency blocked by **no KV cache** (recompute whole context each byte) — KV cache = ×20–50 win, GPU-free.
+- Torch: `/tmp/venv-natif` = torch 2.15.0+cpu + numpy (used for CPU benches, parity); `/tmp/venv-gpu` = **torch 2.11.0+cu128** (cuda-toolkit 12.8, cuDNN 9.19, NCCL 2.28) installed today, sees both GPUs. System `nvidia-smi` driver CUDA 13.0.
+- Repo gates: `tools/pensee/autotest.py` (183 gates, `AUTOTEST_JOBS=8`), `tools/toutes-les-portes.sh` (86 gates, `JOURNAYS`=$JOURNAUX/registre.txt, read with `awk '$2 != 0'`), `tools/porte-produit.sh` (12 controls), doc gates (`revue_documentation`, `taille_documents` T0≤4000/T1 docs/README≤1000 reports/README≤2800, `porte-tableaux`, `verifie_en_cours`, `verifie_journal`, `index_reports --verifier`, `sessions --check`).
+- Meta-harness: `tools/chantier/superviseur.py` (commands `etat`, `prochaine`, `executer`, `boucle --budget --timeout`, `stop`, `reprendre`), plan `tools/chantier/plan.json` (**now 66 tasks**: J0–J5, J6–J14, W1–W6, X1–X3, Y1, T1–T6, U1–U3, V1–V3, Z1–Z3), state `work/chantier/etat.json`, log `work/chantier/journal.log`, STOP file. Reads key `~/.config/drave/deepseek.key` → `DEEPSEEK_API_KEY` for `dsh --profile headless`.
+- Git is very slow (~2 min/commit); concurrent agents cause `index.lock`/ref-lock conflicts; commits need `docs/pilotage/en-cours.md` changed (hook) and ~300 s timeouts.
+
+## Files and Code
+- `reports/rapport-gpu-tandem.md` — **just created/committed (14ef014d)**: the GPU/CPU study (hardware table, 2.1 training ×12–39, 2.2 inference/prefill, 2.3 tandem NVLink 23.1 GB/s + all-reduce 5.5 %, §3 what offloads/what doesn't, §4 5 recommendations, §5 limits incl. Turing no TF32, fp16 convergence unvalidated, rule 11, guard inactive).
+- `/tmp/bench_gpu.py`, `/tmp/bench_2gpu.py`, `/tmp/bench_ar.py`, `/tmp/bench_inf.py` — GPU benchmarks (not yet promoted to `tools/`).
+- `tools/banc_generation.py` — 20 prompts × 3 settings (greedy, top40_0.8, top20_0.5), measures mots_v
+… [7460 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Long autonomous-run program on the Drave repo (`/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, branch `s/v7`, master fast-forwarded, always pushed).
+- Successive user windows: "continue pour une autre tranche", "autonomie jusqu'à demain 8h", "go semaine 2, travaille en autonomie jusqu'à 16h", "avance les travaux jusqu'à 9h", "en autonomie jusqu'à 17h".
+- Decision round: user answered "1A, 2A, 3B, 4A, 5A, 6A puis c et B" (tagger as option; g017 unattainable; commit S verdicts; send Panini note; defer A6.2; product → coordination → Panini).
+- Then: "que manque-t-il pour que le modèle drave natif soit exploitable" → full native-model diagnostic.
+- Latest request (in progress): "maintenant, étudie ce qui peut être optimisé avec nos 2 gpu en tandem nvlink vs cpu. peut-on décharger le cpu du gros de sa charge ou même plus ?" — study of 2×GPU NVLink tandem vs CPU, whether CPU load can be offloaded "or even more".
+
+## Key Technical Concepts
+- **Hardware (measured today)**: 2× Quadro RTX 5000, 16 GB each, compute 7.5 (Turing, no TF32/BF16, FP16 tensor ~89 TFLOPS); NVLink 25.78 GB/s spec, **23.1 GB/s measured** (256 MB cross-copy), P2P active both ways; HBM copy 177.9 GB/s. CPU: 2× Xeon E5-2687W v3 (20 cores/40 threads, AVX2, no AVX-512), 125 GB RAM; **load average 15/40, top consumer `vcam3d-studio` at 1005% (10 cores) + `kinect2-bridge` 135%** (user's own apps, not Drave). `hauru-gpu-guard` service **inactive (dead)**.
+- **GPU benchmark results**: 34M native train step (lot 8 × seq 1024): CPU 5.218 s/step (1,570 tok/s) under load; ~0.44 s idle; GPU fp32 0.416 s (19,696 tok/s, ×12.5); GPU fp16 autocast **0.134 s (61,156 tok/s, ×39)**; 2-GPU parallel 0.136 s (**120,578 tok/s, ×77**); grad exchange 137.2 MB = 7.32 ms (18.8 GB/s) = **5.5 % of step**. Inference: prefill 42,430–49,284 tok/s GPU vs ~1,500 CPU (×12); single-token forward 24 ms GPU vs ~28 ms CPU; forward cost context 32/128/512/1024 = 11.4/11.4/12.3/**23.6 ms** → **34M is launch-bound, GPU underutilized**; generation latency blocked by **no KV cache** (recompute whole context each byte) — KV cache = ×20–50 win, GPU-free.
+- Torch: `/tmp/venv-natif` = torch 2.15.0+cpu + numpy (used for CPU benches, parity); `/tmp/venv-gpu` = **torch 2.11.0+cu128** (cuda-toolkit 12.8, cuDNN 9.19, NCCL 2.28) installed today, sees both GPUs. System `nvidia-smi` driver CUDA 13.0.
+- Repo gates: `tools/pensee/autotest.py` (183 gates, `AUTOTEST_JOBS=8`), `tools/toutes-les-portes.sh` (86 gates, `JOURNAYS`=$JOURNAUX/registre.txt, read with `awk '$2 != 0'`), `tools/porte-produit.sh` (12 controls), doc gates (`revue_documentation`, `taille_documents` T0≤4000/T1 docs/README≤1000 reports/README≤2800, `porte-tableaux`, `verifie_en_cours`, `verifie_journal`, `index_reports --verifier`, `sessions --check`).
+- Meta-harness: `tools/chantier/superviseur.py` (commands `etat`, `prochaine`, `executer`, `boucle --budget --timeout`, `stop`, `reprendre`), plan `tools/chantier/plan.json` (**now 66 tasks**: J0–J5, J6–J14, W1–W6, X1–X3, Y1, T1–T6, U1–U3, V1–V3, Z1–Z3), state `work/chantier/etat.json`, log `work/chantier/journal.log`, STOP file. Reads key `~/.config/drave/deepseek.key` → `DEEPSEEK_API_KEY` for `dsh --profile headless`.
+- Git is very slow (~2 min/commit); concurrent agents cause `index.lock`/ref-lock conflicts; commits need `docs/pilotage/en-cours.md` changed (hook) and ~300 s timeouts.
+
+## Files and Code
+- `reports/rapport-gpu-tandem.md` — **just created/committed (14ef014d)**: the GPU/CPU study (hardware table, 2.1 training ×12–39, 2.2 inference/prefill, 2.3 tandem NVLink 23.1 GB/s + all-reduce 5.5 %, §3 what offloads/what doesn't, §4 5 recommendations, §5 limits incl. Turing no TF32, fp16 convergence unvalidated, rule 11, guard inactive).
+- `/tmp/bench_gpu.py`, `/tmp/bench_2gpu.py`, `/tmp/bench_ar.py`, `/tmp/bench_inf.py` — GPU benchmarks (not yet promoted to `tools/`).
+- `tools/banc_generation.py` — 20 prompts × 3 settings (greedy, top40_0.8, top20_0.5), measures mots_valides/distinct_2/repetition/echo/octets_s; `--aleatoire` control.
+- `tools/banc_grammaticalite.py` — runs `bl.Heuristique().analyser` on generations; measures GV/GN/mots/ciment/attaches (POS class = `e.type`, NOT `e.valeur`; attachment = `e.meta["attachement"]["cible"]`).
+- `tools/banc_perplexite_gold.py` — PPL on gold 612 (with canal via `tools.canal_structure.canal`); `ppl_texte` truncates to **tail** of window.
+- `tools/drvm_infere.py` — numpy inference of DRVM (127 tensors, `read_drvm`, `bytes()` copy to free mmap), forward reproduces `NativeModel` (6 blocks, d_model 384, 4 heads, MoE 8×512 top-2 kwta 0.25, bridge at block 2, thought `tanh(thought(x)+thought_in(h0))` 2 steps, head_byte, causal+window mask); **4/4 exact greedy parity with torch**.
+- `tools/drave.py` — CLI: `analyser` (--json/--jsonl/--langue/--partition/--contexte/--tagger/--duree), `evaluer` (--gold/--reel/--par-langue/--tagger/--strict), `rejouer`, `restituer`, **`generer`** (--modele/--prompt/--n/--top-k/--temperature/--moteur {auto,torch,numpy}/--json; code 4 without torch/DRVM/checkpoint), `profils`.
+- `pyproject.toml` — `drave` 0.1.0, `requires-python >=3.10`, deps `[]`, script `drave = "tools.drave:main"`, packages `["tools"]`; wheel `dist/drave-0.1.0-py3-none-any.whl` (2,055,192 B).
+- `.github/workflows/ci.yml` — matrix py3.10/3.13, 5 steps, 10/10 green locally.
+- `docs/produit/demarrage.md` — 5-min quickstart; documents `git -c protocol.file.allow=always clone --recurse-submodules`.
+- `.gitmodules`: `tools/structures` → local path `/home/stephane/.../drave-structures`; `tools/docwatch` → `https://github.com/stephanedenis/docwatch.git` (re-pinned to `95e94c4`; structures commit `648adce` pushed to local remote).
+- `reports/`: `rapport-banc-generation.md` (bench + §3ter scale table + syntax scale), `banc-generation.json`, `banc-generation-11m/21m.json`, `banc-grammaticalite.json`, `banc-grammaticalite-echelle.json`, `banc-perplexite-gold.json`, `rapport-natif-exploitable.md`, `fiche-modele-natif.md`, `rapport-natif-numpy.md`, `rapport-native-reproductibilite.md`, `rapport-bilan-natif.md` (10 livrables), `rapport-passe-1611.md`, `rapport-passe-1611n` (in references), `rapport-bilan-final.md`, `rapport-semaine-2.md`, `rapport-bilan-semaine.md`, `rapport-bilan-jour-1115.md`, `note-panini-334.md`.
+- `docs/pilotage/natif-plan.md` — 4 paliers (34M collages / 100–150M 3–6 Go / 300–600M 10–20 Go / 1–3Md), falsifiable criteria, and "épingler le corpus" first.
+- `docs/pilotage/references-non-regression.md` — pass blocks: 16/11 04h11 (81/3) and **16/11 12h26→14h48 (86 portes, 82 vertes, 2 rouges structurelles `indice`+`melange`, `bloc-code` transitoire — verte en isolation, `sessions` rafraîchi)**.
+
+## Errors and Fixes
+- `dsh headless` → `MISSING_CREDENTIAL`: supervisor passes key from `~/.config/drave/deepseek.key`.
+- Concurrent git: `index.lock`/`cannot lock ref 'HEAD'`/stale lock — kill orphaned `git commit` (mine), avoid committing while agents run; commits can take 2m16s so use timeouts ≥300 s.
+- `git add` with a wrong path aborts the whole add (e.g. `pensee-bilan-final.json` vs real `rapport-bilan-final.json`).
+- `BufferError: cannot close exported pointers exist` in drvm loader → `bytes(d.tensor(name))` before closing.
+- Parity initially failed ("nnuu nuu" vs "don d d") → thought used evolving `x` instead of `h0 = x.copy()` before thought loop.
+- `banc_grammaticalite` gave `ciment=0` → POS class is `e.type`, not `e.valeur`; `attaches` from `e.meta["attachement"]["cible"]`.
+- `sessions.py --check` "heartbeat illisible" → heartbeat format must be `%Y-%m-%d %H:%M` (e.g. `2026-11-16 14:50 EST`), not "14 h 50".
+- `porte-bloc-code` red during full pass (`coût non linéaire : ×2.40 pour ×4`) → **green in isolation** = load-sensitive transient; documented in references.
+- `docs/README.md`/`reports/README.md` T1 budget repeatedly exceeded → trim/shorten rows; never leave empty descriptions.
+- `en-cours` table row mangled by a regex cut (9 cells ≠ 4) → restored via `git checkout -- docs/pilotage/en-cours.md`, then careful bullet-only trims.
+- PPL discrepancy: checkpoint metadata `ppl_val 2.40` NOT reproducible — same val.txt head gives 17.32 (with canal file) / 21.63 blind; other chunks 21.9–22.6; gold 18.55 (fr 16.03, en 24.52) with canal, 18.93 blind. Cause: corpus not pinned (val.txt starts mid-word "minisation"), documented as `rapport-native-reproductibilite.md`.
+
+## Pending Jobs
+- (none of the previous windows) — native diagnostic complete, goal `goal-b93bd2c5...` marked complete.
+- GPU study fiche committed but **README budget 2804 > 2800** (4 words over) — needs one trim + commit.
+- User-side decisions still open: tagger `auto` activation; sending Panini note + the 26-signature manifest; pinning `data/` corpus (D territory); palier 1 (100–150 M on 3–6 Go) go-ahead; `vcam3d` GPU offload (their app).
+
+## Current Work
+- Just committed `14ef014d` "ÉTUDE — LES 2 GPU NVLink VS CPU ..." (16 files, incl. `reports/rapport-gpu-tandem.md`), pushed to `master` and `s/v7`; git clock 15 h 55 EST.
+- The commit reported `reports/README.md : 2804 mots > budget 2800 (T1)` — a 4-word overrun remains.
+- Study conclusions delivered in fiche: training ×12–39 (×77 tandem), prefill ×12, NVLink 23.1 GB/s with 5.5 % all-reduce, 34M launch-bound/underutilized, generation latency blocked by missing KV cache (×20–50 GPU-free), `vcam3d-studio` (10 cores) is the real CPU "gros" and is user's app.
+
+## Next Step
+- Trim `reports/README.md` by ≥4 words (shorten one row), re-run `python3 tools/taille_documents.py` + `revue_documentation.py`, commit with `docs/pilotage/en-cours.md` timestamp and push, then report the study conclusions to the user (answer: CPU can be offloaded for training/prefill/tandem; biggest wins are KV cache ×20–50 and big models; 34M too small for GPU; `vcam3d` is theirs).
+
+## Critical Context
+- Rule 11: GPUs reserved for Drave — offloading `vcam3d` would be an exception the user must decide; `hauru-gpu-guard` inactive (re-activating prudent).
+- Compute 7.5 = no TF32/BF16, no FlashAttention 3; fp16 + loss scaling only; fp16 convergence not validated (bench measured speed only).
+- 34M model: `drave-n0-rope`, 34,301,224 params, d_model 384, 6 blocks, 4 heads, 8 experts ×512 top-2 kwta 0.25, window 1024, thought 2 steps, byte vocab 256, trained on `data/wiki_mix/propre` 1.017 GB (29.7 bytes/param), 30k steps, 13,331 s.
+- Native diagnostic numbers: bench 612? no — generation 20 prompts: greedy 0.870 mots_valides/15 repetition/0.01 echo/36.4 octets/s; top40 0.490/1; top20 0.735/1; random control 0.336/1. Scale (11M/21M/34M): mots_valides 0.247/0.494/0.870, repetition 1/6/15, GV 1.90/2.65/6.90, ciment 0.137/0.278/0.335 (random 0.79).
+- Product state: POS 86.25 % (612) / 88.91 % (réel 452), F1 0.7902 (612) / 0.7906 (réel), attachment 238/239 (0.9958), 1 span (`g017` unattainable), tagger `--tagger` 95.75 % (612) / 95.00 % (réel), 1 call/phrase, ~0.02 $.
+- Tags: `chantier-2026-11-14`, `semaine-2026-11-14`, `semaine-2-2026-11-20`, `exploitable-2026-11-16`.
+- All commits must be pushed (`git branch -f master s/v7 && git push origin s/v7 && git push origin master`); never commit other sessions' files (`reports/pensee-*`, `rapport-audit-v7.md`, `journal/2026-11-05|06`, `rapport-s-paragraphes.md`, `gold_reel_50.py`).
+- User is absent for days at a time, values honest negatives, measured results with negative controls, fiches+JSON, and the "file jamais en attente" discipline.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+12. **La tarification de l'API a deux fenêtres** : **remisé** pendant **UTC 16:30 → 00:30**
+    (la Chine 00:30 → 08:30), soit au Canada **11:30 → 19:30** ; **plein tarif** le reste.
+    **L'API en remisée** (le tagger, la distillation), **le local en pleine** (l'entraînement, les
+    tests, les docs) ; **deux files** par chantier. → [`plans-tarif.md`](docs/pilotage/plans-tarif.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma** | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `en-cours`, `roadmap`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche** : le fichier de tâche suffit. Charger « pour être
+> complet » coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `en-cours` + **un** document de tâche
+> ([`docs/methode/contexte.md`](docs/methode/contexte.md) ; vérifier `tools/taille_documents.py`).
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `tools/verifie_en_cours.py` ; journal : `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/theorie/vision.md'); t = p.read_text()\nbloc = \"\"\"\n## L'architecture — le bus, les régions, trois niveaux\n\n![Les deux étages et le miroir : la surface entre, la RSN la st … [2066 caractères tronqués]`
+
+  ```
+section architecture ajoutée à la vision
+     · compteurs : en-cours.md dit 1069 JSON, le disque en a 1075
+  ✅ la page vivante date du dernier commit (2026-11-20)
+     sources et images relatives.
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [640 caractères tronqués]`
+
+  ```
+10:## 1. Ce qui ne va pas avec GGUF
+29:## 2. DRVM — le conteneur du modèle
+54:## 3. `drave-n0` — le modèle, pas un Qwen adapté
+70:## 4. L'objectif d'entraînement
+88:## 5. Les portes de décision
+104:## 6. Ce qu'on garde, ce qu'on jette
+115:## 7. Risques, écrits d'avance
+125:## 8. La phrase
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/theorie/architecture-native.md'); t = p.read_text()\nbloc = \"\"\"![Les deux étages et le miroir : la surface, la RSN, la pensée, et le retour à la surface](../theorie/synthese … [914 caractères tronqués]`
+
+  ```
+illustration insérée
+     sources et images relatives.
+  ✅ la page vivante date du dernier commit (2026-11-20)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+README mots: 3480
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add README.md docs/theorie/vision.md docs/theorie/architecture-native.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"ARCHITECTURE — DOCUMENTÉE DANS LE README (TROIS NIVEAUX, LE BUS, LE PRODUIT) ET DANS LA … [414 caractères tronqués]`

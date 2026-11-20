@@ -165,6 +165,38 @@ là que la recherche sur l'intelligence intervient. Deux étages :
 demande pas au modèle d'écrire sa réponse ; on la lit dans son état, avec une sonde — un classifieur linéaire aussi
 simple que possible.*
 
+
+## L'architecture — une image, trois niveaux
+
+![Drave en une image : le texte entre, le modèle se découpe en régions qui échangent des faits sur un bus, et la sortie se lit](docs/theorie/synthese/schemas/vue-ensemble.svg)
+
+**En un coup d'œil** : un **texte** entre, se découpe en **jetons** ; le **modèle** est partagé en
+**régions** (des groupes de couches) qui s'échangent des **faits** sur un **bus** ; la **sortie** se
+lit. Un contrôleur — le **cerveau** — organise les régions ; il ne recalcule pas les couches.
+
+**Les trois niveaux du natif** (le traité : [`modele-natif.md`](docs/theorie/modele-natif.md)) :
+
+1. **La surface** — les octets, les mots, les phrases : ce qui entre et ce qui sort.
+2. **La RSN** (représentation sémantique neutre) — des **faits** structurés, lisibles par un bloc
+   classique comme par un bloc neuronal ; c'est le niveau qu'on peut **lire, comparer, rejouer**.
+3. **La pensée** — l'itération sur la RSN : l'arbre d'états, le portefeuille de stratégies.
+
+![Les deux étages et le miroir : surface, RSN, pensée, puis retour à la surface](docs/theorie/synthese/schemas/etages.svg)
+
+**Le bus** est ce qui rend l'ensemble observable : une activation est un **fait** (« le neurone
+2 539 a valu 27,8 »), les faits forment une **liste valuée poussée** vers leurs lecteurs, et le coût
+suit l'activité, pas la taille.
+
+![Le bus : des faits, pas des matrices](docs/theorie/synthese/schemas/bus-evenements.svg)
+
+**Le produit** (le bloc linguistique) n'utilise que la **surface** : neuf niveaux, deux
+implémentations (l'heuristique CPU hors ligne, le tagger neuronal en option), et un format
+versionné. Les détails : [`docs/produit/README.md`](docs/produit/README.md).
+
+> **Où lire l'architecture en détail** : [`architecture-native.md`](docs/theorie/architecture-native.md)
+> (le format et le modèle), [`modele-natif.md`](docs/theorie/modele-natif.md) (le traité : les trois
+> niveaux, le bus, le graphe, le DRVM, l'exécution), la [synthèse en huit chapitres](docs/theorie/synthese/index.md).
+
 ## Ce qu'on a trouvé récemment (20/11)
 
 **Le produit est utilisable.** `drave analyser` lit un texte, en français ou en anglais, et rend

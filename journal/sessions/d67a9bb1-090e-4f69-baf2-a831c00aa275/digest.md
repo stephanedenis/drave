@@ -19466,3 +19466,107 @@ ven 20 nov 2026 13:10:20 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"décision de routage du t … [1786 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+   e961548d..36b5dbda  s/v7 -> s/v7
+ven 20 nov 2026 13:13:10 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-n2* tools/porte*n2* 2>/dev/null; grep -rn \"porte propre\" reports/rapport-coordination-n2.md 2>/dev/null | head -3; grep -rn \"0,2856\\|0.2856\" reports/rapport-coordination-n2.md docs/pilotage/backlog/N2-distillation … [78 caractères tronqués]`
+
+  ```
+23:- **Public** : la session N2 (prochaine action : la porte propre, 0,29 manquant à 2,7856).
+reports/rapport-coordination-n2.md:121:Le `val` à 1 024 manque la porte de **0,2856** ; le test, mesure honnête, de **0,3566**.
+reports/rapport-coordination-n2.md:364:Attendu : **3,0649 / 2,8875 / 2,8566**. Le `val` à 1 024 manque la porte de 0,2856 ; le test de
+reports/rapport-coordination-n2.md:387:  (2,8566) est la mesure honnête et le manque est 0,3566, pas 0,2856.
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and palier-1 progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 13:23:26 EST
+pas 3350
+pas 3550
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"", "description": "Ten-minute pause and palier-1 progress", "timeoutMs": … [8 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 13:33:21 EST
+pas 4750 · perte 1.3523
+pas 5050 · perte 1.4047
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 13:43:15 EST
+pas 6200
+pas 6550
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 13:53:11 EST
+pas 7600
+pas 8050
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p11','p21'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"", "descriptio … [59 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 14:03:06 EST
+p11 -
+p21 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p11','p21'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('p11 … [261 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 14:13:01 EST
+p11 ppl v1 3.5299
+p21 ppl v1 3.4922
+p11 wikitext2 9.0631
+p21 wikitext2 8.7014
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 14:23:00 EST
+pas 1500
+pas 2200
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 14:32:54 EST
+pas 2900 · perte 1.1617
+pas 3700 · perte 1.1855
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 14:42:48 EST
+pas 4350
+pas 5200
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 14:52:42 EST
+pas 5750
+pas 6700
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p12','p22'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"", "descriptio … [61 caractères tronqués]`

@@ -68,6 +68,32 @@ L'application, branchée sur les mêmes blocs. **Deux étages, dans cet ordre** 
 **Dans l'intelligence, l'ordre est strict** : l'étage 2 ne se bâtit pas sur une entrée-sortie qui n'est pas fiable.
 Mais le **moteur** est indépendant : il avance en parallèle, et c'est lui qui rend l'intelligence **observable**.
 
+
+## L'architecture — le bus, les régions, trois niveaux
+
+![Les deux étages et le miroir : la surface entre, la RSN la structure, la pensée itère, puis retour à la surface](synthese/schemas/etages.svg)
+
+**Le trajet d'un texte** : il entre par la **surface** (les octets, les mots), devient une **RSN**
+(des faits structurés, lisibles par un bloc classique comme par un bloc neuronal), et c'est sur
+cette RSN que **itère la pensée**. La sortie refait le trajet inverse ; le **miroir** valide que ce
+qui sort correspon[d] à ce qui est entré — la fluidité n'est pas la fidélité.
+
+![Le bus : une activation est un fait, les faits forment une liste valuée poussée vers leurs lecteurs](synthese/schemas/bus-evenements.svg)
+
+**Le bus est le cœur.** Une activation n'est pas une case dans une matrice : c'est un **fait**
+(« le neurone 2 539 de la couche 23 a valu 27,8 »). Les faits d'une même couche forment une **liste
+valuée**, groupée par source, et la liste est **poussée** vers ses lecteurs. Le coût du calcul suit
+l'**activité**, pas la taille du modèle ; le modèle devient **observable**, **décomposable** et
+**répartissable**.
+
+**Le graphe** : le modèle est découpé en **régions** (des groupes de couches) et un **cerveau**
+contrôleur décide quelles régions s'activent et quand. Le **format DRVM** transporte ce graphe :
+en-tête, index, poids, routes — un conteneur qu'on peut lire, exécuter et comparer.
+
+> **Les trois niveaux en détail** : [`modele-natif.md`](modele-natif.md) · **le format et le
+> modèle** : [`architecture-native.md`](architecture-native.md) · **la synthèse en huit
+> chapitres** : [`synthese/index.md`](synthese/index.md).
+
 ## Ce que la mesure a déjà tranché
 
 - **La sparsité ne gagne pas toujours** : le [croisement push/pull](../theorie/glossaire/entrees/croisement-push-pull.md) est mesuré à ~22 % de densité ; en dessous, les

@@ -7,15 +7,15 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 473.9 h |
-| Tours | 220 |
-| Messages | 4433 |
-| Appels d'outils | 3954 |
+| Durée | 478.3 h |
+| Tours | 221 |
+| Messages | 4451 |
+| Appels d'outils | 3967 |
 | Fichiers touchés | 25 |
-| Commandes | 3282 |
+| Commandes | 3295 |
 | Sous-agents | 43 |
-| Commits | 525 |
-| Compactages de contexte | 9 |
+| Commits | 526 |
+| Compactages de contexte | 10 |
 
 ## Objectifs déclarés
 
@@ -513,6 +513,8 @@
 **Tour 219** — Le glossaire est intéressant en version courte, mais il faudrait que les fiches aient la version courte en intro tldr pour les tooltips et début de fiche web, puis chaque fiche doit être enrichie ave la vulgarisation nécessaire (cross referencée sans définitions circulaires) et un ensemble de références externes pour les notions de bases et explications des concepts plus courants.
 
 **Tour 220** — Parcours de lecture conseillé dans glossaire.md mentionne des documents sans les lier
+
+**Tour 221** — documente l'architecture dans le readme et vision et là où c'est pertinent. réfère toi à docs/methode/illustrations.md avant de commencer
 
 ## 2. Déroulé, étape par étape
 
@@ -11684,6 +11686,24 @@ Dans `docs/theorie/glossaire.md`, la section **« Parcours de lecture conseillé
 
 Committé `171bfa34`, poussé.
 
+### Tour 221 — documente l'architecture dans le readme et vision et là où c'est pertinent. réfère toi à docs/methode/illustrations.md a … [17 caractères tronqués]
+
+*13 appels d'outils.* Actions notables :
+
+- bash — Lire la règle des illustrations
+- bash — Voir les schémas existants
+- bash — Voir les schémas existants et leurs références
+- bash — Voir etages.svg
+- bash — Voir les schémas de la synthèse
+- bash — Voir la vue d'ensemble et ses références
+- bash — Voir la structure de la vision et du README
+- bash — Lire les sections à compléter
+- bash — Ajouter l'architecture au README
+- bash — Ajouter l'architecture à la vision
+- bash — Voir l'architecture-native et corriger les compteurs
+- bash — Insérer l'illustration dans architecture-native
+- bash — Committer l'architecture
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -11804,7 +11824,7 @@ Committé `171bfa34`, poussé.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3242 autres
+- … et 3255 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12477,4 +12497,5 @@ Committé `171bfa34`, poussé.
 - README — LA VULGARISATION ET L'ÉTAT RÉEL : « CE QUE C'EST, EN CLAIR » (LE PROBLÈME, L'IDÉE, CE QUE ÇA CHANGE), LES CHIFFRES DU 20/11 (86,25 / 95,75 / 0,7902 / 2
 - GLOSSAIRE — CHAQUE FICHE OUVRE SUR UN TL;DR (OUTIL POUR LES TOOLTIPS ET LE DÉBUT DE FICHE WEB), AVEC UNE PLACE POUR « CE QUE C'EST, EN CLAIR » ET LES RÉFÉRENCES
 - GLOSSAIRE — LE PARCOURS DE LECTURE EST ENTIÈREMENT LIÉ (16 DOCUMENTS, DE LA VISION À L'AUDIT) : PLUS UN NOM DE FICHIER NU" 2>&1 | tail -2; git log -1 --format='
+- ARCHITECTURE — DOCUMENTÉE DANS LE README (TROIS NIVEAUX, LE BUS, LE PRODUIT) ET DANS LA VISION (LE TRAJET D'UN TEXTE, LE BUS, LE GRAPHE) ; LES SCHÉMAS DE LA SYN
 
