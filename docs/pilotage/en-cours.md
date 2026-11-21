@@ -24,7 +24,7 @@
 - **Fait** : types **61/61**, rôles **144/144** ; page **`/paragraphes`**, **19/19 verdicts `389b99f`** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [limites](../../reports/rapport-s-limites-v6.md), [fait divers](../../reports/rapport-s-fait-divers.md).
 - **Ce qu'elle fait** : **session close** ; **`/paragraphes`** v7, **`/`** 369 + **profondeur** (324 appariés, **95** à ≥3) ; **`s/v7`** à fusionner.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**.
-- **Prochaine action** : **rétro-traduction** — 9/9, **14/14** gold ; les **clitiques** retrouvés (**16/16** formes du gold, 4 ajouts sur 216 textes) ; les **71 langues** ; la migration `/` est faite (324/369).
+- **Prochaine action** : **rétro-traduction** — 9/9, **14/14** gold ; les **clitiques** retrouvés (**16/16** du gold, 4 ajouts sur 216 textes, **65 tests**) ; les **71 langues** ; la migration `/` est faite (324/369).
 - **Bloquants** : aucun ; 8765 pris (lancer 9000) ; migration = choix.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
 

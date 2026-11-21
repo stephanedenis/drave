@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,6 +18,7 @@
 | 13:04 | `e961548d` | S — LA RÉTRO-TRADUCTION MESURÉE CONTRE LE GOLD : 14/14 (12 RÉFÉRENTS + 2 NON-RÉFÉRENTS) | `en-cours.md`, `README.md`, `mesures.md` (+7) |
 | 13:10 | `36b5dbda` | J4 — LES SECONDS CADRES : UN SECOND ANNOTATEUR NE CONFIRME PAS L'OR DE RÔLES (F1 0,71), ET CERTAINS DÉSACCORDS SONT LES ERREURS DE L'OR | `en-cours.md`, `README.md`, `attention.md` (+12) |
 | 15:50 | `25e65ad0` | N — LE PALIER 1 MÈNE `wiki_big` À 20 000 PAS (7,70-7,97 CONTRE 7,83-8,17) — MAIS L'ÉCART EST DANS LA VARIANCE | `en-cours.md`, `README.md`, `attention.md` (+26) |
+| 23:04 | `f0bdf9ae` | S — LES DEUX FORMES MANQUÉES SONT RETROUVÉES : « LES » ET « L' » DEVANT UN VERBE SONT DES CLITIQUES (14/16 → 16/16 SUR LE GOLD) | `en-cours.md`, `README.md`, `attention.md` (+16) |
 
 ## Chiffres du jour
 
@@ -27,7 +28,7 @@
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 85.2 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 85.3 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 478.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
@@ -37,6 +38,7 @@
 - [reports/rapport-nuit-wikibig.md](../../reports/rapport-nuit-wikibig.md)
 - [reports/rapport-palier1-resumes.md](../../reports/rapport-palier1-resumes.md)
 - [reports/rapport-r0.7-decision.md](../../reports/rapport-r0.7-decision.md)
+- [reports/rapport-s-clitiques.md](../../reports/rapport-s-clitiques.md)
 - [reports/rapport-s-retro-traduction.md](../../reports/rapport-s-retro-traduction.md)
 - [reports/rapport-variance-graines.md](../../reports/rapport-variance-graines.md)
 

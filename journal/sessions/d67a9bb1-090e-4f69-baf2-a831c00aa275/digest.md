@@ -20329,3 +20329,47 @@ AssertionError: | fichiers / JSON de résultats | **821** / **1081** |
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n_json=$(ls reports/*.json | wc -l); n_md=$(ls reports/*.md | wc -l); python3 - \"$n_md\" \"$n_json\" <<'PY'\nimport pathlib, re, sys\nmd, js = sys.argv[1], sys.argv[2]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text( … [1897 caractères tronqués]`
+
+  ```
+etat 822 1088
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   f3658f81..f0bdf9ae  s/v7 -> s/v7
+ven 20 nov 2026 23:07:11 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; grep -n \"cache_experts_go\\|2.0\\|8.0\" drave-core/src/materiel.rs | head -8", " … [59 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 23:07:18 EST
+pas 2150 · perte 0.9960
+pas 3150 · perte 0.9473
+80:    pub cache_experts_go: f64,
+352:        let reserve = 2.0;                       // contexte CUDA, tampons, KV
+353:        let commun_go = 8.0;                     // tête + attention + embeddings (V4.1)
+354:        let cache_experts_go = (vram - reserve - commun_go).max(0.0);
+359:                cache_experts_go, vram, reserve, commun_go));
+395:        Plan { threads, epinglage, lecteurs, cache_experts_go, kv_bits, raisons }
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && cat > tests/test_clitiques.py <<'PY'\n\"\"\"Les clitiques objets : « les » et « l' » devant un verbe sont des pronoms, pas des déterminants.\n\nLe trou documenté le 03/11 (rapport-s-traductions) : « les » (les suivît … [1966 caractères tronqués]`
+
+  ```
+.................................................................        [100%]
+65 passed in 4.51s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 mesure_arbre.py 2>&1 | tail -12; python3 -c \"\nimport json; d=json.load(open('donnees/mesure-arbre.json')); print('refs:', d.get('referents'), 'phrases:', d.get('phrases'), 'candidats:', d.get('candidats'))\ … [88 caractères tronqués]`
+
+  ```
+207 phrases · 359 candidats · 2308 segments
+  profondeur max par candidat : {'0': 2, '1': 37, '2': 221, '3': 84, '4': 13, '5': 2}
+  niveaux des segments : {'0': 359, '1': 1268, '2': 556, '3': 108, '4': 15, '5': 2}
+  référents : 171 phrases, 373 formes, 295 avec candidat, 78 sans
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/donnees/mesure-arbre.json
+refs: 373 phrases: 207 candidats: 359
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add tests/test_clitiques.py donnees/mesure-arbre.json && git commit -q -m \"S — LES CLITIQUES : 8 TESTS QUI BORNENT LA RÈGLE DANS LES DEUX SENS (4 VRAIS, 3 PIÈGES), MESURE-ARBRE RAFRAÎCHIE (373 FORMES SUR 207 PHR … [854 caractères tronqués]`
