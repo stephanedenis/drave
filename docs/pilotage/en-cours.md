@@ -49,7 +49,7 @@
 - **R0.7 / W2–W3 — le tagger** : 402 **0,9198 → 0,9643**, H50 **0,6842 → 0,8607** ; défaut hors ligne **0 socket**, `--tagger` **code 4** sans clé ; **lot 612 exécuté** (11:30, **608 appels**, 87 550 tokens, **0,01869 $**) : POS **0,9572** contre **0,8625** (**+9,47**), ouvert **0,978** contre 0,7918, fermé à parité, **0 refus** — [W2](../../reports/rapport-tagger-h50.md), [lot](../../reports/rapport-tagger-612.md).
 - **Panini** : **14 atomes** ; UDHR **418/438** ; J3.2 **5/21** langues, **V14 3/21** ; B2 **négatif** ; B1 **60 paires**, **27/60**, calibration **42/44** ; CIC **42/42**, B3 **42/42** types de Bruijn ; [atomes](../../reports/rapport-atomes-niveaux.md), [B1](../../reports/rapport-protocole-date.md), [CIC](../../reports/rapport-cic-verificateur.md), [v2](../../reports/rapport-cic-v2.md).
 - **N4 — grammaticalité et données** (18/11) : GV **6,90 → 1,45** (34 → 73 M) ; **135,5 Go**, **7,5 Go** exploitable ; dédup **par ligne** **8,042 %** — corpus v2 **6,90 Go** épinglé (`9861fb39…`) ; [grammaticalité](../../reports/rapport-grammaticalite-100m.md), [données](../../reports/rapport-donnees-inventaire.md), [blocs](../../reports/rapport-dedup-blocs.md), [lignes](../../reports/rapport-dedup-lignes.md).
-- **N — l'entraînement, les corpus et le décodage** (18-20/11) : 73 M **4,6792 → 3,0098** ; **rejeu des fenêtres** : défaut trouvé (les tranches rejouaient le même échantillon), correctif `--compteur-suite` validé et passé dans `bench/chaine_nuit.sh` ; **nuit** : `wiki_big` seul **6,8349** (v1 6,867, v2 7,093), long-forme **7,7479** ; **variance** : 4 graines de `wiki_big` à 30k, **7,22-7,56** (**4,7 %** d'étendue) — la **sélection du contenu** est confirmée, la forme écartée ; [courbe](../../reports/rapport-courbe-r1-r3.md), [150 M](../../reports/rapport-150m-nuit.md), [nuit](../../reports/rapport-nuit-wikibig.md), [sélection](../../reports/rapport-selection-contenu.md), [décodage](../../reports/rapport-decodage-r1.md).
+- **N — l'entraînement, les corpus et le décodage** (18-21/11) : 73 M **4,6792 → 3,0098** ; **150 M** v1 **2,844** / v2 **3,038** ; **nuit** : palier 1 (3,69 Go) **7,03-7,05** à 110k, il plafonne ; **rejeu des fenêtres** (défaut trouvé, `--compteur-suite` validé) ; **matrice** : dans le registre 2,68-2,74 pour tous, **hors registre le plein texte gagne** (3,58) ; [nuit](../../reports/rapport-nuit-palier1-110k.md), [matrice](../../reports/ppl-matrice-bloc2.json), [rejeu](../../reports/rapport-rejeu-des-fenetres.md), [sélection](../../reports/rapport-selection-contenu.md).
 - **A2.6 — la règle des experts** (18-19/11) : bande **7,0 Go/s** (16 : aucun gain), chemins optimisés lents, PPL **37,2013** ; **branchée** en trace sous opt-in sur le vrai 30B (**1,10 Go/jeton · 156,9 ms → VRAM**), **15/15** tests, **porte** dédiée ; la **décision**, les **bandes** et le garde des clusters ; **lire** les clusters reste ; [recon](../../reports/rapport-a2.6-reconnaissance.md), [bande](../../reports/rapport-a2.6-bande-experts.md), [branchement](../../reports/rapport-a2.6-branchement.md).
 - **N3.7–N3.10** (17/11) : variantes, routes, moteurs Rust ↔ numpy **3,576e-07**, le profil « court » bit-exact.
 
@@ -63,7 +63,7 @@
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **826** / **1142** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **129** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **20/11 05 h 58 → 07 h 58** : **91** portes, **89/2** ; seules `indice` (836 s) et `melange` (105 s) **structurelles** ; `sessions` **verte** ; machine au repos (les runs de la nuit finis) | `work/portes/roue-1120-0558/registre.txt` |
+| dernière passe | **21/11 04 h 10 → 06 h 12** : **91** portes, **88/3** — `indice` (848 s) et `melange` (105 s) structurelles, et `sessions` **rouge** (heartbeat de S périmé de 1 305 min), **corrigé et re-vérifié vert** ; machine chargée (deux runs) | `work/portes/roue-1121-0410/registre.txt` |
 
 ## Les chantiers et leurs bloquants
 
@@ -82,9 +82,9 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N** : le palier 1 (résumés, **3,69 Go**) — **2 graines**, 30k : **7,28-7,70**, à parité avec `wiki_big` (7,22-7,56) ; le volume n'achète pas ; la porte propre (0,29) ; N4.
+**N** : un run à `--compteur-suite` (données neuves) ; la porte propre (0,29) ; N4.
 **A** : les clusters et les bandes d'A2.6 ; A3.4 (Colab), A5.4 (FPGA : P2 + RTL), A6.2. **R** : la
-décision de routage du tagger (note prête, option b) ; J4 — l'or de rôles **mesuré** (second annotateur **0,71**, adjudication à faire). **S** : la rétro-traduction (**13/13** sur le gold).
+décision de routage du tagger (note prête, option b) ; J4 — l'or de rôles **mesuré** (second annotateur **0,71**, adjudication à faire). **S** : l'**adjudication J4** (script prêt, fenêtre remisée) ; la rétro-traduction (**14/14** gold) et les **clitiques** (16/16, 65 tests).
 **B** : B13 (gold neuronal) ; B10.3. **Panini** : 26 signatures V14, calibration 42/44. **L** : la
 pragmatique, r353. **D** : la diversité — débloquée par les **Pages** Wikisource (**11 livres, 8,76 Mo**) ; Gutenberg 503 ; étendre.
 

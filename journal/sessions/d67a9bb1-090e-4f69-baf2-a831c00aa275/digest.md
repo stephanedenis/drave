@@ -22016,3 +22016,69 @@ etat 826 1142
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-nuit-palier1-110k.md reports/ppl-matrice-p111.json reports/ppl-matrice-p211.json reports/banc-generation-p1*.json reports/banc-grammaticalite-p1*.json reports/ppl-wikitext2-p1*.json reports/banc-generation-p2* … [1205 caractères tronqués]`
+
+  ```
+680e5cd1..4672ae24  s/v7 -> s/v7
+sam 21 nov 2026 08:50:09 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\n# la puce N : la nuit clos … [2274 caractères tronqués]`
+
+  ```
+T0 max : 3870 mots (budget 4 000)
+budget=0
+  en-cours · 1499 mots · 7 sections · 2 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: **S** : la rétro-traduction (**14/14** gold) ; les **clitiques** retro
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Ce qui reste/,/## Les questions/p' docs/pilotage/en-cours.md; grep -n \"dernière passe\" docs/pilotage/en-cours.md | cut -c1-120", "description": "Read the exact remaining-work lines"}`
+
+  ```
+## Ce qui reste
+
+**N** : le palier 1 (résumés, **3,69 Go**) — **2 graines**, 30k : **7,28-7,70**, à parité avec `wiki_big` (7,22-7,56) ; le volume n'achète pas ; la porte propre (0,29) ; N4.
+**A** : les clusters et les bandes d'A2.6 ; A3.4 (Colab), A5.4 (FPGA : P2 + RTL), A6.2. **R** : la
+décision de routage du tagger (note prête, option b) ; J4 — l'or de rôles **mesuré** (second annotateur **0,71**, adjudication à faire). **S** : la rétro-traduction (**13/13** sur le gold).
+**B** : B13 (gold neuronal) ; B10.3. **Panini** : 26 signatures V14, calibration 42/44. **L** : la
+pragmatique, r353. **D** : la diversité — débloquée par les **Pages** Wikisource (**11 livres, 8,76 Mo**) ; Gutenberg 503 ; étendre.
+
+## Les questions ouvertes
+66:| dernière passe | **20/11 05 h 58 → 07 h 58** : **91** portes, **89/2** ; seules `indice` (836 s) et `melange` (105
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new, nom):\n    global s\n    if s.count(old) == 1:\n        s = s.replace(old, new); print('ok', nom)\n    else:\n  … [2261 caractères tronqués]`
+
+  ```
+ok N reste
+ok S reste
+ok passe
+  T0 max : 3858 mots (budget 4 000)
+budget=0
+  en-cours · 1487 mots · 7 sections · 2 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Passes\" docs/pilotage/references-non-regression.md | cut -c1-260; python3 tools/taille_documents.py 2>&1 | grep \"references\"", "description": "Read the passes block in the references"}`
+
+  ```
+3:> **Passes — 2026-11-18 à 20 :** **90/88-2** (18/11 matin et soir), puis **91 portes, 89/2** trois fois
+    2475    167   T1   2500  docs/pilotage/references-non-regression.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\nold = \"**Passes — 2026-11-18 à 20 :** **90/88-2** (18/11 matin et soir), puis **91 portes, 89/2** trois fois\"\nnew … [699 caractères tronqués]`
+
+  ```
+refs ok
+    2482    167   T1   2500  docs/pilotage/references-non-regression.md
+budget=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/references-non-regression.md && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nÉTAT — LA NUIT EST CLOSE : PALIER 1 PLAFONNE, REJEU DES FENÊTRES, MATRICE REGISTRE/HOR … [685 caractères tronqués]`

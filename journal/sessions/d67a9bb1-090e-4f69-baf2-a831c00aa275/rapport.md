@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 95.0 h |
 | Tours | 90 |
-| Messages | 1596 |
-| Appels d'outils | 1399 |
+| Messages | 1602 |
+| Appels d'outils | 1405 |
 | Fichiers touchés | 44 |
-| Commandes | 1240 |
+| Commandes | 1246 |
 | Sous-agents | 7 |
-| Commits | 122 |
+| Commits | 123 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2264,7 +2264,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 90 — <goal_round> Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre le … [1076 caractères tronqués]
 
-*77 appels d'outils.* Actions notables :
+*83 appels d'outils.* Actions notables :
 
 - bash — Spot-check the literature corpus quality
 - bash — Ten-minute pause and progress
@@ -2280,7 +2280,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - bash — Ten-minute pause with load check
 - bash — Commit tranches 4-5 data and update the fiche
 - bash — Ten-minute pause with tranche counts
-- … et 54 autres
+- … et 60 autres
 
 ## 3. Travail accompli
 
@@ -2385,7 +2385,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1200 autres
+- … et 1206 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2655,4 +2655,5 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text(
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text(
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-nuit-palier1-110k.md reports/ppl-matrice-p111.json reports/ppl-matrice-p211.json r
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/references-non-regression.md && git commit -q -F - <<'MSG'
 

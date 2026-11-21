@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 00:19 | `dc130da2` | N — LA COUVERTURE DE L'ÉCHANTILLON EST CHIFFRÉE (2,2 % DU PALIER 1, 9,9 % DE wiki_big) ; LA PUCE N DIT LE FLAG PASSÉ | `en-cours.md`, `README.md`, `attention.md` (+8) |
 | 01:25 | `a0218228` | N — LA NUIT DU PALIER 1, TRANCHES 4 ET 5 : p1 7,3733 → 7,1953, p2 7,1548 → 7,0021 SUR WIKITEXT2 | `en-cours.md`, `README.md`, `attention.md` (+21) |
+| 08:47 | `4672ae24` | N — LA NUIT EST CLOSE : LE PALIER 1 PLAFONNE À 7,03-7,05 À 110 000 PAS, `wiki_big` RESTE DEVANT (6,83) | `en-cours.md`, `README.md`, `attention.md` (+48) |
 
 ## Chiffres du jour
 

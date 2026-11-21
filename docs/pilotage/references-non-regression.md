@@ -1,7 +1,7 @@
 # Références de non-régression
 
-> **Passes — 2026-11-18 à 20 :** **90/88-2** (18/11 matin et soir), puis **91 portes, 89/2** trois fois
-> (nuit, 19/11 13 h 12, 20/11 05 h 58) — `indice` (854/870/870/859/836 s), `melange` (106/109/108/106/105 s),
+> **Passes — 2026-11-18 à 21 :** **90/88-2** (18/11 matin et soir), puis **91 portes, 89/2** quatre fois
+> (nuit, 19/11 13 h 12, 20/11 05 h 58, 21/11 04 h 10 — `sessions` corrigé) — `indice` (854/870/870/859/836 s), `melange` (106/109/108/106/105 s),
 > les deux **structurelles** ; `sessions` **verte** ; aucune autre. Journaux `roue-1118-1057/`, `-1712/`,
 > `roue-1119-0345/`, `roue-1119-1316/`, `roue-1120-0558/`.
 
