@@ -73109,3 +73109,62 @@ reports/rapport-rsn.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1113 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 tools/rsn.py
+ create mode 100644 tools/tests/test_rsn.py
+7cda5082 RSN — LA FONDATION DE LA PENSÉE EST POSÉE : LE CANDIDAT, L'ÉTAT, LE MERKLE, 
+   dc130da2..7cda5082  s/v7 -> s/v7
+   d0cf6cf1..7cda5082  master -> master
+sam 21 nov 2026 00:25:58 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ **La RSN est posée et mesurée** — la fondation de la pensée existe, elle est testée
+
+## Ce qui est construit (`tools/rsn.py`, committé `7cda5082`)
+
+| brique | état |
+|---|---|
+| **le candidat** : `corps` canonique, `annotation`, `statut` (`hypothese`/`retenu`/`refute`/`ouvert`), `provenance`, `cout`, `score` | fait |
+| **l'état** : `id`, `parent`, `profondeur`, `candidats`, `budget`, `empreinte` de Merkle | fait |
+| **la canonicalisation** : clés triées, UTF-8, **aucun flottant dans le corps** (il lève) | fait |
+| **l'empreinte Merkle** : l'ordre des candidats ne change pas l'empreinte | fait |
+| **le chemin surface → RSN** : l'`Annotation` devient des **faits** et des **prédications** (rôle + cible) | fait |
+| **les 5 invariants** (`tools/tests/test_rsn.py`) | **5/5** |
+
+## La mesure (20 phrases du gold)
+
+| mesure | valeur | contrôle |
+|---|---:|---|
+| couverture (phrases avec ≥ 1 prédication) | **19/20 = 95 %** | le texte vide → 0 |
+| candidats | **34,5 / phrase** (689) | — |
+| déterminisme | la même empreinte sur deux analyses | `e98f3b8a…` |
+| ordre des candidats | l'empreinte ne change pas | Merkle trié |
+| négatif (texte vide) | **0 candidat**, `refus = "vide"` | — |
+
+**Les rôles trouvés** : `agent` 16, `prédicat` 5, `groupe nominal` 5, `patient` 3, `lieu` 3, `but` 3, `theme` 2, `possession` 2.
+
+## Ce que ça permet — et la limite honnête
+
+**Permet** : le moteur de pensée a **sa matière** — un état de candidats avec statut, score, provenance et empreinte rejouable. On peut compter, comparer deux analyses, rejouer, filtrer.
+
+**Ne permet pas encore** :
+- **La désambiguïsation** : tous les candidats sont des hypothèses ; le seuil 0,7 n'en retient **aucun** sur la phrase de test (les syntagmes sont à 0,40) — c'est un **seuil arbitraire**, il faut un **score appris**.
+- **La composition** : deux phrases ne se lient pas encore (coréférence, temporalité).
+- **Le sens** : la RSN est **structurée**, pas **interprétée** — elle donne les prédications candidates, la bonne unité pour la suite.
+- **Le state store** : l'état est en mémoire ; les `put`/`get`/`replay` du contrat restent à écrire.
+- **Le gold de pensée** : toujours absent.
+
+## Le chemin
+
+1. **Le score appris** (remplacer le 0,7 par un modèle entraîné sur le gold).
+2. **La composition** (les liens entre prédications).
+3. **Le state store** (la persistance, le rejeu).
+4. **Le gold de pensée** (les trajectoires humaines).
+
+**Le test sur les 612 phrases** est la prochaine étape naturelle — il donnera la vraie couverture, pas celle de 20 phrases.
+

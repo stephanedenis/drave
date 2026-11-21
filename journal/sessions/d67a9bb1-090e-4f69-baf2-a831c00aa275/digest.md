@@ -21248,3 +21248,114 @@ tools/porte-r13-bpe.sh
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 bash tools/porte-r13-bpe.sh > /tmp/r13.log 2>&1; echo \"exit=$?\"; tail -3 /tmp/r13.log; date", "description": "Run the gate that covers the trainer", "timeoutMs": 700000}`
+
+  ```
+exit=0
+  ✅ BPE 3.249 bits/octet · octets 3.689 · gain 11.9 %
+  PPL/jeton : octets 12.90 · BPE 85.83 · vocab 512
+PORTE TENUE : BPE natif réversible · budgets d'octets égaux · bits/octet meilleurs
+sam 21 nov 2026 00:24:46 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Runs en tranche 5 (50k), cadence mesurée à 78 min/tranche, porte BPE verte après le correctif — la suite est planifiée
+
+**Le point** : p1 et p2 sont à 2 650 et 4 250 pas de la tranche 5 ; la cadence mesurée (78 min/tranche avec banc et PPL) met **p2 à 8 h 40 et p1 à 9 h 10** — la matrice du matin utilisera donc les points **100 000** (7 h 40) et ajoutera les 110 000 si possible. `porte-r13-bpe` passe après le correctif du compteur. Le moniteur automatique rendra la tranche 5 vers 1 h 15.
+
+
+## Tour 90
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du palier 1, val de `wiki_big`) et écrire la comparaison à pas et époques égales ; (3) dans la fenêtre remisée (avant 19 h 30), l'adjudication de J4 (les 10 désaccords les plus lourds) par un troisième passage API ; (4) passe des 91 portes sur l'arbre de la journée ; fiches, état, commits et push pour chaque résultat, bilan à 9 h."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, random\nrandom.seed(3)\nfor f in sorted(pathlib.Path('data/wikisource').glob('*.txt'))[:4]:\n    t = f.read_text()\n    i = random.randrange(0, max(1, len(t) - 800))\n    extrait = t[i:i+500].replace … [151 caractères tronqués]`
+
+  ```
+livre-balzac-le-p-re-goriot-1910-djvu.txt → Elles me tiennent si bien à l’âme, que j’avais idée que vous les verriez ce soir. Mon Dieu ! un homme qui rendrait ma petite Delphine aussi heureuse qu’une femme l’est quand elle est bien aimée, mais je lui cirerais ses bottes, je lui ferais ses commissions. J’ai su par sa femme de chambre que ce petit monsieur de Marsay est un  
+
+livre-dumas-les-trois-mousquetaires-1849-p → gnan ! d’Artagnan ! s’écria-t-elle, est-ce vous ? Par ici ! | — Constance ! Constance ! répondit le jeune homme, où êtes-vous ? Mon Dieu ! | Au même moment la porte de la cellule céda au choc plutôt qu’elle ne s’ouvrit. Plusieurs hommes se précipitèrent dans la chambre ; M me Bonacieux était tombée dans un fauteuil sans pouvoir  
+
+livre-flaubert-madame-bovary-conard-1910-d → égua qu’il avait affaire. | — Ah ! je vous escorte ! dit Homais. | Et, tout en descendant les rues avec lui, il parlait de sa femme, de ses enfants, de leur avenir et de sa pharmacie, racontait en quelle décadence elle était autrefois, et le point de perfection où il l’avait montée. | Arrivé devant l’Hôtel de Boulogne, Léon le q 
+
+livre-hugo-les-mis-rables-tome-iv-1890-djv →  carrés, le saint myst
+… [308 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+sam 21 nov 2026 00:35:08 EST
+pas 4400
+pas 6100
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+sam 21 nov 2026 00:45:02 EST
+pas 5800
+pas 7600
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+sam 21 nov 2026 00:54:57 EST
+pas 7250
+pas 9100
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/courbe_chaine.py --prefixe p1 --prefixe p2 --n 11 2>&1 | tail -16; date", "description": "Print the palier-1 curves so far", "timeoutMs": 120000}`
+
+  ```
+== p1
+  tranche   pas    PPL val   wikitext2   précision   greedy (val/rép)   top-40 (val/rép)   top-20 (val/rép)
+        1  10000    3.5299    9.0631     0.6277   0.975/16.0      0.863/2.0       0.928/11.0
+        2  10000    3.2572    7.9700     0.6520   0.960/9.0       0.878/2.0       0.895/3.0 
+        3  10000    3.1486    7.7044     0.6610   0.942/9.0       0.913/2.0       0.955/4.0 
+        4  10000    3.0761    7.3733     0.6688   0.975/10.0      0.892/2.0       0.957/8.0 
+
+== p2
+  tranche   pas    PPL val   wikitext2   précision   greedy (val/rép)   top-40 (val/rép)   top-20 (val/rép)
+        1  10000    3.4922    8.7014     0.6305   0.993/13.0      0.836/2.0       0.911/6.0 
+        2  10000    3.2196    7.7017     0.6568   0.959/14.0      0.880/3.0       0.950/5.0 
+        3  10000    3.0874    7.2790     0.6672   0.966/13.0      0.879/2.0       0.898/5.0 
+        4  10000    3.0232    7.1548     0.6723   0.964/13.0      0.853/2.0       0.923/5.0 
+
+  écrit : reports/courbe-150m.json
+sam 21 nov 2026 00:55:06 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout -- reports/courbe-150m.json && git status --short | grep -v \"^ M journal\" | head -3; echo restauré; date", "description": "Restore the overwritten curve file"}`
+
+  ```
+?? reports/banc-generation-p14.json
+?? reports/banc-generation-p24.json
+?? reports/banc-grammaticalite-p14.json
+restauré
+sam 21 nov 2026 00:55:14 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sortie\" tools/courbe_chaine.py | head -6", "description": "Read the curve tool's output option"}`
+
+  ```
+12:      --sortie reports/courbe-150m.json
+46:    ap.add_argument("--sortie", default="reports/courbe-150m.json")
+51:    sortie = pathlib.Path(a.sortie)
+52:    sortie.parent.mkdir(parents=True, exist_ok=True)
+53:    sortie.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+71:    print(f"\n  écrit : {sortie}")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/courbe_chaine.py'); s = p.read_text()\nold = '    ap.add_argument(\"--sortie\", default=\"reports/courbe-150m.json\")'\nnew = ('    # pas de fichier par défaut : une courbe p1 … [1237 caractères tronqués]`

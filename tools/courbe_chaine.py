@@ -43,14 +43,17 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--prefixe", action="append", required=True)
     ap.add_argument("--n", type=int, default=12)
-    ap.add_argument("--sortie", default="reports/courbe-150m.json")
+    # pas de fichier par défaut : une courbe p1/p2 a déjà écrasé courbe-150m.json
+    ap.add_argument("--sortie", default="")
     a = ap.parse_args()
     doc = {"schema": "drave.courbe-chaine", "version": 1, "n": a.n, "chaines": {}}
     for p in a.prefixe:
         doc["chaines"][p] = [tranche(p, i) for i in range(1, a.n + 1)]
-    sortie = pathlib.Path(a.sortie)
-    sortie.parent.mkdir(parents=True, exist_ok=True)
-    sortie.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+    sortie = None
+    if a.sortie:
+        sortie = pathlib.Path(a.sortie)
+        sortie.parent.mkdir(parents=True, exist_ok=True)
+        sortie.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
 
     # La table lisible : une ligne par tranche finie.
     for p in a.prefixe:
@@ -68,7 +71,8 @@ def main() -> None:
                   f"{g.get('mots_valides', 0):.3f}/{g.get('repetition', 0):<4.1f}      "
                   f"{t40.get('mots_valides', 0):.3f}/{t40.get('repetition', 0):<4.1f}      "
                   f"{t20.get('mots_valides', 0):.3f}/{t20.get('repetition', 0):<4.1f}")
-    print(f"\n  écrit : {sortie}")
+    if sortie:
+        print(f"\n  écrit : {sortie}")
 
 
 if __name__ == "__main__":

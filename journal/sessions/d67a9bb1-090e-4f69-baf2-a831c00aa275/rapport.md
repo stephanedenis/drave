@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 86.6 h |
+| Durée | 87.1 h |
 | Tours | 90 |
-| Messages | 1515 |
-| Appels d'outils | 1324 |
+| Messages | 1522 |
+| Appels d'outils | 1330 |
 | Fichiers touchés | 44 |
-| Commandes | 1168 |
+| Commandes | 1174 |
 | Sous-agents | 7 |
-| Commits | 116 |
+| Commits | 117 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2264,10 +2264,14 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 90 — <goal_round> Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre le … [1076 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Spot-check the literature corpus quality
 - bash — Ten-minute pause and progress
+- bash — Print the palier-1 curves so far
+- bash — Restore the overwritten curve file
+- bash — Read the curve tool's output option
+- bash — Remove the curve tool's default output file
 
 ## 3. Travail accompli
 
@@ -2372,7 +2376,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1128 autres
+- … et 1134 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2636,4 +2640,5 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - ÉTAT — LA PAGE VIVANTE PASSE AU 21/11 (LE REJEU DES FENÊTRES AJOUTÉ À L'EN-TÊTE)" && git push origin s/v7 2>&1 | tail -1; date
 - N — LA CHAÎNE DE NUIT PASSE --compteur-suite (LES TRANCHES NE REJOUENT PLUS LES MÊMES FENÊTRES)" && git push origin s/v7 2>&1 | tail -1; date
 - N — LA COUVERTURE DE L'ÉCHANTILLON EST CHIFFRÉE (2,2 % DU PALIER 1, 9,9 % DE wiki_big) ; LA PUCE N DIT LE FLAG PASSÉ" && git push origin s/v7 2>&1 | tail -1; da
+- OUTIL — LA COURBE N'ÉCRIT PLUS PAR DÉFAUT (ELLE AVAIT ÉCRASÉ courbe-150m.json EN AFFICHANT p1/p2)" && git push origin s/v7 2>&1 | tail -1; date
 
