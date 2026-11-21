@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (11)
+## Commits du jour (12)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -19,6 +19,7 @@
 | 13:10 | `36b5dbda` | J4 — LES SECONDS CADRES : UN SECOND ANNOTATEUR NE CONFIRME PAS L'OR DE RÔLES (F1 0,71), ET CERTAINS DÉSACCORDS SONT LES ERREURS DE L'OR | `en-cours.md`, `README.md`, `attention.md` (+12) |
 | 15:50 | `25e65ad0` | N — LE PALIER 1 MÈNE `wiki_big` À 20 000 PAS (7,70-7,97 CONTRE 7,83-8,17) — MAIS L'ÉCART EST DANS LA VARIANCE | `en-cours.md`, `README.md`, `attention.md` (+26) |
 | 23:04 | `f0bdf9ae` | S — LES DEUX FORMES MANQUÉES SONT RETROUVÉES : « LES » ET « L' » DEVANT UN VERBE SONT DES CLITIQUES (14/16 → 16/16 SUR LE GOLD) | `en-cours.md`, `README.md`, `attention.md` (+16) |
+| 23:08 | `6ee4fd41` | S — LES TESTS DES CLITIQUES (8 CAS, 4 VRAIS ET 3 PIÈGES) ET LA MESURE-ARBRE RAFRAÎCHIE ENTRENT | `en-cours.md`, `README.md`, `attention.md` (+11) |
 
 ## Chiffres du jour
 
@@ -28,7 +29,7 @@
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 85.3 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 85.4 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 478.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés

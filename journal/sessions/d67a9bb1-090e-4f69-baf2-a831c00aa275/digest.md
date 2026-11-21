@@ -20373,3 +20373,23 @@ refs: 373 phrases: 207 candidats: 359
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git add tests/test_clitiques.py donnees/mesure-arbre.json && git commit -q -m \"S — LES CLITIQUES : 8 TESTS QUI BORNENT LA RÈGLE DANS LES DEUX SENS (4 VRAIS, 3 PIÈGES), MESURE-ARBRE RAFRAÎCHIE (373 FORMES SUR 207 PHR … [854 caractères tronqués]`
+
+  ```
+b70fd2a..008a3a8  master -> master
+ok
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   f0bdf9ae..6ee4fd41  s/v7 -> s/v7
+ven 20 nov 2026 23:10:46 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/or_roles_adjudication.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"or_roles_adjudication.py — J4, étape 2 : l'**adjudication** des désaccords de cadres.\n\nPOURQUOI. Le second annotateur (`tools/or_roles_second.py`) a mesuré  … [5686 caractères tronqués]`
+
+  ```
+{"textes": 10, "adjudiqués": 0}
+script prêt (pas d'appel API cette nuit : tarif plein)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/or_roles_adjudication.py && git commit -q -m \"J4 — L'ADJUDICATION EST PRÊTE : LE SCRIPT PREND LES 10 TEXTES LES PLUS FAIBLES, DONNE LES DEUX ANNOTATIONS À L'API ET DEMANDE LE VERDICT PAR RÔLE (À LANCER EN FENÊTRE REMIS … [122 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 85.3 h |
+| Durée | 85.4 h |
 | Tours | 88 |
-| Messages | 1444 |
-| Appels d'outils | 1257 |
+| Messages | 1446 |
+| Appels d'outils | 1259 |
 | Fichiers touchés | 44 |
-| Commandes | 1102 |
+| Commandes | 1104 |
 | Sous-agents | 7 |
-| Commits | 106 |
+| Commits | 107 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2210,7 +2210,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 88 — continue avec des taches nocturnes jusqu'à demain 9h00
 
-*37 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create the night goal and the resume script
@@ -2226,7 +2226,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - bash — Check referents tests and the missed clitics
 - bash — Read the tokenizer and its classes
 - bash — Read the Token class and sample classes
-- … et 23 autres
+- … et 25 autres
 
 ## 3. Travail accompli
 
@@ -2331,7 +2331,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1062 autres
+- … et 1064 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2585,4 +2585,5 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-corpus-palier1.md'); s = p.read_text() o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n_json=$(ls reports/*.json | wc -l); n_md=$(ls reports/*.md | wc -l); python3 - "$n_md" "$n_json" <<'PY' i
 - S — LES CLITIQUES : 8 TESTS QUI BORNENT LA RÈGLE DANS LES DEUX SENS (4 VRAIS, 3 PIÈGES), MESURE-ARBRE RAFRAÎCHIE (373 FORMES SUR 207 PHRASES)" && git push origi
+- J4 — L'ADJUDICATION EST PRÊTE : LE SCRIPT PREND LES 10 TEXTES LES PLUS FAIBLES, DONNE LES DEUX ANNOTATIONS À L'API ET DEMANDE LE VERDICT PAR RÔLE (À LANCER EN F
 

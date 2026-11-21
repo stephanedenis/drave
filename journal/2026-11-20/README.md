@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**24 commits** · **2 session(s)** · **7 thème(s)**
+**25 commits** · **2 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 6 | [docs.md](docs.md) |
-| mesures | 11 | [mesures.md](mesures.md) |
+| mesures | 12 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 85.3 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 85.4 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 478.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -54,6 +54,7 @@
 | 15:50 | `25e65ad0` | N — LE PALIER 1 MÈNE `wiki_big` À 20 000 PAS (7,70-7,97 CONTRE 7,83-8,17) — MAIS L'ÉCART EST DANS LA VARIANCE |
 | 16:40 | `f3658f81` | N — LE PALIER 1 À 30 000 PAS : 7,2790 / 7,7044 CONTRE 7,22-7,56 POUR `wiki_big` — LE VOLUME N'ACHÈTE PAS, LE REGISTRE OUI |
 | 23:04 | `f0bdf9ae` | S — LES DEUX FORMES MANQUÉES SONT RETROUVÉES : « LES » ET « L' » DEVANT UN VERBE SONT DES CLITIQUES (14/16 → 16/16 SUR LE GOLD) |
+| 23:08 | `6ee4fd41` | S — LES TESTS DES CLITIQUES (8 CAS, 4 VRAIS ET 3 PIÈGES) ET LA MESURE-ARBRE RAFRAÎCHIE ENTRENT |
 
 ## Le récit de la journée (écrit à la main)
 
