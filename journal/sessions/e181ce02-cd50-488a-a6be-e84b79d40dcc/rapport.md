@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 499.4 h |
-| Tours | 227 |
-| Messages | 4530 |
-| Appels d'outils | 4034 |
+| Durée | 500.6 h |
+| Tours | 229 |
+| Messages | 4542 |
+| Appels d'outils | 4042 |
 | Fichiers touchés | 25 |
-| Commandes | 3356 |
+| Commandes | 3364 |
 | Sous-agents | 43 |
-| Commits | 531 |
+| Commits | 532 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -527,6 +527,10 @@
 **Tour 226** — note tout ça et fais de recherche pour trouver des approches comparable dans les travaux de recherche des autres chercheurs
 
 **Tour 227** — On doit donc envisages une interface qui pourrait être éventuellement compatible avec tous ces paradigmes si on veut maintenir la modularité et capacité de substitution des blocs
+
+**Tour 228** — est-ce suffisant pour réfléchir (itérer sans tourner en rond)?
+
+**Tour 229** — implémente ça
 
 ## 2. Déroulé, étape par étape
 
@@ -12010,6 +12014,110 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - bash — Trimmer les lignes de la carte
 - bash — Committer l'interface RSN
 
+**Synthèse produite :**
+
+⏵ L'interface est écrite, testée et committée — la substituabilité est mesurée, pas promise
+
+\## L'interface (committée `1da43ffa`)
+
+**Cinq verbes** — c'est tout ce qu'un paradigme doit accepter pour être substituable :
+
+| verbe | entrée → sortie | la garantie |
+|---|---|---|
+| **`assert`** | une affirmation → un id stable (`sha256`) | **idempotent** : deux fois la même → le même id |
+| **`query`** | un terme → `{statut, degre, preuve, contexte}` | le **tri-état** est toujours rendu (`prouve`/`refute`/`inconnu`) — jamais « refusé par défaut » |
+| **`promote`** | un id + une preuve → le statut | **seule** entrée dans le noyau ; **sans preuve → `refuse`** |
+| **`explain`** | un id → `{justification, provenance}` | toute réponse est **traçable** jusqu'à sa source |
+| **`context`** | un id → `{texte, span, version, langue}` | **le contexte source ne se perd jamais** |
+
+**Deux verbes de service** : `compose` (les règles floues, pour PSL/Zadeh) et `replay` (la trace, pour le TMS).
+
+**Le transport est du JSON** — aucun objet d'un paradigme ne traverse l'interface. Les champs sont le contrat : `corps` (canonique, sans flottant), `contexte`, `statut`, `degre` (le [0,1], **jamais dans le noyau**), `provenance`.
+
+\## Les six paradigmes couverts
+
+**`RSNFormel`** (Lean/Coq, Prolog, Ł3) · **`RSNFlou`** (PSL, Zadeh) · **`RSNProbabiliste`** (ProbLog, MLN) · **`RSNProvenance`** (RDF-star, PROV-O) · **`RSNTMS`** (Doyle, de Kleer) · **`RSNDung`** (Dung 1995).
+
+**Deux adaptateurs se composent** : `RSNFlou(RSNProvenance(base))` donne une RSN **floue et traçable** — c'est celle que Drave veut, et elle se construit **par branchement**.
+
+\## Le test de conformité (le même pour tous)
+
+Les **5 contrôles** (`idempotent`, `inconnu_sur_absent`, `refus_sans_preuve`, `explain_complet`, `contexte_exact`) lancés sur **trois** implémentations :
+
+```
+RSNBase        → CONFORME 5/5
+RSNFlou        → CONFORME 5/5
+RSNProvenance  → CONFORME 5/5
+```
+
+**Un adaptateur qui passe les 5 est substituable** : le moteur de pensée ne change pas d'une ligne quand on remplace l'un par l'autre.
+
+\## Ce que ça garantit — et ce que ça ne garantit pas
+
+**Garantit** : la **modularité** (l'interface est stable), la **substitution** (le test), la **traçabilité** (`explain` et `context` obligatoires), la **non-régression** (les tests sont dans `tools/`).
+
+**Ne garantit pas** : la **qualité** d'un paradigme (un adaptateur conforme peut être médiocre), la **performance** (l'interface est un contrat, pas un optimiseur), et
+… [366 caractères tronqués]
+
+### Tour 228 — est-ce suffisant pour réfléchir (itérer sans tourner en rond)?
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Voir ce que le moteur de pensée prévoit
+- bash — Lire la boucle anytime
+
+**Synthèse produite :**
+
+⏵ La réponse honnête : non — l'interface est nécessaire, pas suffisante
+
+\## Ce que l'interface garantit, et ce qu'elle ne garantit pas
+
+L'interface (`assert`/`query`/`promote`/`explain`/`context`) garantit qu'un paradigme est **substituable**. Elle ne garantit **rien** sur l'**itération** : ni qu'elle progresse, ni qu'elle s'arrête, ni qu'elle ne revient pas sur ses pas.
+
+**La boucle existe déjà sur le papier** (`moteur-de-pensee.md` § 4) :
+
+```python
+while budget.reste() and store.frontier:
+    noeud = strategies.select(store.frontier)
+    propositions = strategies.expand(noeud)
+    for p in propositions:
+        enfant = p.appliquer()
+        empreinte = store.put(enfant)      # ← le Merkle fait la transposition
+        if enfant.statut == "settled": ...
+        elif budget.reste(): store.frontier.push(empreinte, score)
+```
+
+Le `store.put` (le **Merkle**) fait déjà la **transposition** : deux états identiques sont le même nœud. C'est **le début** de l'anti-boucle — mais pas l'anti-boucle.
+
+\## Ce qui manque pour « itérer sans tourner en rond »
+
+| manque | pourquoi c'est nécessaire | où c'est (ou pas) |
+|---|---|---|
+| **l'ensemble des visités explicite** | le `put` déduplique le **stockage**, pas la **frontière** : un état peut être re-poussé et ré-exploré | **absent** |
+| **la mesure de nouveauté** | « est-ce que cet état apporte du neuf ? » — sans elle, on explore des variantes du même | **absent** |
+| **le progrès mesuré** | la distance au but, la monotonie du score — sans elle, on tourne sans le savoir | **absent** (le `score` existe, pas la **dérivée**) |
+| **la mémoire des échecs** | les états **réfutés** doivent être évités, pas re-découverts | **absent** (le `refute` existe, pas l'évitement) |
+| **la terminaison** | le budget arrête, mais rien ne dit *« on a fini »* (le **fixpoint**, la contradiction) | **partiel** (le `settled`, pas le fixpoint) |
+| **la mesure de la circularité** | « a-t-on tourné en rond ? » doit être **compté** (les répétitions d'empreinte, la profondeur inutile) | **absent** |
+
+\## Le point clé : « réfléchir » exige une **métrique de progrès**
+
+La différence entre **itérer** et **tourner en rond** n'est pas la structure (l'arbre, la frontière) — c'est **la mesure**. Un moteur qui explore sans mesurer son progrès **tourne en rond par construction**, même avec un arbre parfait.
+
+**La métrique la plus simple** : à chaque pas, comparer l'empreinte du nouvel état à **toutes** les empreintes visitées (le `visited` set), et **compter
+… [1367 caractères tronqués]
+
+### Tour 229 — implémente ça
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Vérifier le terrain
+- bash — Implémenter le moteur anti-boucle
+- bash — Corriger la mémoire des échecs
+- bash — Écrire et lancer les tests du moteur
+- bash — Écrire la fiche anti-boucle
+- bash — Committer l'anti-boucle
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12130,7 +12238,7 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3316 autres
+- … et 3324 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12809,4 +12917,5 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - RSN À TROIS NIVEAUX — LA STRUCTURE DE NIPADA APPLIQUÉE À LA RSN : LE NOYAU (Ł3, INFÉRENCES FORTES, LA SPÉCIFICATION PORTABLE), LES FAITS (DEGRÉS [0,1], FALSIFIA
 - RSN, LES TRAVAUX COMPARABLES — LE DÉCOUPLAGE SAVOIR/RAISONNEMENT (WANG 2026), LA STRATIFICATION (NIPADA), LES ASSISTANTS DE PREUVE, PSL, ZADEH, PROBLOG, RDF-STA
 - INTERFACE RSN — CINQ VERBES (ASSERT, QUERY, PROMOTE, EXPLAIN, CONTEXT), SIX PARADIGMES (FORMEL, FLOU, PROBABILISTE, PROVENANCE, TMS, DUNG), LE TEST DE CONFORMIT
+- MOTEUR DE PENSÉE — L'ANTI-BOUCLE MESURÉE : LE VISITED EXPLICITE, LA NOUVEAUTÉ COMPTÉE (SEUIL 0,30), LA MÉMOIRE DES ÉCHECS, TROIS TERMINAISONS (BUDGET, FIXPOINT,
 

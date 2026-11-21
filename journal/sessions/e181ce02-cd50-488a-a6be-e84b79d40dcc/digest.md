@@ -73739,3 +73739,258 @@ RSNProvenance → CONFORME {'idempotent': True, 'inconnu_sur_absent': True, 'ref
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/carte.md'); t=p.read_text()\nt=t.replace(\"**intégration** — M1 528/528 ; M5 18,7 % vs 12,6 % ; M6 94,3 % ; M8 57,95 % (borne haute)\", \"**intégration** — M1 528/528 ; M … [875 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-21)
+ create mode 100644 docs/theorie/rsn-interface.md
+ create mode 100644 tools/rsn_interface.py
+1da43ffa INTERFACE RSN — CINQ VERBES (ASSERT, QUERY, PROMOTE, EXPLAIN, CONTEXT), SIX 
+   060cb5fa..1da43ffa  s/v7 -> s/v7
+   060cb5fa..1da43ffa  master -> master
+sam 21 nov 2026 12:10:04 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ L'interface est écrite, testée et committée — la substituabilité est mesurée, pas promise
+
+## L'interface (committée `1da43ffa`)
+
+**Cinq verbes** — c'est tout ce qu'un paradigme doit accepter pour être substituable :
+
+| verbe | entrée → sortie | la garantie |
+|---|---|---|
+| **`assert`** | une affirmation → un id stable (`sha256`) | **idempotent** : deux fois la même → le même id |
+| **`query`** | un terme → `{statut, degre, preuve, contexte}` | le **tri-état** est toujours rendu (`prouve`/`refute`/`inconnu`) — jamais « refusé par défaut » |
+| **`promote`** | un id + une preuve → le statut | **seule** entrée dans le noyau ; **sans preuve → `refuse`** |
+| **`explain`** | un id → `{justification, provenance}` | toute réponse est **traçable** jusqu'à sa source |
+| **`context`** | un id → `{texte, span, version, langue}` | **le contexte source ne se perd jamais** |
+
+**Deux verbes de service** : `compose` (les règles floues, pour PSL/Zadeh) et `replay` (la trace, pour le TMS).
+
+**Le transport est du JSON** — aucun objet d'un paradigme ne traverse l'interface. Les champs sont le contrat : `corps` (canonique, sans flottant), `contexte`, `statut`, `degre` (le [0,1], **jamais dans le noyau**), `provenance`.
+
+## Les six paradigmes couverts
+
+**`RSNFormel`** (Lean/Coq, Prolog, Ł3) · **`RSNFlou`** (PSL, Zadeh) · **`RSNProbabiliste`** (ProbLog, MLN) · **`RSNProvenance`** (RDF-star, PROV-O) · **`RSNTMS`** (Doyle, de Kleer) · **`RSNDung`** (Dung 1995).
+
+**Deux adaptateurs se composent** : `RSNFlou(RSNProvenance(base))` donne une RSN **floue et traçable** — c'est celle que Drave veut, et elle se construit **par branchement**.
+
+## Le test de conformité (le même pour tous)
+
+Les **5 contrôles** (`idempotent`, `inconnu_sur_absent`, `refus_sans_preuve`, `explain_complet`, `contexte_exact`) lancés sur **trois** implémentations :
+
+```
+RSNBase        → CONFORME 5/5
+RSNFlou        → CONFORME 5/5
+RSNProvenance  → CONFORME 5/5
+```
+
+**Un adaptateur qui passe les 5 est substituable** : le moteur de pensée ne change pas d'une ligne quand on remplace l'un par l'autre.
+
+## Ce que ça garantit — et ce que ça ne garantit pas
+
+**Garantit** : la **modularité** (l'interface est stable), la **substitution** (le test), la **traçabilité** (`explain` et `context` obligatoires), la **non-régression** (les tests sont dans `tools/`).
+
+**Ne garantit pas** : la **qualité** d'un paradigme (un adaptateur conforme peut être médiocre), la **performance** (l'interface est un contrat, pas un optimiseur), et la **couverture** — les trois adaptateurs écrits sont les **premiers** ; `RSNFormel` et les adaptateurs « lourds » (PSL, ProbLog, Dung) restent à écrire **si** le besoin est mesuré.
+
+**Le chemin** : le test est écrit ; la prochaine étape est `RSNFormel` (le noyau Ł3), puis le **branchement du moteur de pensée** sur l'interface — c'est là que la modularité paiera.
+
+
+## Tour 228
+
+### 👤 Utilisateur
+
+est-ce suffisant pour réfléchir (itérer sans tourner en rond)?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -nE \"frontiere|boucle|anytime|strategie|politique|budget|terminaison|cycle|repete|nouveaut\" docs/implantation/moteur-de-pensee.md | head -14 | cut -c1-135", "description": "Voir ce que le moteur de pensée prévoit"}`
+
+  ```
+sam 21 nov 2026 12:58:40 EST
+4:> **state store**, l'**arbre d'états**, la **boucle** anytime, les **stratégies**, la **trace** et les
+9:> **frontière**, une **boucle** anytime, un **portefeuille** de stratégies, une **trace** rejouable.
+17:| `State` | `id`, `parent`, `profondeur`, `budget`, `statut`, `candidats`, `frontiere`, `empreinte` | empreinte = Merkle des candida
+21:| `Decision` | `state` settled, `justification`, `budget` | le chemin racine → état est inclus |
+45:  "budget": {"noeuds": 12, "max": 50},
+48:  "frontiere": ["s3", "s5", "s6"],
+84:tas ordonné par une politique (score, coût, UCB, heuristique).
+97:## 4. La boucle
+100:def boucle(store, strategies, budget, trace):
+104:    while budget.reste() and store.frontier:
+105:        noeud = strategies.select(store.frontier)      # politique
+108:        propositions = strategies.expand(noeud)         # opérateurs
+112:            score = strategies.score(enfant)
+116:            elif budget.reste():
+[stderr]
+grep: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '97,140p' docs/implantation/moteur-de-pensee.md | cut -c1-135", "description": "Lire la boucle anytime"}`
+
+  ```
+## 4. La boucle
+
+```python
+def boucle(store, strategies, budget, trace):
+    racine = store.put(etat_initial())
+    store.frontier.push(racine, score=0.0)
+    meilleur = racine
+    while budget.reste() and store.frontier:
+        noeud = strategies.select(store.frontier)      # politique
+        if noeud.score > store.get(meilleur).score:
+            meilleur = noeud
+        propositions = strategies.expand(noeud)         # opérateurs
+        for p in propositions:
+            enfant = p.appliquer()                     # state -> state
+            empreinte = store.put(enfant)
+            score = strategies.score(enfant)
+            store.edge(noeud, enfant, p.operateur, p.params, score)
+            if enfant.statut == "settled":
+                trace.settled(enfant, chemin(store, enfant))
+            elif budget.reste():
+                store.frontier.push(empreinte, score)
+            budget.compter(p.cout)
+            trace.pas(noeud, enfant, p, score)
+    return decision(store, meilleur)
+```
+
+**Les interfaces** :
+
+- **opérateur** : `apply(state, params) -> [state]` ; il est typé, tracé, et peut être neuronal,
+  classique ou matériel. C'est le seul point d'entrée d'un bloc dans 
+… [714 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La réponse honnête : non — l'interface est nécessaire, pas suffisante
+
+## Ce que l'interface garantit, et ce qu'elle ne garantit pas
+
+L'interface (`assert`/`query`/`promote`/`explain`/`context`) garantit qu'un paradigme est **substituable**. Elle ne garantit **rien** sur l'**itération** : ni qu'elle progresse, ni qu'elle s'arrête, ni qu'elle ne revient pas sur ses pas.
+
+**La boucle existe déjà sur le papier** (`moteur-de-pensee.md` § 4) :
+
+```python
+while budget.reste() and store.frontier:
+    noeud = strategies.select(store.frontier)
+    propositions = strategies.expand(noeud)
+    for p in propositions:
+        enfant = p.appliquer()
+        empreinte = store.put(enfant)      # ← le Merkle fait la transposition
+        if enfant.statut == "settled": ...
+        elif budget.reste(): store.frontier.push(empreinte, score)
+```
+
+Le `store.put` (le **Merkle**) fait déjà la **transposition** : deux états identiques sont le même nœud. C'est **le début** de l'anti-boucle — mais pas l'anti-boucle.
+
+## Ce qui manque pour « itérer sans tourner en rond »
+
+| manque | pourquoi c'est nécessaire | où c'est (ou pas) |
+|---|---|---|
+| **l'ensemble des visités explicite** | le `put` déduplique le **stockage**, pas la **frontière** : un état peut être re-poussé et ré-exploré | **absent** |
+| **la mesure de nouveauté** | « est-ce que cet état apporte du neuf ? » — sans elle, on explore des variantes du même | **absent** |
+| **le progrès mesuré** | la distance au but, la monotonie du score — sans elle, on tourne sans le savoir | **absent** (le `score` existe, pas la **dérivée**) |
+| **la mémoire des échecs** | les états **réfutés** doivent être évités, pas re-découverts | **absent** (le `refute` existe, pas l'évitement) |
+| **la terminaison** | le budget arrête, mais rien ne dit *« on a fini »* (le **fixpoint**, la contradiction) | **partiel** (le `settled`, pas le fixpoint) |
+| **la mesure de la circularité** | « a-t-on tourné en rond ? » doit être **compté** (les répétitions d'empreinte, la profondeur inutile) | **absent** |
+
+## Le point clé : « réfléchir » exige une **métrique de progrès**
+
+La différence entre **itérer** et **tourner en rond** n'est pas la structure (l'arbre, la frontière) — c'est **la mesure**. Un moteur qui explore sans mesurer son progrès **tourne en rond par construction**, même avec un arbre parfait.
+
+**La métrique la plus simple** : à chaque pas, comparer l'empreinte du nouvel état à **toutes** les empreintes visitées (le `visited` set), et **compter** le taux de nouveauté (`nouveaux / total`). Si le taux tombe sous un seuil, **on arrête** ou **on change de stratégie**. C'est mesurable, falsifiable, et ça tient en 20 lignes.
+
+**La métrique plus fine** : la **distance** au but — quand le but est un état `settled`, la distance est la profondeur du meilleur chemin ; quand le but est une **question**, c'est le nombre de candidats **encore ouverts** (la frontière).
+
+## Ce que je proposerais de faire (dans l'ordre)
+
+1. **Le `visited` set** (l'ensemble des empreintes explorées) + le **compteur de nouveauté** — 20 lignes, mesurable.
+2. **Le test de non-circularité** : un opérateur qui **ramène** l'état au précédent (l'identité, la négation double) → le moteur doit **s'arrêter** et le **compter**.
+3. **La mémoire des échecs** : les états `refute` → une liste d'exclusion, jamais ré-explorés.
+4. **La terminaison mesurée** : le budget, le fixpoint (l'empreinte ne change plus), la contradiction (un état et sa négation) → **trois** conditions d'arrêt, tracées.
+5. **La mesure de circularité** sur un cas réel : une question à réponse connue, avec le taux de nouveauté à chaque pas.
+
+**La réponse en une phrase** : l'interface rend les **blocs** substituables, mais **l'anti-boucle est une propriété du moteur**, pas de l'interface — et elle n'est pas encore mesurée. C'est le prochain chantier, et il est petit.
+
+
+## Tour 229
+
+### 👤 Utilisateur
+
+implémente ça
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls tools/ | grep -iE \"moteur|pensee\" | head -4; sed -n '1,10p' docs/implantation/moteur-de-pensee.md | cut -c1-100", "description": "Vérifier le terrain"}`
+
+  ```
+sam 21 nov 2026 13:16:59 EST
+entrainer_moteur.py
+operateur_pensee.py
+pas_de_pensee_contracte.py
+pas_de_pensee_corrige.py
+# Le moteur de pensée — state store, arbre, stratégies
+
+> **Ce que ce document est.** Le **contrat d'implémentation** du moteur de pensée : les types, le
+> **state store**, l'**arbre d'états**, la **boucle** anytime, les **stratégies**, la **trace** et l
+> **portes**. La théorie est dans [`pensee-iterative.md`](../theorie/pensee-iterative.md) ; les sché
+> dans [`docs/schemas/`](../schemas/) ; le bloc impulsionnel dans [`diehl-cook.md`](diehl-cook.md).
+
+> **Fiche concept — le moteur.** Un **state store** typé, un **arbre** de nœuds hashés, une
+> **frontière**, une **boucle** anytime, un **portefeuille** de stratégies, une **trace** rejouable.
+> Le moteur est un bloc N3 `state → state` ou `state → decision` ; il ne lit jamais la surface.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/moteur_pensee.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"moteur_pensee.py — la boucle anytime avec l'ANTI-BOUCLE mesurée.\n\nLE PROBLÈME. Une boucle d'exploration sans garde-fou **tourne en rond par construction** : elle\nr … [9051 caractères tronqués]`
+
+  ```
+syntaxe OK
+=== Cas 1 : l'opérateur identité (la boucle parfaite) ===
+{"nouveaux": 1, "repetitions_evitees": 1, "echecs_evites": 0, "contradictions": 0, "taux_nouveaute": 0.5, "termine": "fixpoint (frontière vide)", "pas": 2}
+
+=== Cas 2 : l'opérateur qui avance (n → n+1) ===
+{"nouveaux": 21, "repetitions_evitees": 0, "echecs_evites": 0, "contradictions": 0, "taux_nouveaute": 1.0, "termine": "budget", "pas": 21}
+
+=== Cas 3 : l'opérateur avec un échec connu (le refus revient) ===
+{"nouveaux": 2, "repetitions_evitees": 1, "echecs_evites": 0, "contradictions": 0, "taux_nouveaute": 0.6667, "termine": "fixpoint (frontière vide)", "pas": 3}
+
+=== Cas 4 : la contradiction (p et non-p) ===
+{"nouveaux": 1, "repetitions_evitees": 0, "echecs_evites": 0, "contradictions": 1, "taux_nouveaute": 1.0, "termine": "contradiction (760c48eb ↔ 049e5547)", "pas": 1}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/moteur_pensee.py'); t = p.read_text()\nt = t.replace('''            for enfant in expand(noeud):\n                if enfant.statut == \"refute\":\n                    self.ech … [1024 caractères tronqués]`
+
+  ```
+mémoire des échecs corrigée
+{"nouveaux": 1, "repetitions_evitees": 1, "echecs_evites": 0, "contradictions": 0, "taux_nouveaute": 0.5, "termine": "fixpoint (frontière vide)", "pas": 2}
+
+=== Cas 2 : l'opérateur qui avance (n → n+1) ===
+{"nouveaux": 21, "repetitions_evitees": 0, "echecs_evites": 0, "contradictions": 0, "taux_nouveaute": 1.0, "termine": "budget", "pas": 21}
+
+=== Cas 3 : l'opérateur avec un échec connu (le refus revient) ===
+{"nouveaux": 2, "repetitions_evitees": 0, "echecs_evites": 1, "contradictions": 0, "taux_nouveaute": 0.6667, "termine": "fixpoint (frontière vide)", "pas": 3}
+
+=== Cas 4 : la contradiction (p et non-p) ===
+{"nouveaux": 1, "repetitions_evitees": 0, "echecs_evites": 0, "contradictions": 1, "taux_nouveaute": 1.0, "termine": "contradiction (760c48eb ↔ 049e5547)", "pas": 1}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/tests/test_moteur.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"test_moteur.py — l'anti-boucle du moteur de pensée : 5 invariants mesurés.\n\nCe que le test verrouille :\n  1. **la boucle pure** (l'opérateur identité) : les ré … [3537 caractères tronqués]`
+
+  ```
+OK boucle pure : 1 nouveau, 1 répétition comptée, fixpoint
+OK progrès : 1,0 de nouveauté, budget
+OK mémoire des échecs : 1 état réfuté exclu et compté
+OK contradiction : p et non-p → terminaison
+OK trace : 10 pas tracés, gardes ['deja_vu', 'nouveau']
+MOTEUR : 5/5 invariants d'anti-boucle
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-anti-boucle.md <<'MD'\n# L'anti-boucle du moteur de pensée — mesurée, pas promise\n\n> **Ce que ce document est.** Les **cinq gardes** qui empêchent le moteur de pensée de tourner en\n> rond, le **rapport de cir … [3687 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 827 fichiers, le disque en a 828
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1163 caractères tronqués]`

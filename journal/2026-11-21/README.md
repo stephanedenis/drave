@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**16 commits** · **2 session(s)** · **7 thème(s)**
+**17 commits** · **2 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 5 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 2 | [docs.md](docs.md) |
+| docs | 3 | [docs.md](docs.md) |
 | mesures | 4 | [mesures.md](mesures.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -24,7 +24,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 95.1 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 499.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 500.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -46,6 +46,7 @@
 | 08:51 | `9f0d76d7` | ÉTAT — LA NUIT EST CLOSE : PALIER 1 PLAFONNE, REJEU DES FENÊTRES, MATRICE REGISTRE/HORS REGISTRE ; PASSE 88/3 (sessions corrigé) |
 | 09:28 | `ef9b48a5` | RSN À TROIS NIVEAUX — LA STRUCTURE DE NIPADA APPLIQUÉE À LA RSN : LE NOYAU (Ł3, INFÉRENCES FORTES, LA SPÉCIFICATION PORTABLE), LES FAITS (DEGRÉS [0,1], FALSIFIABLES, LE FLOU N'EST PAS UNE PREUVE), LES AFFIRMATIONS (CANDIDATES, LE CONTEXTE SOURCE PRÉCIEUX) ; LA RÈGLE DE PROMOTION ET L'EXTENSIBILITÉ PAR COUCHES |
 | 09:57 | `060cb5fa` | RSN, LES TRAVAUX COMPARABLES — LE DÉCOUPLAGE SAVOIR/RAISONNEMENT (WANG 2026), LA STRATIFICATION (NIPADA), LES ASSISTANTS DE PREUVE, PSL, ZADEH, PROBLOG, RDF-STAR, PROV-O, LES TMS, DUNG, DEEPPROBLOG ; CE QUE LA RSN REPREND, CE QU'ELLE ÉCARTE, CE QU'ELLE A D'ORIGINAL |
+| 12:07 | `1da43ffa` | INTERFACE RSN — CINQ VERBES (ASSERT, QUERY, PROMOTE, EXPLAIN, CONTEXT), SIX PARADIGMES (FORMEL, FLOU, PROBABILISTE, PROVENANCE, TMS, DUNG), LE TEST DE CONFORMITÉ 5/5 SUR LES TROIS ADAPTATEURS : LA SUBSTITUTION EST MESURÉE |
 
 ## Le récit de la journée (écrit à la main)
 
