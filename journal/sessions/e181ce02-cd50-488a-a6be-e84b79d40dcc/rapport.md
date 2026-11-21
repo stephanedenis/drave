@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 497.3 h |
-| Tours | 226 |
-| Messages | 4522 |
-| Appels d'outils | 4028 |
+| Durée | 499.4 h |
+| Tours | 227 |
+| Messages | 4530 |
+| Appels d'outils | 4034 |
 | Fichiers touchés | 25 |
-| Commandes | 3350 |
+| Commandes | 3356 |
 | Sous-agents | 43 |
-| Commits | 530 |
+| Commits | 531 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -525,6 +525,8 @@
 **Tour 225** — Comment trouver la meilleure RSN pour la base et garder une extensibilité de concept? Explore la vision structurelle de Nipada. Tu devrais y retrouver 3 niveaux qui devrait correspondre à un modèle RSN. CÀ'Est à dire un noyau mathématique robuste permettant des inférences fortes, une couche de faits falsifiables et inférables en logique floue , puis une couche d'affirmation candidates dont on gard … [35 caractères tronqués]
 
 **Tour 226** — note tout ça et fais de recherche pour trouver des approches comparable dans les travaux de recherche des autres chercheurs
+
+**Tour 227** — On doit donc envisages une interface qui pourrait être éventuellement compatible avec tous ces paradigmes si on veut maintenir la modularité et capacité de substitution des blocs
 
 ## 2. Déroulé, étape par étape
 
@@ -11966,6 +11968,48 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - bash — Corriger les compteurs et la carte
 - bash — Committer la recherche des comparables
 
+**Synthèse produite :**
+
+⏵ C'est noté dans la théorie, et la recherche situe la RSN parmi les travaux existants
+
+\## Ce qui est dans le dépôt
+
+**`docs/theorie/rsn-3-niveaux.md`** (committé `ef9b48a5`) — la structure : le **noyau** (Ł3, inférences démontrées, la spécification portable), les **faits** (degrés [0,1], falsifiables, le flou n'est pas une preuve), les **affirmations** (candidates, le contexte source précieux), la **règle de promotion** et l'**extensibilité par couches**.
+
+**`reports/rapport-rsn-comparables.md`** (committé `060cb5fa`) — la recherche bibliographique.
+
+\## Les travaux comparables trouvés
+
+| approche | référence | ce que la RSN en reprend | ce qu'elle écarte |
+|---|---|---|---|
+| **le découplage savoir/raisonnement** | Wang 2026, [Zenodo](https://zenodo.org/records/20709229) — 3 modules, 496 555 faits, incertitude quantifiée | la séparation en 3 étages, la traçabilité | les modules d'entraînement (la RSN sépare des **niveaux de qualification**) |
+| **les assistants de preuve** | Lean 4, Coq, Isabelle | le **kernel auditable**, la séparation automatismes/noyau | la lourdeur |
+| **la programmation logique** | Prolog, Datalog | l'unification et la résolution | le moteur complet |
+| **la logique trinaire** | Łukasiewicz (Ł3) | le tri-état (prouvé/réfuté/inconnu) | — |
+| **Probabilistic Soft Logic** | Bach et al., JMLR 2017 ([papier](http://xxx.itp.ac.cn/abs/1505.04406v1)) | les **degrés [0,1]** continus, les règles pondérées | le champ de Markov complet |
+| **la logique floue** | Zadeh, 1965 | le degré de confiance | la théorie complète |
+| **ProbLog / aProbLog** | Kimmig et al. ([papier](https://ar5iv.labs.arxiv.org/html/1312.4328)) | la séparation faits/règles | la sémantique **probabiliste** (la RSN est fuzzy) |
+| **RDF-star** | le W3C ([spéc.](https://www.w3.org/2021/rdf-star/)) | les **assertions sur les assertions** = le contexte source | le modèle RDF complet |
+| **PROV-O** | le W3C ([spéc.](https://www.w3.org/TR/prov-o/)) | la traçabilité (entité/activité/agent) | le vocabulaire OWL |
+| **les truth maintenance systems** | Doyle 1979, de Kleer 1986 | le statut et la justification | la propagation complète |
+| **les argumentations frameworks** | Dung 1995 | le statut et la réfutation explicite | le calcul des extensions |
+| **DeepProbLog** | Manhaeve et al., NeurIPS 2018 ([papier](https://neurips.cc/virtual/2018/spotlight/12755)) | le **pont** neuronal → symbolique | — |
+
+\## Ce que la recherche dit (l'honnête)
+
+**La structure en trois niveaux est convergent
+… [863 caractères tronqués]
+
+### Tour 227 — On doit donc envisages une interface qui pourrait être éventuellement compatible avec tous ces paradigmes si on veut mai … [58 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Écrire l'interface RSN
+- bash — Lier l'interface
+- bash — Trimmer la carte et corriger les compteurs
+- bash — Trimmer les lignes de la carte
+- bash — Committer l'interface RSN
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12086,7 +12130,7 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3310 autres
+- … et 3316 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12764,4 +12808,5 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - RSN — LA FONDATION DE LA PENSÉE EST POSÉE : LE CANDIDAT, L'ÉTAT, LE MERKLE, LE CHEMIN SURFACE → RSN (19/20 PHRASES AVEC PRÉDICATION, 34,5 CANDIDATS/PHRASE, 5/5 
 - RSN À TROIS NIVEAUX — LA STRUCTURE DE NIPADA APPLIQUÉE À LA RSN : LE NOYAU (Ł3, INFÉRENCES FORTES, LA SPÉCIFICATION PORTABLE), LES FAITS (DEGRÉS [0,1], FALSIFIA
 - RSN, LES TRAVAUX COMPARABLES — LE DÉCOUPLAGE SAVOIR/RAISONNEMENT (WANG 2026), LA STRATIFICATION (NIPADA), LES ASSISTANTS DE PREUVE, PSL, ZADEH, PROBLOG, RDF-STA
+- INTERFACE RSN — CINQ VERBES (ASSERT, QUERY, PROMOTE, EXPLAIN, CONTEXT), SIX PARADIGMES (FORMEL, FLOU, PROBABILISTE, PROVENANCE, TMS, DUNG), LE TEST DE CONFORMIT
 

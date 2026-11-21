@@ -10,6 +10,7 @@
 |---|---|
 | [la vision](vision.md) — le bus d'événements, les blocs, l'hybridation, ce qu'elle refuse | |
 | [la RSN à trois niveaux](rsn-3-niveaux.md) — le noyau, les faits, les affirmations | [le rapport](../../reports/rapport-rsn.md) |
+| [l'interface de la RSN](rsn-interface.md) — cinq verbes, six paradigmes, la substitution | [les comparables](../../reports/rapport-rsn-comparables.md) |
 | [la mission](../methode/mission.md) — les deux programmes, l'ordre des priorités | |
 | [l'état](../pilotage/en-cours.md) — ce qui est en cours, les chiffres qui comptent, les questions | |
 | [la roadmap](../pilotage/roadmap.md) — les chantiers A, B, N, R et la file « jamais en attente » | |
@@ -41,7 +42,7 @@
 | **B5/B6** les jeux symboliques | **faits** — 112 items, 100 % au niveau 4, pensée 5/5 | [le concept](jeux-symboliques.md) · [la fiche](../../reports/rapport-jeux-symboliques.md) |
 | **B7/B8** les langues et les maîtres | **faits** — 71 langues, 449/449, livre 10/10, go 10/10 | [le concept](jeux-symboliques.md) · [la fiche](../../reports/rapport-langues-maitres.md) |
 | **B9** le [banc externe](../theorie/glossaire/entrees/banc-externe.md) | **mesuré** — seuil 9,23–9,96 M, 31,63 M/610 4,40 %, fenêtre, négatif 30 langues | [le concept](../implantation/llm-externe.md) · [la fiche](../../reports/rapport-deepseek.md) |
-| **B10** le protocole sémantique | **premier passage** — encodeur 0,426 ; décodeur négatif (12,7/5,3 vs 39,6) | [le protocole](protocole-semantique.md) · [la fiche](../../reports/rapport-semantique.md) |
+| **B10** le protocole sémantique | **premier passage** — encodeur 0,426 ; décodeur négatif | [le protocole](protocole-semantique.md) · [la fiche](../../reports/rapport-semantique.md) |
 | **B11** la base typée | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (invariance 37,0 %) ; codec + [contexte](../theorie/glossaire/entrees/contexte.md) 528/528 (100 %) ; natif contexte suffixé 59,8/40,7 ; **restitution du code 100 %**, surface **33/79** | [la note](semantique-universaux.md) · [la fiche](../../reports/rapport-universaux.md) |
 | **A7.5–A7.26** cache [KV](../theorie/glossaire/entrees/kv.md) et grappe réseau | **campagne** — 22 mesures, du cache int8 aux seuils ; voir les fiches | [l'index](../../reports/INDEX.md) |
 | **B24–B27** [routeur](../theorie/glossaire/entrees/routeur.md), M8, M6 | **partiels/négatifs** — confiance, [rejeu](../theorie/glossaire/entrees/rejeu.md), conflit, moteur ; voir les fiches | [l'index](../../reports/INDEX.md) |
@@ -57,8 +58,8 @@
 | **B16** M7-bis LFU | **fréquence** — LFU +23,1 pts répétés, +4,25 suffixe, +8,7 nouveaux ; LFU+récence = LFU ; contexte négatif | [la fiche](../../reports/rapport-m7-frequence.md) |
 | **B14** M2 dans la chaîne | **rameau** — M1 100 %, M2 93,4/93,6 %, aucun étage ne consomme M2 ; M5 plateau 18,70 % vs 12,60 % | [la fiche](../../reports/rapport-pipeline-m2.md) |
 | **B15** M1 multilingue | **66 langues** — 528/528 ; 26/26 variantes et 15/15 interlangues invariantes ; contrôle permuté 0/90 % | [la fiche](../../reports/rapport-multilingue.md) |
-| **B13** la chaîne sémantique | **intégration** — M1 528/528 ; M5 contexte 18,7 % vs 12,6 % ; M6 94,3 % ; M8 57,95 % (borne haute) | [la fiche](../../reports/rapport-pipeline-semantique.md) · [le code](../../tools/cerveau/pipeline_semantique.py) |
-| **B12** les modules cerveau-langage | **premier passage** — M1 528/528 ; M2 **98,6 / 93,2** (double dissociation) ; M8 **96,48 %** hors stock ; M5/M6/M7 négatifs ; M9 lésions | [les modules](modules-cerveau-langage.md) · [la fiche](../../reports/rapport-cerveau-modules.md) |
+| **B13** la chaîne sémantique | **intégration** — M1 528/528 ; M5–M8 mesurés | [la fiche](../../reports/rapport-pipeline-semantique.md) · [le code](../../tools/cerveau/pipeline_semantique.py) |
+| **B12** les modules cerveau-langage | **premier passage** — M2 **98,6 / 93,2** (double dissociation) ; M8 **96,48 %** hors stock ; M5/M6/M7 négatifs ; M9 lésions | [les modules](modules-cerveau-langage.md) · [la fiche](../../reports/rapport-cerveau-modules.md) |
 | **C1–C7** les sept chantiers | **mesurés** — [corpus](../theorie/glossaire/entrees/corpus.md), traduction, restitution, styles, domaines, documentation, pensée | [l'état](../pilotage/en-cours.md) |
 
 ## Les preuves

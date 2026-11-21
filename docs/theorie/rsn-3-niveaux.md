@@ -97,6 +97,12 @@ de l'analyseur).
 **Ce qui manque, dans l'ordre** : le `Noyau` (les axiomes et les règles), le `contexte` structuré
 (le texte, le span, la version), et les **règles de composition floues** (le niveau 2 → le niveau 1).
 
+## L'interface (la substitution)
+
+Les cinq verbes qui rendent un paradigme **substituable** — `assert`, `query`, `promote`, `explain`,
+`context` — et les six adaptateurs (formel, flou, probabiliste, provenance, TMS, Dung) :
+[`rsn-interface.md`](rsn-interface.md).
+
 ## Les limites
 
 - **Nipada n'est pas Drave** : sa vision est un **système formel complet** ; la RSN en reprend la

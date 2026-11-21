@@ -73645,3 +73645,97 @@ Sources:
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-rsn-comparables.md docs/theorie/rsn-3-niveaux.md docs/theorie/carte.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"RSN, LES TRAVAUX COMPARABLES — LE DÉCOUPLAGE SAVOIR/RAISONNEMENT (WAN … [470 caractères tronqués]`
+
+  ```
+create mode 100644 journal/2026-11-21/moteur.md
+ create mode 100644 reports/rapport-rsn-comparables.md
+060cb5fa RSN, LES TRAVAUX COMPARABLES — LE DÉCOUPLAGE SAVOIR/RAISONNEMENT (WANG 2026)
+   ef9b48a5..060cb5fa  s/v7 -> s/v7
+   ef9b48a5..060cb5fa  master -> master
+sam 21 nov 2026 10:00:34 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ C'est noté dans la théorie, et la recherche situe la RSN parmi les travaux existants
+
+## Ce qui est dans le dépôt
+
+**`docs/theorie/rsn-3-niveaux.md`** (committé `ef9b48a5`) — la structure : le **noyau** (Ł3, inférences démontrées, la spécification portable), les **faits** (degrés [0,1], falsifiables, le flou n'est pas une preuve), les **affirmations** (candidates, le contexte source précieux), la **règle de promotion** et l'**extensibilité par couches**.
+
+**`reports/rapport-rsn-comparables.md`** (committé `060cb5fa`) — la recherche bibliographique.
+
+## Les travaux comparables trouvés
+
+| approche | référence | ce que la RSN en reprend | ce qu'elle écarte |
+|---|---|---|---|
+| **le découplage savoir/raisonnement** | Wang 2026, [Zenodo](https://zenodo.org/records/20709229) — 3 modules, 496 555 faits, incertitude quantifiée | la séparation en 3 étages, la traçabilité | les modules d'entraînement (la RSN sépare des **niveaux de qualification**) |
+| **les assistants de preuve** | Lean 4, Coq, Isabelle | le **kernel auditable**, la séparation automatismes/noyau | la lourdeur |
+| **la programmation logique** | Prolog, Datalog | l'unification et la résolution | le moteur complet |
+| **la logique trinaire** | Łukasiewicz (Ł3) | le tri-état (prouvé/réfuté/inconnu) | — |
+| **Probabilistic Soft Logic** | Bach et al., JMLR 2017 ([papier](http://xxx.itp.ac.cn/abs/1505.04406v1)) | les **degrés [0,1]** continus, les règles pondérées | le champ de Markov complet |
+| **la logique floue** | Zadeh, 1965 | le degré de confiance | la théorie complète |
+| **ProbLog / aProbLog** | Kimmig et al. ([papier](https://ar5iv.labs.arxiv.org/html/1312.4328)) | la séparation faits/règles | la sémantique **probabiliste** (la RSN est fuzzy) |
+| **RDF-star** | le W3C ([spéc.](https://www.w3.org/2021/rdf-star/)) | les **assertions sur les assertions** = le contexte source | le modèle RDF complet |
+| **PROV-O** | le W3C ([spéc.](https://www.w3.org/TR/prov-o/)) | la traçabilité (entité/activité/agent) | le vocabulaire OWL |
+| **les truth maintenance systems** | Doyle 1979, de Kleer 1986 | le statut et la justification | la propagation complète |
+| **les argumentations frameworks** | Dung 1995 | le statut et la réfutation explicite | le calcul des extensions |
+| **DeepProbLog** | Manhaeve et al., NeurIPS 2018 ([papier](https://neurips.cc/virtual/2018/spotlight/12755)) | le **pont** neuronal → symbolique | — |
+
+## Ce que la recherche dit (l'honnête)
+
+**La structure en trois niveaux est convergente**, pas une invention : Wang 2026, les standards du web sémantique, la logique floue et la programmation logique probabiliste la retrouvent par des chemins différents. **Ce qui est propre à la RSN** : la **combinaison** — un noyau **minimal** (Ł3), des faits **fuzzy** (Zadeh, pas probabilistes), des affirmations **à contexte source** — **sans** les coûts des cadres complets.
+
+**Ce qui manque** : pas de kernel de vérification (les assistants de preuve l'ont), pas de sémantique probabiliste (PSL/ProbLog font mieux sur l'incertitude), pas de calcul d'extensions (Dung), pas de format standard publié (RDF-star/PROV-O en sont).
+
+**La leçon retenue** : ne pas réinventer le noyau, ne pas réinventer la provenance, **mais** garder le **contrat minimal** qui rend la RSN utilisable par un moteur de pensée — c'est la position de Drave, et elle est **défendable**.
+
+
+## Tour 227
+
+### 👤 Utilisateur
+
+On doit donc envisages une interface qui pourrait être éventuellement compatible avec tous ces paradigmes si on veut maintenir la modularité et capacité de substitution des blocs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; cat > docs/theorie/rsn-interface.md <<'MD'\n# L'interface de la RSN — cinq verbes, six paradigmes, la substitution\n\n> **Ce que ce document est.** Le **contrat** qui rend la RSN **substituable** : cinq verbes qui\n> couvrent t … [6169 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 12:05:41 EST
+     · navigation : docs/theorie/rsn-interface.md n'a aucun lien entrant
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/rsn-3-niveaux.md'); t=p.read_text()\nif \"rsn-interface.md\" not in t:\n    t=t.replace(\"## Les limites\", \"## L'interface (la substitution)\\n\\nLes cinq verbes qui re … [1391 caractères tronqués]`
+
+  ```
+lien ajouté à rsn-3-niveaux
+     · annotation : docs/theorie/rsn-interface.md → ../../tools/rsn_interface.py (cassé)
+     · docs/theorie/carte.md : 1114 mots > budget 1100 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/rsn_interface.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"rsn_interface.py — l'interface de la RSN : cinq verbes, la substitution des paradigmes.\n\nLE CONTRAT (voir `docs/theorie/rsn-interface.md`) : un paradigme (formel, f … [7535 caractères tronqués]`
+
+  ```
+syntaxe OK
+RSNBase → CONFORME {'idempotent': True, 'inconnu_sur_absent': True, 'refus_sans_preuve': True, 'explain_complet': True, 'contexte_exact': True, 'conforme': True}
+RSNFlou → CONFORME {'idempotent': True, 'inconnu_sur_absent': True, 'refus_sans_preuve': True, 'explain_complet': True, 'contexte_exact': True, 'conforme': True}
+RSNProvenance → CONFORME {'idempotent': True, 'inconnu_sur_absent': True, 'refus_sans_preuve': True, 'explain_complet': True, 'contexte_exact': True, 'conforme': True}
+     · compteurs : en-cours.md dit 130 documents, le disque en a 131
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/theorie/carte.md'); t=p.read_text()\nt=t.replace(\"**premier passage** — encodeur 0,426 ; décodeur négatif (12,7/5,3 vs 39,6)\", \"**premier passage** — encodeur 0,426 ; déco … [600 caractères tronqués]`
+
+  ```
+· docs/theorie/carte.md : 1110 mots > budget 1100 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"B13\" docs/theorie/carte.md | head -1 | cut -c1-300; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/theorie/carte.md'); t=p.read_text()\n# trims sûrs : retirer les précisions numériques redondantes (elles vivent … [539 caractères tronqués]`
+
+  ```
+61:| **B13** la chaîne sémantique | **intégration** — M1 528/528 ; M5 18,7 % vs 12,6 % ; M6 94,3 % ; M8 57,95 % (borne haute) | [la fiche](../../reports/rapport-pipeline-semantique.md) · [le code](../../tools/cerveau/pipeline_semantique.py) |
+     · docs/theorie/carte.md : 1107 mots > budget 1100 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/carte.md'); t=p.read_text()\nt=t.replace(\"**intégration** — M1 528/528 ; M5 18,7 % vs 12,6 % ; M6 94,3 % ; M8 57,95 % (borne haute)\", \"**intégration** — M1 528/528 ; M … [875 caractères tronqués]`
