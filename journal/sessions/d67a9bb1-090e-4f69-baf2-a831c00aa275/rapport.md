@@ -7,12 +7,12 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 95.0 h |
+| Durée | 95.1 h |
 | Tours | 90 |
-| Messages | 1602 |
-| Appels d'outils | 1405 |
+| Messages | 1607 |
+| Appels d'outils | 1408 |
 | Fichiers touchés | 44 |
-| Commandes | 1246 |
+| Commandes | 1247 |
 | Sous-agents | 7 |
 | Commits | 123 |
 | Compactages de contexte | 2 |
@@ -60,6 +60,8 @@
 - **complete** — De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches 
 … [188 caractères tronqués]
 - **create** — De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du pal
+… [326 caractères tronqués]
+- **complete** — De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du pal
 … [326 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -2264,7 +2266,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 90 — <goal_round> Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre le … [1076 caractères tronqués]
 
-*83 appels d'outils.* Actions notables :
+*86 appels d'outils.* Actions notables :
 
 - bash — Spot-check the literature corpus quality
 - bash — Ten-minute pause and progress
@@ -2280,7 +2282,45 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - bash — Ten-minute pause with load check
 - bash — Commit tranches 4-5 data and update the fiche
 - bash — Ten-minute pause with tranche counts
-- … et 60 autres
+- … et 63 autres
+
+**Synthèse produite :**
+
+⏵ Bilan de 9 h — le palier 1 plafonne, un défaut de méthode trouvé et corrigé, la matrice renverse le classement, un seul item non fait (l'adjudication J4)
+
+\# La nuit en clair
+
+**19 commits entre 16 h 45 et 8 h 54, tête `9f0d76d7`.** Arbre propre, poussé, revue verte, budget respecté, journal et schémas verts. Les deux chaînes GPU sont terminées.
+
+\## 1. Les runs du palier 1 — ✅
+
+Deux graines reprises de 30 000 à 110 000 pas, PPL wikitext2 à chaque tranche :
+
+| pas | p1 (graine 1) | p2 (graine 2) |
+|---:|---|---|
+| 30 000 | 7,7044 | 7,2790 |
+| 50 000 | 7,1953 | 7,0021 |
+| 80 000 | 7,0881 | **6,8757** |
+| 110 000 | **7,0342** | 7,0477 |
+
+**Les deux plafonnent vers 7,0** ; p2 passe par un minimum à 80 000 puis remonte, p1 stagne après 90 000. Pendant ce temps la PPL du val de v1 continue de baisser (2,93-2,94) : le modèle se spécialise au lieu de généraliser. `wiki_big` au même pas fait **6,8349** — le palier 1 reste 2-3 % derrière, sans jamais passer devant. Fiche `reports/rapport-nuit-palier1-110k.md`.
+
+\## 2. Le défaut de méthode — ⚠️ le plus important de la nuit
+
+Chaque tranche d'entraînement repartait le compteur de fenêtres à zéro : **les onze tranches rejouent le même échantillon de 80 000 fenêtres** (~82 Mo, soit 2,2 % des octets du palier 1 et 9,9 % de `wiki_big`), pas 900 Mo de données neuves. Preuve dans les journaux : la perte du pas 1 de p1 est 5,6107 → 1,2005 → 1,0917 → 1,0316 (le même premier lot, un modèle qui s'améliore). Correctif `--compteur-suite` écrit, **validé** (pas 1 : 5,6844 → 5,5582, compteur 3 → 5) et passé dans `bench/chaine_nuit.sh` ; **pas** appliqué aux runs de la nuit pour rester comparable à `wiki_big`. Fiche `rapport-rejeu-des-fenetres.md` ; les « époques » de la fiche de nuit sont corrigées.
+
+\## 3. La matrice — le classement s'inverse selon le val
+
+| modèle | pas | wikitext2 (EN) | littérature (FR, autre) | val de son registre |
+|---|---:|---:|---:|---:|
+| nb11 (`wiki_big`) | 110k | **6,8349** | 4,0443 | **2,7227** |
+| v111 (mélange) | 110k | 6,8674 | 3,9872 | 2,7367 |
+| v211 (plein texte) | 110k | 7,0930 | **3,5752** | 3,2288 |
+| p111 (palier 1, g1) | 110k | 7,0342 | 4,1036 | **2,6929** |
+| p211 (palier 1, g2) | 110k | 7,0477 | 4,1306 | **2,6796** |
+
+**Dans son registre, tout se vaut** (2,68-2,74) : 4,4× plus de résumés n'achète rien. **Hors registre** (littérature, jamais vue, val propre pour tous), le **plein texte gagne** (3,58), le mélange suit (3,99), les résumés perdent (4,04-4,13). En anglais, `wiki_big`/mélange mène
+… [1964 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -2385,7 +2425,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1206 autres
+- … et 1207 autres
 
 ## 4. Mesures et résultats marquants
 

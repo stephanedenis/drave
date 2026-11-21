@@ -73168,3 +73168,298 @@ sam 21 nov 2026 00:25:58 EST
 
 **Le test sur les 612 phrases** est la prochaine étape naturelle — il donnera la vraie couverture, pas celle de 20 phrases.
 
+
+## Tour 225
+
+### 👤 Utilisateur
+
+Comment trouver la meilleure RSN pour la base et garder une extensibilité de concept? Explore la vision structurelle de Nipada. Tu devrais y retrouver 3 niveaux qui devrait correspondre à un modèle RSN. CÀ'Est à dire un noyau mathématique robuste permettant des inférences fortes, une couche de faits falsifiables et inférables en logique floue , puis une couche d'affirmation candidates dont on garde précieusement le contexte source.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -rln \"Nipada\\|nipada\" docs/ reports/ 2>/dev/null | head -12; echo \"=== la règle :\"; head -40 docs/methode/panini-nipada.md | cut -c1-140", "description": "Explorer Nipada dans le dépôt"}`
+
+  ```
+sam 21 nov 2026 09:22:39 EST
+docs/archive/note-ingestion-corpus.md
+docs/archive/note-un-pont-par-professeur.md
+docs/methode/panini-nipada.md
+docs/methode/rangement.md
+docs/pilotage/semaine-autonome.md
+docs/theorie/genealogie-des-langues.md
+docs/README.md
+reports/sources-pidgin.json
+reports/07/p7.md
+reports/rapport-inventaire-panini.md
+reports/pensee-inventaire-panini.json
+reports/rapport-atomes-niveaux.md
+=== la règle :
+# Étudier Panini et Nipada, régulièrement
+
+> Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). À lire **à chaque cycle**, avant de conclure sur
+> la généalogie, les styles ou les familles de langues.
+
+## Pourquoi
+
+Les projets **`../Panini/`** et **`../Panini-Research/`** poursuivent le **même objectif par une approche
+complémentaire** : Panini décompose le texte en **14 atomes sémantiques**, Nipada le fait tourner comme un tissu
+computationnel — *algébrique, là où Drave est statistique*. Ils tiennent le **système linguistique** et généralisent
+une **généalogie des langues, dialectes et styles**.
+
+## La règle
+
+À chaque cycle, **lire ce qui a bougé chez eux** (docs, publications, journaux de bord, `git log`) et **confronter
+leurs résultats aux nôtres**.
+… [1047 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls ../Panini-Research/ 2>/dev/null | head -12; ls ../Panini/ 2>/dev/null | head -8", "description": "Voir les projets Panini"}`
+
+  ```
+AGENTS.md
+archives
+archives_scripts_v1
+autonomous-agents
+colab_results
+config
+conftest.py
+copilotage
+data
+deployments
+diagrams_dhatu_cycles
+docs
+config
+CONTEXTE-IA.md
+copilotage
+corpus
+data
+Dockerfile.template
+docs
+experiments
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"logique floue\\|fuzzy\\|noyau math\\|affirmation\" ../Panini-Research/docs/ 2>/dev/null | head -8; echo \"=== la structure :\"; ls ../Panini-Research/docs/ 2>/dev/null | head -15", "description": "Chercher les 3 niveaux c … [12 caractères tronqués]`
+
+  ```
+../Panini-Research/docs/journal-de-bord/2026-04-22.md
+../Panini-Research/docs/journal-de-bord/2026-04-25.md
+../Panini-Research/docs/journal-de-bord/2026-05-21.md
+../Panini-Research/docs/journal-de-bord/2026-05-22.md
+../Panini-Research/docs/journal-de-bord/2026-05-25-ter.md
+../Panini-Research/docs/journal-de-bord/2026-06-28.md
+../Panini-Research/docs/journal-de-bord/2026-07-01.md
+../Panini-Research/docs/journal-de-bord/2026-07-14.md
+=== la structure :
+ARCHITECTURE_NOYAU_NIPADA_v1.0.md
+ARCHITECTURE_NOYAU_NIPADA_v2.0.md
+CADRES_THEORIQUES_ET_IDEES_ORIGINALES.md
+CRITIQUE_NIPADA_2026-07-14.md
+DEMO_NIPADA_UDHR_Article1_COMPARAISON.md
+DEMO_NIPADA_UDHR_Article1_EN.md
+DEMO_NIPADA_UDHR_Article1_FR.md
+DEMO_NIPADA_UDHR_Article1.md
+directives
+ETUDE_PROJET_PARENT_v1.0.md
+images
+journal-de-bord
+MEMO_ARCHITECTURE_NIPADA_v1.md
+NIPADA_SESSION_476_478c_FINAL_REPORT.md
+NIPADA_SESSION_478d_479_FINAL_REPORT.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l ../Panini-Research/docs/ARCHITECTURE_NOYAU_NIPADA_v2.0.md; grep -nE \"^## |^### |noyau|floue|fuzzy|affirmation|candidat|contexte\" ../Panini-Research/docs/ARCHITECTURE_NOYAU_NIPADA_v2.0.md | head -20 | cut -c1-130", "descriptio … [36 caractères tronqués]`
+
+  ```
+81 ../Panini-Research/docs/ARCHITECTURE_NOYAU_NIPADA_v2.0.md
+11:**Ce qui change depuis la v1.0** : la v1.0 définissait le noyau par une **liste d'artefacts
+14:candidates » — voir `DOCUMENT_DE_CONTEXTE_v3.0.md` §4 pour le reclassement détaillé.
+18:## Les trois notions (définitions théoriques)
+22:| **Noyau** | Un **système formel** : langage de termes, unification, inférence (résolution avec retour arrière), réponse **tri
+23:| **NIPADA — couche descriptive** | La **description de la réalité observable** : encyclopédie, graphes de métadonnées, corpus,
+24:| **NIPADA — produit** | L'instanciation complète : **noyau + couche descriptive**, testable ensemble (versionnement couplé). |
+26:## Principe de séparation (phrase de référence)
+28:> Le noyau ne décrit jamais — il infère. NIPADA décrit ce que le noyau ne peut inférer. Les deux
+32:## Versionnement couplé
+34:Un noyau n'est testable qu'à travers sa NIPADA : on teste le couple **Kᵢ + NIPADAᵢ**, jamais un
+35:noyau seul (les corpus signés sont des versions de la couche descriptive).
+37:## Vocabulaire figé (règle de langage)
+41:| **noyau** | le système formel : termes, unification, inférence, tri-état, fondations, certitudes démontrées | un
+… [872 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '50,81p' ../Panini-Research/docs/ARCHITECTURE_NOYAU_NIPADA_v2.0.md | cut -c1-145; echo \"=== le document de contexte :\"; ls ../Panini-Research/docs/ | grep -i \"CONTEXTE\\|DOCUMENT\" | head -3", "description": "Lire la fin de … [24 caractères tronqués]`
+
+  ```
+| **instrument** | une mesure ou un cadre statistique exploratoire (R², H₀, distances) | un critère, une preuve |
+
+Notes : Ł3 ≠ logique floue (le pont est explicite dans le code, mode `lukasiewicz`) ; les usages du
+flou (Zadeh descriptif / Ł3 moteur / poids du graphe) forment **un seul système de qualification**
+à documenter comme tel — aucun de ces usages ne génère ni ne prouve.
+
+## Instanciations candidates (révisables, hors noyau)
+
+| Artefact | Rôle actuel | Statut |
+|---|---|---|
+| Atomes V14 | vocabulaire de prédicats candidats de la couche linguistique | candidat révisable (ablation, justification linguistique) |
+| Encodage leibnizien / « molécules » | choix d'implémentation de la composition | à vérifier, non requis par la théorie |
+| Dhātus / DTP | opérateurs candidats, synthèse historique gloutonne | à redéfinir comme dérivation logique |
+| TrinarySAT / synthétiseur CSP | moteur de contraintes des questions sous-déterminées | outil du noyau (Ł3) |
+| Graphe ontowave / v35 | description topologique (transmission, attribution) | NIPADA |
+| Projections analytiques | pont lexique → primitives candidates | NIPADA (exploitation linguistique) |
+
+## Pointeurs (mettre à jour à la so
+… [1117 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && find .. -maxdepth 4 -type d -name \"philosophy-theory\" 2>/dev/null | head -2; find ../Panini-Research -maxdepth 3 -name \"DOCUMENT_DE_CONTEXTE_v3.0.md\" 2>/dev/null | head -2", "description": "Trouver philosophy-theory"}`
+
+  ```
+../Panini/research/philosophy-theory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls ../Panini/research/philosophy-theory/ | head -20; echo \"=== la stratification :\"; grep -nE \"stratif|niveau|noyau|flou|affirmation\" ../Panini/research/philosophy-theory/VISION_TECHNIQUE_NOYAU_v1.0.md 2>/dev/null | head -12 | cu … [63 caractères tronqués]`
+
+  ```
+ANALYSE_INCOHERENCES_THEORIQUES_v0.1.md
+APPROCHE_NOYAU_REVERIFIEE_v1.0.md
+AUDIT_BIBLIOGRAPHIQUE_SYSTEMATIQUE_v0.1.md
+DOCUMENT_DE_CONTEXTE_v2.0.md
+DOCUMENT_DE_CONTEXTE_v3.0.md
+GRILLE_ABLATION_V14_v0.1.md
+LANGAGES_CONTENEURS_v1.0.md
+LEXIQUE_TRANSMISSION_V15_MULTILINGUE_v0.1.md
+PANINI_PHILOSOPHY_ANALYSIS.md
+PANINI_WHITEPAPER.md
+PORTEFEUILLE_CANDIDATS_NOYAU_v1.0.md
+PREDICTION_V16_CORPUS_334_v0.1.md
+PROPOSITION_CANDIDAT_ORIGINAL_V15_TRANSMISSION_v0.1.md
+RECHERCHE_INITIATIVES_NOYAU_DEDUCTIF_v1.0.md
+REVISION_FONDATIONS_CORE_CERTITUDES_v1.0.md
+REVISION_FONDATIONS_NOYAU_QUESTIONNEMENTS_v1.0.md
+REVISION_MODELE_ANALYTIQUE_GENERATIF_v1.0.md
+REVISION_NOYAU_FORMEL_PROLOG_v1.0.md
+ROADMAP_NOYAU_v1.0.md
+SPEC_EXPERIMENTALE_ALPHA_2_3_v0.1.md
+=== la stratification :
+1:# Vision technique du noyau — le noyau est une spécification, pas un programme (v1.0)
+5:en transformant les « décisions du §8 » en **résolutions techniques** (stratification, axes
+6:orthogonaux, alignement de nom), et en fixant la règle de portabilité du noyau.
+15:**Le noyau est une spécification, pas un programme.** Sa robustesse ne dépend d'*aucune*
+17:pouvoir optimiser, ou porter, ou répliquer fonctionnellement le noyau en C++, Rust, 
+… [699 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\|^### \" ../Panini/research/philosophy-theory/DOCUMENT_DE_CONTEXTE_v3.0.md | head -16 | cut -c1-120; echo \"=== le § 4 :\"; sed -n \"$(grep -n '^## 4' ../Panini/research/philosophy-theory/DOCUMENT_DE_CONTEXTE_v3.0.md  … [155 caractères tronqués]`
+
+  ```
+15:## 0. Ce qui change depuis la v2.0
+30:## 1. La raison d'être (reformulée)
+52:## 2. L'architecture théorique en deux niveaux
+54:### 2.1 Niveau A — le noyau : calcul et certitudes
+80:### 2.2 Niveau B — NIPADA : la couche descriptive
+96:### 2.3 Le pont entre les niveaux, et l'épistémologie du système
+110:## 3. La linguistique et les langages : exploitation, pas source
+126:## 4. Reclassement des concepts hérités de l'historique d'implémentation
+148:## 5. Critère de sortie révisé
+172:## 6. Règles d'or (mises à jour)
+190:## 7. État honnête (au 2026-09-09)
+207:## 8. Prochaines actions
+219:## 9. Pointeurs (mettre à jour à la source, jamais dans les copies)
+=== le § 4 :
+## 4. Reclassement des concepts hérités de l'historique d'implémentation
+
+Cette section est le cœur de la révision : les éléments ci-dessous ont été construits pendant un an
+d'implémentation et **ne définissent plus** la vision. Ils ne sont pas niés : ils sont **situés**.
+
+| Concept (origine) | Statut v3.0 | Ce qui est conservé |
+|---|---|---|
+| **Atomes V14** (14 primitives, ω_V14, ordre canonique) | **vocabulaire candidat** de la couche linguistique, révisable | la contrainte d'un pet
+| **Encodage leibnizien** (produits
+… [2020 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '52,96p' ../Panini/research/philosophy-theory/DOCUMENT_DE_CONTEXTE_v3.0.md | cut -c1-150; echo \"=== le pont :\"; sed -n '96,110p' ../Panini/research/philosophy-theory/DOCUMENT_DE_CONTEXTE_v3.0.md | cut -c1-150", "description" … [37 caractères tronqués]`
+
+  ```
+## 2. L'architecture théorique en deux niveaux
+
+### 2.1 Niveau A — le noyau : calcul et certitudes
+
+Le noyau est un **système formel**, défini par cinq éléments :
+
+1. **Un langage de termes** (structures arborées : variables, constantes, termes composés) sans
+   contenu linguistique ni historique.
+2. **Une opération d'inférence** : l'unification (égalité structurelle, contrôle d'occurrence) et la
+   résolution avec retour arrière, qui **remplace les distances sémantiques** par de la contrainte.
+3. **Une logique de réponse tri-état** : *prouvé*, *réfuté* (négation explicitement démontrée),
+   *inconnu* — l'inconnu n'est pas un échec, c'est une frontière épistémique.
+4. **Des fondations mathématiques** : égalité (réflexivité, symétrie, transitivité), ordre,
+   arithmétique (récursive, décidable), composition.
+5. **Une bibliothèque de certitudes** : énoncés **clos** et **démontrés**, intégrés au noyau avec
+   leur provenance (domaine, méthode de preuve, trace). Toute certitude démontrée, quel que soit son
+   domaine, appartient au noyau : c'est un théorème, pas une donnée locale.
+
+**Autosuffisance (« iso »)** signifie désormais : *chaque théorème du noyau se dérive des axiomes et
+règl
+… [2500 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/theorie/rsn-3-niveaux.md <<'MD'\n# La RSN à trois niveaux — le noyau, les faits, les affirmations\n\n> **Ce que ce document est.** La **structure de la RSN** que la base doit adopter, alignée sur\n> l'architecture de **Nip … [7100 caractères tronqués]`
+
+  ```
+· navigation : docs/theorie/rsn-3-niveaux.md n'a aucun lien entrant
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ la page vivante date du dernier commit (2026-11-21)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"parcours\\|vision.md\\|modele-natif\" docs/theorie/carte.md | head -5 | cut -c1-120; grep -n \"^## \" docs/theorie/carte.md | head -8 | cut -c1-100", "description": "Voir la carte"}`
+
+  ```
+3:> **Le hub des sujets.** Un lien, **un fichier**. Les autres portes : [la vision](vision.md) ·
+11:| [la vision](vision.md) — le bus d'événements, les blocs, l'hybridation, ce qu'elle refuse | |
+23:| **le bus, les flux** | [la vision](vision.md) · [le format de flux](../implantation/format-flux.md) · [les clusters
+25:| **le bloc classique** | [la vision](vision.md) · [la modularisation](../methode/modularisation.md) | [les jeux](jeu
+7:## Où l'on va, où l'on en est
+19:## Les blocs
+33:## Les chantiers
+63:## Les preuves
+71:## L'archive et la théorie
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/theorie/carte.md'); t = p.read_text()\nt = t.replace(\"| [la vision](vision.md) — le bus d'événements, les blocs, l'hybridation, ce qu'elle refuse | |\",\n              \"| [la … [900 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 129 documents, le disque en a 130
+     · docs/theorie/carte.md : 1115 mots > budget 1100 (T1)
+  ✅ la page vivante date du dernier commit (2026-11-21)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/theorie/carte.md'); t=p.read_text()\nt=t.replace(\"| [la RSN à trois niveaux](rsn-3-niveaux.md) — le noyau, les faits flous, les affirmations candidates | [le rapport](../../ … [811 caractères tronqués]`
+
+  ```
+· docs/theorie/carte.md : 1113 mots > budget 1100 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/theorie/carte.md'); lignes=p.read_text().splitlines(keepends=True)\nidx=sorted(range(len(lignes)), key=lambda i: -len(re.findall(r\"\\S+\", lignes[i])))[:4]\nfor i in idx: pr … [122 caractères tronqués]`
+
+  ```
+44 51 | **B11** la base d'universaux typés | **premier passage** — codec 100 % (79/79, 449/449) ; natif sy
+43 38 | **B10** le protocole sémantique | **premier passage** — encodeur convergent (0,426), décodeur néga
+60 37 | **B12** les modules cerveau-langage | **premier passage** — M1 528/528 ; M2 **98,6 / 93,2** (doubl
+59 35 | **B13** la chaîne sémantique | **intégration** — M1 528/528 ; M5 contexte 18,7 % vs 12,6 % ; M6 94
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '44p' docs/theorie/carte.md | cut -c1-300", "description": "Voir la ligne B11"}`
+
+  ```
+| **B10** le protocole sémantique | **premier passage** — encodeur convergent (0,426), décodeur négatif (référence complète : 12,7 / 5,3 contre 39,6 ; référence tronquée : 14,0 / 5,4 contre 38,8) | [le protocole](protocole-semantique.md) · [la fiche](../../reports/rapport-semantique.md) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/carte.md'); t=p.read_text()\nt=t.replace(\"**premier passage** — encodeur convergent (0,426), décodeur négatif (référence complète : 12,7 / 5,3 contre 39,6 ; référence tr … [357 caractères tronqués]`
+
+  ```
+· docs/theorie/carte.md : 1103 mots > budget 1100 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-21)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/theorie/carte.md'); t=p.read_text()\nt=t.replace(\"| **B11** la base d'universaux typés |\", \"| **B11** la base typée |\")\np.write_text(t)\nPY\npython3 tools/taille_documents.p … [828 caractères tronqués]`

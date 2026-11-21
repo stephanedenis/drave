@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 00:07 | `4c86d1fe` | ÉTAT — LA PUCE N REPASSE SOUS 80 MOTS (REJEU DES FENÊTRES RESSERRÉ) | `en-cours.md`, `README.md`, `attention.md` (+5) |
 | 00:13 | `175e290c` | ÉTAT — LA PAGE VIVANTE PASSE AU 21/11 (LE REJEU DES FENÊTRES AJOUTÉ À L'EN-TÊTE) | `en-cours.md`, `README.md`, `attention.md` (+8) |
 | 00:16 | `d724d0d9` | N — LA CHAÎNE DE NUIT PASSE --compteur-suite (LES TRANCHES NE REJOUENT PLUS LES MÊMES FENÊTRES) | `chaine_nuit.sh`, `README.md`, `attention.md` (+6) |
+| 08:51 | `9f0d76d7` | ÉTAT — LA NUIT EST CLOSE : PALIER 1 PLAFONNE, REJEU DES FENÊTRES, MATRICE REGISTRE/HORS REGISTRE ; PASSE 88/3 (sessions corrigé) | `en-cours.md`, `references-non-regression.md`, `README.md` (+5) |
 
 ## Chiffres du jour
 
@@ -21,8 +22,8 @@
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 95.0 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 487.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 95.1 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 496.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 

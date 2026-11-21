@@ -22082,3 +22082,107 @@ budget=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md docs/pilotage/references-non-regression.md && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nÉTAT — LA NUIT EST CLOSE : PALIER 1 PLAFONNE, REJEU DES FENÊTRES, MATRICE REGISTRE/HOR … [685 caractères tronqués]`
+
+  ```
+4672ae24..9f0d76d7  s/v7 -> s/v7
+sam 21 nov 2026 08:53:48 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git status -sb | head -1; git status --short | wc -l; python3 tools/taille_documents.py >/dev/null 2>&1; echo \"budget=$?\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; … [297 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 08:53:54 EST
+## s/v7...origin/s/v7
+0
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     sources et images relatives.
+19
+work/n4/p1.chaine.log:2
+work/n4/p2.chaine.log:2
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-a334b9f5-7b2f-42d4-b0f3-426e44d882b0","revision":1,"objective":"De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du palier 1, val de `wiki_big`) et écrire la comparaison à pas et époques égales ; (3) dans la fenêtre remisée (avant 19 h 30), l'adjudication de J4 (les 10 désaccords les plus lourds) par un troisième passage API ; (4) passe des 91 portes sur l'arbre de la journée ; fiches, état, commits et push pour chaque résultat, bilan à 9 h.","phase":"active","roundsStarted":2,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-a334b9f5-7b2f-42d4-b0f3-426e44d882b0", "revision": 1}`
+
+> **Objectif** (complete) : De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du palier 1, val de `wiki_big`) et écrire la comparaison à pas et époques égales ; (3) dans la fenêtre remisée (avant 19 h 30), l'adjudication de J4 (les 10 désaccords les plus lourds) par un troisième passage API ; (4) passe des 91 portes sur l'arbre de la journée ; fiches, état, commits et push pour chaque résultat, bilan à 9 h.
+
+
+  ```
+{"goal":{"id":"goal-a334b9f5-7b2f-42d4-b0f3-426e44d882b0","revision":2,"objective":"De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du palier 1, val de `wiki_big`) et écrire la comparaison à pas et époques égales ; (3) dans la fenêtre remisée (avant 19 h 30), l'adjudication de J4 (les 10 désaccords les plus lourds) par un troisième passage API ; (4) passe des 91 portes sur l'arbre de la journée ; fiches, état, commits et push pour chaque résultat, bilan à 9 h.","phase":"complete","roundsStarted":2,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du palier 1, val de `wiki_big`) et écrire la comparaison à pas et époques égales ; (3) dans la fenêtre remisée (avant 19 h 30), l'adjudication de J4 (les 10 désaccords les plus lourds) par un troisième passage API ; (4) passe des 91 portes sur l'arbre de la journée ; fiches, état, commits et push pour chaque résultat, bilan à 9 h."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Bilan de 9 h — le palier 1 plafonne, un défaut de méthode trouvé et corrigé, la matrice renverse le classement, un seul item non fait (l'adjudication J4)
+
+# La nuit en clair
+
+**19 commits entre 16 h 45 et 8 h 54, tête `9f0d76d7`.** Arbre propre, poussé, revue verte, budget respecté, journal et schémas verts. Les deux chaînes GPU sont terminées.
+
+## 1. Les runs du palier 1 — ✅
+
+Deux graines reprises de 30 000 à 110 000 pas, PPL wikitext2 à chaque tranche :
+
+| pas | p1 (graine 1) | p2 (graine 2) |
+|---:|---|---|
+| 30 000 | 7,7044 | 7,2790 |
+| 50 000 | 7,1953 | 7,0021 |
+| 80 000 | 7,0881 | **6,8757** |
+| 110 000 | **7,0342** | 7,0477 |
+
+**Les deux plafonnent vers 7,0** ; p2 passe par un minimum à 80 000 puis remonte, p1 stagne après 90 000. Pendant ce temps la PPL du val de v1 continue de baisser (2,93-2,94) : le modèle se spécialise au lieu de généraliser. `wiki_big` au même pas fait **6,8349** — le palier 1 reste 2-3 % derrière, sans jamais passer devant. Fiche `reports/rapport-nuit-palier1-110k.md`.
+
+## 2. Le défaut de méthode — ⚠️ le plus important de la nuit
+
+Chaque tranche d'entraînement repartait le compteur de fenêtres à zéro : **les onze tranches rejouent le même échantillon de 80 000 fenêtres** (~82 Mo, soit 2,2 % des octets du palier 1 et 9,9 % de `wiki_big`), pas 900 Mo de données neuves. Preuve dans les journaux : la perte du pas 1 de p1 est 5,6107 → 1,2005 → 1,0917 → 1,0316 (le même premier lot, un modèle qui s'améliore). Correctif `--compteur-suite` écrit, **validé** (pas 1 : 5,6844 → 5,5582, compteur 3 → 5) et passé dans `bench/chaine_nuit.sh` ; **pas** appliqué aux runs de la nuit pour rester comparable à `wiki_big`. Fiche `rapport-rejeu-des-fenetres.md` ; les « époques » de la fiche de nuit sont corrigées.
+
+## 3. La matrice — le classement s'inverse selon le val
+
+| modèle | pas | wikitext2 (EN) | littérature (FR, autre) | val de son registre |
+|---|---:|---:|---:|---:|
+| nb11 (`wiki_big`) | 110k | **6,8349** | 4,0443 | **2,7227** |
+| v111 (mélange) | 110k | 6,8674 | 3,9872 | 2,7367 |
+| v211 (plein texte) | 110k | 7,0930 | **3,5752** | 3,2288 |
+| p111 (palier 1, g1) | 110k | 7,0342 | 4,1036 | **2,6929** |
+| p211 (palier 1, g2) | 110k | 7,0477 | 4,1306 | **2,6796** |
+
+**Dans son registre, tout se vaut** (2,68-2,74) : 4,4× plus de résumés n'achète rien. **Hors registre** (littérature, jamais vue, val propre pour tous), le **plein texte gagne** (3,58), le mélange suit (3,99), les résumés perdent (4,04-4,13). En anglais, `wiki_big`/mélange mènent (6,83-6,87).
+
+## 4. Les autres livrables de la nuit
+
+- **D — la diversité débloquée** : Wikisource par l'espace **Page:** — **11 livres, 8,76 Mo** épinglés (Balzac, Hugo, Dumas, Zola, Maupassant, Sand, Flaubert, Stendhal, Verne) ; Gutenberg toujours en 503.
+- **S — les clitiques retrouvés** : « les » et « l' » devant un verbe ; 4 ajouts sur 216 textes, tous vrais, gold **14/16 → 16/16**, 65 tests verts.
+- **wikitext2 est anglais** (0/5 lignes dans les corpus français) : les 6,8-9,5 mesurent du transfert inter-langue ; les vals de registre croisés se contaminent à ~20 %.
+- **Outils** : `ppl_matrice.py`, `collecter_wikisource_v2.py`, `or_roles_adjudication.py`, la courbe qui n'écrase plus `courbe-150m.json` par défaut.
+
+## 5. La passe des 91 portes
+
+**88 vertes, 3 rouges** : `indice` (848 s) et `melange` (105 s) — les structurelles tolérées — et `sessions`, rouge sur un heartbeat de S périmé de 1 305 min, **corrigé dans la minute et re-vérifié vert**. Machine chargée par les deux runs. Journal `work/portes/roue-1121-0410/`.
+
+## 6. Ce qui n'est pas fait
+
+**L'adjudication de J4** (les 10 désaccords les plus lourds) : la fenêtre remisée était déjà passée quand la session a repris à 22 h 45, et la consigne « IA légère au tarif plein » l'excluait. Le script `tools/or_roles_adjudication.py` est **écrit et testé en témoin** (`--sans-api` : 0/10), il n'attend que la fenêtre de 11 h 30.
+
+## Ce que je vous propose de regarder en premier
+
+1. **`reports/rapport-rejeu-des-fenetres.md`** — le défaut de méthode : il change la lecture de tous les « 110 000 pas » de la semaine, et le prochain run doit passer `--compteur-suite`.
+2. **`reports/rapport-nuit-palier1-110k.md`** — les courbes et la matrice : dans le registre tout se vaut, hors registre le plein texte gagne.
+3. **La suite désignée** : un run à `--compteur-suite` (vraies données neuves) pour trancher la question du volume ; l'adjudication J4 à 11 h 30 ; étendre Wikisource à 20-50 livres.
+

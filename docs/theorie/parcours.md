@@ -71,6 +71,7 @@ routage par tâche.
 | 1 | [`vision.md`](vision.md) — le cœur, les cinq axes | 1, 2, 3, 4, 5 | 1 400 |
 | 2 | [`architecture-native.md`](architecture-native.md) — le format et le modèle | 3 | 1 200 |
 | 3 | [`modele-natif.md`](modele-natif.md) — le traité (trois niveaux, bus, graphe, DRVM) | 3 | 7 300 |
+| 3 bis | [`rsn-3-niveaux.md`](rsn-3-niveaux.md) — la RSN (noyau, faits, affirmations) | 3, 4 | 1 700 |
 | 4 | [`synthese/`](synthese/index.md) — les huit chapitres (la théorie en récit) | 4 | 8 000 |
 | 5 | [`protocole-semantique.md`](protocole-semantique.md) — le sens, le rejeu | 3, 4 | 600 |
 | 6 | [`jeux-symboliques.md`](jeux-symboliques.md) — le raisonnement symbolique | 3, 4 | 900 |

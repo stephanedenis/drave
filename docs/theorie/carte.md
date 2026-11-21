@@ -9,6 +9,7 @@
 | | |
 |---|---|
 | [la vision](vision.md) — le bus d'événements, les blocs, l'hybridation, ce qu'elle refuse | |
+| [la RSN à trois niveaux](rsn-3-niveaux.md) — le noyau, les faits, les affirmations | [le rapport](../../reports/rapport-rsn.md) |
 | [la mission](../methode/mission.md) — les deux programmes, l'ordre des priorités | |
 | [l'état](../pilotage/en-cours.md) — ce qui est en cours, les chiffres qui comptent, les questions | |
 | [la roadmap](../pilotage/roadmap.md) — les chantiers A, B, N, R et la file « jamais en attente » | |
@@ -40,8 +41,8 @@
 | **B5/B6** les jeux symboliques | **faits** — 112 items, 100 % au niveau 4, pensée 5/5 | [le concept](jeux-symboliques.md) · [la fiche](../../reports/rapport-jeux-symboliques.md) |
 | **B7/B8** les langues et les maîtres | **faits** — 71 langues, 449/449, livre 10/10, go 10/10 | [le concept](jeux-symboliques.md) · [la fiche](../../reports/rapport-langues-maitres.md) |
 | **B9** le [banc externe](../theorie/glossaire/entrees/banc-externe.md) | **mesuré** — seuil 9,23–9,96 M, 31,63 M/610 4,40 %, fenêtre, négatif 30 langues | [le concept](../implantation/llm-externe.md) · [la fiche](../../reports/rapport-deepseek.md) |
-| **B10** le protocole sémantique | **premier passage** — encodeur convergent (0,426), décodeur négatif (référence complète : 12,7 / 5,3 contre 39,6 ; référence tronquée : 14,0 / 5,4 contre 38,8) | [le protocole](protocole-semantique.md) · [la fiche](../../reports/rapport-semantique.md) |
-| **B11** la base d'universaux typés | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (invariance 37,0 %) ; codec + [contexte](../theorie/glossaire/entrees/contexte.md) 528/528 (100 %) ; natif contexte suffixé 59,8/40,7 ; **restitution du code 100 %**, surface **33/79** | [la note](semantique-universaux.md) · [la fiche](../../reports/rapport-universaux.md) |
+| **B10** le protocole sémantique | **premier passage** — encodeur 0,426 ; décodeur négatif (12,7/5,3 vs 39,6 ; 14,0/5,4 vs 38,8) | [le protocole](protocole-semantique.md) · [la fiche](../../reports/rapport-semantique.md) |
+| **B11** la base typée | **premier passage** — codec 100 % (79/79, 449/449) ; natif synthétique normalisé 55,7 % (invariance 37,0 %) ; codec + [contexte](../theorie/glossaire/entrees/contexte.md) 528/528 (100 %) ; natif contexte suffixé 59,8/40,7 ; **restitution du code 100 %**, surface **33/79** | [la note](semantique-universaux.md) · [la fiche](../../reports/rapport-universaux.md) |
 | **A7.5–A7.26** cache [KV](../theorie/glossaire/entrees/kv.md) et grappe réseau | **campagne** — 22 mesures, du cache int8 aux seuils ; voir les fiches | [l'index](../../reports/INDEX.md) |
 | **B24–B27** [routeur](../theorie/glossaire/entrees/routeur.md), M8, M6 | **partiels/négatifs** — confiance, [rejeu](../theorie/glossaire/entrees/rejeu.md), conflit, moteur ; voir les fiches | [l'index](../../reports/INDEX.md) |
 | **C3.2e** sous-familles autres | **mesuré** — uralic 46,7→100 %, benue 88 %, austro 60,3 %, afro ouest 53,5 % | [la fiche](../../reports/rapport-sous-familles-autres.md) |
