@@ -19788,3 +19788,544 @@ p23 wikitext2 7.279
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-palier1-resumes.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"> **Ligne de ro … [4043 caractères tronqués]`
+
+  ```
+fiche ok
+ok 1087
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   25e65ad0..f3658f81  s/v7 -> s/v7
+ven 20 nov 2026 16:43:17 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-5cffed98-4568-4b64-8d6e-b0700d2612db","revision":1,"objective":"De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-traduction de S, la décision de routage du tagger ; fiches, état, commits et push pour chaque résultat, bilan à 16 h.","phase":"active","roundsStarted":3,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-5cffed98-4568-4b64-8d6e-b0700d2612db", "revision": 1}`
+
+> **Objectif** (complete) : De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-traduction de S, la décision de routage du tagger ; fiches, état, commits et push pour chaque résultat, bilan à 16 h.
+
+
+  ```
+{"goal":{"id":"goal-5cffed98-4568-4b64-8d6e-b0700d2612db","revision":2,"objective":"De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-traduction de S, la décision de routage du tagger ; fiches, état, commits et push pour chaque résultat, bilan à 16 h.","phase":"complete","roundsStarted":3,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-traduction de S, la décision de routage du tagger ; fiches, état, commits et push pour chaque résultat, bilan à 16 h."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Clôture de la journée — six résultats mesurés et poussés, la tranche 30k du palier 1 intégrée à 16 h 43, un seul item non fait (la porte propre de N2)
+
+# La journée en clair
+
+**18 commits entre 08 h 30 et 16 h 43, tête `f3658f81`.** Tout est commité, poussé, revu et reprenable.
+
+## Les six résultats, et où ils sont
+
+| Résultat | Le chiffre qui compte | Où le lire |
+|---|---|---|
+| **S — la profondeur dans la banque** | 324/369 candidats appariés, 95 à profondeur ≥ 3, **les 150 verdicts intacts** | `reports/rapport-s-migration-profondeur.md` |
+| **S — la rétro-traduction** | 9/9 traduits, **14/14 contre le gold** (12 référents + 2 non-référents) | `reports/rapport-s-retro-traduction.md` |
+| **N — le corpus du palier 1** | les résumés `frwiki_v14` : **3,69 Go**, 4,9 M lignes, épinglé `469a6d78…` | `reports/rapport-corpus-palier1.md` |
+| **N — le palier 1 à 30 000 pas** | **7,28-7,70** contre **7,22-7,56** pour `wiki_big` : le volume n'achète pas | `reports/rapport-palier1-resumes.md` |
+| **N — la variance du run-à-run** | 4 runs de `wiki_big` à 30k : **7,22 / 7,35 / 7,42 / 7,56**, étendue **4,7 %** | `reports/rapport-variance-graines.md` |
+| **R0.7 + J4** | la décision du tagger (option b) ; l'or de rôles : second annotateur **F1 0,71**, et des erreurs de l'or | `rapport-r0.7-decision.md`, `rapport-j4-seconds-cadres.md` |
+
+## Ce que la journée a établi — et ce qu'elle a corrigé
+
+1. **La variance commande** : quatre mesures du *même* corpus à 30 000 pas s'étalent de 7,22 à 7,56 (4,7 %). **Aucun écart de corpus inférieur à ~5 % n'est significatif sur une graine** — la « victoire » de `wiki_big` sur v1 (−0,5 %) de la nuit est un match nul. C'est la correction la plus importante de la journée.
+2. **Le registre compte, le volume non** : `wiki_big` (831 Mo) et le palier 1 (3,69 Go, mêmes résumés) se confondent à 30k ; le plein texte (7,09-7,75) et `wiki_fr` (8,09) restent derrière. La **sélection du registre** est le fait solide de la semaine.
+3. **L'or de rôles est un brouillon** : le second annotateur trouve des erreurs dans le gold (or-f47 : agent « c » pour « C'est ») et un trou de schéma (le complément, F1 0,28). Il faut **adjudicater** avant de s'en servir.
+4. **La rétro-traduction est un instrument** : 14/14 sur le gold, et le taux brut du script (37-46 %) était un artefact d'alignement — la mesure juste est par anaphore contre le gold.
+
+## Ce qui n'est pas fait
+
+**La porte propre (0,29) de N2** : elle demande un écart de PPL au val 1024 (2,8566 contre une cible d'environ 2,57) et les runs N2 (le correctif, le ré-épinglage) — les GPU étaient pris par le palier 1 toute la journée. C'est l'item du goal resté ouvert, et il est nommé comme tel dans l'état.
+
+## Ce que je vous propose de regarder
+
+1. **`reports/rapport-variance-graines.md`** — il change la lecture de toutes les comparaisons de la semaine : toute nouvelle mesure de corpus doit être **multi-graines**.
+2. **La décision du tagger** (`rapport-r0.7-decision.md`) : l'option (b) est recommandée (ouvertes à l'API, fermées à l'heuristique, défaut hors ligne) ; la décision vous revient, rien n'est à coder pour la prendre.
+3. **L'adjudication de J4** : les 10 désaccords les plus lourds, avant de réutiliser l'or de rôles.
+
+Rien n'est bloqué ni en attente de ma part ; le dépôt est vert et la session S est marquée active.
+
+
+## Tour 88
+
+### 👤 Utilisateur
+
+continue avec des taches nocturnes jusqu'à demain 9h00
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb1 … [368 caractères tronqués]`
+
+> **Objectif** (create) : De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du palier 1, val de `wiki_big`) et écrire la comparaison à pas et époques égales ; (3) dans la fenêtre remisée (avant 19 h 30), l'adjudication de J4 (les 10 désaccords les plus lourds) par un troisième passage API ; (4) passe des 91 portes sur l'arbre de la journée ; fiches, état, commits et push pour chaque résultat, bilan à 9 h.
+
+
+  ```
+{"goal":{"id":"goal-a334b9f5-7b2f-42d4-b0f3-426e44d882b0","revision":1,"objective":"De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du palier 1, val de `wiki_big`) et écrire la comparaison à pas et époques égales ; (3) dans la fenêtre remisée (avant 19 h 30), l'adjudication de J4 (les 10 désaccords les plus lourds) par un troisième passage API ; (4) passe des 91 portes sur l'arbre de la journée ; fiches, état, commits et push pour chaque résultat, bilan à 9 h.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n4/reprise.sh <<'SH'\n#!/bin/bash\n# reprise.sh — continue une chaîne depuis un point de contrôle : tranches DEBUT..N.\n#   bash work/n4/reprise.sh <gpu> <corpus> <prefixe> <init> <graine> <debut> <n>\nset -u\nGPU=$1; CORP … [1720 caractères tronqués]`
+
+  ```
+567776301 work/n4/p13.pt
+567776301 work/n4/p23.pt
+ven 20 nov 2026 22:45:52 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash work/n4/reprise.sh 0 data/corpus_wiki_fr_palier1/train.txt p1 work/n4/p13.pt 1 4 11 > /tmp/p1-reprise.out 2>&1 & nohup bash work/n4/reprise.sh 1 data/corpus_wiki_fr_palier1/train.txt p2 work/n4/p23.pt 2 4 11 > /tmp/p2-repr … [278 caractères tronqués]`
+
+  ```
+reprises lancées 22:46
+  pertes.append(float(perte))
+pas    1 · perte 1.0316 · PPL val 3.343 · 2 s · échelle 6553
+0, 99 %, 7624 MiB, 64
+1, 98 %, 7624 MiB, 49
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/vals && head -c 5000000 data/wiki_big/propre/val.txt > work/vals/wiki_big_val_5m.txt && head -c 5000000 data/corpus_wiki_fr_palier1/val.txt > work/vals/palier1_val_5m.txt && ls -la work/vals/; ls work/n4/nb11.pt work/re … [131 caractères tronqués]`
+
+  ```
+total 9768
+drwxr-xr-x. 1 stephane stephane      74 20 nov 22:47 .
+drwxr-xr-x. 1 stephane stephane    2910 20 nov 22:47 ..
+-rw-r--r--. 1 stephane stephane 5000000 20 nov 22:47 palier1_val_5m.txt
+-rw-r--r--. 1 stephane stephane 5000000 20 nov 22:47 wiki_big_val_5m.txt
+work/n4/nb11.pt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -S work/*/*.pt work/*.pt 2>/dev/null | head -8; du -sh work/* 2>/dev/null | sort -h | tail -5", "description": "List the checkpoints by size", "timeoutMs": 120000}`
+
+  ```
+work/n4/sonde-lr1e-4.pt
+work/n4/sonde-lr2e-4.pt
+work/n4/nb10.pt
+work/n4/nb11.pt
+work/n4/nl10.pt
+work/n4/nl11.pt
+work/n4/v110.pt
+work/n4/v111.pt
+6,5G	work/clean
+6,5G	work/reflow
+8,3G	work/n2ac
+15G	work/dedup
+75G	work/n4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n4/v211.pt 2>/dev/null; time (PYTHONPATH=. timeout 900 /home/stephane/gpu-env/bin/python tools/ppl_ckpt.py --modele work/n4/nb11.pt --val work/vals/wiki_big_val_5m.txt --device cuda:0 2>/dev/null | grep -o '\"ppl\": [0-9.]*') … [89 caractères tronqués]`
+
+  ```
+work/n4/v211.pt
+[still running after 600000ms; moved to background job bash-1513]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_kill** `{"job_id": "bash-1513", "reason": "évaluation trop lente pendant l'entraînement, à refaire après les runs"}`
+
+  ```
+job bash-1513 had already finished [status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 1000000 data/wiki_big/propre/val.txt > work/vals/wiki_big_val_1m.txt && head -c 1000000 data/corpus_wiki_fr_palier1/val.txt > work/vals/palier1_val_1m.txt && ls -la work/vals/; date; tail -1 work/n4/p1.chaine.log | grep -o \" … [118 caractères tronqués]`
+
+  ```
+total 11728
+drwxr-xr-x. 1 stephane stephane     148 20 nov 22:57 .
+drwxr-xr-x. 1 stephane stephane    2910 20 nov 22:47 ..
+-rw-r--r--. 1 stephane stephane 1000000 20 nov 22:57 palier1_val_1m.txt
+-rw-r--r--. 1 stephane stephane 5000000 20 nov 22:47 palier1_val_5m.txt
+-rw-r--r--. 1 stephane stephane 1000000 20 nov 22:57 wiki_big_val_1m.txt
+-rw-r--r--. 1 stephane stephane 5000000 20 nov 22:47 wiki_big_val_5m.txt
+ven 20 nov 2026 22:57:48 EST
+pas  800 · perte 0.9625
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1513 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n4/v211.pt 2>/dev/null; time (PYTHONPATH=. timeout 900 /home/stephane/gpu-env/bin/python tools/ppl_ckpt.py --modele work/n4/nb11.pt --val work/vals/wiki_big_val_5m.txt --device cuda:0 2>/dev/null | grep -o '"ppl": [0-9.]*')) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1513"}`
+
+  ```
+"ppl": 2.758383478846237
+[stderr]
+
+real	10m13,773s
+user	3m41,722s
+sys	6m35,630s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"def referents\" -A30 generateur.py | head -45", "description": "Read the referents function"}`
+
+  ```
+584:def referents(texte: str, contexte: str = "") -> list[dict]:
+585-    """Propose des antécédents pour chaque pronom/possessif : les GN et têtes de GP à gauche,
+586-    les noms propres de la phrase, puis ceux du contexte (les phrases précédentes). Ce n'est pas
+587-    une résolution : c'est la liste que l'humain tranche — et que l'arbre affiche en pointillés.
+588-    """
+589-    toks = _tokens(texte)
+590-    segs = _segmente(texte, _tokens(texte))
+591-    gns = [s for s in segs if s.type == "GN"]
+592-    gps = [s for s in segs if s.type == "GP"]
+593-
+594-    def noms_propres(texte_partiel: str) -> list[str]:
+595-        return [m for m in PROPRE.findall(texte_partiel)
+596-                if _norm(m) not in PRON and _norm(m) not in DET
+597-                and _norm(m) not in VERBES_FINIS and _norm(m) not in VERBES_LIEU]
+598-
+599-    def avant(pos: int) -> list[str]:
+600-        c = [g.texte.strip() for g in gns if g.fin <= pos]
+601-        for g in gps:
+602-            if g.fin <= pos:
+603-                mots = [m.group() for m in MOTIF.finditer(g.texte) if m.group().strip()
+604-                        and _norm(m.group()) not in PREP | DET]
+605-                if mots:
+606-    
+… [309 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '614,660p' generateur.py; grep -n \"^PRON\\|^DET\\|^PREP\" generateur.py | head -5", "description": "Read the pronoun scan and the lexicons"}`
+
+  ```
+hors += noms_propres(contexte)
+
+    sortie = []
+    for t in toks:
+        n = _norm(t.texte)
+        if not (t.cls == "PRON" or (t.cls == "DET" and n in POSSESSIFS)):
+            continue
+        candidats = list(dict.fromkeys(c for c in avant(t.debut) + hors if c))
+        sortie.append({"forme": t.texte, "debut": t.debut, "fin": t.fin,
+                       "anaphore": n, "candidats": candidats})
+    return sortie
+
+
+ROLES_DEFAUT = {"GP": "complement", "SUB": "contenu", "REL": "qualite"}
+
+
+def structure(texte: str, roles: bool = True) -> list[dict]:
+    """La structure de base, sans variantes d'attachement ; `roles=False` coupe les règles.
+
+    C'est ce que mesure `mesure_analyseur.py` : la segmentation et les rôles, pas le choix
+    d'un candidat. `roles=False` rend les rôles par défaut (le contrôle « règles coupées »).
+    """
+    segs = _segmente(texte, _tokens(texte))
+    sortie = []
+    for s in segs:
+        d = s.dict()
+        if not roles and s.type in ROLES_DEFAUT:
+            d["role"] = ROLES_DEFAUT[s.type]
+        sortie.append(d)
+    return sortie
+
+
+if __name__ == "__main__":
+    import sys
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    texte = 
+… [684 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -rn \"referents(\" tests/*.py | head -10; python3 -c \"\nimport json, generateur\nd=json.load(open('donnees/paragraphes.json'))\np=d['paragraphes'][0]\nrs=generateur.referents(p['cible'], p.get('contexte',''))\n … [269 caractères tronqués]`
+
+  ```
+tests/test_arbre_svg.py:22:    def test_referents(self):
+tests/test_arbre_svg.py:23:        refs = generateur.referents(arbre_svg.CIBLE, arbre_svg.CONTEXTE)
+tests/test_arbre_svg.py:32:            refs = generateur.referents(p["cible"], p["contexte"])
+['Elle', 'se', 'elle', 'se', 'lui', 'en']
+gold dit: Elle, se, elle, les, se, lui, en
+les → [('les', 'DET'), ('les', 'DET')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"def _tokens\" -A40 generateur.py | head -55", "description": "Read the tokenizer and its classes"}`
+
+  ```
+175:def _tokens(texte: str) -> list[Token]:
+176-    return [Token(m.group(), m.start(), m.end(), m.group().isspace()) for m in MOTIF.finditer(texte)]
+177-
+178-
+179-def _est_que(tok: Token) -> bool:
+180-    n = _norm(tok.texte)
+181-    return n.split("'")[0].split("’")[0] in ("que", "qu")
+182-
+183-
+184-def _si_intensif(utiles: list[Token], i: int) -> bool:
+185-    """Vrai si le « si » de `i` est l'intensif (« crie si fort »), pas le conditionnel."""
+186-    if _norm(utiles[i].texte) != "si" or i + 1 >= len(utiles):
+187-        return False
+188-    suivant = _norm(utiles[i + 1].texte)
+189-    return suivant in ADJECTIFS or suivant in ADVERBES_SI
+190-
+191-
+192-def _marqueur(utiles: list[Token], i: int) -> str | None:
+193-    """Le rôle de la subordonnée ouverte au jeton `i`, ou None.
+194-
+195-    Deux familles : le mot simple (« quand », « comme ») et le mot qui ne subordonne que
+196-    devant « que / qu'il » (« parce que », « bien qu'il »). Les élisions portent le
+197-    subordonnant dans le même jeton (« lorsqu'il », « puisqu'elle »).
+198-    """
+199-    n = _norm(utiles[i].texte)
+200-    brut = utiles[i].texte.lower()
+201-    prefixe = n.split("'")[0].split("’")[0]
+202-    # « si
+… [783 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"class Token\" -A25 generateur.py | head -35; python3 -c \"\nimport json, generateur\nd=json.load(open('donnees/paragraphes.json'))\nc=d['paragraphes'][0]['cible']\nprint([(t.texte, t.cls) for t in generateu … [97 caractères tronqués]`
+
+  ```
+139:class Token:
+140-    __slots__ = ("texte", "debut", "fin", "espace", "cls")
+141-
+142-    def __init__(self, texte, debut, fin, espace):
+143-        self.texte, self.debut, self.fin, self.espace = texte, debut, fin, espace
+144-        brut = texte.lower()
+145-        n = _norm(texte)
+146-        prefixe = n.split("'")[0].split("’")[0]
+147-        if texte.isspace():
+148-            self.cls = "ESPACE"
+149-        elif texte in PONCT:
+150-            self.cls = "PONCT"
+151-        elif brut == "à":
+152-            self.cls = "PREP"
+153-        elif brut == "a":
+154-            self.cls = "AUX"
+155-        elif brut == "où":
+156-            self.cls = "RELATIF"
+157-        elif brut == "ou":
+158-            self.cls = "CONJ"
+159-        elif n in DET or prefixe in DET:
+160-            self.cls = "DET"
+161-        elif n in PRON or prefixe in PRON:
+162-            self.cls = "PRON"
+163-        elif n in PREP or prefixe in PREP:
+164-            self.cls = "PREP"
+[('Elle', 'PRON'), ('avait', 'AUX'), ('pour', 'PREP'), ('habitude', 'MOT'), ('de', 'PREP'), ('se', 'PRON'), ('donner', 'MOT'), ('de', 'PREP'), ('très-bons', 'MOT'), ('conseils', 'MOT'), ('(', 'PONCT'), ('bien', 'MOT'), ("qu'
+… [180 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/ppl_matrice.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"ppl_matrice.py — la matrice des PPL : plusieurs modèles × plusieurs vals, une table.\n\nPOURQUOI. La nuit du 20-21/11 compare des corpus (palier 1, `wiki_big`, mélange, … [3672 caractères tronqués]`
+
+  ```
+✅ autotest : les couples nom=chemin se lisent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ppl\\|print\\|json\" tools/ppl_ckpt.py | head -12", "description": "Check ppl_ckpt output format"}`
+
+  ```
+2:"""ppl_ckpt.py — la perplexité d'un checkpoint sur un val, tout le val.
+11:  python3 tools/ppl_ckpt.py --modele work/n4/v211.pt --val data/wikitext2_test.txt \
+12:      --device cuda:0 --sortie reports/ppl-wikitext2.json
+17:import json
+25:from tools.entrainer_native import charger, ppl  # noqa: E402
+48:    p, n = ppl(modele, val, a.seq, a.lot, a.device, n_lots=n_lots)
+51:           "n_lots": n_lots, "jetons": n, "ppl": p}
+52:    print(json.dumps(res, ensure_ascii=False, indent=1))
+54:        pathlib.Path(a.sortie).write_text(json.dumps(res, ensure_ascii=False, indent=1) + "\n")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/ppl_matrice.py'); s = p.read_text()\ns = s.replace('import argparse\\nimport json\\nimport pathlib\\nimport subprocess\\nimport sys',\n              'import argparse\\nimport  … [1331 caractères tronqués]`
+
+  ```
+ok
+|---|---:|
+| nb11 | 2.7119 |
+10.10user 8.64system 0:15.63elapsed 119%CPU (0avgtext+0avgdata 1750808maxresident)k
+0inputs+0outputs (0major+414808minor)pagefaults 0swaps
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '15,40p' tests/test_arbre_svg.py", "description": "Read the referents test expectations"}`
+
+  ```
+def test_profondeur(self):
+        segs = generateur.structure("Le chat de la voisine qui dort sur le toit se réveille.")
+        self.assertEqual(max(s["profondeur"] for s in segs), 3)
+        rel = next(s for s in segs if s["type"] == "REL")
+        self.assertEqual(rel["profondeur"], 3)
+        self.assertEqual(segs[rel["parent"]]["type"], "GP")
+
+    def test_referents(self):
+        refs = generateur.referents(arbre_svg.CIBLE, arbre_svg.CONTEXTE)
+        elle = next(r for r in refs if r["forme"] == "Elle")
+        self.assertIn("Alice", elle["candidats"])
+        lui = next(r for r in refs if r["forme"] == "lui")
+        self.assertIn("Alice", lui["candidats"])
+
+    def test_contenu_dans_le_cadre(self):
+        source = json.loads((RACINE / "donnees" / "paragraphes.json").read_text(encoding="utf-8"))
+        for p in source["paragraphes"]:
+            refs = generateur.referents(p["cible"], p["contexte"])
+            liens = tuple(dict.fromkeys(r["forme"] for r in refs))
+            racine = ET.fromstring(arbre_svg.svg_arbre(p["cible"], p["contexte"],
+                                                       p["antecedent"], liens=liens))
+            _, _, largeur, hauteur = (floa
+… [282 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json, generateur, pathlib\ntextes = []\nfor nom in (\"donnees/phrases.json\", \"donnees/phrases_generees.json\"):\n    d = json.loads(pathlib.Path(nom).read_text())\n    textes += [(p[\"id\"] … [630 caractères tronqués]`
+
+  ```
+textes: 216 · référents: 405
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('generateur.py'); s = p.read_text()\nold = '''    sortie = []\n    for t in toks:\n        n = _norm(t.texte)\n        if not (t.cls == \"PRON\" or (t.cls == \"DET\" … [2618 caractères tronqués]`
+
+  ```
+ok
+référents: 407 (base 405) · textes avec ajout: 2
+  c047 [("l'opium", 42)] | De la classe riche, à laquelle l'usage de l'opium était d'abord formellement réservé, cet usage descendit jusq
+  a001 [('les', 74)] | Elle avait pour habitude de se donner de très-bons conseils (bien qu'elle les suivît rarement), et quelquefois
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('generateur.py'); s = p.read_text()\nold = '''        n = _norm(toks[i].texte)\n        prefixe = n.split(\"'\")[0].split(\"’\")[0]\n        if prefixe not in (\"les … [1405 caractères tronqués]`
+
+  ```
+ok
+référents: 406 (base 405) · textes avec ajout: 1
+  a001 [('les', 74)] | Elle avait pour habitude de se donner de très-bons conseils (bien qu'elle les suivît rarement), et quelquefois elle se g
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 -c \"\nimport json, generateur\nd=json.load(open('donnees/paragraphes.json'))\nc=d['paragraphes'][1]['cible']\nprint(c[:160])\nprint([(t.texte, t.cls) for t in generateur._tokens(c) if not t.espace][:18])\"", … [64 caractères tronqués]`
+
+  ```
+Elle aperçut alors une petite boîte en verre qui était sous la table, l'ouvrit et y trouva un tout petit gâteau sur lequel les mots "MANGEZ-MOI" étaient admirab
+[('Elle', 'PRON'), ('aperçut', 'MOT'), ('alors', 'MOT'), ('une', 'DET'), ('petite', 'MOT'), ('boîte', 'MOT'), ('en', 'PRON'), ('verre', 'MOT'), ('qui', 'RELATIF'), ('était', 'AUX'), ('sous', 'PREP'), ('la', 'DET'), ('table', 'MOT'), (',', 'PONCT'), ("l'ouvrit", 'DET'), ('et', 'CONJ'), ('y', 'PRON'), ('trouva', 'MOT')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('generateur.py'); s = p.read_text()\nold = '''        n = _norm(toks[i].texte)\n        # le jeton doit être **exactement** le clitique : « l'opium » est un seul mot … [3068 caractères tronqués]`
+
+  ```
+ok
+référents: 409 (base 405) · textes avec ajout: 4
+  c019 [("l'", 7)]
+  c038 [("l'", 111)]
+  a001 [('les', 74)]
+  a002 [("l'", 70)]
+.........................................................                [100%]
+57 passed in 4.55s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 -c \"\nimport json, pathlib, generateur\nd = json.loads(pathlib.Path('donnees/phrases_generees.json').read_text())\nfor p in d['phrases']:\n    if p['id'] in ('c019','c038'):\n        print(p['id'], '|', p['t … [260 caractères tronqués]`
+
+  ```
+c019 | --Elle l'était autrefois...», dit à mi-voix Phileas Fogg.
+   l': [("l'", "l'était autref")]
+c038 | Puis, sa pensée la reportant aux scènes du sutty, ses regards revoyant cette terre indienne où tant de dangers l'attenda
+   l': [("l'", "l'attendaient ")]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport json, pathlib, generateur, unicodedata, re\ndef norme(s):\n    s = unicodedata.normalize(\"NFD\", s.lower())\n    s = \"\".join(c for c in s if unicodedata.category(c) != \"Mn\")\n    return  … [1151 caractères tronqués]`
+
+  ```
+a001 gold 7 · avant 6 · après 7 · formes: ['elle', 'se', 'les', 'elle', 'se', 'lui', 'en']
+a002 gold 4 · avant 3 · après 4 · formes: ['elle', 'en', 'l', 'y']
+a003 gold 5 · avant 5 · après 5 · formes: ['elle', 'sa', 'sa', 'elle', 'se']
+TOTAL avant 14 /16 · après 16 /16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('generateur.py'); s = p.read_text()\nold = '''    utiles = [i for i, t in enumerate(toks) if not t.espace]\n\n    def clitique(i: int) -> bool:'''\nnew = '''    util … [972 caractères tronqués]`
+
+  ```
+ok
+57 passed in 4.51s
+a001 ['Elle', 'se', 'les', 'elle', 'se', 'lui', 'en']
+a002 ['Elle', 'en', "l'", 'y']
+a003 ['Elle', 'sa', 'sa', 'elle', 'se']
+a004 ['sa']
+ven 20 nov 2026 23:03:03 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-s-clitiques.md <<'MD'\n# S — Les deux formes que l'analyseur manquait sont retrouvées : 14/16 → 16/16 sur le gold\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-20 (nuit) · **Verdict** : le trou documenté le … [2728 caractères tronqués]`
+
+  ```
+1ccf3df..b70fd2a  master -> master
+ M reports/corpus-wiki-fr.json
+A  reports/rapport-s-clitiques.md
+M  tools/structures
+?? tools/ppl_matrice.py
+ven 20 nov 2026 23:03:33 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat reports/corpus-wiki-fr.json; git diff reports/corpus-wiki-fr.json | head -12; ls reports/*.md | wc -l; ls reports/*.json | wc -l", "description": "Inspect the modified corpus manifest"}`
+
+  ```
+reports/corpus-wiki-fr.json | 37 ++++++++++++++++++-------------------
+ 1 file changed, 18 insertions(+), 19 deletions(-)
+diff --git a/reports/corpus-wiki-fr.json b/reports/corpus-wiki-fr.json
+index b19ef660..6baa5733 100644
+--- a/reports/corpus-wiki-fr.json
++++ b/reports/corpus-wiki-fr.json
+@@ -1,7 +1,8 @@
+ {
+  "date": "2026-11-01",
+  "ligne": "Données",
+- "nature": "corpus Wikipédia FR (résumés)",
++ "langue": "fr",
++ "nature": "corpus Wikipédia fr (résumés)",
+  "source": {
+822
+1087
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/corpus-wiki-fr.json'))\nprint({k: str(v)[:80] for k,v in d.items() if k!='fichiers'})\" ; git show HEAD:reports/corpus-wiki-fr.json | python3 -c \"\nimport json,sys\nd=json.load(s … [154 caractères tronqués]`
+
+  ```
+{'date': '2026-11-01', 'ligne': 'Données', 'langue': 'fr', 'nature': 'corpus Wikipédia fr (résumés)', 'source': "{'db': '/home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db', 'tabl", 'methode': "{'filtre': 'n_chars >= 300', 'nettoyage': 'entités HTML, balises résiduelles, es", 'articles_db': '2755035', 'articles_lus': '2526107', 'articles_gardes': '2525902', 'articles_courts': '0', 'articles_vides': '1', 'articles_doublons': '204', 'caracteres_gardes': '3680374275', 'troncons': '2525902', 'troncons_doublons': '0', 'octets': "{'train': 3691727067, 'val': 76417263, 'test': 38220407}", 'articles': "{'train': 2449981, 'val': 50571, 'test': 25350}", 'troncons_par_split': "{'train': 2449981, 'val': 50571, 'test': 25350}", 'mots_estimes': '593608754', 'note_mots': 'caractères / 6,2 : estimation pour les langues à espaces ; pour le japonais et l', 'sha256_train': '469a6d78676a3771a35782894a1f38fdf44da5dfaa5079f89a6d33b1542df3b0', 'sha256_val': 'a0b3fa1ed6b8602efbd9cec49bc581340edbdf07effbd9b727c57c41919b097b', 'sha256_test': '3ec7d2890388e5c7b0dd9aae6566860e7358239939b7ef5378a59ecc0395e875', 'licence': "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique 
+… [1389 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp reports/corpus-wiki-fr.json /tmp/palier1-manifeste.json && git checkout -- reports/corpus-wiki-fr.json && python3 - <<'PY'\nimport json, pathlib\nd = json.load(open('/tmp/palier1-manifeste.json'))\nd['nature'] = 'corpus Wikipédia  … [854 caractères tronqués]`
+
+  ```
+manifeste palier 1 écrit
+A  reports/rapport-s-clitiques.md
+M  tools/structures
+?? reports/corpus-wiki-fr-palier1.json
+?? tools/ppl_matrice.py
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"0.01\\|épinglé\" reports/rapport-corpus-palier1.md | head -4", "description": "Read the exact fiche line"}`
+
+  ```
+10:> --test 0.01` ; épinglé `469a6d78…` (manifeste `f0ff49d7…`), val 76,4 Mo, test 38,2 Mo.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-corpus-palier1.md'); s = p.read_text()\nold = \"> --test 0.01` ; épinglé `469a6d78…` (manifeste `f0ff49d7…`), val 76,4 Mo, test 38,2 Mo.\"\nnew = \"> --test 0.01` ;  … [2488 caractères tronqués]`
+
+  ```
+ok
+budget=0
+     · compteurs : en-cours.md dit 1087 JSON, le disque en a 1088
+ven 20 nov 2026 23:04:23 EST
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+  File "<stdin>", line 6, in rep
+AssertionError: | fichiers / JSON de résultats | **821** / **1081** |
+  ❌ commit refusé : 3 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/corpus-wiki-fr-palier1.json
+     · reports/rapport-corpus-palier1.md
+     · reports/rapport-s-clitiques.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n_json=$(ls reports/*.json | wc -l); n_md=$(ls reports/*.md | wc -l); python3 - \"$n_md\" \"$n_json\" <<'PY'\nimport pathlib, re, sys\nmd, js = sys.argv[1], sys.argv[2]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text( … [1897 caractères tronqués]`

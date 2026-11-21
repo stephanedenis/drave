@@ -24,7 +24,7 @@
 - **Fait** : types **61/61**, rôles **144/144** ; page **`/paragraphes`**, **19/19 verdicts `389b99f`** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [limites](../../reports/rapport-s-limites-v6.md), [fait divers](../../reports/rapport-s-fait-divers.md).
 - **Ce qu'elle fait** : **session close** ; **`/paragraphes`** v7, **`/`** 369 + **profondeur** (324 appariés, **95** à ≥3) ; **`s/v7`** à fusionner.
 - **Ce que font les autres** : **hub**, **N2**, **Pensée**.
-- **Prochaine action** : **rétro-traduction** — 9/9, **14/14** sur le gold (12 référents + 2 non-référents ; 2 formes manquées par l'analyseur) ; les **71 langues** ; la migration `/` est faite (324/369).
+- **Prochaine action** : **rétro-traduction** — 9/9, **14/14** gold ; les **clitiques** retrouvés (**16/16** formes du gold, 4 ajouts sur 216 textes) ; les **71 langues** ; la migration `/` est faite (324/369).
 - **Bloquants** : aucun ; 8765 pris (lancer 9000) ; migration = choix.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
 
@@ -61,7 +61,7 @@
 |---|---|---|
 | portes | **91** (dont `porte-a2.6-experts` le 18/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **821** / **1087** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **822** / **1088** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **129** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **20/11 05 h 58 → 07 h 58** : **91** portes, **89/2** ; seules `indice` (836 s) et `melange` (105 s) **structurelles** ; `sessions` **verte** ; machine au repos (les runs de la nuit finis) | `work/portes/roue-1120-0558/registre.txt` |
 

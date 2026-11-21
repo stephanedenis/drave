@@ -7,7 +7,8 @@
 > lignes longues du plein texte (7,75 sur wikitext2) ne valent pas les résumés préparés (6,83).
 >
 > **Dispositif** : `tools/corpus_wikipedia.py --db frwiki_v14.db --min-chars 300 --val 0.02
-> --test 0.01` ; épinglé `469a6d78…` (manifeste `f0ff49d7…`), val 76,4 Mo, test 38,2 Mo.
+> --test 0.01` ; épinglé `469a6d78…` (manifeste `f0ff49d7…`), val 76,4 Mo, test 38,2 Mo ;
+> manifeste du corpus [`corpus-wiki-fr-palier1.json`](corpus-wiki-fr-palier1.json).
 
 ## Le tableau
 

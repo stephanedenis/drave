@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 78.8 h |
-| Tours | 87 |
-| Messages | 1403 |
-| Appels d'outils | 1218 |
+| Durée | 85.2 h |
+| Tours | 88 |
+| Messages | 1440 |
+| Appels d'outils | 1253 |
 | Fichiers touchés | 44 |
-| Commandes | 1068 |
+| Commandes | 1098 |
 | Sous-agents | 7 |
-| Commits | 102 |
+| Commits | 105 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -57,6 +57,10 @@
 … [217 caractères tronqués]
 - **create** — De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches 
 … [188 caractères tronqués]
+- **complete** — De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches 
+… [188 caractères tronqués]
+- **create** — De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du pal
+… [326 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -233,6 +237,8 @@
 **Tour 86** — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-trad … [658 caractères tronqués]
 
 **Tour 87** — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-trad … [658 caractères tronqués]
+
+**Tour 88** — continue avec des taches nocturnes jusqu'à demain 9h00
 
 ## 2. Déroulé, étape par étape
 
@@ -2161,13 +2167,66 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 87 — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches  … [938 caractères tronqués]
 
-*6 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Wait for the palier-1 final tranche
 - bash — Check the palier-1 final tranche
 - bash — Read the palier-1 final results
 - bash — Read the palier-1 seed-1 final tranche
 - bash — Commit the palier-1 final results
+- get_goal
+- update_goal
+
+**Synthèse produite :**
+
+⏵ Clôture de la journée — six résultats mesurés et poussés, la tranche 30k du palier 1 intégrée à 16 h 43, un seul item non fait (la porte propre de N2)
+
+\# La journée en clair
+
+**18 commits entre 08 h 30 et 16 h 43, tête `f3658f81`.** Tout est commité, poussé, revu et reprenable.
+
+\## Les six résultats, et où ils sont
+
+| Résultat | Le chiffre qui compte | Où le lire |
+|---|---|---|
+| **S — la profondeur dans la banque** | 324/369 candidats appariés, 95 à profondeur ≥ 3, **les 150 verdicts intacts** | `reports/rapport-s-migration-profondeur.md` |
+| **S — la rétro-traduction** | 9/9 traduits, **14/14 contre le gold** (12 référents + 2 non-référents) | `reports/rapport-s-retro-traduction.md` |
+| **N — le corpus du palier 1** | les résumés `frwiki_v14` : **3,69 Go**, 4,9 M lignes, épinglé `469a6d78…` | `reports/rapport-corpus-palier1.md` |
+| **N — le palier 1 à 30 000 pas** | **7,28-7,70** contre **7,22-7,56** pour `wiki_big` : le volume n'achète pas | `reports/rapport-palier1-resumes.md` |
+| **N — la variance du run-à-run** | 4 runs de `wiki_big` à 30k : **7,22 / 7,35 / 7,42 / 7,56**, étendue **4,7 %** | `reports/rapport-variance-graines.md` |
+| **R0.7 + J4** | la décision du tagger (option b) ; l'or de rôles : second annotateur **F1 0,71**, et des erreurs de l'or | `rapport-r0.7-decision.md`, `rapport-j4-seconds-cadres.md` |
+
+\## Ce que la journée a établi — et ce qu'elle a corrigé
+
+1. **La variance commande** : quatre mesures du *même* corpus à 30 000 pas s'étalent de 7,22 à 7,56 (4,7 %). **Aucun écart de corpus inférieur à ~5 % n'est significatif sur une graine** — la « victoire » de `wiki_big` sur v1 (−0,5 %) de la nuit est un match nul. C'est la correction la plus importante de la journée.
+2. **Le registre compte, le volume non** : `wiki_big` (831 Mo) et le palier 1 (3,69 Go, mêmes résumés) se confondent à 30k ; le plein texte (7,09-7,75) et `wiki_fr` (8,09) restent derrière. La **sélection du registre** est le fait solide de la semaine.
+3. **L'or de rôles est un brouillon** : le second annotateur trouve des erreurs dans le gold (or-f47 : agent « c » pour « C'est ») et un trou de schéma (le complément, F1 0,28). Il faut **adjudicater** avant de s'en servir.
+4. **La rétro-traduction est un instrument** : 14/14 sur le gold, et le taux brut du script (37-46 %) était un artefact d'alignement — la mesure juste est par anaphore contre le gold.
+
+\## Ce qui n'est pas fait
+
+**La porte propre (0,29) de N2** : elle demande un écart de PPL au val 1024 (2,8566 contre un
+… [829 caractères tronqués]
+
+### Tour 88 — continue avec des taches nocturnes jusqu'à demain 9h00
+
+*33 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Create the night goal and the resume script
+- bash — Launch the two 30k→110k resumes
+- bash — Create 5 MB val subsets and locate 150M checkpoints
+- bash — List the checkpoints by size
+- bash — Test a cross-val evaluation on the wiki_big val
+- job_kill
+- bash — Kill the slow eval and prepare 1 MB val subsets
+- job_output
+- bash — Read the referents function
+- bash — Read the pronoun scan and the lexicons
+- bash — Check referents tests and the missed clitics
+- bash — Read the tokenizer and its classes
+- bash — Read the Token class and sample classes
+- … et 19 autres
 
 ## 3. Travail accompli
 
@@ -2272,7 +2331,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1028 autres
+- … et 1058 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2522,4 +2581,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-palier1-resumes.md'); s = p.read_text() 
+- S — LES DEUX FORMES MANQUÉES SONT RETROUVÉES : « LES » ET « L' » DEVANT UN VERBE SONT DES CLITIQUES (14/16 → 16/16 SUR LE GOLD, 4 AJOUTS SUR 216 TEXTES, TOUS VR
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-corpus-palier1.md'); s = p.read_text() o
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n_json=$(ls reports/*.json | wc -l); n_md=$(ls reports/*.md | wc -l); python3 - "$n_md" "$n_json" <<'PY' i
 

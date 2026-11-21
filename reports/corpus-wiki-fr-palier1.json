@@ -1,0 +1,57 @@
+{
+ "date": "2026-11-01",
+ "ligne": "Données",
+ "langue": "fr",
+ "nature": "corpus Wikipédia fr « palier 1 » (résumés, n_chars >= 300, val 2 %, test 1 %)",
+ "source": {
+  "db": "/home/stephane/Data13TB/stephane/data/wikipedia/db/frwiki_v14.db",
+  "table": "articles",
+  "champ": "summary",
+  "octets_db": 7248388096,
+  "note": "résumé d'article tronqué à 8 000 caractères, déjà débalisé"
+ },
+ "methode": {
+  "filtre": "n_chars >= 300",
+  "nettoyage": "entités HTML, balises résiduelles, espaces, caractères de contrôle ; espace aux jointures minuscule→majuscule et apostrophe restaurée devant majuscule",
+  "deduplication_articles": "empreinte BLAKE2b du texte normalisé, première occurrence gardée",
+  "deduplication_troncons": "tronçons de 8192 caractères coupés aux mots, BLAKE2b, première occurrence gardée (train seulement)",
+  "split": "hash salé (graine 1) de page_id : 2% val, 1% test, le reste train ; un article n'est que dans un split",
+  "mots": "caractères / 6,2 (estimation)"
+ },
+ "articles_db": 2755035,
+ "articles_lus": 2526107,
+ "articles_gardes": 2525902,
+ "articles_courts": 0,
+ "articles_vides": 1,
+ "articles_doublons": 204,
+ "caracteres_gardes": 3680374275,
+ "troncons": 2525902,
+ "troncons_doublons": 0,
+ "octets": {
+  "train": 3691727067,
+  "val": 76417263,
+  "test": 38220407
+ },
+ "articles": {
+  "train": 2449981,
+  "val": 50571,
+  "test": 25350
+ },
+ "troncons_par_split": {
+  "train": 2449981,
+  "val": 50571,
+  "test": 25350
+ },
+ "mots_estimes": 593608754,
+ "note_mots": "caractères / 6,2 : estimation pour les langues à espaces ; pour le japonais et le chinois, le caractère est l'unité de volume",
+ "sha256_train": "469a6d78676a3771a35782894a1f38fdf44da5dfaa5079f89a6d33b1542df3b0",
+ "sha256_val": "a0b3fa1ed6b8602efbd9cec49bc581340edbdf07effbd9b727c57c41919b097b",
+ "sha256_test": "3ec7d2890388e5c7b0dd9aae6566860e7358239939b7ef5378a59ecc0395e875",
+ "licence": "Wikipédia : CC-BY-SA 4.0 (et GFDL) — attribution et partage à l'identique ; corpus local, non diffusé",
+ "limites": [
+  "résumés tronqués à 8 000 caractères (le lead et le début des sections), pas l'article entier",
+  "artefacts de débalisage : dates de modèles vides (« né le à »), parenthèses de prononciation, titres de sections restés dans le texte",
+  "déduplication exacte seulement : les quasi-doublons (stubs similaires) restent",
+  "le texte intégral demanderait le dump xml.bz2 et un débaliseur complet"
+ ]
+}
