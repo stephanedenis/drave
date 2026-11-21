@@ -4,15 +4,16 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 08:22 | `e0fd67e7` | SESSIONS — S REPRISE (LE HUB ET N2 SORTENT DE L'ÉTAT), PENSÉE ATTEND LA FENÊTRE | `en-cours.md`, `README.md`, `docs.md` (+8) |
+| 23:11 | `189cb13c` | J4 — L'ADJUDICATION EST PRÊTE : LE SCRIPT PREND LES 10 TEXTES LES PLUS FAIBLES, DONNE LES DEUX ANNOTATIONS À L'API ET DEMANDE LE VERDICT PAR RÔLE (À LANCER EN FENÊTRE REMISÉE) | `README.md`, `attention.md`, `distribue.md` (+10) |
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 85.4 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 85.7 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 478.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 <!-- notes -->

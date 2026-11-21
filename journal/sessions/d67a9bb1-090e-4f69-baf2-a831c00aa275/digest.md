@@ -20393,3 +20393,276 @@ script prêt (pas d'appel API cette nuit : tarif plein)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/or_roles_adjudication.py && git commit -q -m \"J4 — L'ADJUDICATION EST PRÊTE : LE SCRIPT PREND LES 10 TEXTES LES PLUS FAIBLES, DONNE LES DEUX ANNOTATIONS À L'API ET DEMANDE LE VERDICT PAR RÔLE (À LANCER EN FENÊTRE REMIS … [122 caractères tronqués]`
+
+  ```
+6ee4fd41..189cb13c  s/v7 -> s/v7
+ven 20 nov 2026 23:14:12 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 3500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p14','p24'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('p1 … [272 caractères tronqués]`
+
+  ```
+started background job bash-1545
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np1 = 3691727067; wb = 831397620\ndef ep(octets, pas): return octets and (pas*8192)/octets\nlignes = []\nfor pas in (10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000):\n   … [278 caractères tronqués]`
+
+  ```
+| 10 k | 0.022 | 0.099 |
+| 20 k | 0.044 | 0.197 |
+| 30 k | 0.067 | 0.296 |
+| 40 k | 0.089 | 0.394 |
+| 50 k | 0.111 | 0.493 |
+| 60 k | 0.133 | 0.591 |
+| 70 k | 0.155 | 0.690 |
+| 80 k | 0.178 | 0.788 |
+| 90 k | 0.200 | 0.887 |
+| 100 k | 0.222 | 0.985 |
+| 110 k | 0.244 | 1.084 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for u in \"https://www.gutenberg.org/cache/epub/17489/pg17489.txt\" \"https://www.gutenberg.org/ebooks/17489.txt.utf-8\"; do printf \"%-58s \" \"$(echo $u | cut -c1-56)\"; timeout 20 curl -sS -o /tmp/g -w \"%{http_code} %{size_downlo … [402 caractères tronqués]`
+
+  ```
+https://www.gutenberg.org/cache/epub/17489/pg17489.txt     503 913o
+https://www.gutenberg.org/ebooks/17489.txt.utf-8           503 913o
+--- wikisource livre ---
+200 71o
+{"batchcomplete":"","query":{"searchinfo":{"totalhits":0},"search":[]}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && q=\"https://fr.wikisource.org/w/api.php?action=query&list=allpages&apnamespace=104&apprefix=Candide&aplimit=5&format=json\"; timeout 25 curl -sS \"$q\" -o /tmp/ws2.json -w \"%{http_code}\\n\"; head -c 400 /tmp/ws2.json; echo; q2=\"ht … [297 caractères tronqués]`
+
+  ```
+200
+{"batchcomplete":"","query":{"allpages":[]}}
+200
+{"batchcomplete":"","query":{"allpages":[]}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 25 curl -sS \"https://fr.wikisource.org/w/api.php?action=query&meta=siteinfo&siprop=namespaces&format=json\" -o /tmp/ws4.json -w \"%{http_code}\\n\"; python3 -c \"\nimport json\nd=json.load(open('/tmp/ws4.json'))\nns=d['query … [252 caractères tronqués]`
+
+  ```
+200
+0 
+100 Transwiki
+102 Auteur
+104 Page
+105 Discussion Page
+112 Livre
+113 Discussion Livre
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 25 curl -sS \"https://fr.wikisource.org/w/api.php?action=query&list=allpages&apnamespace=112&aplimit=8&format=json\" -o /tmp/ws5.json -w \"%{http_code}\\n\"; head -c 500 /tmp/ws5.json; echo; timeout 25 curl -sS \"https://fr.w … [240 caractères tronqués]`
+
+  ```
+200
+{"batchcomplete":"","continue":{"apcontinue":"100_fa\u00e7ons_de_pr\u00e9parer_des_plats_bon_march\u00e9_-_1909.pdf","continue":"-||"},"query":{"allpages":[{"pageid":4369961,"ns":112,"title":"Livre:\"Pheng Xat Lao\" sheet music.djvu"},{"pageid":3029705,"ns":112,"title":"Livre:(Bourdoise) - Cat\u00e9chisme contenant l'ordre des mati\u00e8res qui s'enseignent dans les cinq classes diff\u00e9rentes qui se font en la paroisse S.N.D.C., 1657.pdf"},{"pageid":4713615,"ns":112,"title":"Livre:(\u00e9thym
+200
+{"batchcomplete":"","continue":{"apcontinue":"(Bourdoise)_-_Cat\u00e9chisme_contenant_l'ordre_des_mati\u00e8res_qui_s'enseignent_dans_les_cinq_classes_diff\u00e9rentes_qui_se_font_en_la_paroisse_S.N.D.C.,_1657.pdf/133","continue":"-||"},"query":{"allpages":[{"pageid":4369963,"ns":104,"title":"Page:\"Pheng Xat Lao\" sheet music.djvu/1"},{"pageid":3149423,"ns":104,"title":"Page:(Bourdoise) - Cat\u00e9chisme contenant l'ordre des mati\u00e8res qui s'enseignent dans les cinq classes diff\u00e9rentes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for s in Candide \"Madame Bovary\" \"Le Rouge et le Noir\" \"Vingt mille lieues\"; do printf \"%-22s \" \"$s\"; timeout 25 curl -sS --get \"https://fr.wikisource.org/w/api.php\" --data-urlencode \"action=query\" --data-urlencode \"li … [442 caractères tronqués]`
+
+  ```
+Candide                200 · Livre:Voltaire - Candide, 1759.djvu · Livre:Dostoïevski - L’Arbre de Noël, paru dans Candide, 25 décembre 19 · Livre:London - Soirée d’amateurs, paru dans Candide, 01 avril 1937.djv 
+Madame Bovary          200 · Livre:Flaubert - Madame Bovary, Conard, 1910.djvu · Livre:Georgette Leblanc - Un pélerinage au pays de Madame Bovary.djvu · Livre:Gustave Flaubert - Trois contes.djvu 
+Le Rouge et le Noir    200 · Livre:Le Rouge et le Noir.djvu · Livre:Stendhal - Le Rouge et le Noir, I, 1927, éd. Martineau.djvu · Livre:Stendhal - Le Rouge et le Noir, II, 1927, éd. Martineau.djvu 
+Vingt mille lieues     200 · Livre:Verne - Vingt mille lieues sous les mers.djvu · Livre:Marius-monnier---a-quatre-vingt-dix-mille-lieues-de-la-terre-190 · Livre:Verne - Le Tour du monde en quatre-vingts jours.djvu
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/collecter_wikisource_v2.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"collecter_wikisource_v2.py — le corpus Wikisource par les **Pages**, pas les portails.\n\nPOURQUOI CE FICHIER (et pourquoi le premierCollecteur a échoué). L … [6386 caractères tronqués]`
+
+  ```
+✅ autotest : "Le s'endort sur le tapis. 12"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 tools/collecter_wikisource_v2.py --livre \"Livre:Voltaire - Candide, 1759.djvu\" --livre \"Livre:Verne - Le Tour du monde en quatre-vingts jours.djvu\" --sortie data/wikisource --manifeste reports/corpus-wikisourc … [110 caractères tronqués]`
+
+  ```
+Livre:Voltaire - Candide, 1759.djvu                             2 p ·      1050 o
+  Livre:Verne - Le Tour du monde en quatre-vingts jours.djvu    224 p ·    435666 o
+  total : 436716 o · manifeste reports/corpus-wikisource.json
+ven 20 nov 2026 23:16:07 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 30 curl -sS --get \"https://fr.wikisource.org/w/api.php\" --data-urlencode \"action=query\" --data-urlencode \"list=allpages\" --data-urlencode \"apnamespace=104\" --data-urlencode \"apprefix=Voltaire - Candide\" --data-urlen … [814 caractères tronqués]`
+
+  ```
+200
+['Page:Voltaire - Candide, 1759.djvu/3', 'Page:Voltaire - Candide, 1759.djvu/4']
+200
+{{:MediaWiki:Proofreadpage_index_template
+|Type=book
+|Titre=[[Candide, ou l’Optimisme (1759)|Candide, ou l’Optimisme]]
+|Sous_titre=traduit de l'allemand du Dr Ralph
+|Volume=
+|Auteur=[[Auteur:Voltaire|Voltaire]]
+|Traducteur=
+|Editeur_scientifique=
+|Illustrateur=
+|Editeur=Cramer
+|School=
+|Lieu=Genève
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 python3 tools/collecter_wikisource_v2.py --livre \"Livre:Verne - Le Tour du monde en quatre-vingts jours.djvu\" --livre \"Livre:Flaubert - Madame Bovary, Conard, 1910.djvu\" --livre \"Livre:Le Rouge et le Noir.djvu\" --l … [231 caractères tronqués]`
+
+  ```
+return self._call_chain(*args)
+           ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/usr/lib64/python3.13/urllib/request.py", line 466, in _call_chain
+    result = func(*args)
+  File "/usr/lib64/python3.13/urllib/request.py", line 613, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 429: Too Many Requests
+ven 20 nov 2026 23:16:28 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/collecter_wikisource_v2.py'); s = p.read_text()\nold = '''def http(params: dict) -> dict:\n    params = dict(params, format=\"json\", formatversion=\"2\")\n    url = API + \"? … [1265 caractères tronqués]`
+
+  ```
+ok
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/collecter_wikisource_v2.py --livre \"Livre:Flaubert - Madame Bovary, Conard, 1910.djvu\" --livre \"Livre:Le Rouge et le Noir.djvu\" --livre \"Livre:Verne - Vingt mille lieues sous les mers.djvu\" --sortie data/wik … [212 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 23:17:32 EST
+  ```
+
+- **bash** `{"command": "sleep 180; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -5 /tmp/wikisource.log; echo \"---\"; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"", "description": "Check the  … [43 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 23:20:40 EST
+    (essai 2 : HTTPError — on attend)
+    (essai 3 : HTTPError — on attend)
+    (essai 4 : HTTPError — on attend)
+  Livre:Verne - Vingt mille lieues sous les mers.djvu           452 p ·    914480 o
+  total : 3049670 o · manifeste reports/corpus-wikisource.json
+---
+pas 4100 · perte 0.8743
+pas 5150 · perte 0.9633
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la data/wikisource/; echo \"--- extrait Bovary ---\"; head -c 700 data/wikisource/*bovary*.txt 2>/dev/null; echo; echo \"--- extrait Rouge ---\"; head -c 500 data/wikisource/*rouge*.txt 2>/dev/null", "description": "Inspect the h … [46 caractères tronqués]`
+
+  ```
+total 3420
+drwxr-xr-x. 1 stephane stephane     464 20 nov 23:20 .
+drwxr-xr-x. 1 stephane stephane    2750 20 nov 23:16 ..
+-rw-r--r--. 1 stephane stephane 1094440 20 nov 23:18 livre-flaubert-madame-bovary-conard-1910-djvu.txt
+-rw-r--r--. 1 stephane stephane 1040752 20 nov 23:19 livre-le-rouge-et-le-noir-djvu.txt
+-rw-r--r--. 1 stephane stephane  435667 20 nov 23:16 livre-verne-le-tour-du-monde-en-quatre-vingts-jours-djvu.txt
+-rw-r--r--. 1 stephane stephane  914481 20 nov 23:20 livre-verne-vingt-mille-lieues-sous-les-mers-djvu.txt
+-rw-r--r--. 1 stephane stephane    1051 20 nov 23:16 livre-voltaire-candide-1759-djvu.txt
+--- extrait Bovary ---
+center|80px
+Le texte de ce volume est conforme à celui de la dernière
+édition revue par G. Flaubert, Paris, Charpentier et , 1874.
+Les variantes sont établies d’après l’édition originale, 2 vol.,
+Paris, Michel Lévy frères, 1857, et les notes d’après les
+ébauches et le manuscrit original de l’auteur.
+page=4|thumb|upright=2.2|
+ŒUVRES COMPLÈTES DE GUSTAVE FLAUBERT
+―――――
+MADAME BOVARY
+MŒURS DE PROVINCE
+100px
+PARIS LOUIS CONARD, LIBRAIRE-ÉDITEUR 17, BOULEVARD DE LA MADELEINE, 17 ──
+MDCCCCX
+Permettez-moi d’inscrire votre nom en tête de ce livre et au-de
+… [604 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/collecter_wikisource_v2.py'); s = p.read_text()\nold = '''    lignes = [l.strip() for l in t.splitlines()]\n    return \"\\\\n\".join(l for l in lignes if l and not re.fullmat … [1250 caractères tronqués]`
+
+  ```
+ok
+ven 20 nov 2026 23:21:53 EST
+  ```
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/wikisource2.log; echo ---; head -c 400 data/wikisource/livre-flaubert-madame-bovary-conard-1910-djvu.txt; echo; head -c 200 data/wikisource/livre-le-rouge-et-le-noir-djvu.txt", "description": "Check the  … [45 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 23:30:21 EST
+    (essai 3 : HTTPError — on attend)
+  Livre:Verne - Le Tour du monde en quatre-vingts jours.djvu    224 p ·    434544 o
+  total : 3481197 o · manifeste reports/corpus-wikisource.json
+---
+Le texte de ce volume est conforme à celui de la dernière
+édition revue par G. Flaubert, Paris, Charpentier et , 1874.
+Les variantes sont établies d’après l’édition originale, 2 vol.,
+Paris, Michel Lévy frères, 1857, et les notes d’après les
+ébauches et le manuscrit original de l’auteur.
+ŒUVRES COMPLÈTES DE GUSTAVE FLAUBERT
+―――――
+MADAME BOVARY
+MŒURS DE PROVINCE
+100px
+OEUVRES COMPLÈTES
+DE
+STENDHAL
+(HENRY BEYLE)
+En vente :
+Sous presse :
+Et deux volumes de publiés pour la première fois,
+PARIS. – IMP. SIMON RANÇON ET COMP., RUE D’ERFURTH, 1.
+La petite ville de
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport hashlib, json, pathlib, re\ndoss = pathlib.Path('data/wikisource')\nman = json.loads(pathlib.Path('reports/corpus-wikisource.json').read_text())\npar_fichier = {pathlib.Path(x['fichier']).name: x for x in man … [1604 caractères tronqués]`
+
+  ```
+avant 3482252 après 3481696 · livres 5
+  Livre:Flaubert - Madame Bovary, Conard, 1910.djvu         1094096 o  0e23609be994
+  Livre:Le Rouge et le Noir.djvu                            1040202 o  d1f0afedf38f
+  Livre:Verne - Le Tour du monde en quatre-vingts jours.d    434545 o  64e28739341d
+  Livre:Verne - Vingt mille lieues sous les mers.djvu        911802 o  d1b304b79e26
+  livre-voltaire-candide-1759-djvu                             1051 o  19708481b4c9
+  livre-verne-le-tour-du-monde-en-quatre-vingts-jours-djvu.txt 64e28739341dce1d…        434545 o         2136 lignes  2026-11-20T23:30:39
+  livre-verne-vingt-mille-lieues-sous-les-mers-djvu.txt d1b304b79e26e34d…        911802 o         3861 lignes  2026-11-20T23:30:39
+  livre-voltaire-candide-1759-djvu.txt 19708481b4c92a41…          1051 o           36 lignes  2026-11-20T23:30:39
+  manifeste : 85f92b49f3e01f01… → reports/corpus-epingle-wikisource.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f data/wikisource/livre-voltaire-candide-1759-djvu.txt && python3 - <<'PY'\nimport json, pathlib\np = pathlib.Path('reports/corpus-wikisource.json')\nm = json.loads(p.read_text())\nm['livres'] = [x for x in m['livres'] if 'candid … [595 caractères tronqués]`
+
+  ```
+4 3480645
+  livre-verne-vingt-mille-lieues-sous-les-mers-djvu.txt d1b304b79e26e34d…        911802 o         3861 lignes  2026-11-20T23:30:39
+  manifeste : d29009d71cc1d8fc… → reports/corpus-epingle-wikisource.json
+ven 20 nov 2026 23:30:52 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-diversite-wikisource.md <<'MD'\n# D — La diversité n'est plus bloquée : Wikisource par les Pages, 4 livres, 3,48 Mo\n\n> **Ligne de roadmap** : D (les données) · **Date** : 2026-11-20 (nuit) · **Verdict** : la c … [4120 caractères tronqués]`
+
+  ```
+budget=0
+     · compteurs : en-cours.md dit 822 fichiers, le disque en a 823
+     · compteurs : en-cours.md dit 1088 JSON, le disque en a 1090
+ven 20 nov 2026 23:31:24 EST
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError
+  ❌ commit refusé : 3 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/corpus-epingle-wikisource.json
+     · reports/corpus-wikisource.json
+     · reports/rapport-diversite-wikisource.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"diversité\\|D\\*\\* :\" docs/pilotage/en-cours.md | head -4", "description": "Read the actual D line in the state"}`
+
+  ```
+89:pragmatique, r353. **D** : la diversité — bloquée (Gutenberg 503, Wikisource).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n_json=$(ls reports/*.json | wc -l); n_md=$(ls reports/*.md | wc -l); python3 - \"$n_md\" \"$n_json\" <<'PY'\nimport pathlib, re, sys\nmd, js = sys.argv[1], sys.argv[2]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text( … [1665 caractères tronqués]`

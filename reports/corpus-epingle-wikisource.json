@@ -1,0 +1,34 @@
+{
+ "schema": "drave.corpus-epingle",
+ "version": 1,
+ "date": "2026-11-20T23:30:52",
+ "corpus": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/wikisource",
+ "note": "sha256 du train, du val et des canaux ; --verifie recalcule et compare l'empreinte de chaque fichier et l'empreinte du manifeste",
+ "fichiers": {
+  "livre-flaubert-madame-bovary-conard-1910-djvu.txt": {
+   "sha256": "0e23609be994f2d15a86a8f1c9e2867628662c9356316479bd79d3a532501a44",
+   "octets": 1094096,
+   "lignes": 5122,
+   "mtime": "2026-11-20T23:30:39"
+  },
+  "livre-le-rouge-et-le-noir-djvu.txt": {
+   "sha256": "d1f0afedf38f7c076be307cdb0b75ba9388c0efa9c31340ef544c4ae56a3d46d",
+   "octets": 1040202,
+   "lignes": 3894,
+   "mtime": "2026-11-20T23:30:39"
+  },
+  "livre-verne-le-tour-du-monde-en-quatre-vingts-jours-djvu.txt": {
+   "sha256": "64e28739341dce1d8d1316ce6e6590331ff0bde41c428e3dcc67f3360893ba63",
+   "octets": 434545,
+   "lignes": 2136,
+   "mtime": "2026-11-20T23:30:39"
+  },
+  "livre-verne-vingt-mille-lieues-sous-les-mers-djvu.txt": {
+   "sha256": "d1b304b79e26e34db6353b83b6b52c10b9cdb63b85e8fd89a158147f511a2976",
+   "octets": 911802,
+   "lignes": 3861,
+   "mtime": "2026-11-20T23:30:39"
+  }
+ },
+ "manifeste_sha256": "d29009d71cc1d8fcbe3db9c305e5d2695b97fdffdd54e08cfe41c95dbf6cf438"
+}

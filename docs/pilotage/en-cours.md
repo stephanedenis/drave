@@ -61,7 +61,7 @@
 |---|---|---|
 | portes | **91** (dont `porte-a2.6-experts` le 18/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **822** / **1088** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **823** / **1090** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **129** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **20/11 05 h 58 → 07 h 58** : **91** portes, **89/2** ; seules `indice` (836 s) et `melange` (105 s) **structurelles** ; `sessions` **verte** ; machine au repos (les runs de la nuit finis) | `work/portes/roue-1120-0558/registre.txt` |
 
@@ -86,7 +86,7 @@ externes** et la **prochaine action**.
 **A** : les clusters et les bandes d'A2.6 ; A3.4 (Colab), A5.4 (FPGA : P2 + RTL), A6.2. **R** : la
 décision de routage du tagger (note prête, option b) ; J4 — l'or de rôles **mesuré** (second annotateur **0,71**, adjudication à faire). **S** : la rétro-traduction (**13/13** sur le gold).
 **B** : B13 (gold neuronal) ; B10.3. **Panini** : 26 signatures V14, calibration 42/44. **L** : la
-pragmatique, r353. **D** : la diversité — bloquée (Gutenberg 503, Wikisource).
+pragmatique, r353. **D** : la diversité — débloquée par les **Pages** Wikisource (4 livres, **3,48 Mo**) ; Gutenberg 503 ; étendre.
 
 ## Les questions ouvertes
 

@@ -1,0 +1,36 @@
+{
+ "source": "fr.wikisource.org (espace Page:, ns 104) — 4 livres du domaine public",
+ "methode": "collecter_wikisource_v2.py (Page: par lot de 50, nettoyage des noinclude/modèles/liens), post-nettoyage (px, filets, parenthèses seules)",
+ "livres": [
+  {
+   "livre": "Livre:Flaubert - Madame Bovary, Conard, 1910.djvu",
+   "fichier": "data/wikisource/livre-flaubert-madame-bovary-conard-1910-djvu.txt",
+   "pages": 656,
+   "octets": 1094096,
+   "sha256": "0e23609be994f2d15a86a8f1c9e2867628662c9356316479bd79d3a532501a44"
+  },
+  {
+   "livre": "Livre:Le Rouge et le Noir.djvu",
+   "fichier": "data/wikisource/livre-le-rouge-et-le-noir-djvu.txt",
+   "pages": 522,
+   "octets": 1040202,
+   "sha256": "d1f0afedf38f7c076be307cdb0b75ba9388c0efa9c31340ef544c4ae56a3d46d"
+  },
+  {
+   "livre": "Livre:Verne - Le Tour du monde en quatre-vingts jours.djvu",
+   "fichier": "data/wikisource/livre-verne-le-tour-du-monde-en-quatre-vingts-jours-djvu.txt",
+   "pages": 224,
+   "octets": 434545,
+   "sha256": "64e28739341dce1d8d1316ce6e6590331ff0bde41c428e3dcc67f3360893ba63"
+  },
+  {
+   "livre": "Livre:Verne - Vingt mille lieues sous les mers.djvu",
+   "fichier": "data/wikisource/livre-verne-vingt-mille-lieues-sous-les-mers-djvu.txt",
+   "pages": 452,
+   "octets": 911802,
+   "sha256": "d1b304b79e26e34db6353b83b6b52c10b9cdb63b85e8fd89a158147f511a2976"
+  }
+ ],
+ "octets_total": 3480645,
+ "note": "Candide (1759) est écarté : son index ne porte que 2 pages de fac-similé (le texte est transclus d'un autre scan) — la voie Page: ne le rend pas."
+}
