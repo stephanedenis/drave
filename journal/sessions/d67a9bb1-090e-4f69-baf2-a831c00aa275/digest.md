@@ -21049,3 +21049,23 @@ budget=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n_json=$(ls reports/*.json | wc -l); n_md=$(ls reports/*.md | wc -l); python3 - \"$n_md\" \"$n_json\" <<'PY'\nimport pathlib, re, sys\nmd, js = sys.argv[1], sys.argv[2]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text( … [2436 caractères tronqués]`
+
+  ```
+etat 825 1096
+budget=0
+  T0 max : 3886 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · puce > 80 mots : **N — l'entraînement, les corpus et le décodage** (18-20/11)
+   c2372f28..c25fa31d  s/v7 -> s/v7
+sam 21 nov 2026 00:07:32 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"N — l'entraînement\" docs/pilotage/en-cours.md | cut -c1-400", "description": "Read the N bullet to trim"}`
+
+  ```
+52:- **N — l'entraînement, les corpus et le décodage** (18-20/11) : 73 M **4,6792 → 3,0098** ; **150 M** : v1 **2,844** / v2 **3,038** (110k) ; **rejeu des fenêtres** : défaut trouvé — chaque tranche repartait le compteur, donc rejouait le même échantillon ; correctif `--compteur-suite` validé, pas encore utilisé ; **nuit** : `wiki_big` seul **6,8349** (v1 6,867, v2 7,093), long-forme **7,7479** ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"**rejeu des fenêtres** : défaut trouvé — chaque tranche repartait le compteur, donc rejouait le même échantillon ; correctif  … [690 caractères tronqués]`
