@@ -11,7 +11,7 @@ for i in $(seq 1 "$N"); do
   echo "=== tranche $i/$N $(date +%H:%M) ===" >> "work/n4/${PREFIX}.chaine.log"
   PYTHONPATH=. $PY -m tools.entrainer_native --corpus "$CORPUS" \
      --val data/wiki_mix/propre/val.txt --pas 10000 --seq 1024 --lot 8 --lr 1e-4 \
-     --dim 896 --expert-hidden 896 --no-tetes --amp --device "cuda:$GPU" --graine 1 $INIT \
+     --dim 896 --expert-hidden 896 --no-tetes --amp --device "cuda:$GPU" --graine 1 --compteur-suite $INIT \
      --sortie "work/n4/${PREFIX}${i}.pt" --drvm "work/n4/${PREFIX}${i}.drvm" \
      >> "work/n4/${PREFIX}.chaine.log" 2>&1 || break
   CK="work/n4/${PREFIX}${i}.pt"

@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 00:04 | `c25fa31d` | N — LE REJEU DES FENÊTRES : CHAQUE TRANCHE RÉPÉTAIT LE MÊME ÉCHANTILLON — 110 000 PAS NE VALENT PAS 900 Mo DE DONNÉES NEUVES | `en-cours.md`, `README.md`, `README.md` (+6) |
 | 00:07 | `4c86d1fe` | ÉTAT — LA PUCE N REPASSE SOUS 80 MOTS (REJEU DES FENÊTRES RESSERRÉ) | `en-cours.md`, `README.md`, `attention.md` (+5) |
+| 00:13 | `175e290c` | ÉTAT — LA PAGE VIVANTE PASSE AU 21/11 (LE REJEU DES FENÊTRES AJOUTÉ À L'EN-TÊTE) | `en-cours.md`, `README.md`, `attention.md` (+8) |
 
 ## Chiffres du jour
 

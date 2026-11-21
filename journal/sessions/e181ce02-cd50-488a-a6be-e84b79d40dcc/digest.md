@@ -72705,3 +72705,205 @@ def retr
 … [325 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ La réponse est mesurée dans le dépôt — voici ce qui manque, dans l'ordre
+
+## Ce que Drave a déjà pour « penser »
+
+- **La surface** : le produit lit un texte, le découpe, l'étiquette (POS 86, 95 avec le tagger), l'attache — **mesuré, installable**.
+- **La théorie** : la RSN plurielle (des candidats avec statut, coût, score, empreinte de Merkle), l'arbre d'états, le portefeuille de stratégies, la boucle anytime (`pensee-iterative.md`, `moteur-de-pensee.md` — 398 lignes de contrat).
+- **Les mesures** : `pas_de_pensee_*` (le pas de pensée linéaire **tient 2 pas puis s'effondre** ; la contraction ne sauve pas ; 7B, 14B, 3B, 7B testés), `native-pensee.json`, `m6-moteur.json`.
+
+## Ce qui manque — dans l'ordre de dépendance
+
+**1. La RSN n'est pas construite.** Le contrat existe (les types, le state store, l'arbre), mais **le chemin surface → RSN n'est pas implémenté** : le produit s'arrête au POS et aux syntagmes ; il ne produit pas les **candidats** (corps, statut, confiance, provenance) que la pensée doit manipuler. Sans RSN, le moteur de pensée n'a **rien** à faire tourner.
+
+**2. L'opérateur de pensée n'est pas appris.** C'est le résultat le plus dur du dépôt : un opérateur **linéaire** tient **2 pas** puis s'effondre ; la contraction, la taille, la projection de norme **ne repoussent pas la falaise**. Il manque l'opérateur **appris par récurrence** — et surtout **la donnée d'entraînement** des trajectoires de pensée (les paires état → état).
+
+**3. Le gold de pensée manque.** Le bloc « Pensée » est **en pause** dans `en-cours` pour cette raison exacte : *« gold de pensée »*. Sans un jeu de trajectoires humaines (comment un humain décompose une question), on ne peut ni entraîner ni **mesurer** un pas de pensée.
+
+**4. Les opérations exactes ne sont pas branchées.** La théorie est claire : le neuronal pour la **représentation**, le classique pour l'**opération** (le solveur, le compte, l'ordre). Les jeux symboliques sont spécifiés, les solveurs ne sont pas branchés au moteur.
+
+**5. Le modèle natif ne compose pas.** 0,88 de mots valides, répétition 6, mais **pas de phrase** : il ne tient pas un état sur la durée. La pensée exige un modèle qui **conserve** ce qu'il a lu (le contexte de 1 024 est le seul lien).
+
+**6. Le miroir n'est pas une boucle.** La règle 6 (entrée/sortie) est posée ; la **validation de sortie** (le texte produit relu par la surface, comparé à l'intention) n'est pas implémentée.
+
+## Le chemin le plus court
+
+**Le verrou n°1 est la RSN** — c'est le seul qui débloque les autres. Concrètement : faire produire au bloc linguistique, en plus du POS et des syntagmes, **un ensemble de candidats RSN** (la phrase → les prédications candidates, avec leur confiance et leur provenance), puis un **état** (les candidats retenus, leur empreinte). C'est mesurable **sans API** : la couverture (combien de phrases produisent une RSN), la cohérence (les candidats se contredisent-ils ?), et le rejeu (la même phrase redonne la même empreinte).
+
+**Une réserve** : le mot « réfléchir » recouvre deux choses différentes — **calculer** (l'inférence, la déduction : un solveur le fait) et **délibérer** (choisir quoi faire : l'arbre d'états, le budget). Drave a le contrat du second, pas le matériau du premier. Il faut choisir lequel on veut mesurer d'abord.
+
+
+## Tour 224
+
+### 👤 Utilisateur
+
+Notre priorité doit être le RSN. Le reste est futile sans cette fondation.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; head -40 docs/theorie/glossaire/entrees/representation-semantique-neutre.md | cut -c1-150; echo \"=== le contrat des candidats :\"; sed -n '30,90p' docs/implantation/moteur-de-pensee.md | cut -c1-140", "description": "Lire le c … [18 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 00:15:30 EST
+<!-- généré par tools/glossaire_cartes.py — ne pas éditer à la main -->
+# Représentation sémantique neutre (RSN)
+
+> **TL;DR — Représentation sémantique neutre (RSN).** L'objet échangé entre le **module pré-linguistique** (texte → sens) et le **module post-linguist
+>
+> **Ce que c'est, en clair.** Définition complète dans la famille.
+>
+> **Famille :** [1. Le projet, ses noms, sa méthode](../01-le-projet-ses-noms-sa-methode.md) · **Index :** [toutes les entrées](../README.md)
+> · **Définition complète :** [la famille](../01-le-projet-ses-noms-sa-methode.md)
+>
+> **Références externes :** voir [les sources citées](../09-sources-externes-citees.md)
+=== le contrat des candidats :
+  "annotation": {"confiance_pm": 620, "format": "mnist"},
+  "statut": "hypothese",
+  "provenance": {"operateur": "vision.encode", "parent": "s0", "pas": 3},
+  "cout": {"noeuds": 3, "ms": 12},
+  "score": 0.62
+}
+```
+
+**Un état** :
+
+```json
+{
+  "id": "s3",
+  "parent": "s1",
+  "profondeur": 3,
+  "budget": {"noeuds": 12, "max": 50},
+  "statut": "ouvert",
+  "candidats": ["c1", "c2", "c3"],
+  "frontiere": ["s3", "s5", "s6"],
+  "empreinte": "H(c1 ‖ c2 ‖ c3)"
+}
+```
+
+**La canonicalisation** : c
+… [1919 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l tools/analyser.py tools/drave.py 2>/dev/null; grep -n \"def analyser\\|syntagme\\|role\\|cible\\|attachement\" tools/analyser.py | head -8 | cut -c1-120; ls tools/schemas/ 2>/dev/null | head -5", "description": "Voir l'analyseu … [3 caractères tronqués]`
+
+  ```
+1735 tools/drave.py
+ 1735 total
+drave-annotation-v1.json
+drave-annotation-v2.json
+[stderr]
+grep: tools/analyser.py: No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def analyser\\|def cmd_analyser\\|def annoter\\|\\\"syntagmes\\\"\\|'syntagmes'\\|\\\"candidats\\\"\" tools/drave.py | head -8 | cut -c1-130; grep -n \"class .*Analy\\|def analyse\" tools/*.py 2>/dev/null | head -5 | cut -c … [59 caractères tronqués]`
+
+  ```
+237:    def analyser(self, texte: str, langue: str | None = None,
+345:    def analyser(self, texte: str, langue: str | None = None,
+665:def cmd_analyser(args: argparse.Namespace) -> int:
+955:    def analyser(self, texte: str, langue: str | None = None, contexte: str | None = None):
+tools/aligneur_litteraire.py:1467:def analyser(args: argparse.Namespace) -> dict:
+tools/analyse_alignement.py:41:def analyse(npz: str, sortie: str) -> None:
+tools/analyse_flux.py:84:def analyser(nom, listes, hidden, top=100):
+tools/atomes_prediction.py:726:def analyser(data: dict, cohorte: str = "mesurable", n_perm_col: int = 2000,
+tools/bloc_code.py:133:def analyse(source: str, nom: str = "<snippet>") -> Module:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '237,260p' tools/drave.py | cut -c1-140; echo \"=== la sortie :\"; sed -n '300,344p' tools/drave.py | grep -nE \"\\\"|'|return\" | head -12 | cut -c1-130", "description": "Lire le contrat de la sortie d'analyse"}`
+
+  ```
+def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> bl.Annotation:
+        if self.cascade is not None and not self.panne:
+            try:
+                annotation = self.cascade.analyser(texte, langue, contexte)
+            except CleTaggerRefusee as exc:
+                self.panne = True
+                self.cause = f"clé refusée (HTTP {exc.code})"
+                return self._heuristique(texte, langue, contexte)
+            if not annotation.refus:
+                self.api_servie += 1
+                return annotation
+            if not annotation.refus.startswith("neuronal"):
+                # refus du texte (vide, non texte) : ce n'est pas une panne du tagger
+                return annotation
+            self.panne = True
+            self.cause = annotation.refus
+        return self._heuristique(texte, langue, contexte)
+
+    def _heuristique(self, texte: str, langue: str | None,
+                     contexte: str | None) -> bl.Annotation:
+        annotation = self.h.analyser(texte, langue, contexte)
+        if annotation.refus:
+            # le texte lui-même est refusé : le code 3 reste celui de l'analyse
+=== la sortie
+… [674 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/ | grep -iE \"^bl|bloc_ling\" | head -3; grep -n \"class Annotation\" tools/bloc_linguistique.py | head -2; sed -n \"$(grep -n 'class Annotation' tools/bloc_linguistique.py | head -1 | cut -d: -f1),+30p\" tools/bloc_linguist … [67 caractères tronqués]`
+
+  ```
+blanchiment_entree.py
+bloc_code.py
+bloc_linguistique.py
+127:class Annotation:
+class Annotation:
+    texte: str
+    langue: str = "und"
+    script: str = SCRIPT_NEUTRE
+    etiquettes: list[Etiquette] = field(default_factory=list)
+    refus: str = ""
+    trace: list[dict] = field(default_factory=list)
+    cout: dict = field(default_factory=dict)
+    unites_semantiques: list[Span] = field(default_factory=list)
+    fraction_semantique: float = 0.0
+    source: str = "heuristique"
+    contexte: str = ""
+
+    def par_niveau(self) -> dict[str, list[Etiquette]]:
+        sortie: dict[str, list[Etiquette]] = collections.defaultdict(list)
+        for e in self.etiquettes:
+            sortie[e.niveau].append(e)
+        return dict(sortie)
+
+    def couverture(self) -> dict[str, float]:
+        """La confiance maximale par niveau — la couverture *déclarée*, pas une précision."""
+        return {n: round(max((e.confiance for e in es), default=0.0), 4)
+                for n, es in self.par_niveau().items()}
+
+    def json(self, avec_duree: bool = False) -> dict:
+        cout = dict(self.cout)
+        if not avec_duree:
+            cout.pop("duree_s", None)
+        return {
+            # le **format*
+… [129 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'class Etiquette' tools/bloc_linguistique.py | head -1 | cut -d: -f1),+20p\" tools/bloc_linguistique.py | cut -c1-130", "description": "Voir la classe Etiquette"}`
+
+  ```
+class Etiquette:
+    niveau: str
+    type: str
+    valeur: str
+    debut: int
+    fin: int
+    source: str = "heuristique"
+    confiance: float = 0.5
+    candidats: list[str] = field(default_factory=list)
+    langue: str = "und"
+    script: str = SCRIPT_NEUTRE
+    meta: dict = field(default_factory=dict)
+
+    def json(self) -> dict:
+        return {
+            "niveau": self.niveau, "type": self.type, "valeur": self.valeur,
+            "debut": self.debut, "fin": self.fin, "source": self.source,
+            "confiance": round(float(self.confiance), 4),
+            "candidats": list(self.candidats), "langue": self.langue,
+            "script": self.script, "meta": _meta_json(self.meta),
+        }
+  ```
+

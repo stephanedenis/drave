@@ -21129,3 +21129,22 @@ p24 wikitext2 7.1548
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"**Mis à jour : 2026-11-20, 15 h 35 HNE (les cinq parcours de lecture : un guidon pour chaque profil, moins de documents)**\"\ … [637 caractères tronqués]`
+
+  ```
+header ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   2a209b6d..175e290c  s/v7 -> s/v7
+sam 21 nov 2026 00:16:04 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in work/n4/nuit.sh bench/chaine_nuit.sh; do python3 - \"$f\" <<'PY'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]); s = p.read_text()\nold = \"--dim 896 --expert-hidden 896 --no-tetes --amp --device \\\"cuda:$GPU\\\" --gra … [687 caractères tronqués]`
+
+  ```
+ok work/n4/nuit.sh
+ok bench/chaine_nuit.sh
+scripts ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/chaine_nuit.sh && git commit -q -m \"N — LA CHAÎNE DE NUIT PASSE --compteur-suite (LES TRANCHES NE REJOUENT PLUS LES MÊMES FENÊTRES)\" && git push origin s/v7 2>&1 | tail -1; date", "description": "Commit the chain scri … [32 caractères tronqués]`

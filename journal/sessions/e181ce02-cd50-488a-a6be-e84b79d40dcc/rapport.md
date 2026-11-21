@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 487.6 h |
 | Tours | 224 |
-| Messages | 4473 |
-| Appels d'outils | 3983 |
+| Messages | 4480 |
+| Appels d'outils | 3990 |
 | Fichiers touchés | 25 |
-| Commandes | 3311 |
+| Commandes | 3318 |
 | Sous-agents | 43 |
 | Commits | 527 |
 | Compactages de contexte | 10 |
@@ -11831,9 +11831,16 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 
 ### Tour 224 — Notre priorité doit être le RSN. Le reste est futile sans cette fondation.
 
-*1 appels d'outils.* Actions notables :
+*8 appels d'outils.* Actions notables :
 
 - bash — Lire le contrat de la RSN
+- bash — Voir l'analyseur
+- bash — Trouver l'analyseur dans drave.py
+- bash — Lire le contrat de la sortie d'analyse
+- bash — Voir la classe Annotation
+- bash — Voir la classe Etiquette
+- bash — Créer le module RSN
+- bash — Trouver la classe d'analyse
 
 ## 3. Travail accompli
 
@@ -11955,7 +11962,7 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3271 autres
+- … et 3278 autres
 
 ## 4. Mesures et résultats marquants
 

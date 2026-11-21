@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**3 commits** · **2 session(s)** · **2 thème(s)**
+**4 commits** · **2 session(s)** · **2 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| attention | 2 | [attention.md](attention.md) |
+| attention | 3 | [attention.md](attention.md) |
 | docs | 1 | [docs.md](docs.md) |
 
 ## Sessions DSH
@@ -28,6 +28,7 @@
 | 00:04 | `c25fa31d` | N — LE REJEU DES FENÊTRES : CHAQUE TRANCHE RÉPÉTAIT LE MÊME ÉCHANTILLON — 110 000 PAS NE VALENT PAS 900 Mo DE DONNÉES NEUVES |
 | 00:07 | `4c86d1fe` | ÉTAT — LA PUCE N REPASSE SOUS 80 MOTS (REJEU DES FENÊTRES RESSERRÉ) |
 | 00:10 | `2a209b6d` | ÉTAT — LA PUCE N PASSE SOUS 80 MOTS ET LA PAGE VIVANTE PASSE AU 21/11 |
+| 00:13 | `175e290c` | ÉTAT — LA PAGE VIVANTE PASSE AU 21/11 (LE REJEU DES FENÊTRES AJOUTÉ À L'EN-TÊTE) |
 
 ## Le récit de la journée (écrit à la main)
 
