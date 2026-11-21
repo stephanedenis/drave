@@ -36,7 +36,8 @@
 - `pas × lot` fenêtres distinctes par tranche : si un run ne fait **qu'une** tranche, il voit bien
   `pas × lot` fenêtres neuves — le défaut ne concerne que les **chaînes**.
 - Le tirage Van der Corput est quasi uniforme sur tout le corpus : l'échantillon de 80 000 fenêtres
-  couvre tout le corpus de façon stratifiée, mais **0,002 %** des positions.
+  couvre tout le corpus de façon stratifiée — **2,2 %** des octets du palier 1 (3,69 Go), **9,9 %**
+  de `wiki_big` (0,83 Go), une fenêtre tous les ~46 Ko / ~10 Ko.
 
 ## La suite
 

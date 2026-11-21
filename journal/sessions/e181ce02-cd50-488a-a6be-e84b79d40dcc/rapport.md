@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 487.6 h |
+| Durée | 487.7 h |
 | Tours | 224 |
-| Messages | 4480 |
-| Appels d'outils | 3990 |
+| Messages | 4488 |
+| Appels d'outils | 3998 |
 | Fichiers touchés | 25 |
-| Commandes | 3318 |
+| Commandes | 3326 |
 | Sous-agents | 43 |
 | Commits | 527 |
 | Compactages de contexte | 10 |
@@ -11831,7 +11831,7 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 
 ### Tour 224 — Notre priorité doit être le RSN. Le reste est futile sans cette fondation.
 
-*8 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Lire le contrat de la RSN
 - bash — Voir l'analyseur
@@ -11841,6 +11841,13 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - bash — Voir la classe Etiquette
 - bash — Créer le module RSN
 - bash — Trouver la classe d'analyse
+- bash — Trouver le nom de la classe
+- bash — Tester la RSN
+- bash — Voir les étiquettes de syntagme
+- bash — Corriger la prédication
+- bash — Tester la couverture et le déterminisme
+- bash — Trouver le gold
+- … et 2 autres
 
 ## 3. Travail accompli
 
@@ -11962,7 +11969,7 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3278 autres
+- … et 3286 autres
 
 ## 4. Mesures et résultats marquants
 

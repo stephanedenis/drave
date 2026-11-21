@@ -72907,3 +72907,109 @@ class Etiquette:
         }
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/rsn.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"rsn.py — la représentation sémantique neutre : les candidats, l'état, l'empreinte.\n\nLA FONDATION. Le produit lit un texte et rend une `Annotation` (le POS, les syntagmes, les … [9159 caractères tronqués]`
+
+  ```
+syntaxe OK
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/rsn.py", line 205, in <module>
+    main()
+    ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/rsn.py", line 192, in main
+    etat = analyser_et_rsn(a.texte, a.langue, tagger=a.tagger)
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/rsn.py", line 178, in analyser_et_rsn
+    from tools.drave import FabriqueBloc  # noqa: F401 — import paresseux
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ImportError: cannot import name 'FabriqueBloc' from 'tools.drave' (/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^class \\|^def fabrique\\|^def creer\" tools/drave.py | head -8 | cut -c1-110; sed -n '225,240p' tools/drave.py | cut -c1-110", "description": "Trouver la classe d'analyse"}`
+
+  ```
+110:class CleTaggerAbsente(RuntimeError):
+114:class CleTaggerRefusee(RuntimeError):
+130:class GoldAbsent(RuntimeError):
+141:class ErreurEntree(RuntimeError):
+209:class _TaggerAuto:
+328:class _CascadeTagger:
+365:class _HeuristiqueProfils(bl.Heuristique):
+464:class _Formateur(argparse.RawDescriptionHelpFormatter):
+
+    def __init__(self, heuristique: bl.Heuristique, cascade=None, stats: dict | None = None):
+        self.h = heuristique
+        self.cascade = cascade
+        self.stats = stats
+        self.cle_presente = cascade is not None
+        self.api_servie = 0
+        self.replis = 0
+        self.cause = ""
+        # une fois la panne constatée, on ne rappelle plus l'API pour les phrases suivantes
+        self.panne = False
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> bl.Annotation:
+        if self.cascade is not None and not self.panne:
+            try:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '210,224p' tools/drave.py | cut -c1-110; grep -n \"Analyseur\\|analyser = \\|\\.analyser(\" tools/drave.py | head -5 | cut -c1-120", "description": "Trouver le nom de la classe"}`
+
+  ```
+"""Le mode `auto` du tagger : API si une clé existe, heuristique sinon.
+
+    Ce qu'il garantit :
+
+    - **aucun code 4** : une clé refusée (401/403) ou un réseau coupé n'arrête pas le run ;
+      l'analyse est rendue par l'heuristique, code 0, avec la cause dans `refus` ;
+    - **aucun appel réseau sans clé** : la cascade n'est même pas construite ;
+    - **la même analyse que le défaut** quand aucune clé n'existe : l'annotation sort de
+      `Heuristique.analyser`, sans `refus` ajouté et sans source modifiée ;
+    - un **message** (`message()`) qui dit lequel a servi, sans jamais nommer la clé.
+
+    Le mode est un **prototype** : il ne change pas le défaut, qui reste l'heuristique.
+    """
+
+    nom = "auto"
+241:                annotation = self.cascade.analyser(texte, langue, contexte)
+258:        annotation = self.h.analyser(texte, langue, contexte)
+347:        annotation = self.cascade.analyser(texte, langue, contexte)
+354:            annotation.refus = self.compose.analyser(texte, langue, contexte).refus
+358:        for e in self.h.analyser(texte, langue, contexte).etiquettes:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/rsn.py'); t = p.read_text()\nt = t.replace('''    from tools.drave import FabriqueBloc  # noqa: F401 — import paresseux\n\n    bloc = FabriqueBloc(tagger=tagger)\n    annotati … [691 caractères tronqués]`
+
+  ```
+corrigé
+état s0 · 51 candidats · 0 retenus · empreinte 794019f2465c5cdc
+  [hypothese] fait        'Le' (score 0.99)
+  [hypothese] fait        'Le' (score 0.98)
+  [hypothese] fait        'Le' (score 0.92)
+  [hypothese] fait        'Le chat' (score 0.40)
+  [hypothese] predication 'Le chat' (score 0.40)
+  [hypothese] fait        'suite' (score 0.50)
+  [hypothese] fait        'Le chat de la voisine dort sur le toit.' (score 0.70)
+  [hypothese] fait        'déclarative' (score 0.85)
+=== JSON :
+{
+  "schema": "drave.rsn",
+  "version": 1,
+  "etat": {
+    "id": "s0",
+    "parent": null,
+    "profondeur": 0,
+    "budget": {
+      "noeuds": 51,
+      "max": 50
+    },
+    "statut": "ouvert",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 - <<'PY' 2>&1 | tail -25\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\na = bl.Heuristique().analyser(\"Le chat de la voisine dort sur le toit.\")\nfor e in a.etiquettes:\n    if e.nive … [201 caractères tronqués]`
+
+  ```
+syntagme | GN | Le chat | {'role': 'agent', 'niveau': 0, 'attachement': {'segment': 'Le chat', 'cible': 'dort', 'candidats': [{'span': {'debut': 22, 'fin': 26}, 'cible': 'dort', 'source': 'heuristique'}, {'span': {'debut': 0, 'fin': 7}, 'cible': 'Le chat', 'source': 'heuristique'}, {'span': {'debut': 3, 'fin': 7}, 'cible': 'chat', 'source': 'heuristique'}]}}
+syntagme | GP | de la voisine | {'role': 'theme', 'niveau': 1, 'union': True, 'attachement': {'segment': 'de la voisine', 'cible': 'chat', 'candidats': [{'span': {'debut': 3, 'fin': 7}, 'cible': 'chat', 'source': 'heuristique'}, {'span': {'debut': 22, 'fin': 26}, 'cible': 'dort', 'source': 'heuristique'}]}, 'partition': {'groupe': 0, 'rang': 1, 'membres': 3, 'vue': 'alternative'}, 'alternative': [{'type': 'GV', 'debut': 22, 'fin': 26, 'source': 'heuristique', 'union': True, 'relation': 'croise', 'rang': 2, 'role': 'prédicat'}, {'type': 'GP', 'debut': 8, 'fin': 26, 'source': 'heuristique', 'union': False, 'relation': 'inclus', 'rang': 3, 'attachement': {'segment': 'de la voisine dort', 'cible': 'dort', 'candidats': [{'span': {'debut': 22, 'fin': 26}, 'cible': 'dort', 'source': 'heuristique'}, {'span': {'debut': 0, 'fin': 7}, 'ci
+… [2459 caractères tronqués]
+  ```
+

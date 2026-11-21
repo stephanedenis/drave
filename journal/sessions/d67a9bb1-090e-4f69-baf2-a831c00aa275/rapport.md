@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 86.4 h |
+| Durée | 86.5 h |
 | Tours | 88 |
-| Messages | 1502 |
-| Appels d'outils | 1315 |
+| Messages | 1503 |
+| Appels d'outils | 1316 |
 | Fichiers touchés | 44 |
-| Commandes | 1159 |
+| Commandes | 1160 |
 | Sous-agents | 7 |
-| Commits | 115 |
+| Commits | 116 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2210,7 +2210,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 88 — continue avec des taches nocturnes jusqu'à demain 9h00
 
-*95 appels d'outils.* Actions notables :
+*96 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create the night goal and the resume script
@@ -2226,7 +2226,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - bash — Check referents tests and the missed clitics
 - bash — Read the tokenizer and its classes
 - bash — Read the Token class and sample classes
-- … et 79 autres
+- … et 80 autres
 
 ## 3. Travail accompli
 
@@ -2331,7 +2331,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1119 autres
+- … et 1120 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2594,4 +2594,5 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - ÉTAT — LA PUCE N PASSE SOUS 80 MOTS ET LA PAGE VIVANTE PASSE AU 21/11" && git push origin s/v7 2>&1 | tail -1; date
 - ÉTAT — LA PAGE VIVANTE PASSE AU 21/11 (LE REJEU DES FENÊTRES AJOUTÉ À L'EN-TÊTE)" && git push origin s/v7 2>&1 | tail -1; date
 - N — LA CHAÎNE DE NUIT PASSE --compteur-suite (LES TRANCHES NE REJOUENT PLUS LES MÊMES FENÊTRES)" && git push origin s/v7 2>&1 | tail -1; date
+- N — LA COUVERTURE DE L'ÉCHANTILLON EST CHIFFRÉE (2,2 % DU PALIER 1, 9,9 % DE wiki_big) ; LA PUCE N DIT LE FLAG PASSÉ" && git push origin s/v7 2>&1 | tail -1; da
 
