@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**11 commits** · **2 session(s)** · **6 thème(s)**
+**12 commits** · **2 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 4 | [attention.md](attention.md) |
-| distribue | 1 | [distribue.md](distribue.md) |
+| distribue | 2 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
 | mesures | 2 | [mesures.md](mesures.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -22,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 94.0 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 95.0 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 487.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -40,6 +40,7 @@
 | 01:25 | `a0218228` | N — LA NUIT DU PALIER 1, TRANCHES 4 ET 5 : p1 7,3733 → 7,1953, p2 7,1548 → 7,0021 SUR WIKITEXT2 |
 | 06:13 | `6e0f49f1` | SESSION S — LE HEARTBEAT EST RAFRAÎCHI (LE MANDAT ÉTAIT PÉRIMÉ DE 1 305 MIN, porte-sessions ROUGE ; RE-VÉRIFIÉE VERTE) |
 | 06:27 | `e9a6b88f` | N — LA MATRICE (BLOC 1) : LE CLASSEMENT S'INVERSE SELON LE VAL — `wiki_big` GAGNE DANS SON REGISTRE, LE PLEIN TEXTE GAGNE EN LITTÉRATURE |
+| 07:50 | `680e5cd1` | N — LA MATRICE COMPLÈTE : DANS SON REGISTRE TOUT SE VAUT (2,68-2,74), HORS REGISTRE LE PLEIN TEXTE GAGNE (3,58 CONTRE 4,04-4,12) |
 
 ## Le récit de la journée (écrit à la main)
 

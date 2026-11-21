@@ -21932,3 +21932,87 @@ p211 -
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text()\ndebut = s.index(\"## La matrice du matin\")\nfin = s.index(\"## Ce qui pourrait le rendre faux\")\nnouveau = \"\"\"## La m … [3870 caractères tronqués]`
+
+  ```
+fiche ok
+etat 826 1134
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   e9a6b88f..680e5cd1  s/v7 -> s/v7
+sam 21 nov 2026 07:53:34 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p211','p111'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  … [281 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 08:03:34 EST
+p211 val 2.9289  wikitext2 7.0477
+p111 -  wikitext2 -
+3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi --query-gpu=index,utilization.gpu --format=csv,noheader; PYTHONPATH=. timeout 600 /home/stephane/gpu-env/bin/python tools/ppl_matrice.py --modele p211=work/n4/p211.pt --val litterature=work/vals/litterature_val_1m.txt --va … [204 caractères tronqués]`
+
+  ```
+0, 99 %
+1, 0 %
+      p211 × palier1    : 2.6796148275059752
+
+| modèle | litterature | palier1 |
+|---|---:|---:|
+| p211 | 4.1306 | 2.6796 |
+sam 21 nov 2026 08:05:32 EST
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\" || echo \"p1 : tranche en cours\"; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/p111.pt.json')); print('p111 val', round(d[ … [117 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 08:15:29 EST
+p1 : tranche en cours
+p111 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 work/n4/p1.chaine.log | cut -c1-55; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/p111.pt.json')); print('p111 val', round(d['ppl_val'],4))\nexcept FileNotFoundError: print('p111 -')\"", "de … [52 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 08:25:23 EST
+pas 7650 · perte 0.7753 · PPL val 3.161 · 3447 s · éche
+pas 7700 · perte 0.8470 · PPL val 3.171 · 3468 s · éche
+pas 7750 · perte 1.0190 · PPL val 3.170 · 3489 s · éche
+p111 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p111',):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  ')\n  … [273 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 08:35:19 EST
+p111 -  wikitext2 -
+pas 9200
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p111',):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  ')\n  … [225 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 08:44:46 EST
+p111 val 2.936  wikitext2 7.0342
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 500 /home/stephane/gpu-env/bin/python tools/ppl_matrice.py --modele p111=work/n4/p111.pt --val litterature=work/vals/litterature_val_1m.txt --val palier1=work/vals/palier1_val_1m.txt --device cuda:0 --sortie repo … [136 caractères tronqués]`
+
+  ```
+| modèle | litterature | palier1 |
+|---|---:|---:|
+| p111 | 4.1036 | 2.6929 |
+sam 21 nov 2026 08:46:58 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text()\nlignes = [\n (30000, \"7,7044 / 3,1486\", \"7,2790 / 3,0874\"),\n (40000, \"7,3733 / 3,0761\", \"7,1548 / 3,0232\"),\n (50 … [2454 caractères tronqués]`
+
+  ```
+fiche ok
+etat 826 1142
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-nuit-palier1-110k.md reports/ppl-matrice-p111.json reports/ppl-matrice-p211.json reports/banc-generation-p1*.json reports/banc-grammaticalite-p1*.json reports/ppl-wikitext2-p1*.json reports/banc-generation-p2* … [1205 caractères tronqués]`

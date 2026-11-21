@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/p111.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9592,
+   "distinct_2": 0.6859,
+   "repetition": 9,
+   "echo": 0.1031,
+   "octets": 2560,
+   "secondes": 22.81,
+   "octets_s": 112.2,
+   "echantillons": [
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.6522,
+     "repetition": 3,
+     "echo": 0.2631578947368421,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la région de Bourgogne-Franche-Comté. Le pays de la région est constitué de la région de Bourgogne-Franche-Comté. Le p",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5667,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le premier projet de la série est décidé par le projet de la série de la série de la série de la série de livres de la ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.7391,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le premier épisode de la série de films de la série télévisée de science-fiction de la série télévisée de science-fic",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.6522,
+     "repetition": 3,
+     "echo": 0.2631578947368421,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la région de Bourgogne-Franche-Comté. Le pays de la région est constitué de la région de Bourgogne-Franche-Comté. Le p",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5667,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le premier projet de la série est décidé par le projet de la série de la série de la série de la série de livres de la ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.7391,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le premier épisode de la série de films de la série télévisée de science-fiction de la série télévisée de science-fic",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.6154,
+     "repetition": 2,
+     "echo": 0.08,
+     "prompt": "Le chat",
+     "texte": "Le chat est un chat en pierre de taille moyenne de la commune de La Chapelle-sur-Mer est un chat en pierre de taille moyenne de la comm",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9048,
+     "distinct_2": 0.7,
+     "repetition": 2,
+     "echo": 0.21052631578947367,
+     "prompt": "La mer",
+     "texte": "La mer est un arbuste de la commune de La Chapelle-sur-Saint-Laurent et de la commune de La Chapelle-sur-Saint-Laurent dans le départ",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7667,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent de la finale de la Coupe du monde de football et de la Coupe du monde de football 2018. Le club est relégué en 2018 et se dé",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8929,
+     "distinct_2": 0.7778,
+     "repetition": 2,
+     "echo": 0.12,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de se rendre en Allemagne et en Allemagne. Le , le gouvernement de la République de la République de Chine en retour de la R�",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "Paris est",
+     "texte": "Paris est un architecte de la commune de Paris dans le département de la Seine-Saint-Denis en France. Il est le fils de Jean Baptiste de",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5652,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme d'affaires de la Communauté de communes de la Commune de Paris et de la Communauté de communes de la Communauté de communes ",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2069,
+     "repetition": 9,
+     "echo": 0.32142857142857145,
+     "prompt": "La musique",
+     "texte": "La musique de la chanson de la chanson de la chanson de la chanson de la chanson de la chanson de la chanson de la chanson de la chanson d",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.88,
+     "repetition": 2,
+     "echo": 0.041666666666666664,
+     "prompt": "Le livre",
+     "texte": "Le livre de La Confédération de la littérature et de la littérature en 1938 et 1939. En 1939, il est nommé par le prix de littérat",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5862,
+     "repetition": 3,
+     "echo": 0.17857142857142858,
+     "prompt": "La guerre",
+     "texte": "La guerre de la Ligue de hockey en 2008 est la deuxième de la Ligue de hockey en 2010 et la deuxième de la Ligue de hockey en 2011. En ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6667,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la production de vie est de . Le programme de ce programme est de . Le programme de conservation est de . Le programme de co",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "Le sport",
+     "texte": "Le sport automobile est un sport automobile en province de Le Parc de la Compagnie des chemins de fer de Paris à l'occasion de la compa",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.88,
+     "repetition": 2,
+     "echo": 0.16,
+     "prompt": "La science",
+     "texte": "La science de l'école de La Réunion, le régiment de la Légion d'honneur le , est décidé de se rendre à la prison de la Légion d'ho",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 0.8095,
+     "repetition": 2,
+     "echo": 0.1,
+     "prompt": "La ville",
+     "texte": "La ville de La Réunion est située dans le département de la Haute-Loire, en région Nouvelle-Aquitaine. Elle est située dans le dép",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.8696,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de jeu est de promotion sont des compétitions sociales et sociales (CSPS) de la Ligue majeure de baseball de la Ligue majeure ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.84,
+     "repetition": 2,
+     "echo": 0.08333333333333333,
+     "prompt": "La vie",
+     "texte": "La vie de la compétition est le troisième et dernier de la compétition. Le club est relégué en Liga en 2008 et est relégué en L",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.4783,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde est un monophobe de la compositrice et de la compositrice et de la compositrice et professionnelle de la compositrice et de la ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.24,
+     "repetition": 7,
+     "echo": 0.3333333333333333,
+     "prompt": "La question",
+     "texte": "La question de la production de la production de la production de la production de la production de la production de la production de la pr",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.8624,
+   "distinct_2": 0.9659,
+   "repetition": 2,
+   "echo": 0.0548,
+   "octets": 2560,
+   "secondes": 23.16,
+   "octets_s": 110.6,
+   "echantillons": [
+    {
+     "mots": 30,
+     "mots_valides": 0.9,
+     "distinct_2": 0.931,
+     "repetition": 1,
+     "echo": 0.12,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de montagne de la Loire en Champagne de la liberté et de la ligne de Saint-Christophe. En 2001, il a été utilisé à des con",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.5833,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1950 Fabian Zone (Bobby Fernand Schleber et Jean-Claude Elizabeth Amourdien), Elizabeth De Sr. On La Mort de Rose Beginsberg",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.22727272727272727,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois dans le monde, il apprécie ses mémoires face à l'attaquant si une fois de ses demi-frères. En 1914, il entame une dépréci",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 30,
+     "mots_valides": 0.9,
+     "distinct_2": 0.931,
+     "repetition": 1,
+     "echo": 0.12,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de montagne de la Loire en Champagne de la liberté et de la ligne de Saint-Christophe. En 2001, il a été utilisé à des con",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.5833,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1950 Fabian Zone (Bobby Fernand Schleber et Jean-Claude Elizabeth Amourdien), Elizabeth De Sr. On La Mort de Rose Beginsberg",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.22727272727272727,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois dans le monde, il apprécie ses mémoires face à l'attaquant si une fois de ses demi-frères. En 1914, il entame une dépréci",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "Le chat",
+     "texte": "Le chat est prêté pour les sites maryliques dans le monde du comité de la comic booker. Ce chat a également fonctionné les soldats",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La merline est en partie monumentale . Les parcs noirs des maisons du Béril de coupe d'Espagne ne sont fidèles que pour le chantier.",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent des promoteurs à couleurs et même d'un autre match contre lui donnent son achète. L'UI est aboutit au cours des deux premier",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de se retirer à la proposition du capitalisme en septembre 2002, déclenché dans un amendement aux manifestations directes sp",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.8636,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un historien français situé rue de Beauprès-Saint-Laurent. Situé au bord de la rivière de la forêt de La rivière Grand l",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 1.0,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme d'affaires d'organisation au Premier Empire officiel du Premier Empire en 1874 puis annexe d'exploitation au cours duquel le du",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.75,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "La musique",
+     "texte": "La musique et la pochette firent à se porter dans l'agglomération de Vion Scouture à l'eau de Charles II, et les affrétissant une nouv",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.8696,
+     "repetition": 2,
+     "echo": 0.041666666666666664,
+     "prompt": "Le livre",
+     "texte": "Le livre est édité par Ed-A. Publication (1877-1886) L'Écho de la mention ou le pseudou de la mention « A suivi de la licence » (18",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.8,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "La guerre",
+     "texte": "La guerre de Montpellier, de Napoléon, du Lac-Ovide, du Lac-Ovide, est située à l'ouest de la Lune et long du Lac-Ovide, à l'est de l",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie du nouveau rectorationnel d’experts allemande est remplacée par un ou plus le rectorat de sabres, un creux d'eau douce. Le r",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "Le sport",
+     "texte": "Le sport du projet remporte sa très russe de recevaires, et ses portions artisanales sont remplacés par le sport de la Coupe du monde ",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.85,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05555555555555555,
+     "prompt": "La science",
+     "texte": "La science post-afro-fluck avec un film écrit de la série télévisée japonaise PTRAC. Musiciens Sonic Fiche technique Notes et référ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8077,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.125,
+     "prompt": "La ville",
+     "texte": "La ville est située au sud de la commune de Maine (Albach) dans le département de la Maine, elle est limitrophe de la Sarthe. Ses terr",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.7368,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps quelquesitial dissout sont envisagées persanes et deux variantes. Sources Liens externes Ne Djamena Veuiller Site officiel : D",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "La vie",
+     "texte": "La vie commune de Shanon en Espagne est un type de confession originaire de la ville américaine. Sources et bitants Liens externes Ca",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde entier fait montre de son effet qui se remarque dans les langues vénitiennes sur les spécialisées de la banque et de langues",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.7619,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.15789473684210525,
+     "prompt": "La question",
+     "texte": "La question de la lemontagne primitive tarifique est la souveraine est Saint-Dié Pierre avec le long de la limontagne classique. Descripti",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9365,
+   "distinct_2": 0.8528,
+   "repetition": 3,
+   "echo": 0.0891,
+   "octets": 2560,
+   "secondes": 23.18,
+   "octets_s": 110.4,
+   "echantillons": [
+    {
+     "mots": 28,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.963,
+     "repetition": 1,
+     "echo": 0.125,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la colline. Sa présence au sein de la station de radio chilienne du métro de Navarre à Alger. La franchise des dialect",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.92,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1950, le nouveau conseil de la République centrafricaine est proposé en à l'élection du canton de Vaud. Le conseil de la",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois la propriétaire des ponts et le château des Caudes. Le château de Champlain est construit en 1817 dans la commune de Champla",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 28,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.963,
+     "repetition": 1,
+     "echo": 0.125,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la colline. Sa présence au sein de la station de radio chilienne du métro de Navarre à Alger. La franchise des dialect",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.92,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1950, le nouveau conseil de la République centrafricaine est proposé en à l'élection du canton de Vaud. Le conseil de la",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois la propriétaire des ponts et le château des Caudes. Le château de Champlain est construit en 1817 dans la commune de Champla",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7037,
+     "repetition": 2,
+     "echo": 0.07692307692307693,
+     "prompt": "Le chat",
+     "texte": "Le chat est un chat est produit par les magazines du chat de la masse de la transmission de la demande de la transmission de la masse d",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "La mer",
+     "texte": "La mer est le nom de Saint-André de la formation de ce dernier en matière de complicité donné au printemps et en partie de command",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent de leurs premiers labels de la société de construction et de l'automobile. En 2004, le premier est le premier site de l'ancie",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7857,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de s'engager dans la conférence de l'armée de l'armée de l'air à la bataille de la côte est de la côte de l'Armée de l'a",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.95,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05555555555555555,
+     "prompt": "Paris est",
+     "texte": "Paris est une ancienne déclinaison politique suisse instaurée dans le département de l'Yonne en région Grand Est. Cette protection de",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.8636,
+     "repetition": 2,
+     "echo": 0.19047619047619047,
+     "prompt": "Un homme",
+     "texte": "Un homme est un homme d'affaires d'ancienne provinciale est un homme politique et siégeant à la province de Wellesles. Il est le prés",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.8462,
+     "repetition": 2,
+     "echo": 0.2,
+     "prompt": "La musique",
+     "texte": "La musique est un peu utilisé en province de Paris en 1995. Le peuple de La Réunion de la musique est la première personne de la chanso",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.7857,
+     "distinct_2": 0.4815,
+     "repetition": 3,
+     "echo": 0.3076923076923077,
+     "prompt": "Le livre",
+     "texte": "Le livre de Lesser par le livre d'Agatha dans le barrage de Lesser par le livre de Lesser par le livre d'Agatha dans le bas de Lesser. L",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "La guerre",
+     "texte": "La guerre des Persis de l'ampleur de l'homme de l'armée de l'air et des grandes mises pour les fondations des souverains pour la salle d",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.6667,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la vallée de la Grèce, est désignée probablement appelée à la foi de la vallée de l'Angle, la vallée de la Grèce et",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport automobile () est un titre de vice-champion de D2 est un titre de champion du monde de prélèvement de la saison de la saison ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "La science",
+     "texte": "La science et la technologie de la matière. Ces sciences sont des informations concernées pour les fondements des prisonniers de vie qui",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.85,
+     "distinct_2": 0.8421,
+     "repetition": 2,
+     "echo": 0.16666666666666666,
+     "prompt": "La ville",
+     "texte": "La ville est située dans le département de la Sarthe et la région Auvergne-Rhône-Alpes. Le site de la région Auvergne-Rhône-Alpes ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.7727,
+     "repetition": 2,
+     "echo": 0.14285714285714285,
+     "prompt": "Le temps",
+     "texte": "Le temps de jeu est donné par le prochain de l'ordre de Saint-Jean-de-Champenoise. Le temps de jeu est donné lorsque la prochaine esp�",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.875,
+     "repetition": 2,
+     "echo": 0.08695652173913043,
+     "prompt": "La vie",
+     "texte": "La vie de la série est ouverte en dehors de la série de livres sur le passé sur le théâtre d'arcade. Elle participe aux compétit",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Le monde",
+     "texte": "Le monde de la saison 2003-2004 est la première saison à être recrutée par des clubs de la Ligue des champions 2004-2005. Ce monde c",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9286,
+     "distinct_2": 0.6667,
+     "repetition": 2,
+     "echo": 0.15384615384615385,
+     "prompt": "La question",
+     "texte": "La question suivait le terrain du dispositif de ce terrain et de la compagnie de la forêt de Caen et de la compagnie de la forêt de Caen ",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

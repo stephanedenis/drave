@@ -1,0 +1,15 @@
+{
+ "modeles": [
+  "p211"
+ ],
+ "vals": [
+  "litterature",
+  "palier1"
+ ],
+ "ppl": {
+  "p211": {
+   "litterature": 4.130587002391626,
+   "palier1": 2.6796148275059752
+  }
+ }
+}

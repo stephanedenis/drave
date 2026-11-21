@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/p27.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9708,
+   "distinct_2": 0.5659,
+   "repetition": 8,
+   "echo": 0.1361,
+   "octets": 2560,
+   "secondes": 22.98,
+   "octets_s": 111.4,
+   "echantillons": [
+    {
+     "mots": 28,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.7407,
+     "repetition": 3,
+     "echo": 0.2,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysan de la commune de La Roche-sur-Yon en Algérie. Le paysan de la commune est composé de deux communes : le paysan de la Loire,",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6667,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le conseil municipal est élu président de la Chambre des représentants de la Chambre des représentants de la Chambre des r",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5769,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de la compagnie de trois courses de la première compagnie de trois courses de la première compagnie de trois coureurs de la p",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 28,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.7407,
+     "repetition": 3,
+     "echo": 0.2,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysan de la commune de La Roche-sur-Yon en Algérie. Le paysan de la commune est composé de deux communes : le paysan de la Loire,",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6667,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le conseil municipal est élu président de la Chambre des représentants de la Chambre des représentants de la Chambre des r",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5769,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de la compagnie de trois courses de la première compagnie de trois courses de la première compagnie de trois coureurs de la p",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.5833,
+     "repetition": 3,
+     "echo": 0.08695652173913043,
+     "prompt": "Le chat",
+     "texte": "Le chat de la commune est la plus grande partie de la commune de Saint-Aubin-de-Champagne. Le chat de la commune est la plus grande par",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2143,
+     "repetition": 8,
+     "echo": 0.32142857142857145,
+     "prompt": "La mer",
+     "texte": "La mercenaire de la chaîne de la chaîne de la chaîne de la chaîne de la chaîne de la chaîne de la chaîne de la chaîne de la ch",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8519,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent des courses de la saison 2008-2009 et de la saison 2009-2010. Ils sont remplacés par le club de la Ligue des champions de la L",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6538,
+     "repetition": 3,
+     "echo": 0.043478260869565216,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de rendre le programme de la communauté de communes de la communauté de communes de la Manche et de la communauté de commune",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8182,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un peintre français de la Renaissance et de la Société des artistes et dessinateurs de la Renaissance. Biographie Fils de la",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.56,
+     "repetition": 3,
+     "echo": 0.08333333333333333,
+     "prompt": "Un homme",
+     "texte": "Un homme est un homme politique français de l'État de l'Armée de l'air et de l'État de l'Armée de l'air et de l'État de l'Armée d",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4074,
+     "repetition": 3,
+     "echo": 0.15384615384615385,
+     "prompt": "La musique",
+     "texte": "La musique de l'album est une chanson de l'album et de la musique de l'album est une chanson de l'album et de la musique de l'album est un",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.5417,
+     "repetition": 3,
+     "echo": 0.19230769230769232,
+     "prompt": "Le livre",
+     "texte": "Le livre de la collection « Le livre de la collection » est un livre de l'artiste peintre et de la collection « Le livre de la collec",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9643,
+     "distinct_2": 0.7037,
+     "repetition": 2,
+     "echo": 0.23076923076923078,
+     "prompt": "La guerre",
+     "texte": "La guerre de la commune de La Rochelle est la première fois en 1847 et la première fois en 1858. Le premier marché de la commune de La",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.5652,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la communauté de la communauté de communes de la communauté de communes du Pays de Galles et de la communauté de commune",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6667,
+     "repetition": 2,
+     "echo": 0.037037037037037035,
+     "prompt": "Le sport",
+     "texte": "Le sportif de la compagnie de tennis de la Ligue de hockey de l'Ouest est le sportif de la Ligue nationale de hockey de l'Ouest et de la",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 0.3448,
+     "repetition": 7,
+     "echo": 0.5357142857142857,
+     "prompt": "La science",
+     "texte": "La science est un projet de la science de la science de la science et de la science de la science de la science de la science de la scienc",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8929,
+     "distinct_2": 0.5556,
+     "repetition": 3,
+     "echo": 0.15384615384615385,
+     "prompt": "La ville",
+     "texte": "La ville de Berlin est située dans le quartier de la ville de Berlin et le quartier de la ville de Berlin. Elle est située dans le qua",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6923,
+     "repetition": 3,
+     "echo": 0.04,
+     "prompt": "Le temps",
+     "texte": "Le temps de la compagnie de chaque canon est un temps de la compagnie de chaque canon estimé et de moyenne de produit de la compagnie d",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2857,
+     "repetition": 8,
+     "echo": 0.2962962962962963,
+     "prompt": "La vie",
+     "texte": "La vie de la chanson est une chanson de la chanson de la chanson de la chanson de la chanson de la chanson de la chanson de la chanson",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5185,
+     "repetition": 3,
+     "echo": 0.038461538461538464,
+     "prompt": "Le monde",
+     "texte": "Le monde de la compagnie de chasse est un monde de la compagnie de chasse et de chasse en pierre de la compagnie de chasse et de chasse ",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.3704,
+     "repetition": 4,
+     "echo": 0.3076923076923077,
+     "prompt": "La question",
+     "texte": "La question de la commune de La Rochelle, de la province de La Rochelle, de la province de La Rochelle, de la province de La Rochelle, de l",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.891,
+   "distinct_2": 0.9748,
+   "repetition": 2,
+   "echo": 0.0434,
+   "octets": 2560,
+   "secondes": 23.33,
+   "octets_s": 109.8,
+   "echantillons": [
+    {
+     "mots": 28,
+     "mots_valides": 0.8929,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays hôte. Le bureau de Zubiri est entouré d'un beau de et de son petit-fils de La Légende des bibliothèques qu'il a souvent ref",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, il est diplômé du de l'université d'Édimbourg où il se rend en tant que Lakra Senate pour annoncer sa retraite du reste �",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.9231,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois les limites de la Kâvil limites au sein de la province de France et au niveau de la plate-forme d'Événements et des relation",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 28,
+     "mots_valides": 0.8929,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays hôte. Le bureau de Zubiri est entouré d'un beau de et de son petit-fils de La Légende des bibliothèques qu'il a souvent ref",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, il est diplômé du de l'université d'Édimbourg où il se rend en tant que Lakra Senate pour annoncer sa retraite du reste �",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.9231,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois les limites de la Kâvil limites au sein de la province de France et au niveau de la plate-forme d'Événements et des relation",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "Le chat",
+     "texte": "Le chat remet de met sur la pointe pour les photos investis. Le chat de fête est qualifié d'une acide alargochrétique qui permet au ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "La mer",
+     "texte": "La mercata est un des plus grands noms de la morce et un argentisseur de l'époque d'une harpanisme en interaction. Conséquences Elle",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent une structure de l'autorité ayant le palais allant de s'intéressant en cours. Armement La brasserie possède un coup de maill",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de devenir réfléchargé du Liban. Historique La guerre était alors vue au sein de la médaille de l'armée pour la première",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.7619,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un chien-voyageurs situé sur la péninsule de Béjaïa. Ce chien-voyageur a été supprimé en viation de l'État de Béjaïa ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme est soutenu par le poète de Christian Winser en 1987. Depuis 1992, il divorce en tant que service jusqu'en 1989. De 1992 à 20",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.18181818181818182,
+     "prompt": "La musique",
+     "texte": "La musique, utilisé par la chanson d'amoures du chanteur Les Enquêtes de l'époque, et la publication de la musique de Bayard (1995) Par",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "Le livre",
+     "texte": "Le livre de l'amour est un roman suivant le sur le côté de révélation de la fabrication de Kirchbailleau Encyclopédie rend honorabl",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "La guerre",
+     "texte": "La guerre romaine du Centre couronnée d'attachements à l'issue de la sécurité de l'épreuve sur le plateau du Centre comme la Révél",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8077,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de lase de la commune de Requilly, de la plaine de Castan et d'insectes, atoute que le plan a variablement le plan de situé da",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport arabe chez les victimes de sévère de l'artiste britannique, beaucoup de rebrousses (une largeur de ses poissons et ouvertes d",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science est un mathématicien français de gestion essentiellement de son parcours vers le Gros aîné Donnée française en . Notes et",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.04,
+     "prompt": "La ville",
+     "texte": "La ville de Bronze est intégrée au profil des comtes de Willie le . En 1379, elle est reconnue par la sortie du diocèse de Dandy Auto",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de base du jeu est considéré comme un pro-diagramme conservé au projet. Des animaux admet à la gamme, la fille, lait avoir ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.84,
+     "repetition": 2,
+     "echo": 0.125,
+     "prompt": "La vie",
+     "texte": "La vie pierre de la Fenêtre. Le bas côtier du porche est le Néolithique par le porche de la marque Balancourt. Le porche de la Néo",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.6818,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "Le monde",
+     "texte": "Le monde of Arachnology (Withiidae). » Addix infernal das sur le mitre de son travail en traitant pour le rappel de Mantevideo. Pleator",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question ecclusive est située à 54 km de long apparaissent dans le contexte des femmes de l'Univers Regina et du Centenaire de Michael",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9393,
+   "distinct_2": 0.8879,
+   "repetition": 3,
+   "echo": 0.0656,
+   "octets": 2560,
+   "secondes": 23.32,
+   "octets_s": 109.8,
+   "echantillons": [
+    {
+     "mots": 30,
+     "mots_valides": 0.9333,
+     "distinct_2": 0.8966,
+     "repetition": 1,
+     "echo": 0.19230769230769232,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysan de la mer qui se trouve dans le massif du Paysans. Il est plus proche de la ville de La Reconquête de la rivière Touraine. ",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8966,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960, le groupe fait partie de l'album de la série de bande dessinée South Band et The The Time of the Year Fight Company ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois dans le cadre de la deuxième guerre civile de la guerre de Prusse dont les valeurs proviennent de la Seconde Guerre mondiale. ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 30,
+     "mots_valides": 0.9333,
+     "distinct_2": 0.8966,
+     "repetition": 1,
+     "echo": 0.19230769230769232,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysan de la mer qui se trouve dans le massif du Paysans. Il est plus proche de la ville de La Reconquête de la rivière Touraine. ",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8966,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960, le groupe fait partie de l'album de la série de bande dessinée South Band et The The Time of the Year Fight Company ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois dans le cadre de la deuxième guerre civile de la guerre de Prusse dont les valeurs proviennent de la Seconde Guerre mondiale. ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.7692,
+     "repetition": 2,
+     "echo": 0.2,
+     "prompt": "Le chat",
+     "texte": "Le chat est le chat de l'étoile, qui sert d'ailleurs une importance plus courte et le chat de l'étoile de la vente de chat de la prov",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "La mer",
+     "texte": "La mer de l'Angleterre est un programme d'artiste de la Société des Arts de l'Est. Épisodes Les séries de la série de jeux vidéo",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.88,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent les balances de la région de l'autre et de la proportionnelle en 1983 et les productions de la production de l'autre en versio",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de faire apparition au congrès de la Sainte-Catherine et est de nouveau président de la République de Roumanie. En 2018, il ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est une espèce de plantes à fleurs de la famille des Argentinae située dans le nord-est du Cap-Vert. Ce soir plus long que le no",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.75,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme en langue française et décrit le premier album de chanter le groupe de rock progressif et décrit le premier album de Rock Re",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique de l'écrivain est accompagnée d'un partenariat avec le théâtre de Charles Piccard qui l'installe dans le rôle des deux par",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.8261,
+     "repetition": 2,
+     "echo": 0.13636363636363635,
+     "prompt": "Le livre",
+     "texte": "Le livre de l'artiste est un livre de bande dessinée en avant d'arrivée à Paris. Le livre de l'artiste reprend placé sous la directi",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8696,
+     "repetition": 2,
+     "echo": 0.09090909090909091,
+     "prompt": "La guerre",
+     "texte": "La guerre de Sécession, qui l'appelle à cette dernière survivante. Le reste de la guerre de Sécession est construit en 1548 par le co",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9643,
+     "distinct_2": 0.8889,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la mer La commune de La Baie de la Croix-Rouge est constituée de 100 mètres et de 200 mètres. Elle est de nouveau de la p",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.8077,
+     "repetition": 2,
+     "echo": 0.038461538461538464,
+     "prompt": "Le sport",
+     "texte": "Le sportif de la compagnie est la seule architecture de la série sous le pseudon de la compagnie de la ville de Beauvais et de la recon",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.913,
+     "repetition": 1,
+     "echo": 0.13636363636363635,
+     "prompt": "La science",
+     "texte": "La science est inscrite au musée national de la littérature anglaise et de la langue d'art de la peinture de l'art magnétique. Par aill",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "La ville",
+     "texte": "La ville d'Europe est la plus grande partie de l'école de l'Est de l'Ouest du Pacifique et de la Serbie. Elle est surtout connue pour s",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.913,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de défense de la communauté de communes de la Bienheure de l'Aisne. La rencontre de l'Aisne est de suivre de nombreux éléme",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.84,
+     "repetition": 1,
+     "echo": 0.20833333333333334,
+     "prompt": "La vie",
+     "texte": "La vie primaire de sa partie sur le site de la Société des sciences de la période de la marque de la bibliothèque de la psychiatri",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.75,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde est un modèle de consommation de la consommation de la société de production de la région de structure de la société de p",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.8182,
+     "repetition": 3,
+     "echo": 0.047619047619047616,
+     "prompt": "La question",
+     "texte": "La question des canons est de réaliser les étoiles troubles de la série de construction de l'absence de l'absence de l'absence de l'abse",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

@@ -5,19 +5,29 @@
 > (les résumés `frwiki_v14`, 3,69 Go, épinglé `469a6d78…`) reprises de 30 000 à 110 000 pas,
 > jugées à chaque tranche sur wikitext2 et, au bout, sur trois autres vals.
 
-## Les courbes (wikitext2)
+## Les courbes (wikitext2 / PPL du val de v1)
 
-| pas | palier 1, g1 (p1) | palier 1, g2 (p2) |
+| pas | p1 (graine 1) | p2 (graine 2) |
 |---:|---|---|
-| 30 000 | 7,7044 | 7,2790 |
-| 40 000 | 7,3733 | 7,1548 |
-| 50 000 | 7,1953 | 7,0021 |
-| 60 000 | *(à remplir)* | *(à remplir)* |
-| 70 000 | *(à remplir)* | *(à remplir)* |
-| 80 000 | *(à remplir)* | *(à remplir)* |
-| 90 000 | *(à remplir)* | *(à remplir)* |
-| 100 000 | *(à remplir)* | *(à remplir)* |
-| 110 000 | *(à remplir)* | *(à remplir)* |
+| 30 000 | 7,7044 / 3,1486 | 7,2790 / 3,0874 |
+| 40 000 | 7,3733 / 3,0761 | 7,1548 / 3,0232 |
+| 50 000 | 7,1953 / 3,0229 | 7,0021 / 2,9860 |
+| 60 000 | 7,1253 / 2,9924 | 7,0252 / 2,9611 |
+| 70 000 | 7,1114 / 2,9664 | 6,9098 / 2,9322 |
+| 80 000 | 7,0881 / 2,9550 | **6,8757** / 2,9245 |
+| 90 000 | 6,9957 / 2,9479 | 6,9398 / 2,9272 |
+| 100 000 | 7,0367 / 2,9409 | 7,0523 / 2,9282 |
+| 110 000 | **7,0342** / 2,9360 | 7,0477 / 2,9289 |
+
+**Les deux graines plafonnent vers 7,0** : p2 passe par un minimum à **80 000 pas (6,8757)** puis
+remonte (7,05 à 110 000) ; p1 descend jusqu'à 6,9957 (90 000) et stagne (7,03). Sur le val de v1,
+les PPL continuent de baisser (2,93-2,94) alors que wikitext2 ne baisse plus — le modèle se
+spécialise, il ne généralise plus. C'est exactement le signe attendu du **rejeu des fenêtres**
+(plus d'optimisation sur le même échantillon).
+
+Comparaison au même pas : `wiki_big` à 110 000 pas = **6,8349**, et son minimum de parcours ~6,807
+(90 000). Le palier 1 reste **derrière de ~2-3 %** — dans la bande de variance (4,7 %), mais sans
+jamais passer devant.
 
 ## Les fenêtres, pas les époques — et le défaut trouvé cette nuit
 
@@ -51,8 +61,8 @@ pas comme sur un parcours séquentiel.
 | nb11 | `wiki_big` (831 Mo) | 110k | **6,8349** | 4,0443 | **2,7227** (`wiki_big`) |
 | v111 | mélange v1 (1 Go) | 110k | 6,8674 | 3,9872 | 2,7367 (`wiki_big`) |
 | v211 | plein texte v2 (6,9 Go) | 110k | 7,0930 | **3,5752** | 3,2288 (`wiki_big`) |
-| p110 | palier 1 (3,69 Go), g1 | 100k | 7,0367 | 4,1098 | **2,6959** (palier 1) |
-| p210 | palier 1, g2 | 100k | 7,0523 | 4,1196 | **2,6837** (palier 1) |
+| p111 | palier 1 (3,69 Go), g1 | 110k | 7,0342 | 4,1036 | **2,6929** (palier 1) |
+| p211 | palier 1, g2 | 110k | 7,0477 | 4,1306 | **2,6796** (palier 1) |
 
 **Trois lectures, et elles ne vont pas dans le même sens :**
 

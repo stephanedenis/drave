@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 94.0 h |
+| Durée | 95.0 h |
 | Tours | 90 |
-| Messages | 1587 |
-| Appels d'outils | 1390 |
+| Messages | 1596 |
+| Appels d'outils | 1399 |
 | Fichiers touchés | 44 |
-| Commandes | 1231 |
+| Commandes | 1240 |
 | Sous-agents | 7 |
-| Commits | 121 |
+| Commits | 122 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2264,7 +2264,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 90 — <goal_round> Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre le … [1076 caractères tronqués]
 
-*68 appels d'outils.* Actions notables :
+*77 appels d'outils.* Actions notables :
 
 - bash — Spot-check the literature corpus quality
 - bash — Ten-minute pause and progress
@@ -2280,7 +2280,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - bash — Ten-minute pause with load check
 - bash — Commit tranches 4-5 data and update the fiche
 - bash — Ten-minute pause with tranche counts
-- … et 46 autres
+- … et 54 autres
 
 ## 3. Travail accompli
 
@@ -2385,7 +2385,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1191 autres
+- … et 1200 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2654,4 +2654,5 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - SESSION S — LE HEARTBEAT EST RAFRAÎCHI (LE MANDAT ÉTAIT PÉRIMÉ DE 1 305 MIN, porte-sessions ROUGE ; RE-VÉRIFIÉE VERTE)" && git push origin s/v7 2>&1 | tail -1; 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text(
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text(
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-nuit-palier1-110k.md reports/ppl-matrice-p111.json reports/ppl-matrice-p211.json r
 
