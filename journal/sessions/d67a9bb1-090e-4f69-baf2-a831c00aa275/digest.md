@@ -21069,3 +21069,16 @@ sam 21 nov 2026 00:07:32 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"**rejeu des fenêtres** : défaut trouvé — chaque tranche repartait le compteur, donc rejouait le même échantillon ; correctif  … [690 caractères tronqués]`
+
+  ```
+trim ok
+     · puce > 80 mots : **N — l'entraînement, les corpus et le décodage** (18-20/11)
+budget=0
+     · fraîcheur : en-cours.md dit 2026-11-20, le dernier commit date du 2026-11-21
+   c25fa31d..4c86d1fe  s/v7 -> s/v7
+sam 21 nov 2026 00:10:20 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"- **N — l'entraînement, les corpus et le décodage** (18-20/11) :\"\ni = s.index(old); j = s.index(\"\\n\", i)\nligne = s[i:j] … [1019 caractères tronqués]`
