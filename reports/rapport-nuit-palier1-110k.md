@@ -44,21 +44,32 @@ pas comme sur un parcours séquentiel.
 4. **Le val littérature** (11 livres Wikisource, 8,76 Mo, `work/vals/litterature_val_1m.txt`) donne
    le val **français d'un autre registre** qui manquait.
 
-## La matrice du matin
+## La matrice du matin — et le classement qui s'inverse selon le val
 
-| modèle | entraîné sur | wikitext2 (anglais) | littérature (fr, autre) | val `wiki_big` |
-|---|---|---:|---:|---:|
-| nb11 | `wiki_big` 110k | 6,8349 | 4,0443 | **2,7227** |
-| v111 | mélange v1 110k | 6,8674 | 3,9872 | 2,7367 |
-| v211 | plein texte v2 110k | 7,0930 | **3,5752** | 3,2288 |
-| p110/p210 | palier 1 100k | *(à remplir)* | *(à remplir)* | *(contaminé)* |
+| modèle | entraîné sur | pas | wikitext2 (EN) | littérature (FR, autre) | val de son registre |
+|---|---|---:|---:|---:|---:|
+| nb11 | `wiki_big` (831 Mo) | 110k | **6,8349** | 4,0443 | **2,7227** (`wiki_big`) |
+| v111 | mélange v1 (1 Go) | 110k | 6,8674 | 3,9872 | 2,7367 (`wiki_big`) |
+| v211 | plein texte v2 (6,9 Go) | 110k | 7,0930 | **3,5752** | 3,2288 (`wiki_big`) |
+| p110 | palier 1 (3,69 Go), g1 | 100k | 7,0367 | 4,1098 | **2,6959** (palier 1) |
+| p210 | palier 1, g2 | 100k | 7,0523 | 4,1196 | **2,6837** (palier 1) |
 
-**Le classement s'inverse selon le val** : sur `wiki_big` (le registre des résumés), `wiki_big`
-gagne (2,72) ; sur la **littérature** (autre registre français), c'est le **plein texte** qui gagne
-(3,58), devant le mélange (3,99) et `wiki_big` (4,04). Entraîner sur des résumés apprend le registre
-encyclopédique ; entraîner sur le plein texte apprend une prose plus large. Nuance : le val
-`wiki_big` est **contaminé** pour v211 (le plein texte couvre les mêmes articles) — pas le val
-littérature, propre pour tous.
+**Trois lectures, et elles ne vont pas dans le même sens :**
+
+1. **Dans son registre**, tout se vaut : les modèles de résumés rendent 2,68-2,74 sur un val de
+   résumés tenu à l'écart — `wiki_big` (831 Mo) comme le palier 1 (3,69 Go). **4,4 fois plus de
+   résumés n'achète rien** — cohérent avec le rejeu des fenêtres (mêmes 80 000 fenêtres) et avec la
+   saturation d'un registre.
+2. **Hors registre** (littérature française, jamais vue), le classement **s'inverse** : le **plein
+   texte** gagne (**3,58**), le mélange suit (3,99), les résumés perdent (4,04-4,12). Entraîner sur
+   des résumés apprend le registre encyclopédique ; entraîner sur le plein texte apprend une prose
+   plus large — et c'est ce qui transfère à la littérature.
+3. **En anglais** (wikitext2, transfert inter-langue), `wiki_big` et le mélange mènent (6,83-6,87) ;
+   le palier 1 suit (7,04-7,05) ; le plein texte ferme (7,09).
+
+**Nuance de contamination** : le val `wiki_big` est contaminé pour v211 (le plein texte couvre les
+mêmes articles) et pour p1/p2 ; le val palier 1 est contaminé pour nb11/v111/v211. Le val
+**littérature est propre pour tous** — c'est le seul classement hors registre sans réserve.
 
 ## Ce qui pourrait le rendre faux
 

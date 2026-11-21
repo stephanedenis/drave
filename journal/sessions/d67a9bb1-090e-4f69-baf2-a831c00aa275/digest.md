@@ -21827,3 +21827,108 @@ sam 21 nov 2026 06:27:00 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text()\nold = \"\"\"| modèle | entraîné sur | wikitext2 (anglais) | littérature (fr, autre) | val du registre |\n|---|---|---:|--- … [3143 caractères tronqués]`
+
+  ```
+fiche ok
+etat 826 1127
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   6e0f49f1..e9a6b88f  s/v7 -> s/v7
+sam 21 nov 2026 06:30:06 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\"", "description": "Ten-minute pause with progress", "timeoutMs": 650 … [4 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 06:40:04 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; for f in p1 p2; do printf \"%s : \" \"$f\"; tail -1 work/n4/$f.chaine.log | cut -c1-46; done", "description": "Read the chain tails verbatim"}`
+
+  ```
+sam 21 nov 2026 06:40:09 EST
+p1 : pas 3600 · perte 0.9284 · PPL val 3.167 · 1903
+p2 : pas 9500 · perte 0.8870 · PPL val 3.148 · 3752
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p110','p210'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  … [230 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-1663]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p110','p210'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  ')\n    tr … [203 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 06:50:19 EST
+p110 -  wikitext2 -
+p210 val 2.9282  wikitext2 7.0523
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1663 (bash: sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c "
+import json
+for f in ('p110','p210'):
+    try:
+        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')
+    except FileNotFoundError: print(f, '-', end='  ')
+    try:
+        w=json.load(open(f'reports/ppl-wikitext2-{f}.json')); print('wikitext2', round(w['ppl'],4))
+    except FileNotFoundError: print('wikitext2 -')") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\" || tail -1 work/n4/p2.chaine.log | cut -c1-40", "description": "Ten … [50 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 07:00:22 EST
+pas 2200 · perte 0.8906 · PPL val 3.131
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls -la /tmp/matrice2.log 2>/dev/null | awk '{print $5\" o\"}'; tail -3 /tmp/matrice2.log 2>/dev/null; tail -1 work/n4/p1.chaine.log | cut -c1-42", "description": "Check matrix block 2 and progress", "timeoutMs": 6500 … [3 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 07:10:25 EST
+pas 7950 · perte 0.8599 · PPL val 3.153 ·
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p110','p210'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  … [304 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 07:20:21 EST
+p110 -  wikitext2 -
+p210 val 2.9282  wikitext2 7.0523
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p110',):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  ')\n  … [290 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 07:30:17 EST
+p110 val 2.9409  wikitext2 7.0367
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; cat /tmp/matrice2.log 2>/dev/null | tail -8; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\" || echo \"p2 tranche en cours\"", "description": "Check matrix block 2 results", "timeoutMs": 650000}`
+
+  ```
+sam 21 nov 2026 07:40:19 EST
+pas 8250
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; cat /tmp/matrice2.log 2>/dev/null | tail -7; python3 -c \"\nimport json\nfor f in ('p211',):\n    try:\n        w=json.load(open(f'reports/ppl-wikitext2-{f}.json')); print(f, 'wikitext2', round(w['ppl'],4))\n    exce … [111 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 07:50:14 EST
+      p210 × litterature : 4.119622839701287
+      p210 × palier1    : 2.6837293693055018
+
+| modèle | litterature | palier1 |
+|---|---:|---:|
+| p110 | 4.1098 | 2.6959 |
+| p210 | 4.1196 | 2.6837 |
+p211 -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text()\ndebut = s.index(\"## La matrice du matin\")\nfin = s.index(\"## Ce qui pourrait le rendre faux\")\nnouveau = \"\"\"## La m … [3870 caractères tronqués]`
