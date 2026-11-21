@@ -77,6 +77,11 @@ def main() -> None:
                     help="corpus de VALIDATION épinglé (sinon : la fin du train, 5 %)")
     ap.add_argument("--epingle", default="reports/corpus-epingle.json",
                     help="manifeste d'épingle dont on recopie l'empreinte (provenance)")
+    ap.add_argument("--compteur-suite", action="store_true",
+                    help="reprendre le compteur de fenêtres du point de contrôle (sinon : "
+                         "comportement historique, chaque tranche rejoue les mêmes fenêtres)")
+    ap.add_argument("--decalage", type=int, default=0,
+                    help="décalage explicite du compteur de fenêtres")
     ap.add_argument("--init", default=None,
                     help="checkpoint de départ (poids seuls, pour un curriculum)")
     ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
@@ -102,17 +107,24 @@ def main() -> None:
         canal_val = canal_data[-n_val:] if canal_data is not None else None
     cfg = NativeConfig(d_model=a.dim, expert_hidden=a.expert_hidden)
     modele = NativeModel(cfg).to(a.device)
+    # Sans reprise du compteur, chaque tranche rejoue **les mêmes fenêtres** (Van der Corput
+    # repart de 0) : on croit faire 110 000 pas de données neuves, on refait 11 fois le même
+    # échantillon de 80 000 fenêtres. Le compteur est donc sauvé dans le point de contrôle et
+    # repris par `--init` ; `--decalage` le décale explicitement.
+    base = int(a.decalage)
     if a.init:
         ck = torch.load(a.init, map_location="cpu", weights_only=False)
         modele.load_state_dict(ck["state"], strict=False)
-        print(f"  init : {a.init}", flush=True)
+        if a.compteur_suite:
+            base += int(ck.get("pas_cumules", 0))
+        print(f"  init : {a.init} · fenêtres à partir de {base}", flush=True)
     opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
     amp = bool(a.amp) and str(a.device).startswith("cuda")
     scaler = torch.amp.GradScaler("cuda", enabled=amp)
     t0 = time.time(); pertes = []
     for pas in range(1, a.pas + 1):
         modele.train()
-        x, y, c = lot(train, a.lot, a.seq, a.device, pas * a.lot, canal_train)
+        x, y, c = lot(train, a.lot, a.seq, a.device, base + pas * a.lot, canal_train)
         pos = random.randint(0, a.positions_aleatoires) if a.positions_aleatoires else 0
         with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=amp):
             sortie = modele(x, pos_debut=pos, canal=c)
@@ -146,7 +158,8 @@ def main() -> None:
     prec_main = bons_main / max(1, n_eval)
     prec_early = [b / max(1, n_eval) for b in bons_early]
     modele.eval()
-    torch.save({"config": cfg.__dict__, "state": modele.state_dict()}, a.sortie)
+    torch.save({"config": cfg.__dict__, "state": modele.state_dict(),
+                "pas_cumules": base + a.pas}, a.sortie)
     h = exporter_drvm(modele, a.drvm)
     epingle = None
     if a.epingle and pathlib.Path(a.epingle).exists():

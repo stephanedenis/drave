@@ -20773,3 +20773,279 @@ livres 11 · octets 8756698
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nm = json.loads(pathlib.Path('reports/corpus-wikisource.json').read_text())\nliv = sorted(m['livres'], key=lambda x: -x['octets'])\nt = \"\\n\".join(f\"| {x['livre'].replace('Livre:','')[:52]} | … [2371 caractères tronqués]`
+
+  ```
+fiche ok
+etat ok
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   26287fe3..c2372f28  s/v7 -> s/v7
+ven 20 nov 2026 23:48:59 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat data/wikisource/*.txt > /tmp/litt2.txt && python3 -c \"\nimport pathlib\nb = pathlib.Path('/tmp/litt2.txt').read_bytes()\npathlib.Path('work/vals/litterature_val_1m.txt').write_bytes(b[-1000000:])\nprint('littérature val 1 Mo sur … [379 caractères tronqués]`
+
+  ```
+littérature val 1 Mo sur 8756698 octets
+ec822f45f8f4fe1acc237fdc
+ven 20 nov 2026 23:49:07 EST
+p14 -
+p24 -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /home/stephane/IA/modeles/ 2>/dev/null | head -12; find /home/stephane/IA -maxdepth 3 -iname \"*cluster*\" 2>/dev/null | head -5; grep -n \"pub fn ouvrir\\b\" -A18 drave-core/src/clusters.rs | head -24", "description": "Check for  … [61 caractères tronqués]`
+
+  ```
+ollama
+qwen3-30b-a3b-Q4_K_M.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters-v2
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters
+/home/stephane/IA/artefacts/modeles-optimises/v4flash-8clusters
+150:pub fn ouvrir(dossier: &Path) -> std::io::Result<Modele> {
+151-    let gardes = gardes_du_milieu()?;
+152-    ouvrir_interne(dossier, false, gardes.as_deref())
+153-}
+154-
+155-/// Ouvre un modèle en ne retenant QUE les clusters demandés.
+156-///
+157-/// C'est le mode « nœud partiel » : chaque nœud ne sert que ses experts. Le
+158-/// paramètre est explicite pour que ce chemin soit **testable** — la variable
+159-/// d'environnement, elle, est globale au processus et ne se prête pas à un test
+160-/// qui s'exécute en parallèle d'autres.
+161-pub fn ouvrir_sous_ensemble(dossier: &Path, clusters: Option<&[usize]>)
+162-    -> std::io::Result<Modele> {
+163-    ouvrir_interne(dossier, false, clusters)
+164-}
+165-
+166-/// `DRAVE_CLUSTERS=0,3` : les numéros demandés, ou `None` pour tous.
+167-pub fn gardes_du_milieu() -> std::io::Result<Option<Vec<usize>>> {
+168-    match std::env::var("DRAVE_CLUSTERS") {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '139,150p' drave-core/src/clusters.rs; sed -n '4075,4105p' drave-core/src/model.rs", "description": "Read the cluster Modele and the construction site"}`
+
+  ```
+pub struct Modele {
+    pub gguf: Gguf,
+    pub mapping: Mapping,
+    pub chemins: Vec<PathBuf>,
+}
+
+/// Ouvre un dossier au format clusters.
+///
+/// Les tenseurs d'experts du cluster `c` sont exposés sous le préfixe `cl{c}/`,
+/// ce qui permet de réunir les N fichiers dans un seul `Gguf` sans que les noms
+/// se recouvrent.
+pub fn ouvrir(dossier: &Path) -> std::io::Result<Modele> {
+                }
+            },
+        };
+
+        let cfg = {
+            let mut c = cfg;
+            if c.head_dim == 0 { c.head_dim = c.hidden / c.n_head.max(1); }
+            c.yarn_declare = declaration_yarn;
+            c
+        };
+        // AVANT toute construction : si le moteur ne sait pas calculer cette
+        // architecture, le dire ici, avec la liste de ce qui manque. Sinon la
+        // panne arrive trente lignes plus loin sous la forme « tenseur
+        // blk.3.attn_q.weight absent » — qui accuse le fichier au lieu du moteur.
+        let map = crate::clusters::actif();
+        let mut manques = manques_architecture(&g, &cfg, ctx, map.is_some());
+        // Exécution bornée : le manque « attentions compressées » ne s'applique
+        // que s'il tombe DANS la plage demandée. On le re
+… [867 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport random, pathlib\nrandom.seed(7)\nlignes = [l for l in pathlib.Path('data/wikitext2_test.txt').read_text(errors='replace').splitlines() if len(l) > 120]\nech = random.sample(lignes, 5)\nfor i, l in enumerate(e … [465 caractères tronqués]`
+
+  ```
+0  During the morning of 1 September , Walker weighed the news coming in from his southern front 
+1  Kershaw was honored after the season with player of the year awards from both The Sporting New
+2  The ships ' secondary armament consisted of twenty 50 @-@ calibre 14 @-@ centimetre Type 3 . E
+3  The band was formed by vocalist Jared Gomes , formerly of The Clue , also known as " M.C.U.D. 
+4  Elie Barach – Orthodox Jew and " prosecution attorney " at the trial ; he is the moral compass
+wt0 · palier1: 0
+     wt0 · wiki_big: 0
+wt1 · palier1: 0
+     wt1 · wiki_big: 0
+wt2 · palier1: 0
+     wt2 · wiki_big: 0
+wt3 · palier1: 0
+     wt3 · wiki_big: 0
+wt4 · palier1: 0
+     wt4 · wiki_big: 0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> work/n4/nuit-notes.md <<'MD'\n\n## wikitext2 est un val **anglais** (vérifié cette nuit)\n- 5 lignes tirées de `data/wikitext2_test.txt` : **0 sur 5** dans le train du palier 1, **0 sur 5**\n  dans celui de `wiki_big`. Ce n'es … [1057 caractères tronqués]`
+
+  ```
+ok
+ven 20 nov 2026 23:50:18 EST
+pas 8350 · perte 1.0000 · PPL val 3.256 ·
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p14','p24'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('p14 … [244 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 00:00:26 EST
+p14 -
+p24 ppl v1 3.0232
+p14 wikitext2 -
+p24 wikitext2 7.1548
+  ```
+
+- **bash** `{"command": "sleep 3500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p14','p24','p15','p25'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f,  … [261 caractères tronqués]`
+
+  ```
+started background job bash-1581
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-nuit-palier1-110k.md <<'MD'\n# La nuit du 20-21/11 : le palier 1 à 110 000 pas, et ce que les vals disent vraiment\n\n> **Ligne de roadmap** : N · **Date** : 2026-11-20 → 21 · **Verdict** : *(en cours — les tran … [3774 caractères tronqués]`
+
+  ```
+fiche nuit créée (brouillon)
+sam 21 nov 2026 00:01:01 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Corpus\\|def lot\\|offset\\|depart\\|randint\\|graine\" tools/entrainer_native.py | head -25", "description": "Check how the corpus batches are drawn each run"}`
+
+  ```
+21:from tools.vdc import departs_vdc
+34:def lot(data: torch.Tensor, n: int, seq: int, device: str, compteur: int, canal=None):
+36:    i = torch.tensor(departs_vdc(compteur, n, len(data) - seq - 1, seq), dtype=torch.long)
+69:    ap.add_argument("--graine", type=int, default=1)
+87:    torch.manual_seed(a.graine)
+116:        pos = random.randint(0, a.positions_aleatoires) if a.positions_aleatoires else 0
+158:           "seq": a.seq, "lot": a.lot, "lr": a.lr, "graine": a.graine,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '30,45p' tools/entrainer_native.py; grep -n \"def departs_vdc\" -A25 tools/vdc.py | head -35", "description": "Read the batch start positions generator"}`
+
+  ```
+# se fait dans `lot`, par lot, jamais sur le corpus entier.
+    return torch.frombuffer(bytearray(b), dtype=torch.uint8)
+
+
+def lot(data: torch.Tensor, n: int, seq: int, device: str, compteur: int, canal=None):
+    # Van der Corput : même compteur = mêmes fenêtres, sans état aléatoire.
+    i = torch.tensor(departs_vdc(compteur, n, len(data) - seq - 1, seq), dtype=torch.long)
+    x = torch.stack([data[j:j + seq] for j in i]).long().to(device)
+    y = torch.stack([data[j + 1:j + seq + 1] for j in i]).long().to(device)
+    c = torch.stack([canal[j:j + seq] for j in i]).to(device) if canal is not None else None
+    return x, y, c
+
+
+def charger_canal(chemin: str) -> torch.Tensor:
+    return torch.tensor(list(pathlib.Path(chemin).read_bytes()), dtype=torch.long)
+
+29:def departs_vdc(compteur: int, n: int, borne: int, seq: int) -> list[int]:
+30-    """`n` débuts de fenêtre dans [0, borne), à partir du compteur global."""
+31-    if borne <= 0:
+32-        return [0] * n
+33-    return [min(borne - 1, int(vdc(compteur + j) * borne)) for j in range(n)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"compteur\" tools/entrainer_native.py | head -12; grep -n \"def charger\\|def sauver\\|state\\|\\\"pas\\\"\\|init\" tools/entrainer_native.py | head -20", "description": "Check whether the step counter persists across tranch … [4 caractères tronqués]`
+
+  ```
+34:def lot(data: torch.Tensor, n: int, seq: int, device: str, compteur: int, canal=None):
+35:    # Van der Corput : même compteur = mêmes fenêtres, sans état aléatoire.
+36:    i = torch.tensor(departs_vdc(compteur, n, len(data) - seq - 1, seq), dtype=torch.long)
+47:def ppl(modele, data, seq, lot_n, device, n_lots=8, compteur=0, canal=None):
+51:            x, y, c = lot(data, lot_n, seq, device, compteur + _ * lot_n, canal)
+24:def charger(chemin: str) -> torch.Tensor:
+43:def charger_canal(chemin: str) -> torch.Tensor:
+80:    ap.add_argument("--init", default=None,
+105:    if a.init:
+106:        ck = torch.load(a.init, map_location="cpu", weights_only=False)
+107:        modele.load_state_dict(ck["state"], strict=False)
+108:        print(f"  init : {a.init}", flush=True)
+149:    torch.save({"config": cfg.__dict__, "state": modele.state_dict()}, a.sortie)
+157:           "octets_val": len(val), "epingle": epingle, "pas": a.pas,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pas    1 \\|=== \" work/n4/p1.chaine.log | tail -8 | cut -c1-90; grep -c \"compteur\" tools/entrainer_native.py; grep -n \"for pas in\\|compteur +\\|compteur =\" tools/entrainer_native.py | head -8", "description": "Check t … [56 caractères tronqués]`
+
+  ```
+6:pas    1 · perte 5.6107 · PPL val 186.524 · 2 s · échelle 65536
+256:=== tranche 2/3 14:12 ===
+262:pas    1 · perte 1.2005 · PPL val 3.779 · 2 s · échelle 65536
+512:=== tranche 3/3 15:24 ===
+518:pas    1 · perte 1.0917 · PPL val 3.467 · 2 s · échelle 65536
+768:=== chaîne p1 finie 16:37 ===
+769:=== reprise tranche 4/11 22:46 ===
+775:pas    1 · perte 1.0316 · PPL val 3.343 · 2 s · échelle 65536
+5
+35:    # Van der Corput : même compteur = mêmes fenêtres, sans état aléatoire.
+51:            x, y, c = lot(data, lot_n, seq, device, compteur + _ * lot_n, canal)
+113:    for pas in range(1, a.pas + 1):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '100,155p' tools/entrainer_native.py", "description": "Read the training loop and checkpoint save"}`
+
+  ```
+train, val = data[:-n_val], data[-n_val:]
+        canal_train = canal_data[:-n_val] if canal_data is not None else None
+        canal_val = canal_data[-n_val:] if canal_data is not None else None
+    cfg = NativeConfig(d_model=a.dim, expert_hidden=a.expert_hidden)
+    modele = NativeModel(cfg).to(a.device)
+    if a.init:
+        ck = torch.load(a.init, map_location="cpu", weights_only=False)
+        modele.load_state_dict(ck["state"], strict=False)
+        print(f"  init : {a.init}", flush=True)
+    opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
+    amp = bool(a.amp) and str(a.device).startswith("cuda")
+    scaler = torch.amp.GradScaler("cuda", enabled=amp)
+    t0 = time.time(); pertes = []
+    for pas in range(1, a.pas + 1):
+        modele.train()
+        x, y, c = lot(train, a.lot, a.seq, a.device, pas * a.lot, canal_train)
+        pos = random.randint(0, a.positions_aleatoires) if a.positions_aleatoires else 0
+        with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=amp):
+            sortie = modele(x, pos_debut=pos, canal=c)
+            pertes = [F.cross_entropy(sortie["logits"].reshape(-1, 256), y.reshape(-1))]
+            if a.tet
+… [1909 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/entrainer_native.py'); s = p.read_text()\n# 1) l'argument\nold = '''    ap.add_argument(\"--init\", default=None,'''\nnew = '''    ap.add_argument(\"--decalage\", type=int, de … [1962 caractères tronqués]`
+
+  ```
+patch ok
+compile-ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wikitext2_test.txt --pas 3 --seq 128 --lot 2 --dim 64 --expert-hidden 64 --no-tetes --device cpu --graine 1 --sortie /tmp/t1.pt --drvm /tmp/t1.drv … [611 caractères tronqués]`
+
+  ```
+pas    1 · perte 5.6844 · PPL val 278.161 · 1 s · échelle 0
+  init : /tmp/t1.pt · fenêtres à partir de 3
+pas    1 · perte 5.5582 · PPL val 248.892 · 0 s · échelle 0
+/tmp/t1.pt pas_cumules 3
+/tmp/t2.pt pas_cumules 6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/entrainer_native.py'); s = p.read_text()\nold = '''    ap.add_argument(\"--decalage\", type=int, default=0,\n                    help=\"décalage du compteur de fenêtres (pour  … [1351 caractères tronqués]`
+
+  ```
+opt-in ok
+  init : /tmp/t1.pt · fenêtres à partir de 3
+pas    1 · perte 5.5582 · PPL val 248.892 · 0 s · échelle 0
+pas_cumules 5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-rejeu-des-fenetres.md <<'MD'\n# Le rejeu des fenêtres : chaque tranche rejouait le même échantillon — 110 000 pas ne valent pas 900 Mo de données neuves\n\n> **Ligne de roadmap** : N (le natif) · **Date** : 2026 … [5119 caractères tronqués]`
+
+  ```
+fiche nuit corrigée
+budget=0
+     · compteurs : en-cours.md dit 823 fichiers, le disque en a 825
+     · compteurs : en-cours.md dit 1090 JSON, le disque en a 1096
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n_json=$(ls reports/*.json | wc -l); n_md=$(ls reports/*.md | wc -l); python3 - \"$n_md\" \"$n_json\" <<'PY'\nimport pathlib, re, sys\nmd, js = sys.argv[1], sys.argv[2]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text( … [2436 caractères tronqués]`
