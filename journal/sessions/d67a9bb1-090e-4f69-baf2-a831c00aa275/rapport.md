@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 92.4 h |
+| Durée | 92.6 h |
 | Tours | 90 |
-| Messages | 1573 |
-| Appels d'outils | 1377 |
+| Messages | 1575 |
+| Appels d'outils | 1379 |
 | Fichiers touchés | 44 |
-| Commandes | 1218 |
+| Commandes | 1220 |
 | Sous-agents | 7 |
-| Commits | 119 |
+| Commits | 120 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2264,7 +2264,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 90 — <goal_round> Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre le … [1076 caractères tronqués]
 
-*55 appels d'outils.* Actions notables :
+*57 appels d'outils.* Actions notables :
 
 - bash — Spot-check the literature corpus quality
 - bash — Ten-minute pause and progress
@@ -2280,7 +2280,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - bash — Ten-minute pause with load check
 - bash — Commit tranches 4-5 data and update the fiche
 - bash — Ten-minute pause with tranche counts
-- … et 35 autres
+- … et 37 autres
 
 ## 3. Travail accompli
 
@@ -2385,7 +2385,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1178 autres
+- … et 1180 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2652,4 +2652,5 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - OUTIL — LA COURBE N'ÉCRIT PLUS PAR DÉFAUT (ELLE AVAIT ÉCRASÉ courbe-150m.json EN AFFICHANT p1/p2)" && git push origin s/v7 2>&1 | tail -1; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text(
 - SESSION S — LE HEARTBEAT EST RAFRAÎCHI (LE MANDAT ÉTAIT PÉRIMÉ DE 1 305 MIN, porte-sessions ROUGE ; RE-VÉRIFIÉE VERTE)" && git push origin s/v7 2>&1 | tail -1; 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text(
 

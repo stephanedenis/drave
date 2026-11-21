@@ -21804,3 +21804,26 @@ sam 21 nov 2026 06:13:10 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md && git commit -q -m \"SESSION S — LE HEARTBEAT EST RAFRAÎCHI (LE MANDAT ÉTAIT PÉRIMÉ DE 1 305 MIN, porte-sessions ROUGE ; RE-VÉRIFIÉE VERTE)\" && git push origin s … [163 caractères tronqués]`
+
+  ```
+a0218228..6e0f49f1  s/v7 -> s/v7
+sam 21 nov 2026 06:19:54 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; cat /tmp/matrice1.log 2>/dev/null | tail -8; ps -eo pid,etime,args | grep ppl_matrice | grep -v grep | cut -c1-70", "description": "Check the first matrix block's progress", "timeoutMs": 500000}`
+
+  ```
+sam 21 nov 2026 06:27:00 EST
+      v211 × litterature : 3.57524437628934
+      v211 × wiki_big   : 3.2287907214175737
+
+| modèle | litterature | wiki_big |
+|---|---:|---:|
+| nb11 | 4.0443 | 2.7227 |
+| v111 | 3.9872 | 2.7367 |
+| v211 | 3.5752 | 3.2288 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text()\nold = \"\"\"| modèle | entraîné sur | wikitext2 (anglais) | littérature (fr, autre) | val du registre |\n|---|---|---:|--- … [3143 caractères tronqués]`

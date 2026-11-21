@@ -46,13 +46,19 @@ pas comme sur un parcours séquentiel.
 
 ## La matrice du matin
 
-| modèle | entraîné sur | wikitext2 (anglais) | littérature (fr, autre) | val du registre |
+| modèle | entraîné sur | wikitext2 (anglais) | littérature (fr, autre) | val `wiki_big` |
 |---|---|---:|---:|---:|
-| nb11 | `wiki_big` 110k | 6,8349 | *(à remplir)* | 2,71 |
-| v111 | mélange v1 110k | 6,8674 | *(à remplir)* | *(à remplir)* |
-| v211 | plein texte v2 110k | 7,0930 | *(à remplir)* | *(à remplir)* |
-| p111 | palier 1 110k, g1 | *(à remplir)* | *(à remplir)* | *(à remplir)* |
-| p211 | palier 1 110k, g2 | *(à remplir)* | *(à remplir)* | *(à remplir)* |
+| nb11 | `wiki_big` 110k | 6,8349 | 4,0443 | **2,7227** |
+| v111 | mélange v1 110k | 6,8674 | 3,9872 | 2,7367 |
+| v211 | plein texte v2 110k | 7,0930 | **3,5752** | 3,2288 |
+| p110/p210 | palier 1 100k | *(à remplir)* | *(à remplir)* | *(contaminé)* |
+
+**Le classement s'inverse selon le val** : sur `wiki_big` (le registre des résumés), `wiki_big`
+gagne (2,72) ; sur la **littérature** (autre registre français), c'est le **plein texte** qui gagne
+(3,58), devant le mélange (3,99) et `wiki_big` (4,04). Entraîner sur des résumés apprend le registre
+encyclopédique ; entraîner sur le plein texte apprend une prose plus large. Nuance : le val
+`wiki_big` est **contaminé** pour v211 (le plein texte couvre les mêmes articles) — pas le val
+littérature, propre pour tous.
 
 ## Ce qui pourrait le rendre faux
 
