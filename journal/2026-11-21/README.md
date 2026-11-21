@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**8 commits** · **2 session(s)** · **4 thème(s)**
+**9 commits** · **2 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,14 +13,14 @@
 |---|---|---|
 | attention | 4 | [attention.md](attention.md) |
 | docs | 2 | [docs.md](docs.md) |
-| mesures | 1 | [mesures.md](mesures.md) |
+| mesures | 2 | [mesures.md](mesures.md) |
 | outils | 1 | [outils.md](outils.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 87.6 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 92.4 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 487.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -35,6 +35,7 @@
 | 00:19 | `dc130da2` | N — LA COUVERTURE DE L'ÉCHANTILLON EST CHIFFRÉE (2,2 % DU PALIER 1, 9,9 % DE wiki_big) ; LA PUCE N DIT LE FLAG PASSÉ |
 | 00:23 | `7cda5082` | RSN — LA FONDATION DE LA PENSÉE EST POSÉE : LE CANDIDAT, L'ÉTAT, LE MERKLE, LE CHEMIN SURFACE → RSN (19/20 PHRASES AVEC PRÉDICATION, 34,5 CANDIDATS/PHRASE, 5/5 INVARIANTS, LE TEXTE VIDE À 0) ; CE QUI MANQUE : LE SCORE APPRIS, LA COMPOSITION, LE STATE STORE |
 | 00:55 | `d10c9320` | OUTIL — LA COURBE N'ÉCRIT PLUS PAR DÉFAUT (ELLE AVAIT ÉCRASÉ courbe-150m.json EN AFFICHANT p1/p2) |
+| 01:25 | `a0218228` | N — LA NUIT DU PALIER 1, TRANCHES 4 ET 5 : p1 7,3733 → 7,1953, p2 7,1548 → 7,0021 SUR WIKITEXT2 |
 
 ## Le récit de la journée (écrit à la main)
 

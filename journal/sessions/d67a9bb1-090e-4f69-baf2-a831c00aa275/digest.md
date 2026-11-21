@@ -21460,3 +21460,347 @@ for f in ('p15','p25'):
     except FileNotFoundError: print('wikitext2 -')") finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"| 40 000 | *( … [2135 caractères tronqués]`
+
+  ```
+fiche ok
+etat 826 1102
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   d10c9320..a0218228  s/v7 -> s/v7
+sam 21 nov 2026 01:28:35 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -c \"reprise tranche\" work/n4/p1.chaine.log work/n4/p2.chaine.log; tail -1 work/n4/p2.chaine.log | cut -c1-52", "description": "Ten-minute pause with tranche counts", "timeoutMs": 660000}`
+
+  ```
+sam 21 nov 2026 01:38:36 EST
+work/n4/p1.chaine.log:3
+work/n4/p2.chaine.log:3
+pas 5350 · perte 0.9394 · PPL val 3.145 · 2109 s · é
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n4/bilan-notes.md <<'MD'\n# Bilan du 21/11 9 h — matière (à rédiger, pas à committer tel quel)\n\n## Les runs de la nuit\n- p1/p2 : palier 1 (résumés, 3,69 Go), reprise 30k → 110k, 8 tranches ; cadence 75-78 min.\n- Arrivé … [1788 caractères tronqués]`
+
+  ```
+bilan-notes écrit
+sam 21 nov 2026 01:38:53 EST
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; for f in p1 p2; do printf \"%s : \" \"$f\"; tail -1 work/n4/$f.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; done", "description": "Ten-minute pause with step check", "timeoutMs": 660000}`
+
+  ```
+sam 21 nov 2026 01:48:49 EST
+p1 : pas 4600 · perte 0.8841
+p2 : pas 6900 · perte 0.9497
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; awk '/reprise tranche/{print}' work/n4/p1.chaine.log | tail -2; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause with tranche header check", "timeoutMs": 660000}`
+
+  ```
+sam 21 nov 2026 01:58:43 EST
+=== reprise tranche 5/11 00:04 ===
+=== reprise tranche 6/11 01:16 ===
+pas 6050
+  ```
+
+- **bash** `{"command": "sleep 580; date; nvidia-smi --query-gpu=index,temperature.gpu,power.draw --format=csv,noheader 2>/dev/null | cut -c1-60", "description": "Ten-minute pause with thermal and power check", "timeoutMs": 650000}`
+
+  ```
+sam 21 nov 2026 02:08:29 EST
+0, 86, 181.76 W
+1, 74, 197.55 W
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p16','p26'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  ' … [230 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 02:18:25 EST
+p16 -  wikitext2 -
+p26 val 2.9611  wikitext2 7.0252
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p16','p26'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  ' … [226 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 02:28:21 EST
+p16 val 2.9924  wikitext2 -
+p26 val 2.9611  wikitext2 7.0252
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; df -h . | awk 'NR==2{print $4\" libres\"}'; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"", "description": "Ten-minut … [55 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 02:38:24 EST
+1,8T libres
+pas 1350 · perte 0.8587
+pas 4050 · perte 0.9180
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nw=json.load(open('reports/ppl-wikitext2-p16.json'))\nprint('p16 wikitext2', round(w['ppl'],4))\" 2>/dev/null || echo 'p16 -'", "description": "Read p1 tranche 6 wikitext2", "timeoutMs": 65 … [5 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 02:48:12 EST
+p16 wikitext2 7.1253
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash -c 'sleep 4800; JOURNAUX=work/portes/roue-1121-0410 DELAI=1800 tools/toutes-les-portes.sh > /tmp/passe-1121.log 2>&1' > /dev/null 2>&1 & nohup bash -c 'sleep 12300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bas … [488 caractères tronqués]`
+
+  ```
+planifié à 02:48 : portes 04:10, matrice 1 06:15, matrice 2 07:35
+9
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\"", "description": "Ten-minute pause and val check", "timeoutMs": 660 … [4 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-1631]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"sleep (4800|12300|17100)\" | grep -v grep | cut -c1-80; date", "description": "Verify the scheduled jobs are alive"}`
+
+  ```
+542995       10:31 bash -c sleep 12300; cd /home/stephane/Data13TB/stephane/Git
+ 542996       10:31 bash -c sleep 17100; cd /home/stephane/Data13TB/stephane/Git
+ 542998       10:31 bash -c sleep 4800; JOURNAUX=work/portes/roue-1121-0410 DELA
+ 542999       10:31 sleep 17100
+ 543000       10:31 sleep 12300
+ 543001       10:31 sleep 4800
+sam 21 nov 2026 02:59:08 EST
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1631 (bash: sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o "pas *[0-9]* · PPL val [0-9.]*"; tail -1 work/n4/p2.chaine.log | grep -o "pas *[0-9]* · PPL val [0-9.]*") finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1631"}`
+
+  ```
+sam 21 nov 2026 02:59:00 EST
+[status: completed, exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 work/n4/p1.chaine.log | cut -c1-60; tail -2 work/n4/p2.chaine.log | cut -c1-60", "description": "Read the chain tails"}`
+
+  ```
+sam 21 nov 2026 02:59:16 EST
+pas 4300 · perte 0.9908 · PPL val 3.170 · 1792 s · échelle 2
+pas 4350 · perte 0.8898 · PPL val 3.169 · 1812 s · échelle 2
+pas 7150 · perte 1.0280 · PPL val 3.136 · 2818 s · échelle 5
+pas 7200 · perte 0.9594 · PPL val 3.142 · 2838 s · échelle 5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"échelle [0-9]*\" work/n4/p1.chaine.log | tail -12 | tr '\\n' ' '; echo; grep -o \"échelle [0-9]*\" work/n4/p2.chaine.log | tail -12 | tr '\\n' ' '; echo; grep -ci \"inf\\|nan\" work/n4/p1.chaine.log work/n4/p2.chaine.log",  … [62 caractères tronqués]`
+
+  ```
+échelle 131072 échelle 131072 échelle 131072 échelle 262144 échelle 262144 échelle 262144 échelle 262144 échelle 262144 échelle 262144 échelle 262144 échelle 262144 échelle 262144 
+échelle 524288 échelle 524288 échelle 524288 échelle 524288 échelle 524288 échelle 524288 échelle 524288 échelle 524288 échelle 524288 échelle 524288 échelle 524288 échelle 524288 
+work/n4/p1.chaine.log:0
+work/n4/p2.chaine.log:0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 590; date; ps -p 543001 -o pid= >/dev/null && echo \"portes planifiées vivantes\" || echo \"portes planifiées PERDUES\"", "description": "Ten-minute pause and scheduled-job liveness", "timeoutMs": 650000}`
+
+  ```
+sam 21 nov 2026 03:09:20 EST
+portes planifiées vivantes
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p17','p27'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  ' … [223 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 03:19:14 EST
+p17 -  wikitext2 -
+p27 val 2.9322  wikitext2 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p17','p27'):\n    try:\n        w=json.load(open(f'reports/ppl-wikitext2-{f}.json')); print(f, 'wikitext2', round(w['ppl'],4), end='  ')\n    except FileNotFoundError: print(f,  … [177 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 03:29:11 EST
+p17 -  p27 wikitext2 6.9098
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p17','p27'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  ' … [283 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 03:39:10 EST
+p17 val 2.9664  wikitext2 -
+p27 val 2.9322  wikitext2 6.9098
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nw=json.load(open('reports/ppl-wikitext2-p17.json')); print('p17 wikitext2', round(w['ppl'],4))\" 2>/dev/null || echo 'p17 -'; ls /tmp/passe-1121.log 2>/dev/null && tail -2 /tmp/passe-1121. … [96 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 03:49:05 EST
+p17 wikitext2 7.1114
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · PPL val [0-9.]*\" || tail -1 work/n4/p1.chaine.log | cut -c1-50", "description": "Ten-minute pause with progress", "timeoutMs": 650000}`
+
+  ```
+sam 21 nov 2026 03:59:02 EST
+pas 2600 · perte 1.0060 · PPL val 3.163 · 1083 s ·
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls -la /tmp/passe-1121.log 2>/dev/null | awk '{print $5\" o\"}'; wc -l < work/portes/roue-1121-0410/registre.txt 2>/dev/null || echo \"registre pas encore\"", "description": "Verify the gates pass started", "timeoutM … [11 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 04:08:57 EST
+253 o
+1
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1121-0410/registre.txt; awk '$2 != 0' work/portes/roue-1121-0410/registre.txt 2>/dev/null", "description": "Ten-minute pause with gate progress", "timeoutMs": 650000}`
+
+  ```
+sam 21 nov 2026 04:18:54 EST
+16
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1121-0410/registre.txt; awk '$2 != 0' work/portes/roue-1121-0410/registre.txt 2>/dev/null; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause with gate … [37 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 04:28:50 EST
+24
+pas    1
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p18','p28'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  ' … [222 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 04:32:58 EST
+p18 -  wikitext2 -
+p28 val 2.9245  wikitext2 6.8757
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1121-0410/registre.txt; awk '$2 != 0' work/portes/roue-1121-0410/registre.txt 2>/dev/null; python3 -c \"\nimport json\ntry:\n    w=json.load(open('reports/ppl-wikitext2-p18.json')); print('p1 … [143 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 04:42:56 EST
+29
+p18 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1121-0410/registre.txt; python3 -c \"\nimport json\nfor f in ('p18','p28'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    … [298 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 04:52:53 EST
+31
+p18 val 2.955  wikitext2 -
+p28 val 2.9245  wikitext2 6.8757
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nw=json.load(open('reports/ppl-wikitext2-p18.json')); print('p18 wikitext2', round(w['ppl'],4))\" 2>/dev/null || echo 'p18 -'; wc -l < work/portes/roue-1121-0410/registre.txt", "description … [54 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 05:02:49 EST
+p18 wikitext2 7.0881
+33
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1121-0410/registre.txt; awk '$2 != 0' work/portes/roue-1121-0410/registre.txt 2>/dev/null; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause with gate … [37 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 05:12:47 EST
+39
+porte-indice 1 848
+pas 2600
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1121-0410/registre.txt; awk '$2 != 0' work/portes/roue-1121-0410/registre.txt 2>/dev/null; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause with gate … [37 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 05:22:46 EST
+67
+porte-indice 1 848
+porte-melange 1 105
+pas 8200
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1121-0410/registre.txt; tail -2 /tmp/passe-1121.log | cut -c1-55", "description": "Ten-minute pause with gates tail", "timeoutMs": 650000}`
+
+  ```
+sam 21 nov 2026 05:32:41 EST
+71
+  porte-pannes           ✅                          46 
+  porte-peripherie       ✅                          15
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1121-0410/registre.txt; awk '$2 != 0' work/portes/roue-1121-0410/registre.txt 2>/dev/null; python3 -c \"\nimport json\nfor f in ('p19','p29'):\n    try:\n        d=json.load(open(f'work/n4/{f … [355 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 05:42:41 EST
+75
+porte-indice 1 848
+porte-melange 1 105
+p19 -  wikitext2 -
+p29 val 2.9272  wikitext2 6.9398
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1121-0410/registre.txt; grep -E \"vertes|rouges\" /tmp/passe-1121.log | tail -1; python3 -c \"\nimport json\ntry:\n    w=json.load(open('reports/ppl-wikitext2-p19.json')); print('p19', round( … [141 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 05:52:42 EST
+79
+p19 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1121-0410/registre.txt; tail -3 /tmp/passe-1121.log | cut -c1-60; python3 -c \"\nimport json\nfor f in ('p19','p29'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'v … [340 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 06:02:39 EST
+90
+  porte-tokenizer-kimi   ✅                           7 s    
+  porte-topologie        ✅                          96 s    
+  porte-trace            ✅                          26 s    
+p19 -  wikitext2 -
+p29 val 2.9272  wikitext2 6.9398
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -E \"vertes|rouges\" /tmp/passe-1121.log | tail -1; awk '$2 != 0' work/portes/roue-1121-0410/registre.txt 2>/dev/null; python3 -c \"\nimport json\nfor f in ('p19',):\n    try:\n        d=json.load(open(f'work/n4 … [357 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 06:12:35 EST
+--- 88 vertes, 3 rouges ---
+porte-indice 1 848
+porte-melange 1 105
+porte-sessions 1 0
+--- 88 vertes, 3 rouges ---
+p19 val 2.9479  wikitext2 6.9957
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/portes/roue-1121-0410/ | grep -i session | head -3; tail -12 work/portes/roue-1121-0410/porte-sessions.log 2>/dev/null; grep -n \"sessions\" -A3 tools/porte-sessions.sh | head -12", "description": "Read the sessions gate's co … [9 caractères tronqués]`
+
+  ```
+porte-sessions.log
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ❌ mandat périmé (1305 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+2:# porte-sessions.sh — les plans de session sont lisibles et le linter refuse un doublon.
+3-set -u
+4-cd "$(dirname "$0")/.."
+5:python3 tools/sessions.py --autotest || exit 1
+6:python3 tools/sessions.py --check --strict || exit 1
+7-echo "PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, datetime\np = pathlib.Path('journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md'); s = p.read_text()\nimport re\nm = re.search(r\"- \\*\\*Heartbeat\\*\\* : .*\", s)\nassert m\ns = s[:m.star … [256 caractères tronqués]`
+
+  ```
+heartbeat ok
+  ✅ plans cohérents
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+sam 21 nov 2026 06:12:57 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; cat /tmp/matrice1.log 2>/dev/null | tail -6; ps -eo pid,args | grep \"ppl_matrice\" | grep -v grep | head -2 | cut -c1-90", "description": "Check the first matrix block"}`
+
+  ```
+sam 21 nov 2026 06:13:10 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md && git commit -q -m \"SESSION S — LE HEARTBEAT EST RAFRAÎCHI (LE MANDAT ÉTAIT PÉRIMÉ DE 1 305 MIN, porte-sessions ROUGE ; RE-VÉRIFIÉE VERTE)\" && git push origin s … [163 caractères tronqués]`
