@@ -21082,3 +21082,50 @@ sam 21 nov 2026 00:10:20 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"- **N — l'entraînement, les corpus et le décodage** (18-20/11) :\"\ni = s.index(old); j = s.index(\"\\n\", i)\nligne = s[i:j] … [1019 caractères tronqués]`
+
+  ```
+mots avant: 90
+mots après: 74
+  ✅ état court, structuré, multi-session et reprenable
+budget=0
+     · fraîcheur : en-cours.md dit 2026-11-20, le dernier commit date du 2026-11-21
+   4c86d1fe..2a209b6d  s/v7 -> s/v7
+sam 21 nov 2026 00:13:10 EST
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1545 (bash: sleep 3500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c "
+import json
+for f in ('p14','p24'):
+    try:
+        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))
+    except FileNotFoundError: print(f, '-')
+for f in ('p14','p24'):
+    try:
+        d=json.load(open(f'reports/ppl-wikitext2-{f}.json')); print(f, 'wikitext2', round(d['ppl'],4))
+    except FileNotFoundError: print(f, 'wikitext2 -')") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3p' docs/pilotage/en-cours.md | cut -c1-200", "description": "Read the current state header"}`
+
+  ```
+**Mis à jour : 2026-11-20, 15 h 35 HNE (les cinq parcours de lecture : un guidon pour chaque profil, moins de documents)**
+  ```
+
+- **job_output** `{"job_id": "bash-1545"}`
+
+  ```
+sam 21 nov 2026 00:12:37 EST
+p14 ppl v1 3.0761
+p24 ppl v1 3.0232
+p14 wikitext2 7.3733
+p24 wikitext2 7.1548
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"**Mis à jour : 2026-11-20, 15 h 35 HNE (les cinq parcours de lecture : un guidon pour chaque profil, moins de documents)**\"\ … [637 caractères tronqués]`

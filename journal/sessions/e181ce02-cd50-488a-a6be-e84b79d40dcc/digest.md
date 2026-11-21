@@ -72599,3 +72599,109 @@ ven 20 nov 2026 15:32:26 EST
 
 Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **décrit** l'organisation, il ne la **force** pas — le `modele-natif.md` (7 300 mots) et la `synthese/` (8 000) restent à découper, c'est le chantier de fond.
 
+
+## Tour 223
+
+### 👤 Utilisateur
+
+Que manque-t-il à Drave pour réfléchir
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo \"=== pensee-iterative :\"; head -30 docs/theorie/pensee-iterative.md | cut -c1-140; echo \"=== jeux-symboliques :\"; head -25 docs/theorie/jeux-symboliques.md | cut -c1-130", "description": "Lire la théorie de la pensée"}`
+
+  ```
+sam 21 nov 2026 00:11:40 EST
+=== pensee-iterative :
+# La pensée itérative — la RSN plurielle, l'arbre d'états et les stratégies
+
+> **Ce que ce document est.** La **théorie du moteur de pensée** de Drave. La RSN n'est pas un objet canonique
+> unique : c'est une **représentation plurielle**, un **ensemble de candidats** qui sert de **mémoire de travail**
+> à des **cycles de pensée** multi-niveaux. Penser, c'est **chercher** dans un **arbre d'états**, avec un
+> **portefeuille de stratégies** d'IA classique et des **opérateurs** neuronaux ou classiques. Le bus ne transporte
+> pas des réponses : il transporte des **états** et des **propositions** typés, tracés et rejouables.
+> Les **chiffres** sont dans [`reports/`](../../reports/) ; la **séparation à trois niveaux** dans
+> [`modele-natif.md`](modele-natif.md) ; l'**implémentation** dans [`moteur-de-pensee.md`](../implantation/moteur-de-pensee.md).
+
+> **Fiche concept — la RSN plurielle.**
+> Un **état** est un ensemble de **candidats**. Chaque candidat a un **corps canonique**, une **annotation**
+> (confiance, ambiguïté, provenance), un **statut** (hypothèse, retenu, réfuté, ouvert), un **coût** et un
+> **score**. L'état a un **parent**,
+… [2704 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/implantation/ | grep -iE \"pensee|moteur\" | head -3; head -25 docs/implantation/moteur-de-pensee.md 2>/dev/null | cut -c1-135; echo \"=== l'état :\"; grep -nE \"pensée|pensee|RSN\" docs/pilotage/en-cours.md | head -6 | cut - … [51 caractères tronqués]`
+
+  ```
+moteur-de-pensee.md
+# Le moteur de pensée — state store, arbre, stratégies
+
+> **Ce que ce document est.** Le **contrat d'implémentation** du moteur de pensée : les types, le
+> **state store**, l'**arbre d'états**, la **boucle** anytime, les **stratégies**, la **trace** et les
+> **portes**. La théorie est dans [`pensee-iterative.md`](../theorie/pensee-iterative.md) ; les schémas
+> dans [`docs/schemas/`](../schemas/) ; le bloc impulsionnel dans [`diehl-cook.md`](diehl-cook.md).
+
+> **Fiche concept — le moteur.** Un **state store** typé, un **arbre** de nœuds hashés, une
+> **frontière**, une **boucle** anytime, un **portefeuille** de stratégies, une **trace** rejouable.
+> Le moteur est un bloc N3 `state → state` ou `state → decision` ; il ne lit jamais la surface.
+
+## 1. Les types
+
+| type | contenu | invariant |
+|---|---|---|
+| `Candidate` | `corps`, `annotation`, `statut`, `provenance`, `cout`, `score` | `corps` canonique ; `H(corps)` stable |
+| `State` | `id`, `parent`, `profondeur`, `budget`, `statut`, `candidats`, `frontiere`, `empreinte` | empreinte = Merkle des candidats 
+| `Node` | `state`, `children`, `score`, `cout`, `visites` | un nœud = un état ; l'arête porte l'opérateur |
+
+… [661 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"gold de pensée\\|gold-pensee\\|gold_pensee\" reports/ docs/ 2>/dev/null | head -4; echo \"=== le moteur : combien de lignes\"; wc -l docs/implantation/moteur-de-pensee.md; echo \"=== le code :\"; ls tools/ | grep -iE \"pe … [95 caractères tronqués]`
+
+  ```
+reports/rapport-file-taches.md
+reports/pensee-file-taches.json
+reports/rapport-gold-reel-50.json
+reports/rapport-gold-reel-50.md
+=== le moteur : combien de lignes
+398 docs/implantation/moteur-de-pensee.md
+=== le code :
+entrainer_moteur.py
+operateur_pensee.py
+pas_de_pensee_contracte.py
+pas_de_pensee_corrige.py
+pas_de_pensee_mlp.py
+pas_de_pensee_non_lineaire.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 tools/pas_de_pensee_contracte.py | cut -c1-140; echo \"=== les résultats mesurés :\"; ls reports/*pensee* reports/*moteur* 2>/dev/null | head -6", "description": "Voir le pas de pensée"}`
+
+  ```
+#!/usr/bin/env python3
+"""pas_de_pensee_contracte.py — ÉTAGE 2 : une dynamique CONTRACTANTE tient-elle plus de pas ?
+
+POURQUOI ✓✓. La mesure 82 a montré qu'un opérateur linéaire F fait **deux pas** de pensée puis s'effondre, et la
+mesure 83 que la taille ne repousse pas la falaise ✗✗. Le chapitre 5 attribue la falaise à l'absence de
+**contraction** : l'état prédit sort de la variété des états réels ✓✓. On teste ici la correction la plus simple :
+**mélanger** le pas appris avec l'état courant, `x' = (1−α)·x + α·F(x)`, pour α ∈ {0,25, 0,5, 0,75, 1} ✓✓ — et
+une **projection de norme** (garder la norme de l'état courant) ✓✓.
+
+CE QU'ON MESURE ✓✓ : le retrieval de la bonne position (parmi les 4 phrases de la série, hasard 25 %) aux pas 1,
+2 et 3, pour chaque α et chaque couche ✓✓. *Si une contraction tient 3 pas, la falaise n'est pas une fatalité ;
+sinon, il faut un opérateur **appris** par récurrence, pas un linéaire mélangé* ✓✓.
+"""
+from __future__ import annotations
+import argparse, json, pathlib
+import numpy as np
+
+
+def norm(x):
+    return x / np.maximum(1e-9, np.linalg.norm(x, axis=1, keepdims=True))
+
+
+def cos(a, b):
+    return float(np.mean(np.sum(norm(a) * norm(b), 1)))
+
+
+def retr
+… [325 caractères tronqués]
+  ```
+

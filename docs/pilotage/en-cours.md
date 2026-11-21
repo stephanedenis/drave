@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-20, 15 h 35 HNE (les cinq parcours de lecture : un guidon pour chaque profil, moins de documents)**
+**Mis à jour : 2026-11-21, 00 h 15 HNE (les cinq parcours de lecture : un guidon pour chaque profil, moins de documents · le rejeu des fenêtres trouvé et corrigé — `--compteur-suite`)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

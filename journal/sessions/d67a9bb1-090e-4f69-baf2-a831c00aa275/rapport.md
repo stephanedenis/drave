@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 86.4 h |
 | Tours | 88 |
-| Messages | 1497 |
-| Appels d'outils | 1310 |
+| Messages | 1500 |
+| Appels d'outils | 1313 |
 | Fichiers touchés | 44 |
-| Commandes | 1155 |
+| Commandes | 1157 |
 | Sous-agents | 7 |
-| Commits | 113 |
+| Commits | 114 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2210,7 +2210,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 88 — continue avec des taches nocturnes jusqu'à demain 9h00
 
-*90 appels d'outils.* Actions notables :
+*93 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create the night goal and the resume script
@@ -2226,7 +2226,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - bash — Check referents tests and the missed clitics
 - bash — Read the tokenizer and its classes
 - bash — Read the Token class and sample classes
-- … et 75 autres
+- … et 77 autres
 
 ## 3. Travail accompli
 
@@ -2331,7 +2331,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1115 autres
+- … et 1117 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2592,4 +2592,5 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n_json=$(ls reports/*.json | wc -l); n_md=$(ls reports/*.md | wc -l); python3 - "$n_md" "$n_json" <<'PY' i
 - ÉTAT — LA PUCE N REPASSE SOUS 80 MOTS (REJEU DES FENÊTRES RESSERRÉ)" && git push origin s/v7 2>&1 | tail -1; date
 - ÉTAT — LA PUCE N PASSE SOUS 80 MOTS ET LA PAGE VIVANTE PASSE AU 21/11" && git push origin s/v7 2>&1 | tail -1; date
+- ÉTAT — LA PAGE VIVANTE PASSE AU 21/11 (LE REJEU DES FENÊTRES AJOUTÉ À L'EN-TÊTE)" && git push origin s/v7 2>&1 | tail -1; date
 

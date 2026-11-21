@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 487.5 h |
-| Tours | 223 |
-| Messages | 4468 |
-| Appels d'outils | 3980 |
+| Durée | 487.6 h |
+| Tours | 224 |
+| Messages | 4473 |
+| Appels d'outils | 3983 |
 | Fichiers touchés | 25 |
-| Commandes | 3308 |
+| Commandes | 3311 |
 | Sous-agents | 43 |
 | Commits | 527 |
 | Compactages de contexte | 10 |
@@ -519,6 +519,8 @@
 **Tour 222** — Pourrait-on rendre la documentation plus claire et moins redondante? On y mélange plein de choses de différentes perspectives. le readme présente des profils de lecteurs. on devrait organiser des parcours de lecture qui vont dans ce sens pour couvrir toute la théorie evec moins de documents.
 
 **Tour 223** — Que manque-t-il à Drave pour réfléchir
+
+**Tour 224** — Notre priorité doit être le RSN. Le reste est futile sans cette fondation.
 
 ## 2. Déroulé, étape par étape
 
@@ -11791,10 +11793,47 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 
 ### Tour 223 — Que manque-t-il à Drave pour réfléchir
 
-*2 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Lire la théorie de la pensée
 - bash — Voir le moteur de pensée
+- bash — Chercher l'implémentation du moteur de pensée
+- bash — Voir le pas de pensée
+
+**Synthèse produite :**
+
+⏵ La réponse est mesurée dans le dépôt — voici ce qui manque, dans l'ordre
+
+\## Ce que Drave a déjà pour « penser »
+
+- **La surface** : le produit lit un texte, le découpe, l'étiquette (POS 86, 95 avec le tagger), l'attache — **mesuré, installable**.
+- **La théorie** : la RSN plurielle (des candidats avec statut, coût, score, empreinte de Merkle), l'arbre d'états, le portefeuille de stratégies, la boucle anytime (`pensee-iterative.md`, `moteur-de-pensee.md` — 398 lignes de contrat).
+- **Les mesures** : `pas_de_pensee_*` (le pas de pensée linéaire **tient 2 pas puis s'effondre** ; la contraction ne sauve pas ; 7B, 14B, 3B, 7B testés), `native-pensee.json`, `m6-moteur.json`.
+
+\## Ce qui manque — dans l'ordre de dépendance
+
+**1. La RSN n'est pas construite.** Le contrat existe (les types, le state store, l'arbre), mais **le chemin surface → RSN n'est pas implémenté** : le produit s'arrête au POS et aux syntagmes ; il ne produit pas les **candidats** (corps, statut, confiance, provenance) que la pensée doit manipuler. Sans RSN, le moteur de pensée n'a **rien** à faire tourner.
+
+**2. L'opérateur de pensée n'est pas appris.** C'est le résultat le plus dur du dépôt : un opérateur **linéaire** tient **2 pas** puis s'effondre ; la contraction, la taille, la projection de norme **ne repoussent pas la falaise**. Il manque l'opérateur **appris par récurrence** — et surtout **la donnée d'entraînement** des trajectoires de pensée (les paires état → état).
+
+**3. Le gold de pensée manque.** Le bloc « Pensée » est **en pause** dans `en-cours` pour cette raison exacte : *« gold de pensée »*. Sans un jeu de trajectoires humaines (comment un humain décompose une question), on ne peut ni entraîner ni **mesurer** un pas de pensée.
+
+**4. Les opérations exactes ne sont pas branchées.** La théorie est claire : le neuronal pour la **représentation**, le classique pour l'**opération** (le solveur, le compte, l'ordre). Les jeux symboliques sont spécifiés, les solveurs ne sont pas branchés au moteur.
+
+**5. Le modèle natif ne compose pas.** 0,88 de mots valides, répétition 6, mais **pas de phrase** : il ne tient pas un état sur la durée. La pensée exige un modèle qui **conserve** ce qu'il a lu (le contexte de 1 024 est le seul lien).
+
+**6. Le miroir n'est pas une boucle.** La règle 6 (entrée/sortie) est posée ; la **validation de sortie** (le texte produit relu par la surface, comparé à l'intention) n'est pas implémentée.
+
+\## Le chemin le plus court
+
+**Le verrou n°1 est la RSN** — c'est 
+… [796 caractères tronqués]
+
+### Tour 224 — Notre priorité doit être le RSN. Le reste est futile sans cette fondation.
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Lire le contrat de la RSN
 
 ## 3. Travail accompli
 
@@ -11916,7 +11955,7 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3268 autres
+- … et 3271 autres
 
 ## 4. Mesures et résultats marquants
 
