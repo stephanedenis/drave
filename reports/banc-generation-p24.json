@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/p24.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9635,
+   "distinct_2": 0.5322,
+   "repetition": 13,
+   "echo": 0.1052,
+   "octets": 2560,
+   "secondes": 22.75,
+   "octets_s": 112.5,
+   "echantillons": [
+    {
+     "mots": 35,
+     "mots_valides": 0.9714,
+     "distinct_2": 0.2647,
+     "repetition": 9,
+     "echo": 0.3225806451612903,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la m",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3548,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le premier manuscrit de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison d",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 0.5862,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le plus important de la plupart des plantes de la ville de la ville de Saint-Louis et de la plupart des plantes de la ville de ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 35,
+     "mots_valides": 0.9714,
+     "distinct_2": 0.2647,
+     "repetition": 9,
+     "echo": 0.3225806451612903,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la m",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3548,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le premier manuscrit de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison d",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 0.5862,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le plus important de la plupart des plantes de la ville de la ville de Saint-Louis et de la plupart des plantes de la ville de ",
+     "octets": 128
+    },
+    {
+     "mots": 37,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1389,
+     "repetition": 11,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de la cour de la cour de la cour de la cour de la cour de la cour de la cour de la cour de la cour de la cour de la cour de la ",
+     "octets": 128
+    },
+    {
+     "mots": 41,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1,
+     "repetition": 13,
+     "echo": 0.6410256410256411,
+     "prompt": "La mer",
+     "texte": "La mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la m",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.5652,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent de la première partie de la série de la série télévisée d'animation de la série télévisée d'animation de la série t�",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.52,
+     "repetition": 4,
+     "echo": 0.18181818181818182,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de quitter le gouvernement avec le gouvernement de la République de la République de la République de la République de la R",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un petit village de la voïvodie de Lublin. Il se situe à environ au nord-est de Prague et à au sud-est de Prague Distances �",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5238,
+     "repetition": 3,
+     "echo": 0.1,
+     "prompt": "Un homme",
+     "texte": "Un homme est un homme politique français de la République française de la République française de la République française de la R",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5217,
+     "repetition": 4,
+     "echo": 0.2727272727272727,
+     "prompt": "La musique",
+     "texte": "La musique de l'année 1988 est la première musique de l'année 1999 et la musique de l'année 1999 est la première musique de l'année ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8929,
+     "distinct_2": 0.7778,
+     "repetition": 2,
+     "echo": 0.19230769230769232,
+     "prompt": "La guerre",
+     "texte": "La guerre de Chine est la guerre de Chine et le premier président de la Compagnie de la Ligue de Chine en 1912. Elle est la première gu",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.8636,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la commune de La Chapelle-sur-Saône est une commune rurale qui compte en , avec une faible plus grande partie de la commune",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8966,
+     "distinct_2": 0.6071,
+     "repetition": 2,
+     "echo": 0.14814814814814814,
+     "prompt": "Le sport",
+     "texte": "Le sport est un sport en français de la commune de La Rochelle et de la commune de La Rochelle en France. Le sport est un sport en fran",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5312,
+     "repetition": 4,
+     "echo": 0.06451612903225806,
+     "prompt": "La science",
+     "texte": "La science de la mort de son père est le fils de la mort de son père et de son père et de son père. Il est le fils de l'artiste et de ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 0.8095,
+     "repetition": 2,
+     "echo": 0.1,
+     "prompt": "La ville",
+     "texte": "La ville de La Rochelle est située dans le département de la Mayenne en région Auvergne-Rhône-Alpes. Elle est située dans le dépar",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5926,
+     "repetition": 2,
+     "echo": 0.038461538461538464,
+     "prompt": "Le temps",
+     "texte": "Le temps de la compagnie de la maison de La Chapelle est le premier président de la compagnie de la maison de La Chapelle et de la mais",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5263,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie de l'armée française est une ville de l'armée française de l'armée française de l'armée française de l'armée français",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "La question",
+     "texte": "La question de la commune de Bernier, est une commune rurale qui compte en , après avoir connu un pic de population de en 2008. Géographi",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.853,
+   "distinct_2": 0.9696,
+   "repetition": 2,
+   "echo": 0.0622,
+   "octets": 2453,
+   "secondes": 21.95,
+   "octets_s": 111.8,
+   "echantillons": [
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage semi-dollars pour d'avoir daté de quelques solutions en Transcription en Moulin. Il est considéré comme le Parti progress",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, il organise son siège de la commission polonaise. Il est organisé par le SIP de la Convolution des tendances britanniques, a",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois absolue dans un domaine long de campagne de Naples et entrainé dans une bande de frontières de Grand Royaume-Uni. Sa populati",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage semi-dollars pour d'avoir daté de quelques solutions en Transcription en Moulin. Il est considéré comme le Parti progress",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, il organise son siège de la commission polonaise. Il est organisé par le SIP de la Convolution des tendances britanniques, a",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois absolue dans un domaine long de campagne de Naples et entrainé dans une bande de frontières de Grand Royaume-Uni. Sa populati",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.23809523809523808,
+     "prompt": "Le chat",
+     "texte": "Le chat se trouve a également également possédant sur le point le bas dans le sud-ouest de la marque volontaire. Historique Le chat ",
+     "octets": 128
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.7692,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer Depus 1975 Catégorie:Code de football en 1975 Catégorie:1975 en septembre 1975\n",
+     "octets": 82
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent durant la Seconde Guerre mondiale, les Nationaaran, et le Championnat de Guerre mondiale empêchent au meilleur Mondial en lien",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9231,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de le vente des rédacteurs en cinq premier an en 1959 lorsqu'il a occupé des évêques classements en 1959 en 1959 lors d'une",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Paris est",
+     "texte": "Paris est une ancienne localité rurale naturelle du Poinciard et de la commune. Géologie et relief Le qui est de la bande dessinée Ass",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9524,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "Un homme",
+     "texte": "Un homme est un commissaire français d'installation et de bus en permanence. Le commissaire de la Sainte-Facette conserve de la famille",
+     "octets": 128
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.9091,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique est un homme d'affaires basé à Villanos-sur-Seine. Biographie C\n",
+     "octets": 67
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "Le livre",
+     "texte": "Le livre est un des des quatre étapes et le français de l'unité de l'United States Albums (1878-1983) sous le marquage du Groupe Baby",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8519,
+     "distinct_2": 0.8077,
+     "repetition": 2,
+     "echo": 0.24,
+     "prompt": "La guerre",
+     "texte": "La guerre des Hans de La Rochelle, est la base de la Lochem de La Rochelle et la créatrice de l'ancienne base de l'Académie de La Roche",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.4118,
+     "distinct_2": 0.9375,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie américaine est nommée d'après l'immigration de l'Amarim (Astern Luxember Boother Alexander Boother Boother Boother Bother Bo",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.6364,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.15,
+     "prompt": "Le sport",
+     "texte": "Le sport se trouve le reliquant Astrospor de Lisillatare Michael de Lisillature. Le sport est frappé par Robert Wansley La Michael Char",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.7619,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science nord-ouest est un grand dégagement le plus important dans les comportés de Landhlungen, en Haute-Marne, en Espagne. Il s'éte",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville de Maison de Québec et commence à se protesser en 1558 puis se retrouve protégée sur une suicide dont conservée les femmes",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps qui n'a pas subi un rapatrié de la rue Arbendoukampere, donc à des images de l'actuelle rue et d'une raie qui se transforme d",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "La vie",
+     "texte": "La vie et son fils Michelle devient parasonneuse de La Part, ainsi que le vendredi du « Vétrable – Détroit » permettant à Plais",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "Le monde",
+     "texte": "Le monde est considéré par le chanteur Yorkichi Mitsubishi sur le site de Kobi Touribeshi en 2022. Il y sera cependant désigné par l",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "La question",
+     "texte": "La question du produit est utilisée dans le domaine de la réserve pour les méthodes des malfaitions effectives en 1988. Utilisation Hist",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9226,
+   "distinct_2": 0.8424,
+   "repetition": 5,
+   "echo": 0.0751,
+   "octets": 2560,
+   "secondes": 22.94,
+   "octets_s": 111.6,
+   "echantillons": [
+    {
+     "mots": 30,
+     "mots_valides": 0.9333,
+     "distinct_2": 0.8966,
+     "repetition": 1,
+     "echo": 0.15384615384615385,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage archéologique qui se situe à l'est de la commune de La Fancé et de la Résistance. Le paysage est situé à à l'est du c",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.8333,
+     "repetition": 3,
+     "echo": 0.047619047619047616,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960, le consulteur fut développé par les membres de la désignation de la désignation des versions de la désignation. L",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le plus représenté au monde de la marine et de la galerie antique. Description Pierre Le bourg est constitué de deux caract�",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 30,
+     "mots_valides": 0.9333,
+     "distinct_2": 0.8966,
+     "repetition": 1,
+     "echo": 0.15384615384615385,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage archéologique qui se situe à l'est de la commune de La Fancé et de la Résistance. Le paysage est situé à à l'est du c",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.8333,
+     "repetition": 3,
+     "echo": 0.047619047619047616,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960, le consulteur fut développé par les membres de la désignation de la désignation des versions de la désignation. L",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le plus représenté au monde de la marine et de la galerie antique. Description Pierre Le bourg est constitué de deux caract�",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3448,
+     "repetition": 5,
+     "echo": 0.32142857142857145,
+     "prompt": "Le chat",
+     "texte": "Le chat de la montagne, comme le chat de la montagne et le chat de la montagne, le chat de la montagne et le chat de la montagne. Le ch",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer des Deux signes de l'ancien programme situé à Portsmouth. Le programme du classement a été remporté par le tournoi de l'an",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.8077,
+     "repetition": 3,
+     "echo": 0.125,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent les deux premiers sur le site de la Commune de l'Allemagne et les deux premiers de la ville de Blanding pour les deux premiers ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de quitter la construction de l'épisode de la Royal Society of London en 1961 et 1963. En 1964, la première édition du titre",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un compositeur autrichien né le à Tunis. Il a été fondé le à la même occasion de l'écrivaine Charles de Louise Bertrand",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme est une série de bande dessinée au moment de la composition de la lumière présente des pratiques de l'espace et de la mati�",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "La musique",
+     "texte": "La musique est une musique sous le titre du premier album studio du cinéma international des albums studio Albums. Ce premier album fut l",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.963,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de l'art de la première série trois ans au cours du début de la période de santé et de prendre place dans les combats de l",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.7143,
+     "distinct_2": 0.8,
+     "repetition": 2,
+     "echo": 0.15789473684210525,
+     "prompt": "La guerre",
+     "texte": "La guerre de Corinne (1872-1917), la guerre de Corinne (1884-1954) est le premier principal billet de la section de Corinne (1887-1958). ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la province de Chine est un petit cours d'eau de la province de Las Vegas situé à d'altitude, à d'altitude, à l'ouest du",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7308,
+     "repetition": 3,
+     "echo": 0.04,
+     "prompt": "Le sport",
+     "texte": "Le sport de la saison suivante est de la saison suivante et la saison suivante en jeu à l'exception de la saison 2018. Il remporte le t",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "La science",
+     "texte": "La science de la mort de Louis VII, en 1854, est le premier premier président du courant de l'armée royale française au cours de la Mar",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.72,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville de Marcel Rouge est le fils d'Alameda de Tito de Robert Lavallois de Lavignan de Montréal et de Jean-François Parent et de Je",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.8333,
+     "repetition": 2,
+     "echo": 0.17391304347826086,
+     "prompt": "Le temps",
+     "texte": "Le temps du colloque présente un pinceau de bons métabolismes sur le réseau de la santé et du temps du colloque. Le temps du colloqu",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.21739130434782608,
+     "prompt": "La vie",
+     "texte": "La vie de Lanarde, en effet de l'architecte Faure de la bataille de la Seine, l'architecte Faure de la Mayenne de La Presse, la même ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.4348,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde du jour du remplacement de la commission de la commission de la commission de la commission de la commission de la communicatio",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.913,
+     "repetition": 1,
+     "echo": 0.13636363636363635,
+     "prompt": "La question",
+     "texte": "La question de la construction de l'architecte est un parti politique de la république socialiste du Monde. Le parti suit les listes de la",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

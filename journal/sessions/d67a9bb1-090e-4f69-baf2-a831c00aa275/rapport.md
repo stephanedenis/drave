@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 87.1 h |
+| Durée | 87.6 h |
 | Tours | 90 |
-| Messages | 1522 |
-| Appels d'outils | 1330 |
+| Messages | 1533 |
+| Appels d'outils | 1338 |
 | Fichiers touchés | 44 |
-| Commandes | 1174 |
+| Commandes | 1180 |
 | Sous-agents | 7 |
-| Commits | 117 |
+| Commits | 118 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2264,7 +2264,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 90 — <goal_round> Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre le … [1076 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Spot-check the literature corpus quality
 - bash — Ten-minute pause and progress
@@ -2272,6 +2272,13 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - bash — Restore the overwritten curve file
 - bash — Read the curve tool's output option
 - bash — Remove the curve tool's default output file
+- bash — Ten-minute pause with disk and GPU check
+- job_output
+- bash — Read tranche 5 results
+- bash — Prepare the morning's matrix script
+- bash — Check p1 tranche 5
+- bash — Ten-minute pause with load check
+- bash — Commit tranches 4-5 data and update the fiche
 
 ## 3. Travail accompli
 
@@ -2376,7 +2383,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1134 autres
+- … et 1140 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2641,4 +2648,5 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - N — LA CHAÎNE DE NUIT PASSE --compteur-suite (LES TRANCHES NE REJOUENT PLUS LES MÊMES FENÊTRES)" && git push origin s/v7 2>&1 | tail -1; date
 - N — LA COUVERTURE DE L'ÉCHANTILLON EST CHIFFRÉE (2,2 % DU PALIER 1, 9,9 % DE wiki_big) ; LA PUCE N DIT LE FLAG PASSÉ" && git push origin s/v7 2>&1 | tail -1; da
 - OUTIL — LA COURBE N'ÉCRIT PLUS PAR DÉFAUT (ELLE AVAIT ÉCRASÉ courbe-150m.json EN AFFICHANT p1/p2)" && git push origin s/v7 2>&1 | tail -1; date
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text(
 

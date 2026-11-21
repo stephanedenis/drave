@@ -21359,3 +21359,104 @@ sam 21 nov 2026 00:55:14 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/courbe_chaine.py'); s = p.read_text()\nold = '    ap.add_argument(\"--sortie\", default=\"reports/courbe-150m.json\")'\nnew = ('    # pas de fichier par défaut : une courbe p1 … [1237 caractères tronqués]`
+
+  ```
+ok
+  tranche   pas    PPL val   wikitext2   précision   greedy (val/rép)   top-40 (val/rép)   top-20 (val/rép)
+        1  10000    3.5299    9.0631     0.6277   0.975/16.0      0.863/2.0       0.928/11.0
+        2  10000    3.2572    7.9700     0.6520   0.960/9.0       0.878/2.0       0.895/3.0 
+   7cda5082..d10c9320  s/v7 -> s/v7
+sam 21 nov 2026 00:58:11 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; df -h . | tail -1; nvidia-smi --query-gpu=index,utilization.gpu,temperature.gpu,memory.used --format=csv,noheader; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pa … [93 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-1615]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1581 (bash: sleep 3500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c "
+import json
+for f in ('p14','p24','p15','p25'):
+    try:
+        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')
+    except FileNotFoundError: print(f, '-', end='  ')
+    try:
+        w=json.load(open(f'reports/ppl-wikitext2-{f}.json')); print('wikitext2', round(w['ppl'],4))
+    except FileNotFoundError: print('wikitext2 -')") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1581"}`
+
+  ```
+sam 21 nov 2026 00:58:55 EST
+p14 val 3.0761  wikitext2 7.3733
+p24 val 3.0232  wikitext2 7.1548
+p15 -  wikitext2 -
+p25 -  wikitext2 -
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1615 (bash: sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; df -h . | tail -1; nvidia-smi --query-gpu=index,utilization.gpu,temperature.gpu,memory.used --format=csv,noheader; tail -1 work/n4/p1.chaine.log | grep -o "pas *[0-9]*"; tail -1 work/n4/p2.chaine.log | grep -o "pas *[0-9]*") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1615"}`
+
+  ```
+sam 21 nov 2026 01:08:17 EST
+/dev/mapper/system-root   11T  9,1T  1,8T  84% /home/stephane/Data13TB
+0, 99 %, 86, 8520 MiB
+1, 100 %, 74, 8296 MiB
+pas 9150
+pas  700
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p15','p25'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  ')\n    try: … [219 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 01:08:29 EST
+p15 -  wikitext2 -
+p25 val 2.986  wikitext2 7.0021
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n4/matrice.sh <<'SH'\n#!/bin/bash\n# matrice.sh — la matrice du matin : 2 blocs pour rester dans la fenêtre.\n#   bash work/n4/matrice.sh <device> <bloc: 1|2>\nset -u\nPY=/home/stephane/gpu-env/bin/python\nDEV=${1:-cuda:0} … [1007 caractères tronqués]`
+
+  ```
+matrice prête
+sam 21 nov 2026 01:08:48 EST
+  ```
+
+- **bash** `{"command": "sleep 380; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p15',):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='  ')\n   … [221 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 01:15:18 EST
+p15 val 3.0229  wikitext2 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; uptime | cut -c1-80; python3 -c \"\nimport json\ntry:\n    w=json.load(open('reports/ppl-wikitext2-p15.json')); print('p15 wikitext2', round(w['ppl'],4))\nexcept FileNotFoundError: print('p15 wikitext2 -')\"", "descr … [65 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 01:25:39 EST
+ 01:25:39  up 17 days  5:51,  2 users,  load average: 3,54, 3,26, 3,29
+p15 wikitext2 7.1953
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1601 (bash: sleep 3300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c "
+import json
+for f in ('p15','p25'):
+    try:
+        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')
+    except FileNotFoundError: print(f, '-', end='  ')
+    try:
+        w=json.load(open(f'reports/ppl-wikitext2-{f}.json')); print('wikitext2', round(w['ppl'],4))
+    except FileNotFoundError: print('wikitext2 -')") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nuit-palier1-110k.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"| 40 000 | *( … [2135 caractères tronqués]`

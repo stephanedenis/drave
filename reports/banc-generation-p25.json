@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/p25.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9756,
+   "distinct_2": 0.4116,
+   "repetition": 13,
+   "echo": 0.1902,
+   "octets": 2560,
+   "secondes": 22.74,
+   "octets_s": 112.6,
+   "echantillons": [
+    {
+     "mots": 31,
+     "mots_valides": 0.9677,
+     "distinct_2": 0.5333,
+     "repetition": 4,
+     "echo": 0.1111111111111111,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la province de la Chambre des lords et de la Chambre des lords en Chambre des lords en Chambre des lords en Chambre des l",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5556,
+     "repetition": 3,
+     "echo": 0.25,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960, le groupe se produit dans les années 1960, le groupe se produit dans les années 1960. En 1965, le groupe se consacre",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4286,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le plus grand succès de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la com",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 31,
+     "mots_valides": 0.9677,
+     "distinct_2": 0.5333,
+     "repetition": 4,
+     "echo": 0.1111111111111111,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la province de la Chambre des lords et de la Chambre des lords en Chambre des lords en Chambre des lords en Chambre des l",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5556,
+     "repetition": 3,
+     "echo": 0.25,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960, le groupe se produit dans les années 1960, le groupe se produit dans les années 1960. En 1965, le groupe se consacre",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4286,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le plus grand succès de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la com",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.9655,
+     "distinct_2": 0.4286,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat est une chanson de la chanson de la chanson de la série de chansons de la série de chansons de la série de chansons de la s�",
+     "octets": 128
+    },
+    {
+     "mots": 41,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1,
+     "repetition": 13,
+     "echo": 0.6410256410256411,
+     "prompt": "La mer",
+     "texte": "La mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la m",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 0.9697,
+     "distinct_2": 0.2188,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent de la série de la série de la série de la série de la série de la série de la série de la série de la série de la sér",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7308,
+     "repetition": 3,
+     "echo": 0.08695652173913043,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de le rendre visant à la fois le premier projet de la constitution de la constitution de la propriété de la constitution de ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.7391,
+     "repetition": 2,
+     "echo": 0.13636363636363635,
+     "prompt": "Paris est",
+     "texte": "Paris est un homme politique français né le à Paris et mort le à Paris (Alliance des armées) est un homme politique français. Biogr",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de la famille des Championnats du monde de 1998 à Londres en 1999 et en 2000. En 2001, il est nommé professeur de musique en ",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1379,
+     "repetition": 9,
+     "echo": 0.6428571428571429,
+     "prompt": "La musique",
+     "texte": "La musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique d",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5,
+     "repetition": 3,
+     "echo": 0.037037037037037035,
+     "prompt": "Le livre",
+     "texte": "Le livre de la chanson est un livre de la chanson de la série de la série de bande dessinée de la série de bande dessinée de la sé",
+     "octets": 128
+    },
+    {
+     "mots": 35,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1765,
+     "repetition": 10,
+     "echo": 0.3333333333333333,
+     "prompt": "La guerre",
+     "texte": "La guerre de la ligne de la ligne de la ligne de la ligne de la ligne de la ligne de la ligne de la ligne de la ligne de la ligne de la l",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.9474,
+     "distinct_2": 0.1667,
+     "repetition": 8,
+     "echo": 0.4444444444444444,
+     "prompt": "L'économie",
+     "texte": "L'économie de l'économie de l'économie de l'économie de l'économie de l'économie de l'économie de l'économie de l'économie de l'é",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 0.9688,
+     "distinct_2": 0.1935,
+     "repetition": 9,
+     "echo": 0.3333333333333333,
+     "prompt": "La science",
+     "texte": "La science de la marque de la marque de la marque de la marque de la marque de la marque de la marque de la marque de la marque de la marq",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8519,
+     "distinct_2": 0.6923,
+     "repetition": 2,
+     "echo": 0.12,
+     "prompt": "La ville",
+     "texte": "La ville de Mario est située dans le département de la Marne et la région de Marne et la région de Marne est située dans le départ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.75,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la commune de La Rochelle est une commune rurale qui compte en , appartenant au département de la commune de La Rochelle et",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.24,
+     "repetition": 7,
+     "echo": 0.3333333333333333,
+     "prompt": "La vie",
+     "texte": "La vie de la production de la production de la production de la production de la production de la production de la production de la pr",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.24,
+     "repetition": 7,
+     "echo": 0.3333333333333333,
+     "prompt": "La question",
+     "texte": "La question de la production de la production de la production de la production de la production de la production de la production de la pr",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.8713,
+   "distinct_2": 0.9779,
+   "repetition": 2,
+   "echo": 0.0469,
+   "octets": 2560,
+   "secondes": 23.07,
+   "octets_s": 110.9,
+   "echantillons": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays découvert en 1997. Mentionné à une étude estimante à la Révolution est de l'État de Namur et y a été préhistoriquemen",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, les premiers éléments sont produits à temps par la diffusion des chasseurs. C'est un général de chef en pathologie de la ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.7083,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois la chambre des Hills de George Mc Australia permanent de l'assassinat de la province de l'Oscar du Tennessee. Nommé journalist",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays découvert en 1997. Mentionné à une étude estimante à la Révolution est de l'État de Namur et y a été préhistoriquemen",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, les premiers éléments sont produits à temps par la diffusion des chasseurs. C'est un général de chef en pathologie de la ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.7083,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois la chambre des Hills de George Mc Australia permanent de l'assassinat de la province de l'Oscar du Tennessee. Nommé journalist",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.8,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.125,
+     "prompt": "Le chat",
+     "texte": "Le chat, dit le Brain d'Abdoulay, a contribué à l'ischinalyse de la famille en 1854 avec le Brabant et a été le présenté de Jean-",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "La mer",
+     "texte": "La mer, de Dominica, qui est la musique de Catherin Leonard (1982) en celle d'après en vertu de l'Homme Mort du chanteur, sorti en 19",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.8,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent sa première saison avec le Raqak Sofia, le meilleur rôle de Champion au club en 2018 avec l'équipe d'Allemagne de l'AS Valle",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9643,
+     "distinct_2": 0.9259,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de se voter de l'ordre du code de la vie d'une des accès de la révolution pour la révolution routière du . Depuis la transp",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8947,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est une commune française située dans le département de l'Aisne, en région Nouvelle-Aquitaine.. Géographie Constitué de mai �",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.8,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme désigne le comparaisonnement de l'eau de l'élasticité. Chaque conflit a fait sa première explicitation le . Après le débu",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.875,
+     "repetition": 2,
+     "echo": 0.21739130434782608,
+     "prompt": "La musique",
+     "texte": "La musique actuelle verroole et chantant alors que le politique en son troupe. Ce sont la concepture nommée de la musique de la musique d",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre était autrefois résidant au niveau autrichien qui prête au María María de Porta Caridón, est autrichien du prêtre de l'h",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre d'Algérie de l'armée du Nord est prillé. Les campagnes sont créées vers le bon premier colons de l'Asie mineure vers le Su",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie est une maison de campagne des pressigieux de ce qui est divisée en 1795. En 1836 il est converti dantant sa force publique en",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.9231,
+     "repetition": 1,
+     "echo": 0.04,
+     "prompt": "Le sport",
+     "texte": "Le sport est celui qui sépare le premier logistique au bout de bout de ville. Il est repoussé par José Orustel et il est érigé en 1",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.8333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.125,
+     "prompt": "La science",
+     "texte": "La science du Papouasie-Nouvelle-Guinée-Occidentale est considérée comme la production de la marque Hector Haley pour enquêter sur les",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8077,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "La ville",
+     "texte": "La ville est situé entre les nord de la péninsule María de Alejín et du Torrentin Sabine, dans le quartier de Chypre, le hameau de S",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.04,
+     "prompt": "Le temps",
+     "texte": "Le temps droit vu de l'ère au-dessus du Chois II le et donc en lui ordonnant la nomination de la grande partie d'un monde au niveau du ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "La vie",
+     "texte": "La vieille de marine ne s'est rendue par une version de la Route Bruo par une chanteur du batteur Stan Panaka, chanté sur la chanson ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de portement ou mondial, qui pouvait donc être retiré du Svratlinovare Destroyers et de son propre score attribué à autrefo",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "La question",
+     "texte": "La question de couple est acquise par seulement sur le voit qui sépare le voit que l'anneau depuis le début de la situation de la victime",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9428,
+   "distinct_2": 0.8137,
+   "repetition": 13,
+   "echo": 0.1168,
+   "octets": 2560,
+   "secondes": 25.53,
+   "octets_s": 100.3,
+   "echantillons": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.14285714285714285,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays présenté lors de la guerre de Colombie-Bigorre en 1911. La société est une marque de trois ans servir en 1915. Contrairemen",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 est la première femme à perdre des armes et des écoles de la Société des armées de l'ancien comtestier du roi de Liège d",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.038461538461538464,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois une année de son père qui produit la ville de La Rochelle à l'âge de 13 ans. Elle est l'une des plus anciennes du père du ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.14285714285714285,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays présenté lors de la guerre de Colombie-Bigorre en 1911. La société est une marque de trois ans servir en 1915. Contrairemen",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 est la première femme à perdre des armes et des écoles de la Société des armées de l'ancien comtestier du roi de Liège d",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.038461538461538464,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois une année de son père qui produit la ville de La Rochelle à l'âge de 13 ans. Elle est l'une des plus anciennes du père du ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.8636,
+     "repetition": 2,
+     "echo": 0.047619047619047616,
+     "prompt": "Le chat",
+     "texte": "Le chat est le réservé aux éléments de la production de la production des autres cités membres du parti démocrate de la républiq",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.8077,
+     "repetition": 2,
+     "echo": 0.12,
+     "prompt": "La mer",
+     "texte": "La mer de la famille des Placidae est le chef de l'École des beaux-arts de Paris et de la mer de l'Armée royale et de l'Armée royal",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.8261,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent cependant que ses collaborations avec le groupe de l'histoire de la romantique et de l'histoire de la pénétration de la Regin",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.9048,
+     "repetition": 1,
+     "echo": 0.05555555555555555,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de remplacer la construction d'une église de l'église de l'église Saint-Jean-de-Brage et de remplacer le premier épisode de",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 0.6667,
+     "repetition": 3,
+     "echo": 0.05,
+     "prompt": "Paris est",
+     "texte": "Paris est un prélat de la Communauté anglaise du Calvados est un prélat commercial de la Communauté anglaise de la Communauté anglai",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.8261,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de l'armée de l'air du ministère de l'Éducation et de l'Éducation et de l'Environnement des six provinces de France et de l",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.72,
+     "repetition": 2,
+     "echo": 0.041666666666666664,
+     "prompt": "La musique",
+     "texte": "La musique de l'album est une technique et d'autre de l'album. L'album est un album de l'album est un album de chansons de la première te",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.7826,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la mémoire et de la mémoire des religions contraires religieuses de la confrontation de la région de l'Inde de la mémoir",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.8261,
+     "repetition": 2,
+     "echo": 0.09090909090909091,
+     "prompt": "La guerre",
+     "texte": "La guerre des moines de la ville de Londres dans le département de la Ville de Londres, en France. Les conseillers d'artillerie sont con",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.08333333333333333,
+     "prompt": "L'économie",
+     "texte": "L'économie de Paris est une habitation de la ville de Paris et de la ville de Paris. L'économie recouvre le plus souvent de l'économie d",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.84,
+     "repetition": 3,
+     "echo": 0.041666666666666664,
+     "prompt": "Le sport",
+     "texte": "Le sport de la série est diffusé sur le site de la série télévisée en deux mots religieux de cette série. En service de la série",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.9,
+     "distinct_2": 0.8421,
+     "repetition": 2,
+     "echo": 0.05555555555555555,
+     "prompt": "La science",
+     "texte": "La science de l'évolution de la production et de l'industrie des contentions de l'évolution des contenentions de l'évolution des centre",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 0.68,
+     "repetition": 2,
+     "echo": 0.24,
+     "prompt": "La ville",
+     "texte": "La ville de Herzoge est décédée le , en France. Elle est devenue la première ville de la première ville de la ville de Herzoge et l",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9643,
+     "distinct_2": 0.1111,
+     "repetition": 13,
+     "echo": 0.9259259259259259,
+     "prompt": "Le temps",
+     "texte": "Le temps, le temps, le temps, le temps, le temps, le temps, le temps, le temps, le temps, le temps, le temps, le temps, le temps, le tem",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.88,
+     "repetition": 2,
+     "echo": 0.125,
+     "prompt": "La vie",
+     "texte": "La vie de la production de la mort de Gille est le premier procès de produits en plein air propriétaire du commandement de la mort d",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 0.9048,
+     "repetition": 2,
+     "echo": 0.2,
+     "prompt": "Le monde",
+     "texte": "Le monde est constitué de moins de l'école de Montréal. Le monde est découvert par le ministère des Affaires étrangères, le proje",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9643,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07692307692307693,
+     "prompt": "La question",
+     "texte": "La question des deux ans est la réserve de la source des pilotes de plus de 200 mm. Le président du conseil des mines est chargé de l'é",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}
