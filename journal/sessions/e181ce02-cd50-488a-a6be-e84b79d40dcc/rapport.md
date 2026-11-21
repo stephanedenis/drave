@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 487.7 h |
 | Tours | 224 |
-| Messages | 4488 |
-| Appels d'outils | 3998 |
+| Messages | 4491 |
+| Appels d'outils | 4001 |
 | Fichiers touchés | 25 |
-| Commandes | 3326 |
+| Commandes | 3329 |
 | Sous-agents | 43 |
-| Commits | 527 |
+| Commits | 528 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -11831,7 +11831,7 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 
 ### Tour 224 — Notre priorité doit être le RSN. Le reste est futile sans cette fondation.
 
-*16 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Lire le contrat de la RSN
 - bash — Voir l'analyseur
@@ -11847,7 +11847,7 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - bash — Corriger la prédication
 - bash — Tester la couverture et le déterminisme
 - bash — Trouver le gold
-- … et 2 autres
+- … et 5 autres
 
 ## 3. Travail accompli
 
@@ -11969,7 +11969,7 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3286 autres
+- … et 3289 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12644,4 +12644,5 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - GLOSSAIRE — LE PARCOURS DE LECTURE EST ENTIÈREMENT LIÉ (16 DOCUMENTS, DE LA VISION À L'AUDIT) : PLUS UN NOM DE FICHIER NU" 2>&1 | tail -2; git log -1 --format='
 - ARCHITECTURE — DOCUMENTÉE DANS LE README (TROIS NIVEAUX, LE BUS, LE PRODUIT) ET DANS LA VISION (LE TRAJET D'UN TEXTE, LE BUS, LE GRAPHE) ; LES SCHÉMAS DE LA SYN
 - PARCOURS DE LECTURE — CINQ PROFILS, CINQ CHEMINS (CURIEUX 20 MIN, UTILISATEUR 15, INGÉNIEUR 2 H, CHERCHEUR 1 H, AGENT 10), NEUF DOCUMENTS DE THÉORIE AU TOTAL, L
+- RSN — LA FONDATION DE LA PENSÉE EST POSÉE : LE CANDIDAT, L'ÉTAT, LE MERKLE, LE CHEMIN SURFACE → RSN (19/20 PHRASES AVEC PRÉDICATION, 34,5 CANDIDATS/PHRASE, 5/5 
 

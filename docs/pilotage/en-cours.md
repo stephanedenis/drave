@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-21, 00 h 15 HNE (les cinq parcours de lecture : un guidon pour chaque profil, moins de documents · le rejeu des fenêtres trouvé et corrigé — `--compteur-suite`)**
+**Mis à jour : 2026-11-21, 00 h 35 HNE (la RSN : la fondation de la pensée est posée et mesurée — 95 % de couverture, 5/5 invariants)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -61,7 +61,7 @@
 |---|---|---|
 | portes | **91** (dont `porte-a2.6-experts` le 18/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **825** / **1096** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **826** / **1096** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **129** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **20/11 05 h 58 → 07 h 58** : **91** portes, **89/2** ; seules `indice` (836 s) et `melange` (105 s) **structurelles** ; `sessions` **verte** ; machine au repos (les runs de la nuit finis) | `work/portes/roue-1120-0558/registre.txt` |
 

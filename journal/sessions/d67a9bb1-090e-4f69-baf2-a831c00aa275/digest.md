@@ -21157,3 +21157,94 @@ sam 21 nov 2026 00:19:15 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-rejeu-des-fenetres.md'); s = p.read_text()\nold = (\"- Le tirage Van der Corput est quasi uniforme sur tout le corpus : l'échantillon de 80 000 fenêtres\\n\"\n       … [1421 caractères tronqués]`
+
+  ```
+fiche ok
+etat ok
+budget=0
+  ✅ état court, structuré, multi-session et reprenable
+   d724d0d9..dc130da2  s/v7 -> s/v7
+sam 21 nov 2026 00:22:17 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 3300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('p15','p25'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'val', round(d['ppl_val'],4), end='  ')\n    except FileNotFoundError: print(f, '-', end='   … [245 caractères tronqués]`
+
+  ```
+started background job bash-1601
+  ```
+
+### 🤖 Assistant
+
+⏵ Nuit en cours : le défaut du rejeu des fenêtres est trouvé et corrigé, la collecte Wikisource étendue à 11 livres, la matrice du matin préparée
+
+**Ce qui a été fait depuis 22 h 45** (commits jusqu'à `dc130da2`) :
+
+- **⚠️ Un défaut de méthode trouvé** : chaque tranche d'entraînement repartait le compteur de fenêtres à zéro — les onze tranches rejouent le **même échantillon de 80 000 fenêtres** (~82 Mo), pas 900 Mo de données neuves. La preuve est dans les journaux : la perte du pas 1 de `p1` est 5,6107 → 1,2005 → 1,0917 → 1,0316 (le même premier lot, un modèle qui s'améliore). Correctif `--compteur-suite` (opt-in) écrit et validé (pas 1 : 5,6844 → 5,5582, compteur 3 → 5), passé dans `bench/chaine_nuit.sh` — **pas** activé sur les runs de la nuit pour rester comparable à `wiki_big`. Fiche `rapport-rejeu-des-fenetres.md` ; la fiche de la nuit est corrigée (les « époques » supposées n'existent pas : 2,2 % des octets du palier 1, 9,9 % de `wiki_big`).
+- **D — la diversité débloquée** : la voie `Page:` de Wikisource rend le texte (les portails ne rendaient rien) ; **11 livres, 8,76 Mo** épinglés (Balzac, Hugo, Dumas, Zola, Maupassant, Sand, Flaubert, Stendhal, Verne). Gutenberg reste en 503.
+- **S — les clitiques retrouvés** : « les » et « l' » devant un verbe sont des pronoms objets ; 4 ajouts sur 216 textes, tous vrais, **0 faux positif**, gold 14/16 → **16/16**, 65 tests verts.
+- **J4** : le script d'adjudication est écrit (à lancer en fenêtre remisée).
+- **wikitext2 est anglais** (0/5 lignes dans les corpus français) : les PPL de 6,8-9,5 mesurent du transfert inter-langue, et le val de registre donne 2,71 — deux mesures différentes. Les vals de registre se contaminent à ~20 %.
+
+**Les runs** : p1/p2 dans la tranche 5 (50k) ; 40k : p1 7,3733, p2 7,1548 (contre 7,70/7,28 à 30k). ETA 110k vers 8 h 10-8 h 50 ; la matrice (3 vals × 5 modèles) est prête à partir dès 8 h.
+
+
+## Tour 89
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du palier 1, val de `wiki_big`) et écrire la comparaison à pas et époques égales ; (3) dans la fenêtre remisée (avant 19 h 30), l'adjudication de J4 (les 10 désaccords les plus lourds) par un troisième passage API ; (4) passe des 91 portes sur l'arbre de la journée ; fiches, état, commits et push pour chaque résultat, bilan à 9 h."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/pilotage/backlog/ | head -12; tail -1 work/n4/p1.chaine.log | cut -c1-40; tail -1 work/n4/p2.chaine.log | cut -c1-40; date", "description": "List backlogs and check runs"}`
+
+  ```
+A2.6-ordonnanceur.md
+A3.2-granularite.md
+A3.3-seuil.md
+A3.4-colab.md
+A5.4-fpga.md
+A6.2-moe-local.md
+A8.0-portes-ppl.md
+A8.3-defaut.md
+B10.2bis-decodeur-attention-croisee.md
+B10.3-raisonnement-z.md
+B11.10-cartes-ambiguites.md
+B12.10-pipeline-m1-m4-m8.md
+pas 2650 · perte 0.8779 · PPL val 3.246 
+pas 4250 · perte 0.9511 · PPL val 3.189 
+sam 21 nov 2026 00:22:57 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"reprise tranche\" work/n4/p1.chaine.log | tail -3; grep -c -i \"nan\" work/n4/p1.chaine.log work/n4/p2.chaine.log; tail -2 work/n4/p1.chaine.log | cut -c1-90; tail -2 work/n4/p2.chaine.log | cut -c1-90", "description": "Che … [34 caractères tronqués]`
+
+  ```
+769:=== reprise tranche 4/11 22:46 ===
+1025:=== reprise tranche 5/11 00:04 ===
+work/n4/p1.chaine.log:0
+work/n4/p2.chaine.log:0
+pas 2650 · perte 0.8779 · PPL val 3.246 · 1106 s · échelle 131072
+pas 2700 · perte 0.9554 · PPL val 3.247 · 1127 s · échelle 131072
+pas 4200 · perte 0.9385 · PPL val 3.180 · 1657 s · échelle 262144
+pas 4250 · perte 0.9511 · PPL val 3.189 · 1677 s · échelle 262144
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> work/n4/nuit-notes.md <<'MD'\n\n## Cadence mesurée (00 h 30)\n- tranche 4 : 22:46 → 00:04 = **78 min** (10 000 pas + banc + PPL wikitext2).\n- p1 : 0,417 s/pas → tranche 11 vers **9 h 10** ; p2 : 0,395 s/pas → vers **8 h 40**. … [288 caractères tronqués]`
+
+  ```
+ok
+sam 21 nov 2026 00:23:30 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -ln \"entrainer_native\\|ppl_ckpt\" tools/porte-*.sh | head -6", "description": "Find the gates covering the trainer"}`
+
+  ```
+tools/porte-r13-bpe.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 bash tools/porte-r13-bpe.sh > /tmp/r13.log 2>&1; echo \"exit=$?\"; tail -3 /tmp/r13.log; date", "description": "Run the gate that covers the trainer", "timeoutMs": 700000}`

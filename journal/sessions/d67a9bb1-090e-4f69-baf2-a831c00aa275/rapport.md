@@ -7,12 +7,12 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 86.5 h |
-| Tours | 88 |
-| Messages | 1503 |
-| Appels d'outils | 1316 |
+| Durée | 86.6 h |
+| Tours | 90 |
+| Messages | 1515 |
+| Appels d'outils | 1324 |
 | Fichiers touchés | 44 |
-| Commandes | 1160 |
+| Commandes | 1168 |
 | Sous-agents | 7 |
 | Commits | 116 |
 | Compactages de contexte | 2 |
@@ -239,6 +239,10 @@
 **Tour 87** — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-trad … [658 caractères tronqués]
 
 **Tour 88** — continue avec des taches nocturnes jusqu'à demain 9h00
+
+**Tour 89** — <goal_round> Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du palier 1, val de `wiki_big`) et écrire la comparaison à pas et époques égales  … [796 caractères tronqués]
+
+**Tour 90** — <goal_round> Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre les deux graines du palier 1 (p1 et p2) de 30 000 à 110 000 pas sur les GPU, avec PPL wikitext2 à chaque tranche ; (2) à 110 000 pas, évaluer p1, p2 et `wiki_big` (nb11) sur trois vals (wikitext2, val du palier 1, val de `wiki_big`) et écrire la comparaison à pas et époques égales  … [796 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2210,7 +2214,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 88 — continue avec des taches nocturnes jusqu'à demain 9h00
 
-*96 appels d'outils.* Actions notables :
+*97 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create the night goal and the resume script
@@ -2226,7 +2230,44 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - bash — Check referents tests and the missed clitics
 - bash — Read the tokenizer and its classes
 - bash — Read the Token class and sample classes
-- … et 80 autres
+- … et 81 autres
+
+**Synthèse produite :**
+
+⏵ Nuit en cours : le défaut du rejeu des fenêtres est trouvé et corrigé, la collecte Wikisource étendue à 11 livres, la matrice du matin préparée
+
+**Ce qui a été fait depuis 22 h 45** (commits jusqu'à `dc130da2`) :
+
+- **⚠️ Un défaut de méthode trouvé** : chaque tranche d'entraînement repartait le compteur de fenêtres à zéro — les onze tranches rejouent le **même échantillon de 80 000 fenêtres** (~82 Mo), pas 900 Mo de données neuves. La preuve est dans les journaux : la perte du pas 1 de `p1` est 5,6107 → 1,2005 → 1,0917 → 1,0316 (le même premier lot, un modèle qui s'améliore). Correctif `--compteur-suite` (opt-in) écrit et validé (pas 1 : 5,6844 → 5,5582, compteur 3 → 5), passé dans `bench/chaine_nuit.sh` — **pas** activé sur les runs de la nuit pour rester comparable à `wiki_big`. Fiche `rapport-rejeu-des-fenetres.md` ; la fiche de la nuit est corrigée (les « époques » supposées n'existent pas : 2,2 % des octets du palier 1, 9,9 % de `wiki_big`).
+- **D — la diversité débloquée** : la voie `Page:` de Wikisource rend le texte (les portails ne rendaient rien) ; **11 livres, 8,76 Mo** épinglés (Balzac, Hugo, Dumas, Zola, Maupassant, Sand, Flaubert, Stendhal, Verne). Gutenberg reste en 503.
+- **S — les clitiques retrouvés** : « les » et « l' » devant un verbe sont des pronoms objets ; 4 ajouts sur 216 textes, tous vrais, **0 faux positif**, gold 14/16 → **16/16**, 65 tests verts.
+- **J4** : le script d'adjudication est écrit (à lancer en fenêtre remisée).
+- **wikitext2 est anglais** (0/5 lignes dans les corpus français) : les PPL de 6,8-9,5 mesurent du transfert inter-langue, et le val de registre donne 2,71 — deux mesures différentes. Les vals de registre se contaminent à ~20 %.
+
+**Les runs** : p1/p2 dans la tranche 5 (50k) ; 40k : p1 7,3733, p2 7,1548 (contre 7,70/7,28 à 30k). ETA 110k vers 8 h 10-8 h 50 ; la matrice (3 vals × 5 modèles) est prête à partir dès 8 h.
+
+### Tour 89 — <goal_round> Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre le … [1076 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — List backlogs and check runs
+- bash — Check tranche timings and anomalies
+- bash — Record the measured cadence and matrix decision
+- bash — Find the gates covering the trainer
+- bash — Run the gate that covers the trainer
+
+**Synthèse produite :**
+
+⏵ Runs en tranche 5 (50k), cadence mesurée à 78 min/tranche, porte BPE verte après le correctif — la suite est planifiée
+
+**Le point** : p1 et p2 sont à 2 650 et 4 250 pas de la tranche 5 ; la cadence mesurée (78 min/tranche avec banc et PPL) met **p2 à 8 h 40 et p1 à 9 h 10** — la matrice du matin utilisera donc les points **100 000** (7 h 40) et ajoutera les 110 000 si possible. `porte-r13-bpe` passe après le correctif du compteur. Le moniteur automatique rendra la tranche 5 vers 1 h 15.
+
+### Tour 90 — <goal_round> Objective: "De 16 h 50 le 20/11 à 9 h le 21/11, en autonomie, tarif plein donc IA légère : (1) reprendre le … [1076 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Spot-check the literature corpus quality
+- bash — Ten-minute pause and progress
 
 ## 3. Travail accompli
 
@@ -2331,7 +2372,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1120 autres
+- … et 1128 autres
 
 ## 4. Mesures et résultats marquants
 

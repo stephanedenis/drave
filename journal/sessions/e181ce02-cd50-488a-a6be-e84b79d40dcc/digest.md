@@ -73013,3 +73013,99 @@ syntagme | GP | de la voisine | {'role': 'theme', 'niveau': 1, 'union': True, 'a
 … [2459 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/rsn.py'); t = p.read_text()\nt = t.replace('''    return {\n        \"type\": \"predication\",\n        \"role\": str(et.type),\n        \"forme\": str(et.valeur),''','''    r … [700 caractères tronqués]`
+
+  ```
+prédication corrigée
+état s0 · 51 candidats · 0 retenus · empreinte 6c4be9f35bacc811
+  [hypothese] fait        'Le' (score 0.99)
+  [hypothese] fait        'Le' (score 0.98)
+  [hypothese] fait        'Le' (score 0.92)
+  [hypothese] fait        'Le chat' (score 0.40)
+  [hypothese] predication 'Le chat' (score 0.40)
+  [hypothese] fait        'suite' (score 0.50)
+  [hypothese] fait        'Le chat de la voisine dort sur le toit.' (score 0.70)
+  [hypothese] fait        'déclarative' (score 0.85)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/test_rsn.py <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport pathlib, json\nimport tools.bloc_linguistique as bl\nfrom tools.rsn import depuis_annotation, State\n\n# 1) couverture : combien de phrases du gold produisent  … [1754 caractères tronqués]`
+
+  ```
+gold trouvé : []
+aucun gold trouvé
+déterminisme : True e98f3b8a3d2868ab
+ordre indifférent : True
+négatif (texte vide) : 0 candidats, refus = 'vide'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls data/ 2>/dev/null | head -8; ls data/gold* 2>/dev/null | head -4; find data -maxdepth 2 -name \"*.jsonl\" 2>/dev/null | head -5; grep -n \"gold\" tools/drave.py | head -4 | cut -c1-110", "description": "Trouver le gold"}`
+
+  ```
+adaptateurs
+alignement
+composition-etats.npz
+composition-verne-14b-etats.npz
+composition-verne-7b-etats.npz
+composition-verne-etats.npz
+composition-verne-large-etats.npz
+composition-verne-plan-etats.npz
+data/udhr/langues.jsonl
+data/udhr/articles.jsonl
+data/udhr/articles_propres.jsonl
+data/deepseek/enseignant.jsonl
+data/deepseek/enseignant-300.jsonl
+11:    python3 tools/drave.py evaluer --gold --json
+24:avec rôle et cible d'attachement, pragmatique, unités sémantiques —, sa mesure sur le gold et la
+84:# gold vivant **et** sur le réel. C'est le seuil du banc de recherche (`evaluer_gold.py`,
+131:    """Une roue amputée de ses gold : la mesure est impossible, et elle le dit.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Gold\" -A 12 tools/drave.py | head -14 | cut -c1-120; grep -rn \"CHEMIN_GOLD\\|gold.*jsonl\\|GOLD\" tools/drave.py | head -4 | cut -c1-120", "description": "Voir le chemin du gold"}`
+
+  ```
+130:class GoldAbsent(RuntimeError):
+131-    """Une roue amputée de ses gold : la mesure est impossible, et elle le dit.
+132-
+133-    Les gold sont des **données** de la roue (`tools/tests/linguistique/gold_*.json`).
+134-    Sans eux, `evaluer` ne peut pas inventer une référence : il sort en **4**, nomme les
+135-    fichiers manquants et indique les deux issues — réinstaller la roue complète, ou
+136-    mesurer depuis le dépôt. `--gold` sélectionne le gold **gelé** ; il ne remplace pas
+137-    un gold absent.
+138-    """
+139-
+140-
+141-class ErreurEntree(RuntimeError):
+142-    """L'entrée `--fichier` n'est pas lisible : le code dit pourquoi (4 ou 5), sans trace.
+747:GOLD_VIVANT = ("gold.json", "gold_reel.json", "gold_synthetique.json")
+748:GOLD_GELE = ("gold_gele.json",)
+763:    manquants = [nom for nom in (GOLD_GELE if gele else GOLD_VIVANT)
+1031:    for nom_gold, titre in (("612", "GOLD VIVANT 612"), ("452", "GOLD RÉEL 452")):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/test_rsn2.py <<'PY'\nimport sys, json, pathlib; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.rsn import depuis_annotation\n\ngold = json.loads(pathlib.Path('tools/tests/linguistique/gold.json'). … [1039 caractères tronqués]`
+
+  ```
+couverture : 19/20 phrases (95.0 %) ; 689 candidats (34.5/phrase)
+rôles : {'agent': 16, 'predicat': 5, 'groupe nominal': 5, 'patient': 3, 'lieu': 3, 'but': 3, 'theme': 2, 'possession': 2}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/tests/test_rsn.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"test_rsn.py — les invariants de la RSN (la fondation de la pensée).\n\nCe que le test verrouille :\n  1. la **canonicalisation** : clés triées, aucun flottant dans l … [2723 caractères tronqués]`
+
+  ```
+OK canonicalisation
+OK empreinte Merkle (ordre indifférent)
+OK déterminisme e98f3b8a3d2868ab
+OK prédication : 4 candidates
+OK contrôle négatif (texte vide, refus = 'vide')
+RSN : 5/5 invariants
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-rsn.md <<'MD'\n# La RSN — la fondation est posée et mesurée\n\n> **Ce que ce document est.** La **première implémentation** de la représentation sémantique neutre :\n> le module [`tools/rsn.py`](../tools/rsn.py) … [4197 caractères tronqués]`
+
+  ```
+ok
+reports/rapport-rsn.md
+     · compteurs : en-cours.md dit 825 fichiers, le disque en a 826
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1113 caractères tronqués]`
