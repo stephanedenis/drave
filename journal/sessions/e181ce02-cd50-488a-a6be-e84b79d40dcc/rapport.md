@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 496.8 h |
-| Tours | 225 |
-| Messages | 4510 |
-| Appels d'outils | 4018 |
+| Durée | 497.3 h |
+| Tours | 226 |
+| Messages | 4522 |
+| Appels d'outils | 4028 |
 | Fichiers touchés | 25 |
-| Commandes | 3346 |
+| Commandes | 3350 |
 | Sous-agents | 43 |
-| Commits | 529 |
+| Commits | 530 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -523,6 +523,8 @@
 **Tour 224** — Notre priorité doit être le RSN. Le reste est futile sans cette fondation.
 
 **Tour 225** — Comment trouver la meilleure RSN pour la base et garder une extensibilité de concept? Explore la vision structurelle de Nipada. Tu devrais y retrouver 3 niveaux qui devrait correspondre à un modèle RSN. CÀ'Est à dire un noyau mathématique robuste permettant des inférences fortes, une couche de faits falsifiables et inférables en logique floue , puis une couche d'affirmation candidates dont on gard … [35 caractères tronqués]
+
+**Tour 226** — note tout ça et fais de recherche pour trouver des approches comparable dans les travaux de recherche des autres chercheurs
 
 ## 2. Déroulé, étape par étape
 
@@ -11919,6 +11921,51 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - bash — Voir les lignes longues de la carte
 - … et 3 autres
 
+**Synthèse produite :**
+
+⏵ Trois niveaux trouvés chez Nipada, appliqués à la RSN — et la structure tient
+
+\## Ce que dit Nipada (lu dans `../Panini/research/philosophy-theory/`)
+
+**La séparation de référence** : *« Le noyau ne décrit jamais — il infère. NIPADA décrit ce que le noyau ne peut inférer. »*
+
+| niveau | ce qu'il est | ce qu'il porte |
+|---|---|---|
+| **A — le noyau** | un **système formel** : termes, unification, résolution, **Ł3** (prouvé / réfuté / inconnu), fondations mathématiques, bibliothèque de certitudes | les **inférences fortes**, démontrées |
+| **B — la couche descriptive** | la **réalité observable** : hypothèses, degrés **[0,1]** (Zadeh), instruments de mesure, contingence | les **faits falsifiables** |
+| **les instantiations candidates** | les **artefacts révisables** (atomes V14, dhātus, projections, graphes) | les **affirmations candidates** |
+
+**La règle d'or** : *le noyau ne stocke **jamais** de degré* ; une hypothèse porte **statut + degré** ; la promotion (hypothèse → certitude) passe **uniquement** par une dérivation.
+
+\## La RSN à trois niveaux (`docs/theorie/rsn-3-niveaux.md`, committé `ef9b48a5`)
+
+1. **Le noyau** — les **relations démontrées** entre candidats (égalité, ordre, composition) : des inférences **vraies ou fausses**, jamais « probables ». C'est une **spécification portable**, pas un programme (la robustesse de Nipada).
+2. **Les faits** — chaque candidat est un **énoncé descriptif** avec son **degré [0,1]**, sa provenance, et **ce qui le réfuterait**. Le flou n'est **pas** une preuve (les trois usages — Zadeh, Ł3, poids du graphe — forment **un seul système de qualification**).
+3. **Les affirmations** — les **instantiations candidates** qui gardent **précieusement leur contexte source** : le texte, le span, la langue, la version de l'analyseur. Sans lui : pas de falsifiabilité, pas de traçabilité, pas de rejeu.
+
+\## Pourquoi c'est la « meilleure » RSN
+
+**L'extensibilité par couches** : un concept nouveau est une **affirmation candidate** (niveau 3) — il n'entre dans le **noyau** que **démontré**, et dans les **faits** que **degré**. On peut ajouter un concept **sans casser la base** : c'est une couche, pas un schéma figé. C'est exactement la propriété que le dépôt exige (« la structure bat la taille »).
+
+\## Ce que le code a, et ce qui manque
+
+| niveau | dans `tools/rsn.py` | état |
+|---|---|---|
+| 1 — le noyau | `Noyau` (égalité, ordre, tri-état) | **à construire** |
+| 2 — les faits | `Candidate` (score, provenance, statut) | **partiel** —
+… [752 caractères tronqués]
+
+### Tour 226 — note tout ça et fais de recherche pour trouver des approches comparable dans les travaux de recherche des autres cherche … [3 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Voir ce qui existe déjà
+- web_search
+- web_fetch
+- bash — Écrire la recherche des comparables
+- bash — Corriger les compteurs et la carte
+- bash — Committer la recherche des comparables
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12039,7 +12086,7 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3306 autres
+- … et 3310 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12716,4 +12763,5 @@ Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **d�
 - PARCOURS DE LECTURE — CINQ PROFILS, CINQ CHEMINS (CURIEUX 20 MIN, UTILISATEUR 15, INGÉNIEUR 2 H, CHERCHEUR 1 H, AGENT 10), NEUF DOCUMENTS DE THÉORIE AU TOTAL, L
 - RSN — LA FONDATION DE LA PENSÉE EST POSÉE : LE CANDIDAT, L'ÉTAT, LE MERKLE, LE CHEMIN SURFACE → RSN (19/20 PHRASES AVEC PRÉDICATION, 34,5 CANDIDATS/PHRASE, 5/5 
 - RSN À TROIS NIVEAUX — LA STRUCTURE DE NIPADA APPLIQUÉE À LA RSN : LE NOYAU (Ł3, INFÉRENCES FORTES, LA SPÉCIFICATION PORTABLE), LES FAITS (DEGRÉS [0,1], FALSIFIA
+- RSN, LES TRAVAUX COMPARABLES — LE DÉCOUPLAGE SAVOIR/RAISONNEMENT (WANG 2026), LA STRATIFICATION (NIPADA), LES ASSISTANTS DE PREUVE, PSL, ZADEH, PROBLOG, RDF-STA
 
