@@ -20666,3 +20666,110 @@ AssertionError
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n_json=$(ls reports/*.json | wc -l); n_md=$(ls reports/*.md | wc -l); python3 - \"$n_md\" \"$n_json\" <<'PY'\nimport pathlib, re, sys\nmd, js = sys.argv[1], sys.argv[2]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text( … [1665 caractères tronqués]`
+
+  ```
+etat 823 1090
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   189cb13c..26287fe3  s/v7 -> s/v7
+ven 20 nov 2026 23:34:14 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat data/wikisource/livre-flaubert*.txt data/wikisource/livre-le-rouge*.txt data/wikisource/livre-verne*.txt > /tmp/litt.txt && python3 -c \"\nimport pathlib\nb = pathlib.Path('/tmp/litt.txt').read_bytes()\nprint('total', len(b))\npa … [212 caractères tronqués]`
+
+  ```
+total 3480645
+val 1m écrit
+total 12808
+drwxr-xr-x. 1 stephane stephane     234 20 nov 23:34 .
+drwxr-xr-x. 1 stephane stephane    2910 20 nov 22:47 ..
+-rw-r--r--. 1 stephane stephane 1000000 20 nov 23:34 litterature_val_1m.txt
+-rw-r--r--. 1 stephane stephane 1000000 20 nov 22:57 palier1_val_1m.txt
+-rw-r--r--. 1 stephane stephane 5000000 20 nov 22:47 palier1_val_5m.txt
+-rw-r--r--. 1 stephane stephane  100000 20 nov 23:00 wiki_big_val_100k.txt
+-rw-r--r--. 1 stephane stephane 1000000 20 nov 22:57 wiki_big_val_1m.txt
+-rw-r--r--. 1 stephane stephane 5000000 20 nov 22:47 wiki_big_val_5m.txt
+ven 20 nov 2026 23:34:27 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport random, pathlib\nrandom.seed(1)\nval = pathlib.Path('data/wiki_big/propre/val.txt').read_text(errors='replace').splitlines()\nlignes = [l for l in val if len(l) > 120]\nechant = random.sample(lignes, 5)\nfor  … [375 caractères tronqués]`
+
+  ```
+0 Ignacy Schwarzbart, ou Itzhak SchwarzbartListing of the record groups in the Yad Vashem Ar
+1 Cette page concerne l' année 1831 du calendrier grégorien en Italie. Événements vignette|g
+2 Virginal Book (ou Tisdale's Virginal Book) est un recueil manuscrit de musique pour le vir
+3 Le Tour de Perth est une course cycliste par étapes australienne disputée dans la ville de
+4 Le mémorial des officiers du Los Angeles Police Department tombés en service, en , est un 
+ech0 dans palier1 train : 0
+ech1 dans palier1 train : 0
+ech2 dans palier1 train : 1
+ech3 dans palier1 train : 0
+ech4 dans palier1 train : 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n4/nuit-notes.md <<'MD'\n# Notes de la nuit du 20-21/11 (pour la fiche de 9 h)\n\n## Les runs\n- p1 (graine 1) et p2 (graine 2) repris de 30k à 110k, tranches 4..11, sur le palier 1 (3,69 Go).\n- 0.42 s/pas → ~70 min/tranc … [914 caractères tronqués]`
+
+  ```
+noté
+ven 20 nov 2026 23:35:07 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for s in \"Zola Germinal\" \"Balzac Le Père Goriot\" \"Hugo Les Misérables\" \"Dumas Les Trois Mousquetaires\" \"Maupassant Bel-Ami\" \"Sand La Mare au Diable\"; do printf \"%-28s \" \"$s\"; timeout 25 curl -sS --get \"https://fr.wik … [513 caractères tronqués]`
+
+  ```
+Zola Germinal                200 Livre:Zola - Germinal.djvu · Livre:Fagus - Colloque sentimental entre Émile Zola et Fagus
+Balzac Le Père Goriot       200 Livre:Balzac Le Père Goriot 1910.djvu · Livre:Œuvres complètes de H. de Balzac, IX.djvu
+Hugo Les Misérables         200 Livre:Hugo - Les Misérables Tome IV (1890).djvu · Livre:Hugo - Les Misérables Tome V (1890).djvu
+Dumas Les Trois Mousquetaires 200 Livre:Dumas - Les Trois Mousquetaires - 1849.pdf
+Maupassant Bel-Ami           200 Livre:Maupassant Bel-ami.djvu · Livre:Maupassant - Bel-Ami, OC, Conard, 1910.djvu
+Sand La Mare au Diable       200 Livre:Sand - La Mare au Diable.djvu · Livre:Sand - Œuvres illustrées de George Sand, vol 1, 1852.d
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup python3 tools/collecter_wikisource_v2.py \\\n --livre \"Livre:Zola - Germinal.djvu\" \\\n --livre \"Livre:Balzac Le Père Goriot 1910.djvu\" \\\n --livre \"Livre:Hugo - Les Misérables Tome IV (1890).djvu\" \\\n --livre \"Livre:H … [484 caractères tronqués]`
+
+  ```
+collecte 7 livres lancée 23:35
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/wikisource3.log; echo \"--- runs ---\"; tail -1 work/n4/p1.chaine.log | cut -c1-45; tail -1 work/n4/p2.chaine.log | cut -c1-45", "description": "Check the harvest and the runs", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 23:45:52 EST
+  Livre:Maupassant Bel-ami.djvu                                 456 p ·    651900 o
+  Livre:Sand - La Mare au Diable.djvu                           218 p ·    221184 o
+  total : 5279623 o · manifeste reports/corpus-wikisource2.json
+--- runs ---
+pas 7750 · perte 1.1659 · PPL val 3.296 · 356
+pas 9000 · perte 1.1112 · PPL val 3.212 · 355
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -9 /tmp/wikisource3.log | head -8; python3 - <<'PY'\nimport hashlib, json, pathlib, re\ndoss = pathlib.Path('data/wikisource')\nman = {}\nfor nom in ('reports/corpus-wikisource.json', 'reports/corpus-wikisource2.json'):\n    d = … [1718 caractères tronqués]`
+
+  ```
+(essai 3 : HTTPError — on attend)
+    (essai 4 : HTTPError — on attend)
+  Livre:Dumas - Les Trois Mousquetaires - 1849.pdf              554 p ·   1381698 o
+    (essai 1 : HTTPError — on attend)
+    (essai 2 : HTTPError — on attend)
+    (essai 3 : HTTPError — on attend)
+  Livre:Maupassant Bel-ami.djvu                                 456 p ·    651900 o
+  Livre:Sand - La Mare au Diable.djvu                           218 p ·    221184 o
+livres 11 · octets 8756698
+  Livre:Balzac Le Père Goriot 1910.djvu                   559199
+  Livre:Dumas - Les Trois Mousquetaires - 1849.pdf       1381699
+  Livre:Flaubert - Madame Bovary, Conard, 1910.djvu      1094023
+  Livre:Hugo - Les Misérables Tome IV (1890).djvu         754310
+  Livre:Hugo - Les Misérables Tome V (1890).djvu          656575
+  Livre:Le Rouge et le Noir.djvu                         1040202
+  Livre:Maupassant Bel-ami.djvu                           651901
+  Livre:Sand - La Mare au Diable.djvu                     221179
+  Livre:Verne - Le Tour du monde en quatre-vingts jour    434545
+  Livre:Verne - Vingt mille lieues sous les mers.djvu     908648
+  Livre:Zola - Germinal.djvu                             1054417
+  livre-zola-germina
+… [187 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nm = json.loads(pathlib.Path('reports/corpus-wikisource.json').read_text())\nliv = sorted(m['livres'], key=lambda x: -x['octets'])\nt = \"\\n\".join(f\"| {x['livre'].replace('Livre:','')[:52]} | … [2371 caractères tronqués]`

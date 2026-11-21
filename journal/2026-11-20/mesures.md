@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (12)
+## Commits du jour (13)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -20,21 +20,23 @@
 | 15:50 | `25e65ad0` | N — LE PALIER 1 MÈNE `wiki_big` À 20 000 PAS (7,70-7,97 CONTRE 7,83-8,17) — MAIS L'ÉCART EST DANS LA VARIANCE | `en-cours.md`, `README.md`, `attention.md` (+26) |
 | 23:04 | `f0bdf9ae` | S — LES DEUX FORMES MANQUÉES SONT RETROUVÉES : « LES » ET « L' » DEVANT UN VERBE SONT DES CLITIQUES (14/16 → 16/16 SUR LE GOLD) | `en-cours.md`, `README.md`, `attention.md` (+16) |
 | 23:08 | `6ee4fd41` | S — LES TESTS DES CLITIQUES (8 CAS, 4 VRAIS ET 3 PIÈGES) ET LA MESURE-ARBRE RAFRAÎCHIE ENTRENT | `en-cours.md`, `README.md`, `attention.md` (+11) |
+| 23:31 | `26287fe3` | D — LA DIVERSITÉ N'EST PLUS BLOQUÉE : WIKISOURCE PAR LES PAGES, 4 LIVRES, 3,48 Mo ÉPINGLÉS | `en-cours.md`, `README.md`, `attention.md` (+14) |
 
 ## Chiffres du jour
 
-`4,7 %` · `3,69 Go` · `6,8349` · `6,867` · `7,093` · `6,8448` · `2,9167` · `7,7758` · `6,8590` · `2,9327` · `7,6053`
+`3,48 Mo` · `4,7 %` · `3,69 Go` · `6,8349` · `6,867` · `7,093` · `6,8448` · `2,9167` · `7,7758` · `6,8590` · `2,9327` · `7,6053`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 85.7 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 85.9 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 478.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/rapport-corpus-palier1.md](../../reports/rapport-corpus-palier1.md)
+- [reports/rapport-diversite-wikisource.md](../../reports/rapport-diversite-wikisource.md)
 - [reports/rapport-j4-seconds-cadres.md](../../reports/rapport-j4-seconds-cadres.md)
 - [reports/rapport-nuit-wikibig.md](../../reports/rapport-nuit-wikibig.md)
 - [reports/rapport-palier1-resumes.md](../../reports/rapport-palier1-resumes.md)

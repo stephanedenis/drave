@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**26 commits** · **2 session(s)** · **7 thème(s)**
+**27 commits** · **2 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 2 | [attention.md](attention.md) |
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 6 | [docs.md](docs.md) |
-| mesures | 12 | [mesures.md](mesures.md) |
+| mesures | 13 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 85.7 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 85.9 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 478.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -56,6 +56,7 @@
 | 23:04 | `f0bdf9ae` | S — LES DEUX FORMES MANQUÉES SONT RETROUVÉES : « LES » ET « L' » DEVANT UN VERBE SONT DES CLITIQUES (14/16 → 16/16 SUR LE GOLD) |
 | 23:08 | `6ee4fd41` | S — LES TESTS DES CLITIQUES (8 CAS, 4 VRAIS ET 3 PIÈGES) ET LA MESURE-ARBRE RAFRAÎCHIE ENTRENT |
 | 23:11 | `189cb13c` | J4 — L'ADJUDICATION EST PRÊTE : LE SCRIPT PREND LES 10 TEXTES LES PLUS FAIBLES, DONNE LES DEUX ANNOTATIONS À L'API ET DEMANDE LE VERDICT PAR RÔLE (À LANCER EN FENÊTRE REMISÉE) |
+| 23:31 | `26287fe3` | D — LA DIVERSITÉ N'EST PLUS BLOQUÉE : WIKISOURCE PAR LES PAGES, 4 LIVRES, 3,48 Mo ÉPINGLÉS |
 
 ## Le récit de la journée (écrit à la main)
 

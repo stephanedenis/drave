@@ -86,7 +86,7 @@ externes** et la **prochaine action**.
 **A** : les clusters et les bandes d'A2.6 ; A3.4 (Colab), A5.4 (FPGA : P2 + RTL), A6.2. **R** : la
 décision de routage du tagger (note prête, option b) ; J4 — l'or de rôles **mesuré** (second annotateur **0,71**, adjudication à faire). **S** : la rétro-traduction (**13/13** sur le gold).
 **B** : B13 (gold neuronal) ; B10.3. **Panini** : 26 signatures V14, calibration 42/44. **L** : la
-pragmatique, r353. **D** : la diversité — débloquée par les **Pages** Wikisource (4 livres, **3,48 Mo**) ; Gutenberg 503 ; étendre.
+pragmatique, r353. **D** : la diversité — débloquée par les **Pages** Wikisource (**11 livres, 8,76 Mo**) ; Gutenberg 503 ; étendre.
 
 ## Les questions ouvertes
 

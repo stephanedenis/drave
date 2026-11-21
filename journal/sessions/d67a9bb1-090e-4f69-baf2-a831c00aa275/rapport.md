@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 85.7 h |
+| Durée | 85.9 h |
 | Tours | 88 |
-| Messages | 1468 |
-| Appels d'outils | 1281 |
+| Messages | 1476 |
+| Appels d'outils | 1289 |
 | Fichiers touchés | 44 |
-| Commandes | 1126 |
+| Commandes | 1134 |
 | Sous-agents | 7 |
-| Commits | 109 |
+| Commits | 110 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -2210,7 +2210,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 
 ### Tour 88 — continue avec des taches nocturnes jusqu'à demain 9h00
 
-*61 appels d'outils.* Actions notables :
+*69 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create the night goal and the resume script
@@ -2226,7 +2226,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - bash — Check referents tests and the missed clitics
 - bash — Read the tokenizer and its classes
 - bash — Read the Token class and sample classes
-- … et 47 autres
+- … et 54 autres
 
 ## 3. Travail accompli
 
@@ -2331,7 +2331,7 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 1086 autres
+- … et 1094 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2588,4 +2588,5 @@ Le **30 000 pas du palier 1** finit vers **16 h 30** (2 graines, GPU 0 et 1). Ce
 - J4 — L'ADJUDICATION EST PRÊTE : LE SCRIPT PREND LES 10 TEXTES LES PLUS FAIBLES, DONNE LES DEUX ANNOTATIONS À L'API ET DEMANDE LE VERDICT PAR RÔLE (À LANCER EN F
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-diversite-wikisource.md <<'MD' # D — La diversité n'est plus bloquée : Wikisource pa
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n_json=$(ls reports/*.json | wc -l); n_md=$(ls reports/*.md | wc -l); python3 - "$n_md" "$n_json" <<'PY' i
+- D — LA COLLECTE S'ÉTEND : 11 LIVRES, 8,76 Mo ÉPINGLÉS (BALZAC, HUGO, DUMAS, ZOLA, MAUPASSANT, SAND EN PLUS)" && git push origin s/v7 2>&1 | tail -1; date
 

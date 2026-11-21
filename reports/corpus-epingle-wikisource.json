@@ -1,34 +1,76 @@
 {
  "schema": "drave.corpus-epingle",
  "version": 1,
- "date": "2026-11-20T23:30:52",
+ "date": "2026-11-20T23:46:07",
  "corpus": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/wikisource",
  "note": "sha256 du train, du val et des canaux ; --verifie recalcule et compare l'empreinte de chaque fichier et l'empreinte du manifeste",
  "fichiers": {
+  "livre-balzac-le-p-re-goriot-1910-djvu.txt": {
+   "sha256": "392182703d221e9b0884444961862ed00ac1cdc6af7ff9cfd95ababc0b757c00",
+   "octets": 559199,
+   "lignes": 2176,
+   "mtime": "2026-11-20T23:46:07"
+  },
+  "livre-dumas-les-trois-mousquetaires-1849-pdf.txt": {
+   "sha256": "2765852892667f3b6402ed56573b762b25aca329e50f20a0cd37f59c817d0da5",
+   "octets": 1381699,
+   "lignes": 8814,
+   "mtime": "2026-11-20T23:46:07"
+  },
   "livre-flaubert-madame-bovary-conard-1910-djvu.txt": {
-   "sha256": "0e23609be994f2d15a86a8f1c9e2867628662c9356316479bd79d3a532501a44",
-   "octets": 1094096,
-   "lignes": 5122,
-   "mtime": "2026-11-20T23:30:39"
+   "sha256": "9736ff6276c5f1f709d30dcfd46ac93801d18a06ba468d81e04bf91c01b6f7d5",
+   "octets": 1094023,
+   "lignes": 5121,
+   "mtime": "2026-11-20T23:46:07"
+  },
+  "livre-hugo-les-mis-rables-tome-iv-1890-djvu.txt": {
+   "sha256": "b4f92b62ab8300b7fa07566eb407a2565e3c05b22de49cf5366db3654d717a93",
+   "octets": 754310,
+   "lignes": 4170,
+   "mtime": "2026-11-20T23:46:07"
+  },
+  "livre-hugo-les-mis-rables-tome-v-1890-djvu.txt": {
+   "sha256": "e51d5560326538b54a62fe98fbf868c73548bfd86aa492183e68f1cbff8ad262",
+   "octets": 656575,
+   "lignes": 2786,
+   "mtime": "2026-11-20T23:46:07"
   },
   "livre-le-rouge-et-le-noir-djvu.txt": {
    "sha256": "d1f0afedf38f7c076be307cdb0b75ba9388c0efa9c31340ef544c4ae56a3d46d",
    "octets": 1040202,
    "lignes": 3894,
-   "mtime": "2026-11-20T23:30:39"
+   "mtime": "2026-11-20T23:46:07"
+  },
+  "livre-maupassant-bel-ami-djvu.txt": {
+   "sha256": "153514f6380b978b7e71c128675283eb2c41b4a0cf1f99d821698cbcfb2b6b45",
+   "octets": 651901,
+   "lignes": 3964,
+   "mtime": "2026-11-20T23:46:07"
+  },
+  "livre-sand-la-mare-au-diable-djvu.txt": {
+   "sha256": "1d3ef2d9be2c5253fe034f865cc0b17db85308cf36bcef7f4b6916094bba5ad3",
+   "octets": 221179,
+   "lignes": 836,
+   "mtime": "2026-11-20T23:46:07"
   },
   "livre-verne-le-tour-du-monde-en-quatre-vingts-jours-djvu.txt": {
    "sha256": "64e28739341dce1d8d1316ce6e6590331ff0bde41c428e3dcc67f3360893ba63",
    "octets": 434545,
    "lignes": 2136,
-   "mtime": "2026-11-20T23:30:39"
+   "mtime": "2026-11-20T23:46:07"
   },
   "livre-verne-vingt-mille-lieues-sous-les-mers-djvu.txt": {
-   "sha256": "d1b304b79e26e34db6353b83b6b52c10b9cdb63b85e8fd89a158147f511a2976",
-   "octets": 911802,
-   "lignes": 3861,
-   "mtime": "2026-11-20T23:30:39"
+   "sha256": "94ccadf485ea162a4e372533e141e06c57112610b0527cffe3d5ab0b56bccc8f",
+   "octets": 908648,
+   "lignes": 3809,
+   "mtime": "2026-11-20T23:46:07"
+  },
+  "livre-zola-germinal-djvu.txt": {
+   "sha256": "12a9096746edc04588ccbcbe71edf9d0159be18ec98fac476c82960bd10dbfd2",
+   "octets": 1054417,
+   "lignes": 3591,
+   "mtime": "2026-11-20T23:46:07"
   }
  },
- "manifeste_sha256": "d29009d71cc1d8fcbe3db9c305e5d2695b97fdffdd54e08cfe41c95dbf6cf438"
+ "manifeste_sha256": "016f090cac9ac0f1ded7977d8aabc3c1181081043bb83e44320a05ef88ee3a50"
 }
