@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 512.9 h |
-| Tours | 235 |
-| Messages | 4670 |
-| Appels d'outils | 4141 |
+| Durée | 513.0 h |
+| Tours | 236 |
+| Messages | 4676 |
+| Appels d'outils | 4145 |
 | Fichiers touchés | 25 |
-| Commandes | 3458 |
+| Commandes | 3462 |
 | Sous-agents | 43 |
-| Commits | 547 |
+| Commits | 548 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -545,6 +545,8 @@
 **Tour 234** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 **Tour 235** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
+
+**Tour 236** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12396,6 +12398,44 @@ Je continue et je commit chaque tranche.
 - bash — Banc 612 sur le 34M
 - bash — Committer le classement des trois témoins
 
+**Synthèse produite :**
+
+⏵ Le classement des trois checkpoints est mesuré — et il confirme la thèse
+
+\## Le banc 612 sur les trois témoins (602 phrases du gold gelé)
+
+| checkpoint | paramètres | mots valides | non-UTF-8 | octets/s |
+|---|---:|---:|---:|---:|
+| **34 M** (30 k pas) | 34,3 M | **0,666** | 3 | 107,4 |
+| **100 M** (3 000 pas) | 96,7 M | **0,755** | **0** | **127,5** |
+| 100 M (30 000 pas) | 96,7 M | 0,763 | 29 | 116,3 |
+
+**Le classement** : le 100 M **bat le 34 M de 9 points** (0,755 contre 0,666) — avec **30× moins de jetons vus** (0,24 jeton/paramètre contre 7,2). **L'échelle paie par jeton vu**, c'est la confirmation de la thèse du 16/11.
+
+**La nuance qui compte** : le 34 M est **stable** (3 non-UTF-8), le 100 M à 3 000 pas est **parfaitement propre** (0), le 100 M à 30 000 pas **dérive** (29). La dérive ne vient **pas de la taille** mais du **ratio données/paramètres** — le sur-apprentissage est un problème de données, pas de modèle.
+
+\## Les deux mesures, deux vérités
+
+| banc | ce qu'il mesure | 3 k | 30 k |
+|---|---|---:|---:|
+| **le banc de style** (20 prompts) | la **créativité** (inventer) | **0,882** | 0,501 |
+| **le banc 612** (602 phrases) | la **continuité** (prolonger) | 0,755 | **0,763** |
+
+Le sur-apprenti **prolonge** mieux une phrase connue mais **invente** moins bien — et produit des octets invalides. **Un banc unique mentirait** ; c'est pourquoi les deux existent.
+
+\## L'état (01 h 36)
+
+`HEAD 6e8bfec7`, tout poussé. Le mode nuit continue : la prochaine tranche locale est le **diagnostic approfondi des deux portes rouges** (comprendre pourquoi `melange` ne calibre pas — c'est un résultat sur les états internes, pas une régression) et le **rangement des journaux** de la nuit. Zéro API, tout local.
+
+### Tour 236 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Vérifier l'état
+- bash — Lire le script de la porte melange
+- bash — Voir les modèles des deux portes
+- bash — Committer la cause commune
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12516,7 +12556,7 @@ Je continue et je commit chaque tranche.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3418 autres
+- … et 3422 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13211,4 +13251,5 @@ Je continue et je commit chaque tranche.
 - BANC 612 — LE 100 M (3 000 PAS) SUR LES 602 PHRASES DU GOLD GELÉ : 0,755 DE MOTS VALIDES, RÉPÉTITION 3, ZÉRO NON-UTF-8, 127,5 OCTETS/S ; LE BANC DE STYLE (0,882
 - BANC 612 — LE TÉMOIN 30 K : 0,763 CONTRE 0,755 AU 3 K SUR LES PHRASES RÉELLES (LA CONTINUITÉ), MAIS 29 SORTIES NON-UTF-8 CONTRE 0 (LA DÉRIVE) ; LE BANC DE STYLE
 - BANC 612 — LE CLASSEMENT DES TROIS TÉMOINS : 34 M 0,666 · 100 M 3k 0,755 · 100 M 30k 0,763 ; LE 100 M BAT LE 34 M DE 9 POINTS AVEC 30× MOINS DE JETONS VUS (L'ÉC
+- PORTES ROUGES — LA CAUSE COMMUNE : LES DEUX PORTES TESTENT QWEN2.5-0.5B, UN MODÈLE DE DÉMONSTRATION ; AUCUNE POSITION NE PORTE LE CODE (MELANGE) ET LA MÉMOIRE N
 

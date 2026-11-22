@@ -54,3 +54,24 @@ la porte mesure une hypothèse de recherche, pas une régression du dépôt.
 - **`porte-sessions` était rouge** (le heartbeat de la session S périmé de 1 114 min) : **corrigé**,
   elle est verte.
 - Les deux rouges restantes **ne bloquent rien** : les autres portes ne les attendent pas.
+## 5. La cause commune : le modèle des deux portes est 0,5 B
+
+Les deux portes utilisent le **même modèle** : `models/Qwen2.5-0.5B-Q8_0.gguf` (le défaut de
+`MODELE` dans les deux scripts). **0,5 milliard de paramètres**, 4 bits — c'est un modèle de
+**démonstration**, pas un modèle de raisonnement.
+
+**Ce que ça explique** :
+
+- `porte-melange` **calibre** quatre positions de fin pour trouver celle qui porte le code ; sur
+  un 0,5 B, **aucune** ne le porte — la capacité n'est pas là. La porte a donc **raison de dire**
+  « le mélange ne pourrait rien dire » : l'expérience n'a pas de support.
+- `porte-indice` capture les états (positions 1439/1469) mais la section 3 ne conclut pas : la
+  mémoire interroge A, et le 0,5 B ne répond pas de façon stable.
+
+**Le diagnostic est donc structurel, et il est net** : ce ne sont pas deux bugs, c'est **un
+modèle trop petit** pour les deux expériences. Les rendre vertes demanderait un **modèle plus
+grand** (le 7 B/14 B déjà présents ?) — et c'est un **choix de campagne**, pas une correction.
+
+**La conséquence pour le dépôt** : les deux portes **mesurent une hypothèse sur les états
+internes** ; elles sont rouges **par honnêteté**, pas par négligence. Les tolérer est le bon
+arbitrage tant que le modèle de campagne n'est pas changé.

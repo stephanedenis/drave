@@ -242,6 +242,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-17](2026-11-17/modele.md) | `0,04 %` · `+7,0 %` · `+4,6 %` · `+0,04 %` · `+2,09 %` · `−0,70 %` |
 | [2026-11-18](2026-11-18/modele.md) | — |
 | [2026-11-20](2026-11-20/modele.md) | — |
+| [2026-11-22](2026-11-22/modele.md) | `0,666` · `0,755` · `0,763` |
 
 ### `moteur` — Moteur : chargement, calcul, listes, quantification
 

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**5 commits** · **1 session(s)** · **2 thème(s)**
+**6 commits** · **1 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,12 +13,13 @@
 |---|---|---|
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
+| modele | 1 | [modele.md](modele.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 512.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 513.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -29,6 +30,7 @@
 | 01:16 | `06bf2cc2` | 100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTILE EST CELUI DE 3 000 PAS (0,882), LE 30 K SERT DE CONTRÔLE NÉGATIF ; LA PRÉDICTION POUR LA DONNÉE 10× EST ÉCRITE D'AVANCE (MOTS > 0,90, RÉPÉTITION ≤ 5, PPL < 2,0) |
 | 01:23 | `3590e78b` | BANC 612 — LE 100 M (3 000 PAS) SUR LES 602 PHRASES DU GOLD GELÉ : 0,755 DE MOTS VALIDES, RÉPÉTITION 3, ZÉRO NON-UTF-8, 127,5 OCTETS/S ; LE BANC DE STYLE (0,882) EST PLUS FACILE QUE LE GOLD — LA COMPARAISON DES TROIS CHECKPOINTS EST LE PROCHAIN PAS |
 | 01:28 | `deedbb18` | BANC 612 — LE TÉMOIN 30 K : 0,763 CONTRE 0,755 AU 3 K SUR LES PHRASES RÉELLES (LA CONTINUITÉ), MAIS 29 SORTIES NON-UTF-8 CONTRE 0 (LA DÉRIVE) ; LE BANC DE STYLE (0,501 CONTRE 0,882) MESURE LA CRÉATIVITÉ — DEUX MESURES, DEUX VÉRITÉS |
+| 01:33 | `6e8bfec7` | BANC 612 — LE CLASSEMENT DES TROIS TÉMOINS : 34 M 0,666 · 100 M 3k 0,755 · 100 M 30k 0,763 ; LE 100 M BAT LE 34 M DE 9 POINTS AVEC 30× MOINS DE JETONS VUS (L'ÉCHELLE PAIE PAR JETON), LA DÉRIVE VIENT DU RATIO DONNÉES/PARAMÈTRES |
 
 ## Le récit de la journée (écrit à la main)
 

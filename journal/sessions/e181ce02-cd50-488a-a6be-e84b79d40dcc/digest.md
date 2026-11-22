@@ -75354,3 +75354,98 @@ dim 22 nov 2026 01:31:28 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-banc-612.md'); t = p.read_text()\nbloc = \"\"\"\n## 6. Le troisième témoin : le 34 M sur le même banc\n\n| checkpoint | paramètres | mots valides | répétition | non- … [2472 caractères tronqués]`
+
+  ```
+section 34M ajoutée
+     · compteurs : en-cours.md dit 1145 JSON, le disque en a 1146
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 reports/banc-612-34m.json
+6e8bfec7 BANC 612 — LE CLASSEMENT DES TROIS TÉMOINS : 34 M 0,666 · 100 M 3k
+   deedbb18..6e8bfec7  s/v7 -> s/v7
+   deedbb18..6e8bfec7  master -> master
+dim 22 nov 2026 01:36:01 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Le classement des trois checkpoints est mesuré — et il confirme la thèse
+
+## Le banc 612 sur les trois témoins (602 phrases du gold gelé)
+
+| checkpoint | paramètres | mots valides | non-UTF-8 | octets/s |
+|---|---:|---:|---:|---:|
+| **34 M** (30 k pas) | 34,3 M | **0,666** | 3 | 107,4 |
+| **100 M** (3 000 pas) | 96,7 M | **0,755** | **0** | **127,5** |
+| 100 M (30 000 pas) | 96,7 M | 0,763 | 29 | 116,3 |
+
+**Le classement** : le 100 M **bat le 34 M de 9 points** (0,755 contre 0,666) — avec **30× moins de jetons vus** (0,24 jeton/paramètre contre 7,2). **L'échelle paie par jeton vu**, c'est la confirmation de la thèse du 16/11.
+
+**La nuance qui compte** : le 34 M est **stable** (3 non-UTF-8), le 100 M à 3 000 pas est **parfaitement propre** (0), le 100 M à 30 000 pas **dérive** (29). La dérive ne vient **pas de la taille** mais du **ratio données/paramètres** — le sur-apprentissage est un problème de données, pas de modèle.
+
+## Les deux mesures, deux vérités
+
+| banc | ce qu'il mesure | 3 k | 30 k |
+|---|---|---:|---:|
+| **le banc de style** (20 prompts) | la **créativité** (inventer) | **0,882** | 0,501 |
+| **le banc 612** (602 phrases) | la **continuité** (prolonger) | 0,755 | **0,763** |
+
+Le sur-apprenti **prolonge** mieux une phrase connue mais **invente** moins bien — et produit des octets invalides. **Un banc unique mentirait** ; c'est pourquoi les deux existent.
+
+## L'état (01 h 36)
+
+`HEAD 6e8bfec7`, tout poussé. Le mode nuit continue : la prochaine tranche locale est le **diagnostic approfondi des deux portes rouges** (comprendre pourquoi `melange` ne calibre pas — c'est un résultat sur les états internes, pas une régression) et le **rangement des journaux** de la nuit. Zéro API, tout local.
+
+
+## Tour 236
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 5/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %s' | cut -c1-60; git status --porcelain | grep -vE \"pensee|audit|gold_reel\" | head -3; echo \"=== les scripts des 2 rouges :\"; ls -la tools/porte-indice.sh tools/porte-melange.sh | awk '{print $5, $9 … [38 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 01:36:54 EST
+6e8bfec7 BANC 612 — LE CLASSEMENT DES TROIS TÉMOINS : 34 M 0
+=== les scripts des 2 rouges :
+9879 tools/porte-indice.sh
+9417 tools/porte-melange.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/porte-melange.sh | cut -c1-140", "description": "Lire le script de la porte melange"}`
+
+  ```
+#!/bin/bash
+# porte-melange.sh — C2 : DEUX ENTRÉES, UNE RÈGLE DE MÉLANGE. Que fait une somme ?
+#
+# LA QUESTION DE C2, SANS TOUCHER AU MOTEUR. Deux flux qui se rencontrent : que devient
+# leur contenu ? La greffe d'état a fourni l'instrument (`--fusion-etat`), et une somme
+# de deux états prélevés s'écrit sans une ligne de code de plus. Il y a deux réponses
+# possibles, très différentes :
+#   · la somme ARBITRE entre les deux contenus (l'un ou l'autre) ⇒ il y a un POINT DE
+#     BASCULE à mesurer, et la fusion par somme est utilisable ;
+#   · la somme produit un TROISIÈME contenu (ni l'un ni l'autre) ⇒ elle DÉTRUIT
+#     l'information, et aucune architecture ne peut fusionner ainsi.
+#
+# LA CALIBRATION, ET POURQUOI ELLE EST LÀ. Prélever « la dernière position » ne va pas
+# de soi : `--tokenize` et `--prompt` ne comptent PAS les mêmes jetons pour un texte qui
+# finit par un saut de ligne (17 contre 16, mesuré), et la première version de cette
+# porte a donc prélevé l'état qui prédit le DERNIER JETON DU TEXTE au lieu de celui qui
+# prédit le code — les deux états purs rendaient alors « 1234 », et la porte a échoué
+# pour cette raison, pas pour une raison de fond. La porte CALIBRE donc 
+… [1300 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"MODELE\\|0.5B\\|Qwen\" tools/porte-melange.sh | head -5 | cut -c1-140; grep -n \"MODELE\\|Qwen\" tools/porte-indice.sh | head -4 | cut -c1-140; grep -n \"Qwen2.5-0.5B\" reports/rapport-portes-rouges.md | head -2", "descript … [41 caractères tronqués]`
+
+  ```
+32:M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+27:M=${MODELE:-models/Qwen2.5-0.5B-Q8_0.gguf}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-portes-rouges.md'); t = p.read_text()\nbloc = \"\"\"\n## 5. La cause commune : le modèle des deux portes est 0,5 B\n\nLes deux portes utilisent le **même modèle** :  … [2437 caractères tronqués]`

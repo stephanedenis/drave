@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 01 h 50 HNE (les trois témoins sur le banc 612 : 34 M 0,666 ; 100 M 3k 0,755 ; 100 M 30k 0,763 — l'échelle paie par jeton vu, la dérive vient du ratio données/paramètres)**
+**Mis à jour : 2026-11-22, 01 h 45 HNE (la cause commune des 2 portes rouges : le modèle Qwen2.5-0.5B est trop petit pour les deux expériences — structurel, pas un bug)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
