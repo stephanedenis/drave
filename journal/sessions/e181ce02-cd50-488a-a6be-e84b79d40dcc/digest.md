@@ -74992,3 +74992,111 @@ PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 00 h 55 HNE (la passe des portes : 89 portes, 87 vertes, 2  … [850 caractères tronqués]`
+
+  ```
+· fraîcheur : en-cours.md dit 2026-11-22, le dernier commit date du 2026-11-21
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 journal/2026-11-22/README.md
+aee709d9 PORTES — LA PASSE DE NUIT : 89 PORTES, 87 VERTES, 2 ROUGES STRUCTURELLE
+   41270f1f..aee709d9  s/v7 -> s/v7
+   41270f1f..aee709d9  master -> master
+dim 22 nov 2026 00:53:07 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ La passe des portes est finie — 89 portes, 87 vertes, 2 rouges structurelles tolérées
+
+## La passe complète (`aee709d9`)
+
+| mesure | valeur |
+|---|---:|
+| portes lancées | **89** |
+| **vertes** | **87** |
+| rouges | **2** — `indice`, `melange` (les deux structurelles, **tolérées** par `references-non-regression.md`) |
+| durée | ~1 h 50 |
+
+**Une rouge a été corrigée en cours de passe** : `porte-sessions` signalait un mandat périmé de **1 114 min** (le heartbeat de la session S du 21/11 06:15). Le heartbeat est rafraîchi (`2026-11-22 00:50 EST`), la porte repasse **verte** — et l'autotest des sessions est OK.
+
+## L'état du mode nuit (00 h 53)
+
+| tranche | état |
+|---|---|
+| **le 100 M en 30 000 pas** | ✅ fini (2 h 26, PPL 2,944) |
+| **le banc du 100 M** | ✅ mesuré (0,501 mots, répétition 1) |
+| **les portes complètes** | ✅ 89 / 87 vertes |
+| **les tests RSN / moteur / interface** | ✅ 5/5 · 7/7 · 3/3 |
+| **le branchement du moteur sur l'interface** | ✅ mesuré, 2 paradigmes substituables |
+
+**Le résultat le plus important de la nuit** : l'échelle **ne paie pas au-delà de 3 000 pas** — le 100 M à 3 000 pas (0,882) bat son propre 30 000 pas (0,501) et le 34 M (0,870). Le sur-apprentissage est l'explication la plus probable (30 tokens/paramètre contre 7). **La donnée est le verrou, pas la taille.**
+
+## Ce que je continue
+
+Il reste ~7 h avant 8 h. Les tranches locales utiles : le **palier de vérification du 3 k** (faire du 3 000 pas le checkpoint de référence, avec sa fiche), les **deux portes rouges** (comprendre `indice` et `melange` — elles sont tolérées, pas ignorées), et le **rangement des journaux** de la nuit.
+
+Je reste en mode local, zéro API.
+
+
+## Tour 234
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 3/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; cp work/n2ac/mix1024-100m.pt work/n2ac/mix1024-100m-3k.pt && echo \"checkpoint 3k renommé\"; ls -la work/n2ac/mix1024-100m-3k.pt work/n2ac/mix1024-100m-30k.pt | awk '{printf \"%.0f Mo %s\\n\", $5/1048576, $9}'; echo \"=== les 2 … [169 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 00:54:33 EST
+checkpoint 3k renommé
+280 Mo work/n2ac/mix1024-100m-30k.pt
+280 Mo work/n2ac/mix1024-100m-3k.pt
+=== les 2 rouges :
+=== 2. indice EXTÉRIEUR : l'état de la question de B (pas dans le magasin de A) ===
+    capture d'état    : position(s) [1439] écrite(s) dans /tmp/tmp.N0fJU45uEY/etatB.*
+    capture d'état    : position(s) [1469] écrite(s) dans /tmp/tmp.N0fJU45uEY/etatA.*
+=== 3. la mémoire interroge A, avec puis sans l'indice extérieur ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 bash tools/porte-indice.sh 2>&1 | tail -8 | cut -c1-150; echo \"=== melange :\"; timeout 600 bash tools/porte-melange.sh 2>&1 | tail -8 | cut -c1-150", "description": "Voir les deux portes rouges en isolation", "timeoutMs … [11 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5674]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5674", "timeout_ms": 900000, "wait": true}`
+
+  ```
+=== 1. A répond le code, B non ===
+  A : Answer: ZQ-447
+  B : Answer: 12345
+  ✅ les deux invites diffèrent bien par l'aiguille seule
+=== 2. indice EXTÉRIEUR : l'état de la question de B (pas dans le magasin de A) ===
+    capture d'état    : position(s) [1439] écrite(s) dans /tmp/tmp.QcAhNd5RN4/etatB.*
+    capture d'état    : position(s) [1469] écrite(s) dans /tmp/tmp.QcAhNd5RN4/etatA.*
+=== 3. la mémoire interroge A, avec puis sans l'indice extérieur ===
+=== melange :
+=== 0. trois invites : A (code ZQ), B (code KJ), C (AUCUN code) ===
+  jetons : A 1470 · B 1470 · C 1440 (C = A sans l'aiguille)
+=== 1. prélever l'état FINAL depuis l'INFÉRENCE (même numérotation) ===
+    capture d'état    : position(s) [1470] (depuis la fin d'une invite de 1471 jetons) écrite(s) dans /tmp/tmp.vcKCU2yNbc/etatA
+    capture d'état    : position(s) [1470] (depuis la fin d'une invite de 1471 jetons) écrite(s) dans /tmp/tmp.vcKCU2yNbc/etatB
+=== 2. CALIBRATION : quelle position porte vraiment le contenu ? ===
+  ❌ l'état de A ne rend pas le code de A dans une
+     invite qui n'en contient aucun : le mélange ne pourrait rien dire
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-portes-rouges.md <<'MD'\n# Les deux portes rouges — le diagnostic (structurelles, tolérées, comprises)\n\n> **Ce que ce document est.** Le **diagnostic** des deux portes qui restent rouges après la passe\n> du 2 … [3228 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 829 fichiers, le disque en a 830
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1145 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 512.2 h |
-| Tours | 233 |
-| Messages | 4645 |
-| Appels d'outils | 4120 |
+| Durée | 512.5 h |
+| Tours | 234 |
+| Messages | 4652 |
+| Appels d'outils | 4125 |
 | Fichiers touchés | 25 |
-| Commandes | 3438 |
+| Commandes | 3442 |
 | Sous-agents | 43 |
-| Commits | 540 |
+| Commits | 541 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -541,6 +541,8 @@
 **Tour 232** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 **Tour 233** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
+
+**Tour 234** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12301,6 +12303,49 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 - bash — Corriger le format du heartbeat
 - bash — Committer la passe des portes
 
+**Synthèse produite :**
+
+⏵ La passe des portes est finie — 89 portes, 87 vertes, 2 rouges structurelles tolérées
+
+\## La passe complète (`aee709d9`)
+
+| mesure | valeur |
+|---|---:|
+| portes lancées | **89** |
+| **vertes** | **87** |
+| rouges | **2** — `indice`, `melange` (les deux structurelles, **tolérées** par `references-non-regression.md`) |
+| durée | ~1 h 50 |
+
+**Une rouge a été corrigée en cours de passe** : `porte-sessions` signalait un mandat périmé de **1 114 min** (le heartbeat de la session S du 21/11 06:15). Le heartbeat est rafraîchi (`2026-11-22 00:50 EST`), la porte repasse **verte** — et l'autotest des sessions est OK.
+
+\## L'état du mode nuit (00 h 53)
+
+| tranche | état |
+|---|---|
+| **le 100 M en 30 000 pas** | ✅ fini (2 h 26, PPL 2,944) |
+| **le banc du 100 M** | ✅ mesuré (0,501 mots, répétition 1) |
+| **les portes complètes** | ✅ 89 / 87 vertes |
+| **les tests RSN / moteur / interface** | ✅ 5/5 · 7/7 · 3/3 |
+| **le branchement du moteur sur l'interface** | ✅ mesuré, 2 paradigmes substituables |
+
+**Le résultat le plus important de la nuit** : l'échelle **ne paie pas au-delà de 3 000 pas** — le 100 M à 3 000 pas (0,882) bat son propre 30 000 pas (0,501) et le 34 M (0,870). Le sur-apprentissage est l'explication la plus probable (30 tokens/paramètre contre 7). **La donnée est le verrou, pas la taille.**
+
+\## Ce que je continue
+
+Il reste ~7 h avant 8 h. Les tranches locales utiles : le **palier de vérification du 3 k** (faire du 3 000 pas le checkpoint de référence, avec sa fiche), les **deux portes rouges** (comprendre `indice` et `melange` — elles sont tolérées, pas ignorées), et le **rangement des journaux** de la nuit.
+
+Je reste en mode local, zéro API.
+
+### Tour 234 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Nommer le checkpoint 3k et voir la porte indice
+- bash — Voir les deux portes rouges en isolation
+- job_output
+- bash — Écrire le diagnostic des portes rouges
+- bash — Committer le diagnostic des portes rouges
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12421,7 +12466,7 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3398 autres
+- … et 3402 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13109,4 +13154,5 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 - RUN 100 M — LA FICHE AVEC LES HYPOTHÈSES ÉCRITES D'AVANCE (PPL < 2,0, MOTS ≥ 0,90, RÉPÉTITION ≤ 3) ET LES TROIS RAISONS DE POUVOIR LA RENDRE FAUSSE ; L'ÉTAT : 1
 - 100 M À 30 000 PAS — LE RÉSULTAT HONNÊTE : PPL 2,944 (L'HYPOTHÈSE ÉTAIT < 2,0), BANC 0,501 MOTS (L'HYPOTHÈSE ÉTAIT ≥ 0,90), RÉPÉTITION 1 ; L'ÉCHELLE NE PAIE PAS
 - PORTES — LA PASSE DE NUIT : 89 PORTES, 87 VERTES, 2 ROUGES STRUCTURELLES TOLÉRÉES (INDICE, MÉLANGE) ; LE HEARTBEAT DE LA SESSION S RAFRAÎCHI (LE MANDAT ÉTAIT PÉ
+- PORTES ROUGES — LE DIAGNOSTIC : MELANGE NE CALIBRE PAS (L'ÉTAT NE REND PAS LE CODE DANS UNE INVITE SANS CODE, LE PRÉALABLE DE RECHERCHE ÉCHOUE) ; INDICE NE CONC
 
