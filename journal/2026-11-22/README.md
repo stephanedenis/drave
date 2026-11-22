@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**8 commits** · **1 session(s)** · **4 thème(s)**
+**9 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,14 +13,14 @@
 |---|---|---|
 | memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
-| modele | 1 | [modele.md](modele.md) |
+| modele | 2 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 513.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 513.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -34,6 +34,7 @@
 | 01:33 | `6e8bfec7` | BANC 612 — LE CLASSEMENT DES TROIS TÉMOINS : 34 M 0,666 · 100 M 3k 0,755 · 100 M 30k 0,763 ; LE 100 M BAT LE 34 M DE 9 POINTS AVEC 30× MOINS DE JETONS VUS (L'ÉCHELLE PAIE PAR JETON), LA DÉRIVE VIENT DU RATIO DONNÉES/PARAMÈTRES |
 | 01:37 | `78ba486c` | PORTES ROUGES — LA CAUSE COMMUNE : LES DEUX PORTES TESTENT QWEN2.5-0.5B, UN MODÈLE DE DÉMONSTRATION ; AUCUNE POSITION NE PORTE LE CODE (MELANGE) ET LA MÉMOIRE NE CONCLUT PAS (INDICE) — CE N'EST PAS UN BUG, C'EST UN MODÈLE TROP PETIT ; LES RENDRE VERTES DEMANDE UN CHOIX DE CAMPAGNE |
 | 01:41 | `49931b79` | PORTES ROUGES — LE TERRAIN : MODELS/ N'A QUE DEUX QUANTIFICATIONS DU 0,5 B (Q4_0, Q8_0) ET UN DOSSIER VISION ; AUCUN 7 B NI 14 B LOCAL — LES DEUX PORTES SONT ROUGES PAR CONSTRUCTION DU TERRAIN, PAS PAR DÉFAUT DE CODE |
+| 01:45 | `5df8bfe3` | NUIT 21-22 — LA SYNTHÈSE : 18 COMMITS, LES TROIS RÉSULTATS (L'ÉCHELLE PAIE PAR JETON VU, LA DÉRIVE EST UN PROBLÈME DE DONNÉES, DEUX BANCS DEUX VÉRITÉS), LES DEUX PORTES ROUGES CLOSES, ET LES TROIS CHANTIERS OUVERTS (LA DONNÉE, LE GOLD DE PENSÉE, LA PROMOTION RSN) |
 
 ## Le récit de la journée (écrit à la main)
 

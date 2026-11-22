@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 513.1 h |
+| Durée | 513.2 h |
 | Tours | 237 |
-| Messages | 4684 |
-| Appels d'outils | 4151 |
+| Messages | 4702 |
+| Appels d'outils | 4169 |
 | Fichiers touchés | 25 |
-| Commandes | 3468 |
+| Commandes | 3486 |
 | Sous-agents | 43 |
-| Commits | 551 |
+| Commits | 552 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -12465,11 +12465,23 @@ Je continue, zéro API, et je commit chaque tranche.
 
 ### Tour 237 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Lister les commits de la nuit
 - bash — Écrire la synthèse de la nuit
 - bash — Committer la synthèse
+- bash — Voir la roadmap
+- bash — Lire le coup d'œil de la roadmap
+- bash — Mettre à jour la roadmap
+- bash — Trimmer la roadmap
+- bash — Voir les lignes longues de la roadmap
+- bash — Voir les 3 lignes longues
+- bash — Trimmer le bloc d'état
+- bash — Finaliser le trim de la roadmap
+- bash — Réduire le bloc d'état
+- bash — Trimmer encore
+- bash — Trim final de la roadmap
+- … et 4 autres
 
 ## 3. Travail accompli
 
@@ -12591,7 +12603,7 @@ Je continue, zéro API, et je commit chaque tranche.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3428 autres
+- … et 3446 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12719,7 +12731,7 @@ Je continue, zéro API, et je commit chaque tranche.
 
 ## 5. Erreurs rencontrées
 
-95 sorties en erreur ou divergentes. Les premières :
+96 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -13290,4 +13302,5 @@ Je continue, zéro API, et je commit chaque tranche.
 - PORTES ROUGES — LE TERRAIN : MODELS/ N'A QUE DEUX QUANTIFICATIONS DU 0,5 B (Q4_0, Q8_0) ET UN DOSSIER VISION ; AUCUN 7 B NI 14 B LOCAL — LES DEUX PORTES SONT RO
 - PORTES ROUGES — LE TERRAIN : MODELS/ N'A QUE DEUX QUANTIFICATIONS DU 0,5 B (Q4_0, Q8_0) ET UN DOSSIER VISION ; AUCUN 7 B NI 14 B LOCAL — LES DEUX PORTES SONT RO
 - NUIT 21-22 — LA SYNTHÈSE : 18 COMMITS, LES TROIS RÉSULTATS (L'ÉCHELLE PAIE PAR JETON VU, LA DÉRIVE EST UN PROBLÈME DE DONNÉES, DEUX BANCS DEUX VÉRITÉS), LES DEU
+- ROADMAP — L'ÉTAT DU 22/11 : LE 100 M BAT LE 34 M (30× MOINS DE JETONS VUS), PORTES 89/87, LE MOTEUR DE PENSÉE ET LA RSN POSÉS ; LA SYNTHÈSE DE LA NUIT EST LIÉE,
 

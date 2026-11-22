@@ -75559,3 +75559,167 @@ ba112663 RUN 100 M — LA FICHE AVEC LES HYPOTHÈSES ÉCRITES D'AVANCE (PPL < 2,
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-nuit-21-22.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"NUIT 21-22 — LA SYNTHÈSE : 18 COMMITS, LES TROIS RÉSULTATS (L'ÉCHELLE PAIE PAR JETON VU, LA DÉRIVE EST UN PROBLÈME DE DONNÉES, … [394 caractères tronqués]`
+
+  ```
+create mode 100644 reports/rapport-nuit-21-22.md
+5df8bfe3 NUIT 21-22 — LA SYNTHÈSE : 18 COMMITS, LES TROIS RÉSULTATS (L'ÉCHE
+   49931b79..5df8bfe3  s/v7 -> s/v7
+   49931b79..5df8bfe3  master -> master
+dim 22 nov 2026 01:48:12 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -nE \"^## |^### \" docs/pilotage/roadmap.md | head -14 | cut -c1-100; wc -l docs/pilotage/roadmap.md", "description": "Voir la roadmap"}`
+
+  ```
+dim 22 nov 2026 01:48:26 EST
+13:## Comment lire cette roadmap
+26:## En un coup d'œil
+193:## L'ordre du jour (carpe diem)
+224:## Le Gantt indicatif
+277:## Programme A — Le moteur (la drave, les flux)
+298:## Programme B — L'intelligence (les deux étages)
+326:## Programme N — Le natif (DRVM, `drave-n0`, distillation)
+358:## Programme R
+370:### Les six phases
+381:### R0 — le lecteur v0 (système, sans entraînement)
+402:### R1 — la fenêtre native
+416:### R2 — la mémoire
+426:### R3 — la restitution
+436:### R4 — les blocs structurels
+521 docs/pilotage/roadmap.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '26,60p' docs/pilotage/roadmap.md | cut -c1-140", "description": "Lire le coup d'œil de la roadmap"}`
+
+  ```
+## En un coup d'œil
+
+| chantier | ce qu'il couvre | état | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A
+| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules 
+| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0
+| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.
+| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v7** : **61/61** types, **144/144** rôles, 
+| **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬
+| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅
+
+**État au 15/11 (nuit).** Semaine 2 close ; tag `semaine-2-2026-11-20` sur `73edb3dd` ; [rapport](../../reports/rapp
+… [1797 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\nbloc = \"\"\"**État au 22/11 (nuit).** Le **100 M** est entraîné (30 000 pas, 2 h 26, PPL 2,944) et **mesuré\nsur trois bancs** : le s … [1256 caractères tronqués]`
+
+  ```
+état du 22/11 ajouté
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · docs/pilotage/roadmap.md : 9166 mots > budget 9000 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\nt = t.replace(\"\"\"**État au 22/11 (nuit).** Le **100 M** est entraîné (30 000 pas, 2 h 26, PPL 2,944) et **mesuré\nsur trois bancs** … [1834 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9119 mots > budget 9000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\n# trimmer les lignes du tableau « En un coup d'œil » (les états sont détaillés plus bas)\nimport re\nt = t.replace(\"| **S — les struc … [752 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9118 mots > budget 9000 (T1)
+mots roadmap: 9444
+344 554 | **N2** | la distillation : corpus, professeur, [curriculum](../theorie/glossaire/entrees/curriculu
+325 506 | **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | ✅ **state store v0** +
+30 439 | **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entree
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '30p;325p;344p' docs/pilotage/roadmap.md | cut -c1-300", "description": "Voir les 3 lignes longues"}`
+
+  ```
+| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4/A5.4 bloqués** ; **A6.2 libre** (MoE 18 Go) ; **A2.6 mesuré** (experts 7,0 Go/s, tête Q8_0/Q6_K dans la règle) ; A3.2/A3.3, A8.3c/d mesurés ; le [lot](../th
+| **B12** | les modules cerveau-langage M1–M9 | ⚠️ / ❌ | **B12.10 close** (négatif : [oracle](../theorie/glossaire/entrees/oracle.md) = M8, M4 seul = 0) ; seul M1 est solide |
+| **N1** | `drave-n0` : 11,47 M, 6 blocs, octets, [attention](../theorie/glossaire/entrees/attention.md) locale, [FFN](../theorie/glossaire/entrees/ffn.md) creux, 3 têtes précoces | ✅ | aucune — PPL **3,465** avec [pont](../theorie/glossaire/entrees/pont.md) (**4,080** sans) ; têtes **57,6 / 61,6 /
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\n# trims ciblés sur les lignes du tableau (les liens restent, les mots redondants partent)\nt = t.replace(\"| **A — le moteur** | f … [1013 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9114 mots > budget 9000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\n# trimmer les détails de l'état 22/11 (ils vivent dans la fiche) — garder le verdict\nt = t.replace(\"\"\"**État au 22/11 (nuit).* … [1503 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9094 mots > budget 9000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\n# le bloc 22/11 : ne garder que le verdict (les chiffres vivent dans la synthèse)\nt = t.replace(\"\"\"**État au 22/11 (nuit).** L … [1186 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9048 mots > budget 9000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-22)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\n# retirer le bloc 22/11 redondant avec la ligne « En un coup d'œil » ; garder une ligne de pointeur\nt = t.replace(\"\"\"**État au … [790 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9029 mots > budget 9000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\nt = t.replace(\"\"\"**État au 22/11 (nuit).** Le **100 M** bat le **34 M** de 9 points avec 30× moins de jetons vus ;\nla dérive d … [496 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9026 mots > budget 9000 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\n# trim final : la ligne S (les détails sont dans la fiche v7)\nt = t.replace(\"| **S — les structures** | coloration, rôles, valid … [377 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9023 mots > budget 9000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-22)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\n# les 23 mots : le bloc 22/11 devient une ligne de pointeur pure\nt = t.replace(\"\"\"**État au 22/11 (nuit).** Le **100 M** bat l … [598 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9020 mots > budget 9000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\nt = t.replace(\"\"\"**22/11 (nuit).** Le **100 M** bat le **34 M** de 9 points (30× moins de jetons vus) ; la dérive\nvient du rat … [413 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9005 mots > budget 9000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\nt = t.replace(\"\"\"**22/11.** Le **100 M** bat le **34 M** de 9 points. Portes : 89/87.\n[Synthèse](../../reports/rapport-nuit-21 … [290 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9002 mots > budget 9000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\nt = t.replace(\"**22/11.** Le **100 M** bat le **34 M**. Portes : 89/87. [Synthèse](../../reports/rapport-nuit-21-22.md).\",\n     … [321 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9002 mots > budget 9000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-22)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\n# le bloc 22/11 tient sur une ligne dans l'en-tête : on le retire (la synthèse est déjà liée ailleurs)\nt = t.replace(\"**22/11.** … [323 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 02 h 10 HNE (la roadmap et la synthèse de la nuit : 18 comm … [704 caractères tronqués]`
