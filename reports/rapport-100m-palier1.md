@@ -67,3 +67,33 @@ est **franchi**, avec une réserve sur la PPL.
 
 **Le prochain pas** : le **même run avec le corpus nettoyé et le canal** (le `train.canal` manquait) ;
 et le **banc 612 sur le 30 k du palier 1** pour voir si la dérive revient.
+## 6. Le 3 000 pas du palier 1 — la courbe du temps
+
+Le **même modèle** sur le **même corpus** (3,44 Go), à **3 000 pas** (14,7 min) au lieu de 30 000
+(2 h 25) :
+
+| checkpoint | pas | temps | mots valides | répétition | non-UTF-8 |
+|---|---:|---:|---:|---:|---:|
+| palier 1, 3 k | 3 000 | **14,7 min** | 0,842 | **0** | **3** |
+| palier 1, 30 k | 30 000 | 2 h 25 | **0,854** | 2 | 13 |
+
+**Le résultat** : les 30 000 pas n'apportent que **1,2 point** de mots valides (0,842 → 0,854) et
+**coûtent 10× plus de temps** — en échange de **plus de dérive** (3 → 13 non-UTF-8) et de
+répétitions (0 → 2).
+
+**La lecture** : sur 3,44 Go, le **3 000 pas est déjà le bon point** — le corpus est assez grand
+pour que le modèle apprenne vite, et l'entraînement plus long n'achète presque rien. C'est la
+**première** fois que la courbe du natif montre un **plateau net** avant le sur-apprentissage.
+
+**Le classement final du natif** (gold 612, mots valides) :
+
+| modèle | corpus | pas | temps | mots |
+|---|---|---:|---:|---:|
+| 34 M | 1 Go | 30 k | 3,7 h | 0,666 |
+| 100 M | 1 Go | 3 k | 12 min | 0,755 |
+| 100 M | 1 Go | 30 k | 2,4 h | 0,763 |
+| **100 M** | **3,44 Go** | **3 k** | **15 min** | **0,842** |
+| 100 M | 3,44 Go | 30 k | 2,4 h | 0,854 |
+
+**Le meilleur rapport temps/qualité** est le **100 M sur 3,44 Go à 3 000 pas** : 0,842 pour
+**15 minutes**. Le 30 k est le meilleur absolu (0,854), mais 10× le temps.

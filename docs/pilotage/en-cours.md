@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 05 h 05 HNE (le README intègre le palier 1 : 67 % → 75 % → 85 % de mots réels, la donnée est le levier)**
+**Mis à jour : 2026-11-22, 05 h 25 HNE (le 3 k du palier 1 : 0,842 en 15 min contre 0,854 en 2 h 25 — le meilleur rapport temps/qualité du natif, plateau net)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -61,7 +61,7 @@
 |---|---|---|
 | portes | **91** (dont `porte-a2.6-experts` le 18/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **834** / **1147** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **834** / **1148** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **131** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **21/11 04 h 10 → 06 h 12** : **91** portes, **88/3** — `indice` (848 s) et `melange` (105 s) structurelles, et `sessions` **rouge** (heartbeat de S périmé de 1 305 min), **corrigé et re-vérifié vert** ; machine chargée (deux runs) | `work/portes/roue-1121-0410/registre.txt` |
 

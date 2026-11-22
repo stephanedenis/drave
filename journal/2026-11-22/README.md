@@ -5,13 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**18 commits** · **1 session(s)** · **5 thème(s)**
+**19 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
+| docs | 1 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
 | mesures | 8 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
@@ -21,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 516.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 516.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -45,6 +46,7 @@
 | 04:46 | `5b1b9fe0` | PALIER 1 FRANCHI — LE 100 M SUR 3,44 Go DONNE 0,854 DE MOTS VALIDES SUR LE GOLD 612 : LE MEILLEUR RÉSULTAT DU NATIF (LE 1 Go : 0,755 ; LE 30 k : 0,763) ; 3 HYPOTHÈSES SUR 4 TIENNENT (RÉPÉTITION 2, NON-UTF-8 13 CONTRE 29, MOTS > 0,85), LA PPL MANQUE (3,073 CONTRE < 2,5) — LE CORPUS EST PLUS DUR, PAS COMPARABLE |
 | 04:49 | `ab8ef491` | SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3,44 Go DONNE 0,854 (LE MEILLEUR DU NATIF), RÉPÉTITION 2, 13 NON-UTF-8 CONTRE 29 ; LA DONNÉE ÉTAIT LE VERROU, COMME PRÉVU — LA PPL (3,073) N'EST PAS COMPARABLE (CORPUS PLUS DUR) |
 | 04:56 | `f73c6d81` | JOURNAL — LE 22/11 RÉGÉNÉRÉ À 17 COMMITS : LA NUIT, LE PALIER 1 ET LES DIAGNOSTICS CLASSÉS ; LES LIENS ET LES SESSIONS VÉRIFIÉS |
+| 04:59 | `7690c5f9` | README — LE PALIER 1 DANS LA VITRINE : LE 34 M ÉCRIT 67 % DE MOTS RÉELS, LE 100 M 75 %, LE 100 M SUR 3,4 Go 85 % — LA DONNÉE EST LE LEVIER, PAS LA TAILLE (30× MOINS DE JETONS VUS) |
 
 ## Le récit de la journée (écrit à la main)
 

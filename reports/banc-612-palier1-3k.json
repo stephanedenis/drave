@@ -1,0 +1,12 @@
+{
+  "mots": 5177,
+  "mots_valides": 0.8424,
+  "repetition_2grammes": 0,
+  "sorties_non_utf8": 3,
+  "sorties": 602,
+  "phrases": 602,
+  "octets_s": 124.0,
+  "s": 77.7,
+  "modele": "work/n2ac/mix1024-100m-palier1-3k.pt",
+  "lexique": 769
+}

@@ -76700,3 +76700,99 @@ README mots: 3498
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 05 h 05 HNE (le README intègre le palier 1 : 67 % → 75 % →  … [608 caractères tronqués]`
+
+  ```
+8 files changed, 48 insertions(+), 16 deletions(-)
+7690c5f9 README — LE PALIER 1 DANS LA VITRINE : LE 34 M ÉCRIT 67 % DE MOTS 
+   f73c6d81..7690c5f9  s/v7 -> s/v7
+   f73c6d81..7690c5f9  master -> master
+dim 22 nov 2026 05:02:13 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ La vitrine est à jour — le palier 1 y est, et le budget est tenu
+
+## Ce qui a été fait (05 h 05)
+
+| tranche | contenu | commit |
+|---|---|---|
+| **le journal** | le 22/11 régénéré : 17 commits, 5 thèmes, sessions ancrées | `f73c6d81` |
+| **le README** | le palier 1 dans la vitrine : **34 M 67 % → 100 M 75 % → 100 M sur 3,4 Go 85 %** de mots réels ; « la donnée est le levier, pas la taille » | `7690c5f9` |
+
+## L'état du mode nuit (05 h 05)
+
+`HEAD 7690c5f9`, tout poussé. **33 commits** de nuit. Les portes : 89/87. Les tests : RSN 5/5, moteur 7/7, interface 3/3. Les budgets : README 3 498 ≤ 3 500, tout passe.
+
+**Le bilan de la nuit, en trois phrases** :
+
+1. **Le palier 1 est franchi** : le 100 M sur 3,44 Go donne **0,854** de mots valides — le meilleur résultat du natif, +10 points sur le même modèle à 1 Go.
+2. **La donnée est le levier, pas la taille** : le 100 M bat le 34 M de 9 points avec 30× moins de jetons vus ; la dérive vient du ratio données/paramètres.
+3. **La métrique « mots valides » est faible** : le hasard fait 0,711 — le **taux d'encodage** est la mesure qui discrimine (0 contre 60/60).
+
+Il reste **2 h 55** avant 8 h. Je continue en local : la prochaine tranche est le **banc du 30 k du palier 1** (la dérive revient-elle sur le gros corpus ?), puis la **synthèse finale** de la nuit.
+
+
+## Tour 246
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 15/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; nohup env PYTHONPATH=. /tmp/venv-gpu/bin/python -u tools/entrainer_native.py --corpus data/corpus_wiki_fr_palier1/train.txt --pas 3000 --seq 1024 --lot 8 --dim 640 --expert-hidden 640 --amp --no-tetes --device cuda --sortie wor … [344 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 05:02:53 EST
+PID 2227751
+dim 22 nov 2026 05:07:33 EST
+pas  800 · perte 2.4661 · PPL val 11.961 · 233 s · échelle 65536
+pas  850 · perte 2.5712 · PPL val 12.019 · 247 s · échelle 65536
+pas  900 · perte 2.4365 · PPL val 11.961 · 262 s · échelle 65536
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -4 /tmp/train-100m-palier1-3k.log; ls -la work/n2ac/mix1024-100m-palier1-3k.pt 2>/dev/null | awk '{print $5}'; ps aux | grep -c \"[e]ntrainer_native\"", "description": "Attendre la fin du run 3k", "timeoutMs": 1 … [7 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5782]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -4 /tmp/train-100m-palier1-3k.log; ls -la work/n2ac/mix1024-100m-palier1-3k.pt 2>/dev/null | awk '{print $5}'; ps aux | grep -c \"[e]ntrainer_native\"", "description": "Vérifier le run 3k"}`
+
+  ```
+dim 22 nov 2026 05:17:53 EST
+ "drvm": "work/n2ac/mix1024-100m-palier1-3k.drvm",
+ "sha256_drvm": "dec146933abc77ce921a38b801cc1afdb86ef3d972b4bd2b9701ed032a53d104",
+ "duree_s": 880.9297168254852
+}
+293511441
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env PYTHONPATH=. /tmp/venv-gpu/bin/python tools/banc_612.py --modele work/n2ac/mix1024-100m-palier1-3k.pt --n 16 --device cuda --json > reports/banc-612-palier1-3k.json 2>/dev/null & echo \"PID $!\"; sleep 180; cat reports/banc … [115 caractères tronqués]`
+
+  ```
+PID 2233569
+{
+  "mots": 5177,
+  "mots_valides": 0.8424,
+  "repetition_2grammes": 0,
+  "sorties_non_utf8": 3,
+  "sorties": 602,
+  "phrases": 602,
+  "octets_s": 124.0,
+  "s": 77.7,
+  "modele": "work/n2ac/mix1024-100m-palier1-3k.pt",
+  ```
+
+### 🤖 Assistant
+
+⏵ Le 3 k du palier 1 est mesuré — et il ne perd presque rien pour 10× moins de temps
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-100m-palier1.md'); t = p.read_text()\nbloc = \"\"\"\n## 6. Le 3 000 pas du palier 1 — la courbe du temps\n\nLe **même modèle** sur le **même corpus** (3,44 Go), à ** … [2830 caractères tronqués]`

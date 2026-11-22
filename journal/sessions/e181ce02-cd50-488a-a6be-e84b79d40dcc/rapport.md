@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 516.3 h |
-| Tours | 245 |
-| Messages | 4791 |
-| Appels d'outils | 4229 |
+| Durée | 516.7 h |
+| Tours | 246 |
+| Messages | 4798 |
+| Appels d'outils | 4234 |
 | Fichiers touchés | 25 |
-| Commandes | 3546 |
+| Commandes | 3551 |
 | Sous-agents | 43 |
-| Commits | 563 |
+| Commits | 564 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -565,6 +565,8 @@
 **Tour 244** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [551 caractères tronqués]
 
 **Tour 245** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [551 caractères tronqués]
+
+**Tour 246** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [551 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12707,6 +12709,43 @@ Le **100 M sur `corpus_wiki_fr_palier1` (3,44 Go)**, 30 000 pas en **2 h 25** (P
 - bash — Trimmer le README
 - bash — Committer le README
 
+**Synthèse produite :**
+
+⏵ La vitrine est à jour — le palier 1 y est, et le budget est tenu
+
+\## Ce qui a été fait (05 h 05)
+
+| tranche | contenu | commit |
+|---|---|---|
+| **le journal** | le 22/11 régénéré : 17 commits, 5 thèmes, sessions ancrées | `f73c6d81` |
+| **le README** | le palier 1 dans la vitrine : **34 M 67 % → 100 M 75 % → 100 M sur 3,4 Go 85 %** de mots réels ; « la donnée est le levier, pas la taille » | `7690c5f9` |
+
+\## L'état du mode nuit (05 h 05)
+
+`HEAD 7690c5f9`, tout poussé. **33 commits** de nuit. Les portes : 89/87. Les tests : RSN 5/5, moteur 7/7, interface 3/3. Les budgets : README 3 498 ≤ 3 500, tout passe.
+
+**Le bilan de la nuit, en trois phrases** :
+
+1. **Le palier 1 est franchi** : le 100 M sur 3,44 Go donne **0,854** de mots valides — le meilleur résultat du natif, +10 points sur le même modèle à 1 Go.
+2. **La donnée est le levier, pas la taille** : le 100 M bat le 34 M de 9 points avec 30× moins de jetons vus ; la dérive vient du ratio données/paramètres.
+3. **La métrique « mots valides » est faible** : le hasard fait 0,711 — le **taux d'encodage** est la mesure qui discrimine (0 contre 60/60).
+
+Il reste **2 h 55** avant 8 h. Je continue en local : la prochaine tranche est le **banc du 30 k du palier 1** (la dérive revient-elle sur le gros corpus ?), puis la **synthèse finale** de la nuit.
+
+### Tour 246 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [831 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Run 3k sur le palier 1
+- bash — Attendre la fin du run 3k
+- bash — Vérifier le run 3k
+- bash — Banc 612 sur le 3k du palier 1
+- bash — Committer le 3k du palier 1
+
+**Synthèse produite :**
+
+⏵ Le 3 k du palier 1 est mesuré — et il ne perd presque rien pour 10× moins de temps
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12827,7 +12866,7 @@ Le **100 M sur `corpus_wiki_fr_palier1` (3,44 Go)**, 30 000 pas en **2 h 25** (P
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3506 autres
+- … et 3511 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12955,7 +12994,7 @@ Le **100 M sur `corpus_wiki_fr_palier1` (3,44 Go)**, 30 000 pas en **2 h 25** (P
 
 ## 5. Erreurs rencontrées
 
-98 sorties en erreur ou divergentes. Les premières :
+99 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -13538,4 +13577,5 @@ Le **100 M sur `corpus_wiki_fr_palier1` (3,44 Go)**, 30 000 pas en **2 h 25** (P
 - ROADMAP — LE PALIER 1 EST FRANCHI (0,854 SUR 3,44 Go) ET LES PORTES SONT À 89/87 ; LA LIGNE DU 22/11 PORTE LE RÉSULTAT" 2>&1 | tail -1; git log -1 --format='%h 
 - JOURNAL — LE 22/11 RÉGÉNÉRÉ À 17 COMMITS : LA NUIT, LE PALIER 1 ET LES DIAGNOSTICS CLASSÉS ; LES LIENS ET LES SESSIONS VÉRIFIÉS" 2>&1 | tail -1; git log -1 --fo
 - README — LE PALIER 1 DANS LA VITRINE : LE 34 M ÉCRIT 67 % DE MOTS RÉELS, LE 100 M 75 %, LE 100 M SUR 3,4 Go 85 % — LA DONNÉE EST LE LEVIER, PAS LA TAILLE (30× M
+- PALIER 1, 3 000 PAS — 0,842 DE MOTS VALIDES EN 15 MINUTES CONTRE 0,854 EN 2 H 25 : LE MEILLEUR RAPPORT TEMPS/QUALITÉ DU NATIF, UN PLATEAU NET (ZÉRO RÉPÉTITION, 
 
