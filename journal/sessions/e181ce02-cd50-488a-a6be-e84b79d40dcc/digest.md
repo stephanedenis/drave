@@ -75100,3 +75100,44 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1145 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-portes-rouges.md
+0559d721 PORTES ROUGES — LE DIAGNOSTIC : MELANGE NE CALIBRE PAS (L'ÉTAT NE REND 
+   aee709d9..0559d721  s/v7 -> s/v7
+   aee709d9..0559d721  master -> master
+dim 22 nov 2026 01:14:56 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-100m-30k.md'); t = p.read_text()\nbloc = \"\"\"\n## La leçon opérationnelle : le checkpoint utile est celui de 3 000 pas\n\nLes deux checkpoints sont sur disque :\n\ … [1629 caractères tronqués]`
+
+  ```
+leçon ajoutée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     git add docs/pilotage/en-cours.md
+0559d721 PORTES ROUGES — LE DIAGNOSTIC : MELANGE NE CALIBRE PAS (L'ÉTAT NE REND 
+Everything up-to-date
+Everything up-to-date
+dim 22 nov 2026 01:15:26 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | head -8; git log -1 --format='%h %s' | cut -c1-70", "description": "Voir l'état git"}`
+
+  ```
+M  reports/rapport-100m-30k.md
+0559d721 PORTES ROUGES — LE DIAGNOSTIC : MELANGE NE CALIBRE PAS (L'ÉTA
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git commit -m \"100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTILE EST CELUI DE 3 000 PAS (0,882), LE 30 K SERT DE CONTRÔLE NÉGATIF ; LA PRÉDICTION POUR LA DONNÉE 10× EST ÉCRITE D'AVANCE (MOTS > 0,90, RÉPÉTITION ≤ 5, P … [291 caractères tronqués]`
+
+  ```
+git add docs/pilotage/en-cours.md
+0559d721 PORTES ROUGES — LE DIAGNOSTIC : MELANGE NE CALIBRE PAS (L'ÉTAT NE 
+Everything up-to-date
+Everything up-to-date
+M  reports/rapport-100m-30k.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 01 h 18 HNE (la leçon opérationnelle du 100 M : le 3 k est  … [773 caractères tronqués]`

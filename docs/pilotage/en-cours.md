@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 01 h 10 HNE (le diagnostic des 2 portes rouges : melange ne calibre pas, indice ne conclut pas — structurelles, tolérées, comprises ; le checkpoint 100 M à 3 000 pas nommé)**
+**Mis à jour : 2026-11-22, 01 h 18 HNE (la leçon opérationnelle du 100 M : le 3 k est la référence, le 30 k le témoin ; la prédiction pour 10× de données est écrite)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

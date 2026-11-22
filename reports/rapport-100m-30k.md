@@ -63,3 +63,19 @@ et il a vu 30× moins de données. La donnée est le verrou, pas la taille.
 **Ce qui pourrait rendre ce verdict faux** : un taux d'apprentissage trop élevé à 30 k (la perte
 d'entraînement descend à 1,0 — le modèle colle au train), ou un corpus trop étroit (1 Go, ~98 %
 Wikipédia). Le test décisif : le **même run avec 10× plus de données**.
+## La leçon opérationnelle : le checkpoint utile est celui de 3 000 pas
+
+Les deux checkpoints sont sur disque :
+
+| checkpoint | taille | mots valides | répétition | usage |
+|---|---:|---:|---:|---|
+| `work/n2ac/mix1024-100m-3k.pt` | 280 Mo | **0,882** | **6** | **le meilleur** — la référence |
+| `work/n2ac/mix1024-100m-30k.pt` | 280 Mo | 0,501 | 1 | le sur-apprenti, gardé comme **témoin** |
+
+**La règle** : pour la génération, on part du **3 k** ; le **30 k** sert de **contrôle négatif** —
+il montre ce que le sur-apprentissage fait à un modèle (les mots valides s'effondrent, la répétition
+disparaît, la sortie devient du texte mémorisé).
+
+**Le prochain pas, si la donnée arrive** : le **même 100 M** avec **10× plus de corpus** (3–6 Go).
+La prédiction (à écrire d'avance) : les mots valides **> 0,90**, la répétition **≤ 5**, la PPL
+**< 2,0** — si c'est faux, la donnée n'est pas le seul verrou et il faudra revoir l'architecture.

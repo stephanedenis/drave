@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 512.5 h |
+| Durée | 512.6 h |
 | Tours | 234 |
-| Messages | 4652 |
-| Appels d'outils | 4125 |
+| Messages | 4656 |
+| Appels d'outils | 4129 |
 | Fichiers touchés | 25 |
-| Commandes | 3442 |
+| Commandes | 3446 |
 | Sous-agents | 43 |
-| Commits | 541 |
+| Commits | 544 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -12338,13 +12338,17 @@ Je reste en mode local, zéro API.
 
 ### Tour 234 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Nommer le checkpoint 3k et voir la porte indice
 - bash — Voir les deux portes rouges en isolation
 - job_output
 - bash — Écrire le diagnostic des portes rouges
 - bash — Committer le diagnostic des portes rouges
+- bash — Ajouter la leçon opérationnelle
+- bash — Voir l'état git
+- bash — Committer la leçon
+- bash — Committer la leçon avec l'état
 
 ## 3. Travail accompli
 
@@ -12466,7 +12470,7 @@ Je reste en mode local, zéro API.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3402 autres
+- … et 3406 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13155,4 +13159,7 @@ Je reste en mode local, zéro API.
 - 100 M À 30 000 PAS — LE RÉSULTAT HONNÊTE : PPL 2,944 (L'HYPOTHÈSE ÉTAIT < 2,0), BANC 0,501 MOTS (L'HYPOTHÈSE ÉTAIT ≥ 0,90), RÉPÉTITION 1 ; L'ÉCHELLE NE PAIE PAS
 - PORTES — LA PASSE DE NUIT : 89 PORTES, 87 VERTES, 2 ROUGES STRUCTURELLES TOLÉRÉES (INDICE, MÉLANGE) ; LE HEARTBEAT DE LA SESSION S RAFRAÎCHI (LE MANDAT ÉTAIT PÉ
 - PORTES ROUGES — LE DIAGNOSTIC : MELANGE NE CALIBRE PAS (L'ÉTAT NE REND PAS LE CODE DANS UNE INVITE SANS CODE, LE PRÉALABLE DE RECHERCHE ÉCHOUE) ; INDICE NE CONC
+- 100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTILE EST CELUI DE 3 000 PAS (0,882), LE 30 K SERT DE CONTRÔLE NÉGATIF ; LA PRÉDICTION POUR LA DONNÉE 10× EST ÉC
+- 100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTILE EST CELUI DE 3 000 PAS (0,882), LE 30 K SERT DE CONTRÔLE NÉGATIF ; LA PRÉDICTION POUR LA DONNÉE 10× EST ÉC
+- 100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTILE EST CELUI DE 3 000 PAS (0,882), LE 30 K SERT DE CONTRÔLE NÉGATIF ; LA PRÉDICTION POUR LA DONNÉE 10× EST ÉC
 
