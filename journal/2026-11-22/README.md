@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**12 commits** · **1 session(s)** · **5 thème(s)**
+**13 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 1 | [distribue.md](distribue.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
-| mesures | 3 | [mesures.md](mesures.md) |
+| mesures | 4 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 
@@ -21,7 +21,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 513.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 513.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -39,6 +39,7 @@
 | 01:53 | `d0dbe24b` | ROADMAP — L'ÉTAT DU 22/11 : LE 100 M BAT LE 34 M (30× MOINS DE JETONS VUS), PORTES 89/87, LE MOTEUR DE PENSÉE ET LA RSN POSÉS ; LA SYNTHÈSE DE LA NUIT EST LIÉE, LES BLOCS REDONDANTS RETIRÉS (BUDGET 9 000 TENU) |
 | 01:57 | `45dbd131` | JOURNAL — LE 22/11 RÉGÉNÉRÉ : 10 COMMITS, 5 THÈMES (MÉMOIRE, MESURES, MODÈLE, MOTEUR, PORTES), LES LIENS ET LES SESSIONS VÉRIFIÉS |
 | 02:02 | `e38f35b8` | BANC 612 — LE CONTRÔLE NÉGATIF : UN MODÈLE À POIDS ALÉATOIRES OBTIENT 0,711 DE MOTS VALIDES (PRESQUE LE 0,755 DU 100 M) MAIS 60/60 SORTIES NON-UTF-8 CONTRE 0 — LA MÉTRIQUE SEULE MENT, LE TAUX D'ENCODAGE DISCRIMINE |
+| 02:06 | `bbddfefa` | DIAGNOSTIC 16/11 RELU — LA NUIT LE CONFIRME ET LE CHIFFRE : LE 100 M SUR 1 GO PLAFONNE À 0,76 (LA BORNE VALIDE « 100-150 M SUR 3-6 GO »), « MOTS VALIDES » EST FAIBLE (LE HASARD FAIT 0,711), LA PRIORITÉ EST LA DONNÉE, PAS LA TAILLE |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -75960,3 +75960,138 @@ le DRVM et l'évaluation (ce banc) dès le début — pas la génération d'un 3
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-natif-exploitable.md'); t = p.read_text()\nbloc = \"\"\"\n## 6. Ce que la nuit du 21-22 a appris (le 22/11)\n\n**Trois faits mesurés qui précisent la conclusion du 1 … [2728 caractères tronqués]`
+
+  ```
+section apprise ajoutée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 9 files changed, 163 insertions(+), 14 deletions(-)
+bbddfefa DIAGNOSTIC 16/11 RELU — LA NUIT LE CONFIRME ET LE CHIFFRE : LE 100
+   e38f35b8..bbddfefa  s/v7 -> s/v7
+   e38f35b8..bbddfefa  master -> master
+dim 22 nov 2026 02:08:56 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Le diagnostic du 16/11 est relu à la lumière de la nuit — et la conclusion tient, chiffrée
+
+## Ce que la nuit a appris au diagnostic (committé `bbddfefa`)
+
+| la conclusion du 16/11 | ce que la nuit ajoute |
+|---|---|
+| « 100–150 M **sur 3–6 Go** » | **la borne** : le 100 M sur **1 Go** plafonne à **0,76** (3 k : 0,755 ; 30 k : 0,763 mais 29 non-UTF-8) — sans les 3–6 Go, il ne dépasse pas 0,76 |
+| « la qualité se paie en échelle + données + alignement » | **le chiffre** : le 100 M bat le 34 M de **9 points** avec **30× moins de jetons vus** — le levier est la **donnée** |
+| (le banc du futur palier) | **la leçon** : « mots valides » est faible (le hasard fait 0,711) ; le **taux d'encodage** discrimine (0 contre 60/60) |
+
+**La priorité change** : ce n'est plus « faire un plus gros modèle », c'est **trouver les 3–6 Go**. Le banc est prêt à mesurer le résultat.
+
+## L'état (02 h 10)
+
+`HEAD bbddfefa`, tout poussé. **24 commits** de nuit. Les tests (RSN 5/5, moteur 7/7, interface 3/3), les portes (89/87), le journal régénéré, la synthèse écrite.
+
+Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventaire des corpus disponibles** (ce que le dépôt a, ses licences, ses volumes) — c'est la préparation du palier « 3–6 Go », entièrement local, et ça répond à la question « où est la donnée ? ».
+
+
+## Tour 240
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 9/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; du -sh data/ 2>/dev/null; du -sh data/*/ 2>/dev/null | sort -rh | head -12; echo \"=== les corpus :\"; find data -name \"*.txt\" -size +1M 2>/dev/null | head -8 | xargs -I{} sh -c 'printf \"%.1f Go %s\\n\" $(stat -c%s {} | awk  … [87 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 02:09:29 EST
+137G	data/
+21G	data/corpus_wiki_en_texte/
+11G	data/corpus_wiki_ru_texte/
+10G	data/corpus_wiki_de_texte/
+9,3G	data/corpus_wiki_en/
+7,8G	data/corpus_wiki_fr_texte/
+6,9G	data/corpus_wiki_ja_texte/
+6,5G	data/wiki_mix_v2/
+6,4G	data/corpus_wiki_es_texte/
+5,0G	data/corpus_wiki_it_texte/
+4,9G	data/corpus_wiki_ru/
+4,5G	data/corpus_wiki_de/
+4,2G	data/corpus_wiki_ja/
+=== les corpus :
+0,0 Go data/corpus_en_val.txt
+0,0 Go data/corpus_en.txt
+0,0 Go data/corpus_fr.txt
+0,0 Go data/corpus_mixte.txt
+0,0 Go data/corpus_fr_litterature.txt
+0,0 Go data/corpus_mixte_litt.txt
+0,0 Go data/corpus_mixte_litt2.txt
+0,0 Go data/udhr/udhr_train.txt
+[exit code: 123]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && du -sh data/*/ 2>/dev/null | sort -rh | head -20; echo \"=== les fichiers texte > 100 Mo :\"; find data -name \"*.txt\" -size +100M 2>/dev/null | head -10; echo \"=== les licences :\"; find data -iname \"*licence*\" -o -iname \"*lice … [71 caractères tronqués]`
+
+  ```
+21G	data/corpus_wiki_en_texte/
+11G	data/corpus_wiki_ru_texte/
+10G	data/corpus_wiki_de_texte/
+9,3G	data/corpus_wiki_en/
+7,8G	data/corpus_wiki_fr_texte/
+6,9G	data/corpus_wiki_ja_texte/
+6,5G	data/wiki_mix_v2/
+6,4G	data/corpus_wiki_es_texte/
+5,0G	data/corpus_wiki_it_texte/
+4,9G	data/corpus_wiki_ru/
+4,5G	data/corpus_wiki_de/
+4,2G	data/corpus_wiki_ja/
+3,6G	data/corpus_wiki_fr_palier1/
+3,6G	data/corpus_wiki_fr/
+3,4G	data/corpus_wiki_ar_texte/
+3,0G	data/corpus_wiki_pt_texte/
+2,7G	data/wiki_big/
+2,7G	data/corpus_wiki_es/
+2,5G	data/corpus_wiki_zh_texte/
+2,3G	data/xnli/
+=== les fichiers texte > 100 Mo :
+data/corpus_multi.txt
+data/corpus_multi_train.txt
+data/corpus_wiki_fr/train.txt
+data/corpus_wiki_fr/val.txt
+data/corpus_wiki_fr/test.txt
+data/wiki_fr/articles.txt
+data/wiki_fr/propre/train.txt
+data/corpus_wiki_ar/train.txt
+data/corpus_wiki_de/train.txt
+data/corpus_wiki_de/val.txt
+=== les licences :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la data/corpus_wiki_fr_palier1/ 2>/dev/null | head -8 | awk '{printf \"%.2f Go %s\\n\", $5/1073741824, $9}'; du -sh data/corpus_wiki_fr_palier1/* 2>/dev/null | head -5; ls data/corpus_wiki_fr/ 2>/dev/null | head -5", "description … [29 caractères tronqués]`
+
+  ```
+0.00 Go 
+0.00 Go .
+0.00 Go ..
+0.04 Go test.txt
+3.44 Go train.txt
+0.07 Go val.txt
+37M	data/corpus_wiki_fr_palier1/test.txt
+3,5G	data/corpus_wiki_fr_palier1/train.txt
+73M	data/corpus_wiki_fr_palier1/val.txt
+test.txt
+train.txt
+val.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-corpus-disponibles.md <<'MD'\n# Les corpus disponibles — l'inventaire (le 22/11)\n\n> **Ce que ce document est.** L'**inventaire** des corpus présents dans `data/` (137 Go), avec leurs\n> volumes et ce qu'ils pe … [3454 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-corpus-disponibles.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"CORPUS — L'INVENTAIRE : 137 GO DANS DATA/, ET LE PALIER 1 (3,44 GO, CORPUS_WIKI_FR_PALIER1) EXISTE DÉJÀ ; LE VERROU N' … [381 caractères tronqués]`

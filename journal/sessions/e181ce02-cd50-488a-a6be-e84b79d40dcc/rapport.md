@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 513.4 h |
-| Tours | 239 |
-| Messages | 4715 |
-| Appels d'outils | 4178 |
+| Durée | 513.5 h |
+| Tours | 240 |
+| Messages | 4722 |
+| Appels d'outils | 4183 |
 | Fichiers touchés | 25 |
-| Commandes | 3495 |
+| Commandes | 3500 |
 | Sous-agents | 43 |
-| Commits | 555 |
+| Commits | 556 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -553,6 +553,8 @@
 **Tour 238** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 **Tour 239** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
+
+**Tour 240** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12561,6 +12563,36 @@ Il reste **5 h 55** avant 8 h. Je continue en local : la prochaine tranche utile
 - bash — Lire la conclusion du diagnostic
 - bash — Relire le diagnostic du 16/11
 
+**Synthèse produite :**
+
+⏵ Le diagnostic du 16/11 est relu à la lumière de la nuit — et la conclusion tient, chiffrée
+
+\## Ce que la nuit a appris au diagnostic (committé `bbddfefa`)
+
+| la conclusion du 16/11 | ce que la nuit ajoute |
+|---|---|
+| « 100–150 M **sur 3–6 Go** » | **la borne** : le 100 M sur **1 Go** plafonne à **0,76** (3 k : 0,755 ; 30 k : 0,763 mais 29 non-UTF-8) — sans les 3–6 Go, il ne dépasse pas 0,76 |
+| « la qualité se paie en échelle + données + alignement » | **le chiffre** : le 100 M bat le 34 M de **9 points** avec **30× moins de jetons vus** — le levier est la **donnée** |
+| (le banc du futur palier) | **la leçon** : « mots valides » est faible (le hasard fait 0,711) ; le **taux d'encodage** discrimine (0 contre 60/60) |
+
+**La priorité change** : ce n'est plus « faire un plus gros modèle », c'est **trouver les 3–6 Go**. Le banc est prêt à mesurer le résultat.
+
+\## L'état (02 h 10)
+
+`HEAD bbddfefa`, tout poussé. **24 commits** de nuit. Les tests (RSN 5/5, moteur 7/7, interface 3/3), les portes (89/87), le journal régénéré, la synthèse écrite.
+
+Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventaire des corpus disponibles** (ce que le dépôt a, ses licences, ses volumes) — c'est la préparation du palier « 3–6 Go », entièrement local, et ça répond à la question « où est la donnée ? ».
+
+### Tour 240 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Inventorier les corpus
+- bash — Détailler l'inventaire
+- bash — Voir le corpus palier 1
+- bash — Écrire l'inventaire des corpus
+- bash — Committer l'inventaire
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12681,7 +12713,7 @@ Il reste **5 h 55** avant 8 h. Je continue en local : la prochaine tranche utile
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3455 autres
+- … et 3460 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12809,7 +12841,7 @@ Il reste **5 h 55** avant 8 h. Je continue en local : la prochaine tranche utile
 
 ## 5. Erreurs rencontrées
 
-96 sorties en erreur ou divergentes. Les premières :
+97 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -13384,4 +13416,5 @@ Il reste **5 h 55** avant 8 h. Je continue en local : la prochaine tranche utile
 - JOURNAL — LE 22/11 RÉGÉNÉRÉ : 10 COMMITS, 5 THÈMES (MÉMOIRE, MESURES, MODÈLE, MOTEUR, PORTES), LES LIENS ET LES SESSIONS VÉRIFIÉS" 2>&1 | tail -1; git log -1 --
 - BANC 612 — LE CONTRÔLE NÉGATIF : UN MODÈLE À POIDS ALÉATOIRES OBTIENT 0,711 DE MOTS VALIDES (PRESQUE LE 0,755 DU 100 M) MAIS 60/60 SORTIES NON-UTF-8 CONTRE 0 — 
 - DIAGNOSTIC 16/11 RELU — LA NUIT LE CONFIRME ET LE CHIFFRE : LE 100 M SUR 1 GO PLAFONNE À 0,76 (LA BORNE VALIDE « 100-150 M SUR 3-6 GO »), « MOTS VALIDES » EST F
+- CORPUS — L'INVENTAIRE : 137 GO DANS DATA/, ET LE PALIER 1 (3,44 GO, CORPUS_WIKI_FR_PALIER1) EXISTE DÉJÀ ; LE VERROU N'EST PAS LA DONNÉE, C'EST LE NETTOYAGE (DÉD
 
