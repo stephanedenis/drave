@@ -43,3 +43,26 @@ est **meilleure** (3 contre 6).
 
 Le **même banc sur le 34 M** (le contrôle) et sur le **30 k** (le témoin du sur-apprentissage) :
 la comparaison des trois checkpoints sur **le même corpus** donnera la vraie courbe.
+## 5. Le deuxième témoin : le 30 k sur le même banc
+
+| checkpoint | mots valides | répétition | **non-UTF-8** | octets/s |
+|---|---:|---:|---:|---:|
+| 3 000 pas | 0,755 | 3 | **0** | 127,5 |
+| **30 000 pas** | **0,763** | 3 | **29** | 116,3 |
+
+**Le résultat surprenant** : sur les **602 phrases réelles**, le 30 k fait **légèrement mieux**
+(0,763 contre 0,755) — alors que sur les 20 prompts du banc de style, il fait **beaucoup moins bien**
+(0,501 contre 0,882).
+
+**L'explication la plus probable** : le banc de style mesure la **créativité** (des prompts courts,
+le modèle doit inventer) ; le banc 612 mesure la **continuité** (l'amorce est une vraie phrase, le
+modèle prolonge). Le sur-apprenti **prolonge** mieux une phrase connue, mais **invente** moins bien.
+Ce n'est pas une contradiction : c'est **deux mesures différentes**.
+
+**Le signal d'alerte** : les **29 sorties non-UTF-8** du 30 k (contre 0 pour le 3 k) — le
+sur-apprentissage produit des séquences d'octets invalides. C'est un défaut **mesuré**, pas une
+impression.
+
+**La conclusion** : le **3 k reste la référence** (0 dérive, meilleure créativité) ; le **30 k est
+le témoin** (meilleure continuité, dérive d'encodage). Les deux mesures sont nécessaires — un banc
+unique mentirait.

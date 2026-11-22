@@ -75264,3 +75264,62 @@ gold gelé (602 phrases)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-banc-612.md <<'MD'\n# Le banc du modèle natif sur le gold gelé (602 phrases)\n\n> **Ce que ce document est.** La génération du 100 M (checkpoint 3 000 pas, le meilleur) sur les\n> **602 phrases du gold gelé** —  … [3471 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 tools/banc_612.py
+3590e78b BANC 612 — LE 100 M (3 000 PAS) SUR LES 602 PHRASES DU GOLD GELÉ :
+   06bf2cc2..3590e78b  s/v7 -> s/v7
+   06bf2cc2..3590e78b  master -> master
+dim 22 nov 2026 01:26:06 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n2ac/*.pt | head -6; timeout 1800 env PYTHONPATH=. /tmp/venv-gpu/bin/python tools/banc_612.py --modele work/n2ac/mix1024-100m-30k.pt --n 16 --device cuda --json > reports/banc-612-30k.json 2>/tmp/banc612b.err; tail -8 reports … [131 caractères tronqués]`
+
+  ```
+work/n2ac/absolu-pos1152.pt
+work/n2ac/cap-1147m-128.pt
+work/n2ac/cap-1147m-512.pt
+work/n2ac/cap-2165m-128.pt
+work/n2ac/cap-2165m-512.pt
+work/n2ac/init-figee.pt
+  "sorties_non_utf8": 29,
+  "sorties": 602,
+  "phrases": 602,
+  "octets_s": 116.3,
+  "s": 82.8,
+  "modele": "work/n2ac/mix1024-100m-30k.pt",
+  "lexique": 769
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat reports/banc-612-30k.json; echo \"=== les 3k :\"; cat reports/banc-612.json | head -8; ls work/n2ac/*60k*.pt work/n2ac/*34*.pt work/n2ac/*n0*.pt 2>/dev/null | head -4", "description": "Comparer les deux bancs"}`
+
+  ```
+{
+  "mots": 3801,
+  "mots_valides": 0.7632,
+  "repetition_2grammes": 3,
+  "sorties_non_utf8": 29,
+  "sorties": 602,
+  "phrases": 602,
+  "octets_s": 116.3,
+  "s": 82.8,
+  "modele": "work/n2ac/mix1024-100m-30k.pt",
+  "lexique": 769
+}
+=== les 3k :
+{
+  "mots": 6087,
+  "mots_valides": 0.7552,
+  "repetition_2grammes": 3,
+  "sorties_non_utf8": 0,
+  "sorties": 602,
+  "phrases": 602,
+  "octets_s": 127.5,
+work/n2ac/mix1024-60k.pt
+work/n2ac/propre-3430m-512z.pt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-banc-612.md'); t = p.read_text()\nbloc = \"\"\"\n## 5. Le deuxième témoin : le 30 k sur le même banc\n\n| checkpoint | mots valides | répétition | **non-UTF-8** | oc … [2648 caractères tronqués]`
