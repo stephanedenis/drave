@@ -73994,3 +73994,102 @@ MOTEUR : 5/5 invariants d'anti-boucle
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1163 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+ create mode 100644 tools/moteur_pensee.py
+ create mode 100644 tools/tests/test_moteur.py
+b3ace802 MOTEUR DE PENSÉE — L'ANTI-BOUCLE MESURÉE : LE VISITED EXPLICITE, LA NOUVEAUT
+   1da43ffa..b3ace802  s/v7 -> s/v7
+   1da43ffa..b3ace802  master -> master
+sam 21 nov 2026 13:21:59 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ C'est implémenté et mesuré — la boucle ne tourne plus en rond sans le dire
+
+## Les cinq gardes (`tools/moteur_pensee.py`, committé `b3ace802`)
+
+| garde | ce qu'elle fait | ce qu'elle compte |
+|---|---|---|
+| **le `visited` explicite** | un état **exploré** n'est jamais ré-empilé (par son empreinte) | les répétitions évitées |
+| **la nouveauté** | `nouveaux/(nouveaux+répétitions+échecs)` ; **sous 0,30 → arrêt** | le taux de nouveauté |
+| **la mémoire des échecs** | un état `refute` est **exclu avant** d'être empilé | les échecs évités |
+| **trois terminaisons** | le **budget**, le **fixpoint**, la **contradiction** (p et non-p) | la raison de la fin |
+| **la trace** | chaque pas écrit (nouveau / déjà vu / échec / réfuté), rejouable | les pas |
+
+## La mesure — les quatre cas
+
+| cas | nouveaux | répétitions évitées | échecs évités | contradictions | nouveauté | terminaison |
+|---|---:|---:|---:|---:|---:|---|
+| **l'identité** (la boucle pure) | 1 | **1** | 0 | 0 | 0,50 | fixpoint |
+| **le progrès** (n → n+1) | 21 | 0 | 0 | 0 | **1,00** | budget |
+| **l'échec connu** | 2 | 0 | **1** | 0 | 0,67 | fixpoint |
+| **la contradiction** | 1 | 0 | 0 | **1** | 1,00 | contradiction |
+
+**La lecture** : la boucle pure s'**arrête** au fixpoint après **une** exploration (la répétition est comptée) ; le progrès a un taux de **1,0** ; l'échec est **mémorisé** ; la contradiction **arrête** le moteur. Chaque garde a son cas, chaque cas est **mesuré**.
+
+## Les tests
+
+`tools/tests/test_moteur.py` : **5/5** — la boucle pure, le progrès, la mémoire des échecs, la contradiction, la trace (10 pas, gardes `{nouveau, deja_vu}`).
+
+## Ce que ça garantit — et ce que ça ne garantit pas
+
+**Garantit** : un état exploré n'est plus jamais traité comme neuf ; les échecs sont évités ; la fin est **nommée** ; tout est **tracé**.
+
+**Ne garantit pas** : que le moteur **atteigne** le but (il peut s'arrêter au budget) ; que le **score** soit bon (il est fourni, pas appris) ; que la **stratégie** soit optimale (le tas est ordonné par le score, la politique reste à écrire).
+
+## Le chemin
+
+1. **Le branchement sur l'interface** : le moteur consomme les cinq verbes (`assert`/`query`/`promote`/`explain`/`context`) — aujourd'hui il prend des `Etat` bruts.
+2. **La stratégie** : le portefeuille (BFS, DFS, A*, MCTS) — le `select`/`expand` du contrat.
+3. **Le test sur une question réelle** (la RSN du 21/11), avec le taux de nouveauté à chaque pas — c'est la **vraie** mesure de « réfléchir sans tourner en rond ».
+
+**Le bilan honnête** : la réponse à votre question est maintenant **oui pour l'anti-boucle** (elle est mesurée), et **non pour la réflexion complète** — il manque encore l'opérateur appris, le score, et le gold de pensée. Mais la **garde** qui empêche l'illusion de progrès existe, et elle est testée.
+
+
+## Tour 230
+
+### 👤 Utilisateur
+
+continue en mode léger (IA de nuit)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; cat >> tools/moteur_pensee.py <<'PY'\n\n\n# ---------------------------------------------------------------------------\n# Les stratégies (le portefeuille du contrat : select / expand / score)\n# ------------------------------- … [1561 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 20:08:03 EST
+syntaxe OK
+OK trace : 10 pas tracés, gardes ['deja_vu', 'nouveau']
+MOTEUR : 5/5 invariants d'anti-boucle
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/moteur_pensee.py'); t = p.read_text()\nt = t.replace('''    def json(self) -> dict:\n        return {\"empreinte\": self.empreinte[:16], \"corps\": self.corps,\n               … [836 caractères tronqués]`
+
+  ```
+successeurs ajouté
+OK trace : 10 pas tracés, gardes ['deja_vu', 'nouveau']
+MOTEUR : 5/5 invariants d'anti-boucle
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> tools/tests/test_moteur.py <<'PY'\n\n\ndef test_strategies():\n    from tools.moteur_pensee import BFS, DFS, Glouton\n    frontiere = [(-1.0, 1, Etat(empreinte=\"a\", corps={\"n\": 1})),\n                 (-0.5, 2, Etat(emprei … [1082 caractères tronqués]`
+
+  ```
+test_strategies()
+    ^^^^^^^^^^^^^^^
+NameError: name 'test_strategies' is not defined
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('tools/tests/test_moteur.py'); t = p.read_text()\n# retirer la fonction de la fin\nm = re.search(r\"\\n\\ndef test_strategies\\(\\):\\n(?:.*\\n)*?    print\\(\\\"OK stratégies.*\ … [419 caractères tronqués]`
+
+  ```
+fonction déplacée
+OK trace : 10 pas tracés, gardes ['deja_vu', 'nouveau']
+OK stratégies : BFS (ancien), DFS (récent), Glouton (meilleur)
+MOTEUR : 6/6 invariants (5 anti-boucle + les stratégies)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-21, 20 h 15 HNE (les stratégies du moteur : BFS, DFS, glouton — … [727 caractères tronqués]`

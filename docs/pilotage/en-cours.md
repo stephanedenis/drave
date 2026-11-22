@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-21, 13 h 35 HNE (le moteur de pensée : l'anti-boucle mesurée — 5 gardes, 5/5 invariants)**
+**Mis à jour : 2026-11-21, 20 h 15 HNE (les stratégies du moteur : BFS, DFS, glouton — 6/6 invariants ; mode léger)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

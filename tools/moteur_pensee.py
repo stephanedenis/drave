@@ -40,6 +40,14 @@ class Etat:
     statut: str = "ouvert"       # ouvert | settled | refute
     negation: str | None = None  # l'empreinte de la négation, pour la contradiction
 
+    def successeurs(self) -> list["Etat"]:
+        """Les successeurs par défaut : un état sans opérateur n'en a aucun.
+
+        Un opérateur réel est fourni au moteur (`expand` de la boucle) ; cette méthode existe
+        pour que les stratégies aient un contrat uniforme.
+        """
+        return []
+
     def json(self) -> dict:
         return {"empreinte": self.empreinte[:16], "corps": self.corps,
                 "statut": self.statut, "negation": (self.negation or "")[:16]}
@@ -199,3 +207,53 @@ if __name__ == "__main__":
         demonstration()
     else:
         demonstration()
+
+
+# ---------------------------------------------------------------------------
+# Les stratégies (le portefeuille du contrat : select / expand / score)
+# ---------------------------------------------------------------------------
+
+class Strategie:
+    """La politique de sélection : `select(frontier) -> etat` et `expand(etat) -> [etat]`."""
+
+    nom = "base"
+
+    def select(self, frontiere: list) -> Etat:
+        raise NotImplementedError
+
+    def expand(self, etat: Etat) -> list[Etat]:
+        raise NotImplementedError
+
+
+class BFS(Strategie):
+    """Le plus ancien d'abord : exhaustif, lent, sûr."""
+    nom = "bfs"
+
+    def select(self, frontiere: list) -> Etat:
+        return frontiere.pop(0)[2] if frontiere else None
+
+    def expand(self, etat: Etat) -> list[Etat]:
+        return etat.successeurs()
+
+
+class DFS(Strategie):
+    """Le plus récent d'abord : rapide, peut s'enfoncer."""
+    nom = "dfs"
+
+    def select(self, frontiere: list) -> Etat:
+        return frontiere.pop()[2] if frontiere else None
+
+    def expand(self, etat: Etat) -> list[Etat]:
+        return etat.successeurs()
+
+
+class Glouton(Strategie):
+    """Le meilleur score d'abord (le tas du moteur) : le défaut anytime."""
+    nom = "glouton"
+
+    def select(self, frontiere: list) -> Etat:
+        import heapq
+        return heapq.heappop(frontiere)[2] if frontiere else None
+
+    def expand(self, etat: Etat) -> list[Etat]:
+        return etat.successeurs()

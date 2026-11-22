@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 500.6 h |
-| Tours | 229 |
-| Messages | 4542 |
-| Appels d'outils | 4042 |
+| Durée | 507.5 h |
+| Tours | 230 |
+| Messages | 4549 |
+| Appels d'outils | 4047 |
 | Fichiers touchés | 25 |
-| Commandes | 3364 |
+| Commandes | 3369 |
 | Sous-agents | 43 |
-| Commits | 532 |
+| Commits | 533 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -531,6 +531,8 @@
 **Tour 228** — est-ce suffisant pour réfléchir (itérer sans tourner en rond)?
 
 **Tour 229** — implémente ça
+
+**Tour 230** — continue en mode léger (IA de nuit)
 
 ## 2. Déroulé, étape par étape
 
@@ -12118,6 +12120,58 @@ La différence entre **itérer** et **tourner en rond** n'est pas la structure (
 - bash — Écrire la fiche anti-boucle
 - bash — Committer l'anti-boucle
 
+**Synthèse produite :**
+
+⏵ C'est implémenté et mesuré — la boucle ne tourne plus en rond sans le dire
+
+\## Les cinq gardes (`tools/moteur_pensee.py`, committé `b3ace802`)
+
+| garde | ce qu'elle fait | ce qu'elle compte |
+|---|---|---|
+| **le `visited` explicite** | un état **exploré** n'est jamais ré-empilé (par son empreinte) | les répétitions évitées |
+| **la nouveauté** | `nouveaux/(nouveaux+répétitions+échecs)` ; **sous 0,30 → arrêt** | le taux de nouveauté |
+| **la mémoire des échecs** | un état `refute` est **exclu avant** d'être empilé | les échecs évités |
+| **trois terminaisons** | le **budget**, le **fixpoint**, la **contradiction** (p et non-p) | la raison de la fin |
+| **la trace** | chaque pas écrit (nouveau / déjà vu / échec / réfuté), rejouable | les pas |
+
+\## La mesure — les quatre cas
+
+| cas | nouveaux | répétitions évitées | échecs évités | contradictions | nouveauté | terminaison |
+|---|---:|---:|---:|---:|---:|---|
+| **l'identité** (la boucle pure) | 1 | **1** | 0 | 0 | 0,50 | fixpoint |
+| **le progrès** (n → n+1) | 21 | 0 | 0 | 0 | **1,00** | budget |
+| **l'échec connu** | 2 | 0 | **1** | 0 | 0,67 | fixpoint |
+| **la contradiction** | 1 | 0 | 0 | **1** | 1,00 | contradiction |
+
+**La lecture** : la boucle pure s'**arrête** au fixpoint après **une** exploration (la répétition est comptée) ; le progrès a un taux de **1,0** ; l'échec est **mémorisé** ; la contradiction **arrête** le moteur. Chaque garde a son cas, chaque cas est **mesuré**.
+
+\## Les tests
+
+`tools/tests/test_moteur.py` : **5/5** — la boucle pure, le progrès, la mémoire des échecs, la contradiction, la trace (10 pas, gardes `{nouveau, deja_vu}`).
+
+\## Ce que ça garantit — et ce que ça ne garantit pas
+
+**Garantit** : un état exploré n'est plus jamais traité comme neuf ; les échecs sont évités ; la fin est **nommée** ; tout est **tracé**.
+
+**Ne garantit pas** : que le moteur **atteigne** le but (il peut s'arrêter au budget) ; que le **score** soit bon (il est fourni, pas appris) ; que la **stratégie** soit optimale (le tas est ordonné par le score, la politique reste à écrire).
+
+\## Le chemin
+
+1. **Le branchement sur l'interface** : le moteur consomme les cinq verbes (`assert`/`query`/`promote`/`explain`/`context`) — aujourd'hui il prend des `Etat` bruts.
+2. **La stratégie** : le portefeuille (BFS, DFS, A*, MCTS) — le `select`/`expand` du contrat.
+3. **Le test sur une question réelle** (la RSN du 21/11), avec le taux de nouveauté à chaque pas — c'est la **vraie** mesure de « réfléchir sans tourner en rond 
+… [305 caractères tronqués]
+
+### Tour 230 — continue en mode léger (IA de nuit)
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Ajouter les stratégies
+- bash — Compléter le contrat des stratégies
+- bash — Tester les stratégies
+- bash — Corriger l'ordre des tests
+- bash — Committer les stratégies
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12238,7 +12292,7 @@ La différence entre **itérer** et **tourner en rond** n'est pas la structure (
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3324 autres
+- … et 3329 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12918,4 +12972,5 @@ La différence entre **itérer** et **tourner en rond** n'est pas la structure (
 - RSN, LES TRAVAUX COMPARABLES — LE DÉCOUPLAGE SAVOIR/RAISONNEMENT (WANG 2026), LA STRATIFICATION (NIPADA), LES ASSISTANTS DE PREUVE, PSL, ZADEH, PROBLOG, RDF-STA
 - INTERFACE RSN — CINQ VERBES (ASSERT, QUERY, PROMOTE, EXPLAIN, CONTEXT), SIX PARADIGMES (FORMEL, FLOU, PROBABILISTE, PROVENANCE, TMS, DUNG), LE TEST DE CONFORMIT
 - MOTEUR DE PENSÉE — L'ANTI-BOUCLE MESURÉE : LE VISITED EXPLICITE, LA NOUVEAUTÉ COMPTÉE (SEUIL 0,30), LA MÉMOIRE DES ÉCHECS, TROIS TERMINAISONS (BUDGET, FIXPOINT,
+- MOTEUR, LES STRATÉGIES — BFS (LE PLUS ANCIEN), DFS (LE PLUS RÉCENT), GLOUTON (LE MEILLEUR SCORE) ; LE CONTRAT UNIFORME (select/expand) ET 6/6 INVARIANTS (MODE L
 

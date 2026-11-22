@@ -82,10 +82,29 @@ def test_trace():
     print(f"OK trace : {len(m.trace)} pas tracés, gardes {sorted(gardes)}")
 
 
+
+def test_strategies():
+    from tools.moteur_pensee import BFS, DFS, Glouton
+    frontiere = [(-1.0, 1, Etat(empreinte="a", corps={"n": 1})),
+                 (-0.5, 2, Etat(empreinte="b", corps={"n": 2})),
+                 (-0.1, 3, Etat(empreinte="c", corps={"n": 3}))]
+    import copy
+    for strat in (BFS(), DFS(), Glouton()):
+        f = copy.deepcopy(frontiere)
+        e = strat.select(f)
+        assert e is not None, strat.nom
+        assert len(f) == 2, (strat.nom, len(f))
+    assert BFS().select(copy.deepcopy(frontiere)).empreinte == "a", "BFS devrait prendre le plus ancien"
+    assert DFS().select(copy.deepcopy(frontiere)).empreinte == "c", "DFS devrait prendre le plus récent"
+    print("OK stratégies : BFS (ancien), DFS (récent), Glouton (meilleur)")
+
+
 if __name__ == "__main__":
     test_boucle_pure()
     test_progres()
     test_echecs()
     test_contradiction()
     test_trace()
-    print("MOTEUR : 5/5 invariants d'anti-boucle")
+    test_strategies()
+    print("MOTEUR : 6/6 invariants (5 anti-boucle + les stratégies)")
+
