@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 01 h 48 HNE (le terrain des portes rouges : models/ n'a que le 0,5 B — les deux portes sont rouges par construction, pas par défaut de code)**
+**Mis à jour : 2026-11-22, 01 h 55 HNE (la synthèse de la nuit : 18 commits, trois résultats mesurés, deux portes rouges closes)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -61,7 +61,7 @@
 |---|---|---|
 | portes | **91** (dont `porte-a2.6-experts` le 18/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **831** / **1146** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **832** / **1146** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **131** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **21/11 04 h 10 → 06 h 12** : **91** portes, **88/3** — `indice` (848 s) et `melange` (105 s) structurelles, et `sessions` **rouge** (heartbeat de S périmé de 1 305 min), **corrigé et re-vérifié vert** ; machine chargée (deux runs) | `work/portes/roue-1121-0410/registre.txt` |
 

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 513.0 h |
-| Tours | 236 |
-| Messages | 4679 |
-| Appels d'outils | 4148 |
+| Durée | 513.1 h |
+| Tours | 237 |
+| Messages | 4684 |
+| Appels d'outils | 4151 |
 | Fichiers touchés | 25 |
-| Commandes | 3465 |
+| Commandes | 3468 |
 | Sous-agents | 43 |
-| Commits | 550 |
+| Commits | 551 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -547,6 +547,8 @@
 **Tour 235** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 **Tour 236** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
+
+**Tour 237** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12438,6 +12440,37 @@ Le sur-apprenti **prolonge** mieux une phrase connue mais **invente** moins bien
 - bash — Voir les modèles disponibles
 - bash — Committer l'état du terrain
 
+**Synthèse produite :**
+
+⏵ Le diagnostic des portes rouges est clos — et il est net
+
+\## La chaîne complète du diagnostic (commits `0559d721` → `49931b79`)
+
+1. **`porte-melange`** : la calibration échoue — aucune des quatre positions de fin ne porte le code dans une invite sans code. La porte a **raison** de dire « le mélange ne pourrait rien dire ».
+2. **`porte-indice`** : les états sont capturés (positions 1439/1469), mais la section 3 ne conclut pas — la mémoire interroge A et le modèle ne répond pas de façon stable.
+3. **La cause commune** : les deux portes testent **`Qwen2.5-0.5B`** — un modèle de **démonstration**, pas de raisonnement. Aucune position ne porte le code, la mémoire ne conclut pas : la capacité n'est pas là.
+4. **Le terrain** : `models/` ne contient que **deux quantifications du même 0,5 B** (`Q4_0`, `Q8_0`) et un dossier `vision/`. **Aucun 7 B, aucun 14 B local.**
+
+**La conclusion** : les deux portes sont rouges **par construction du terrain**, pas par défaut de code. Les rendre vertes demande de **télécharger un modèle** — une **décision humaine** (la règle 11), pas un agent. **Il n'y a rien à corriger dans les scripts.**
+
+\## L'état du mode nuit (01 h 44)
+
+`HEAD 49931b79`, tout poussé. **13 tranches** livrées depuis le lancement : le 100 M (3 k et 30 k), les 3 bancs (style, 612, 3 témoins), les portes (89/87), les tests (RSN, moteur, interface, branchement), la RSN, les stratégies, la passerelle, les 2 diagnostics.
+
+\## La suite
+
+Il reste **6 h 15** avant 8 h. Les tranches locales utiles : la **synthèse de la nuit** (une fiche qui récapitule les 13 tranches et les résultats mesurés), le **rangement des journaux**, et la **mise à jour de la roadmap** (marquer ce qui est fait, désigner la prochaine action de chaque chantier).
+
+Je continue, zéro API, et je commit chaque tranche.
+
+### Tour 237 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Lister les commits de la nuit
+- bash — Écrire la synthèse de la nuit
+- bash — Committer la synthèse
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12558,7 +12591,7 @@ Le sur-apprenti **prolonge** mieux une phrase connue mais **invente** moins bien
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3425 autres
+- … et 3428 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13256,4 +13289,5 @@ Le sur-apprenti **prolonge** mieux une phrase connue mais **invente** moins bien
 - PORTES ROUGES — LA CAUSE COMMUNE : LES DEUX PORTES TESTENT QWEN2.5-0.5B, UN MODÈLE DE DÉMONSTRATION ; AUCUNE POSITION NE PORTE LE CODE (MELANGE) ET LA MÉMOIRE N
 - PORTES ROUGES — LE TERRAIN : MODELS/ N'A QUE DEUX QUANTIFICATIONS DU 0,5 B (Q4_0, Q8_0) ET UN DOSSIER VISION ; AUCUN 7 B NI 14 B LOCAL — LES DEUX PORTES SONT RO
 - PORTES ROUGES — LE TERRAIN : MODELS/ N'A QUE DEUX QUANTIFICATIONS DU 0,5 B (Q4_0, Q8_0) ET UN DOSSIER VISION ; AUCUN 7 B NI 14 B LOCAL — LES DEUX PORTES SONT RO
+- NUIT 21-22 — LA SYNTHÈSE : 18 COMMITS, LES TROIS RÉSULTATS (L'ÉCHELLE PAIE PAR JETON VU, LA DÉRIVE EST UN PROBLÈME DE DONNÉES, DEUX BANCS DEUX VÉRITÉS), LES DEU
 

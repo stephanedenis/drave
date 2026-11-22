@@ -75487,3 +75487,75 @@ dim 22 nov 2026 01:41:21 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 01 h 48 HNE (le terrain des portes rouges : models/ n'a que … [713 caractères tronqués]`
+
+  ```
+8 files changed, 66 insertions(+), 13 deletions(-)
+49931b79 PORTES ROUGES — LE TERRAIN : MODELS/ N'A QUE DEUX QUANTIFICATIONS 
+   78ba486c..49931b79  s/v7 -> s/v7
+   78ba486c..49931b79  master -> master
+dim 22 nov 2026 01:44:04 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Le diagnostic des portes rouges est clos — et il est net
+
+## La chaîne complète du diagnostic (commits `0559d721` → `49931b79`)
+
+1. **`porte-melange`** : la calibration échoue — aucune des quatre positions de fin ne porte le code dans une invite sans code. La porte a **raison** de dire « le mélange ne pourrait rien dire ».
+2. **`porte-indice`** : les états sont capturés (positions 1439/1469), mais la section 3 ne conclut pas — la mémoire interroge A et le modèle ne répond pas de façon stable.
+3. **La cause commune** : les deux portes testent **`Qwen2.5-0.5B`** — un modèle de **démonstration**, pas de raisonnement. Aucune position ne porte le code, la mémoire ne conclut pas : la capacité n'est pas là.
+4. **Le terrain** : `models/` ne contient que **deux quantifications du même 0,5 B** (`Q4_0`, `Q8_0`) et un dossier `vision/`. **Aucun 7 B, aucun 14 B local.**
+
+**La conclusion** : les deux portes sont rouges **par construction du terrain**, pas par défaut de code. Les rendre vertes demande de **télécharger un modèle** — une **décision humaine** (la règle 11), pas un agent. **Il n'y a rien à corriger dans les scripts.**
+
+## L'état du mode nuit (01 h 44)
+
+`HEAD 49931b79`, tout poussé. **13 tranches** livrées depuis le lancement : le 100 M (3 k et 30 k), les 3 bancs (style, 612, 3 témoins), les portes (89/87), les tests (RSN, moteur, interface, branchement), la RSN, les stratégies, la passerelle, les 2 diagnostics.
+
+## La suite
+
+Il reste **6 h 15** avant 8 h. Les tranches locales utiles : la **synthèse de la nuit** (une fiche qui récapitule les 13 tranches et les résultats mesurés), le **rangement des journaux**, et la **mise à jour de la roadmap** (marquer ce qui est fait, désigner la prochaine action de chaque chantier).
+
+Je continue, zéro API, et je commit chaque tranche.
+
+
+## Tour 237
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 6/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log --oneline 44fb939c..HEAD | head -20 | cut -c1-95", "description": "Lister les commits de la nuit"}`
+
+  ```
+dim 22 nov 2026 01:44:44 EST
+49931b79 PORTES ROUGES — LE TERRAIN : MODELS/ N'A QUE DEUX QUANTIFICATIONS DU 0,5 B (Q4_0, Q8_0
+78ba486c PORTES ROUGES — LA CAUSE COMMUNE : LES DEUX PORTES TESTENT QWEN2.5-0.5B, UN MODÈLE DE 
+6e8bfec7 BANC 612 — LE CLASSEMENT DES TROIS TÉMOINS : 34 M 0,666 · 100 M 3k 0,755 · 100 M 30k 0
+deedbb18 BANC 612 — LE TÉMOIN 30 K : 0,763 CONTRE 0,755 AU 3 K SUR LES PHRASES RÉELLES (LA CONT
+3590e78b BANC 612 — LE 100 M (3 000 PAS) SUR LES 602 PHRASES DU GOLD GELÉ : 0,755 DE MOTS VALID
+06bf2cc2 100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTILE EST CELUI DE 3 000 PAS (0,882), 
+0559d721 PORTES ROUGES — LE DIAGNOSTIC : MELANGE NE CALIBRE PAS (L'ÉTAT NE REND PAS LE CODE DAN
+aee709d9 PORTES — LA PASSE DE NUIT : 89 PORTES, 87 VERTES, 2 ROUGES STRUCTURELLES TOLÉRÉES (IND
+41270f1f 100 M À 30 000 PAS — LE RÉSULTAT HONNÊTE : PPL 2,944 (L'HYPOTHÈSE ÉTAIT < 2,0), BANC 0
+ba112663 RUN 100 M — LA FICHE AVEC LES HYPOTHÈSES ÉCRITES D'AVANCE (PPL < 2,0, MOTS ≥ 0,90, RÉP
+30a4d98a PASSERELLE — L'ANNOTATION ENTRE DANS L'INTERFACE : 51 AFFIRMATIONS TYPÉES AVEC LEUR CO
+37216f50 BANC — LE 100 M À 3 000 PAS EST MESURÉ DANS LE RAPPORT : 0,882 MOTS VALIDES (LE 34 M À
+79a4f5a4 MOTEUR — L
+… [748 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-nuit-21-22.md <<'MD'\n# La nuit du 21 au 22 novembre — ce qui a été mesuré, écrit, committé\n\n> **Ce que ce document est.** La **synthèse** de la session de nuit (21/11 20 h → 22/11 08 h) :\n> les tranches, les … [5014 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-nuit-21-22.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"NUIT 21-22 — LA SYNTHÈSE : 18 COMMITS, LES TROIS RÉSULTATS (L'ÉCHELLE PAIE PAR JETON VU, LA DÉRIVE EST UN PROBLÈME DE DONNÉES, … [394 caractères tronqués]`
