@@ -66,3 +66,21 @@ impression.
 **La conclusion** : le **3 k reste la référence** (0 dérive, meilleure créativité) ; le **30 k est
 le témoin** (meilleure continuité, dérive d'encodage). Les deux mesures sont nécessaires — un banc
 unique mentirait.
+## 6. Le troisième témoin : le 34 M sur le même banc
+
+| checkpoint | paramètres | mots valides | répétition | non-UTF-8 | octets/s |
+|---|---:|---:|---:|---:|---:|
+| 34 M (30 k pas, `n0-rope`) | 34,3 M | **0,666** | 3 | 3 | 107,4 |
+| **100 M (3 000 pas)** | 96,7 M | **0,755** | 3 | **0** | 127,5 |
+| 100 M (30 000 pas) | 96,7 M | 0,763 | 3 | 29 | 116,3 |
+
+**Le classement** : le 100 M **bat le 34 M de 9 points** (0,755 contre 0,666) sur les phrases
+réelles — et le 100 M n'a vu que **0,24 jeton/paramètre** contre **7,2** pour le 34 M. C'est la
+**confirmation** de la thèse du 16/11 : **l'échelle paie par jeton vu**.
+
+**Le détail qui nuance** : le 34 M est **stable** (3 non-UTF-8 seulement), le 100 M à 3 000 pas est
+**parfaitement propre** (0), et le 100 M à 30 000 pas **dérive** (29). Le sur-apprentissage n'est
+pas la taille : c'est le **ratio données/paramètres**.
+
+**Le protocole est reproductible** : le même outil (`tools/banc_612.py`), les mêmes 602 phrases,
+le même lexique (769 mots), sur les trois checkpoints.

@@ -1,0 +1,12 @@
+{
+  "mots": 5665,
+  "mots_valides": 0.6665,
+  "repetition_2grammes": 3,
+  "sorties_non_utf8": 3,
+  "sorties": 602,
+  "phrases": 602,
+  "octets_s": 107.4,
+  "s": 89.7,
+  "modele": "work/n2ac/mix1024-60k.pt",
+  "lexique": 769
+}

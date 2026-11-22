@@ -75323,3 +75323,34 @@ work/n2ac/propre-3430m-512z.pt
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-banc-612.md'); t = p.read_text()\nbloc = \"\"\"\n## 5. Le deuxième témoin : le 30 k sur le même banc\n\n| checkpoint | mots valides | répétition | **non-UTF-8** | oc … [2648 caractères tronqués]`
+
+  ```
+section 30k ajoutée
+     · compteurs : en-cours.md dit 1144 JSON, le disque en a 1145
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 reports/banc-612-30k.json
+deedbb18 BANC 612 — LE TÉMOIN 30 K : 0,763 CONTRE 0,755 AU 3 K SUR LES PHRA
+   3590e78b..deedbb18  s/v7 -> s/v7
+   3590e78b..deedbb18  master -> master
+dim 22 nov 2026 01:31:09 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; timeout 1800 env PYTHONPATH=. /tmp/venv-gpu/bin/python tools/banc_612.py --modele work/n2ac/mix1024-60k.pt --n 16 --device cuda --json > reports/banc-612-34m.json 2>/tmp/banc612c.err; tail -12 reports/banc-612-34m.json 2>/dev/n … [104 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 01:31:28 EST
+{
+  "mots": 5665,
+  "mots_valides": 0.6665,
+  "repetition_2grammes": 3,
+  "sorties_non_utf8": 3,
+  "sorties": 602,
+  "phrases": 602,
+  "octets_s": 107.4,
+  "s": 89.7,
+  "modele": "work/n2ac/mix1024-60k.pt",
+  "lexique": 769
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-banc-612.md'); t = p.read_text()\nbloc = \"\"\"\n## 6. Le troisième témoin : le 34 M sur le même banc\n\n| checkpoint | paramètres | mots valides | répétition | non- … [2472 caractères tronqués]`

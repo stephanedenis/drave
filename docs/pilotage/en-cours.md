@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 01 h 40 HNE (le banc 612 : le 30 k fait 0,763 contre 0,755 au 3 k — mais 29 sorties non-UTF-8 contre 0 : deux mesures, deux vérités)**
+**Mis à jour : 2026-11-22, 01 h 50 HNE (les trois témoins sur le banc 612 : 34 M 0,666 ; 100 M 3k 0,755 ; 100 M 30k 0,763 — l'échelle paie par jeton vu, la dérive vient du ratio données/paramètres)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -61,7 +61,7 @@
 |---|---|---|
 | portes | **91** (dont `porte-a2.6-experts` le 18/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **831** / **1145** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **831** / **1146** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **131** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **21/11 04 h 10 → 06 h 12** : **91** portes, **88/3** — `indice` (848 s) et `melange` (105 s) structurelles, et `sessions` **rouge** (heartbeat de S périmé de 1 305 min), **corrigé et re-vérifié vert** ; machine chargée (deux runs) | `work/portes/roue-1121-0410/registre.txt` |
 

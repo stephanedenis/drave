@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 512.8 h |
+| Durée | 512.9 h |
 | Tours | 235 |
-| Messages | 4668 |
-| Appels d'outils | 4139 |
+| Messages | 4670 |
+| Appels d'outils | 4141 |
 | Fichiers touchés | 25 |
-| Commandes | 3456 |
+| Commandes | 3458 |
 | Sous-agents | 43 |
-| Commits | 546 |
+| Commits | 547 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -12381,7 +12381,7 @@ Je continue et je commit chaque tranche.
 
 ### Tour 235 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état et le gold
 - bash — Créer le banc 612 et le tester
@@ -12393,6 +12393,8 @@ Je continue et je commit chaque tranche.
 - bash — Banc 612 sur le 30k
 - bash — Comparer les deux bancs
 - bash — Committer le témoin 30k
+- bash — Banc 612 sur le 34M
+- bash — Committer le classement des trois témoins
 
 ## 3. Travail accompli
 
@@ -12514,7 +12516,7 @@ Je continue et je commit chaque tranche.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3416 autres
+- … et 3418 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13208,4 +13210,5 @@ Je continue et je commit chaque tranche.
 - 100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTILE EST CELUI DE 3 000 PAS (0,882), LE 30 K SERT DE CONTRÔLE NÉGATIF ; LA PRÉDICTION POUR LA DONNÉE 10× EST ÉC
 - BANC 612 — LE 100 M (3 000 PAS) SUR LES 602 PHRASES DU GOLD GELÉ : 0,755 DE MOTS VALIDES, RÉPÉTITION 3, ZÉRO NON-UTF-8, 127,5 OCTETS/S ; LE BANC DE STYLE (0,882
 - BANC 612 — LE TÉMOIN 30 K : 0,763 CONTRE 0,755 AU 3 K SUR LES PHRASES RÉELLES (LA CONTINUITÉ), MAIS 29 SORTIES NON-UTF-8 CONTRE 0 (LA DÉRIVE) ; LE BANC DE STYLE
+- BANC 612 — LE CLASSEMENT DES TROIS TÉMOINS : 34 M 0,666 · 100 M 3k 0,755 · 100 M 30k 0,763 ; LE 100 M BAT LE 34 M DE 9 POINTS AVEC 30× MOINS DE JETONS VUS (L'ÉC
 
