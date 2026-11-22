@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**20 commits** · **2 session(s)** · **8 thème(s)**
+**21 commits** · **2 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,7 +16,7 @@
 | docs | 3 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 4 | [mesures.md](mesures.md) |
-| moteur | 3 | [moteur.md](moteur.md) |
+| moteur | 4 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -25,7 +25,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 95.1 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 507.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 508.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -51,6 +51,7 @@
 | 13:19 | `b3ace802` | MOTEUR DE PENSÉE — L'ANTI-BOUCLE MESURÉE : LE VISITED EXPLICITE, LA NOUVEAUTÉ COMPTÉE (SEUIL 0,30), LA MÉMOIRE DES ÉCHECS, TROIS TERMINAISONS (BUDGET, FIXPOINT, CONTRADICTION), LA TRACE ; 5/5 INVARIANTS — LA BOUCLE PURE S'ARRÊTE, LE PROGRÈS EST À 1,0 |
 | 20:09 | `9bdc1b3d` | MOTEUR, LES STRATÉGIES — BFS (LE PLUS ANCIEN), DFS (LE PLUS RÉCENT), GLOUTON (LE MEILLEUR SCORE) ; LE CONTRAT UNIFORME (select/expand) ET 6/6 INVARIANTS (MODE LÉGER) |
 | 20:28 | `a7db5614` | MOTEUR — LE BRANCHEMENT SUR L'INTERFACE RSN : LE MOTEUR CONSOMME LES CINQ VERBES (ASSERT/QUERY/EXPLAIN), LA DÉCISION PORTE SON EXPLAIN, 13 NOUVEAUX ET 11 RÉPÉTITIONS ÉVITÉES SUR LE CAS DE TEST (MODE NUIT) |
+| 20:31 | `79a4f5a4` | MOTEUR — LE BRANCHEMENT TESTÉ : 7/7 INVARIANTS, DEUX PARADIGMES (FLOU, PROVENANCE) RENDENT LA MÊME STRUCTURE DE DÉCISION (MODE NUIT) |
 
 ## Le récit de la journée (écrit à la main)
 

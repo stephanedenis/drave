@@ -74231,3 +74231,89 @@ MOTEUR : 7/7 invariants (5 anti-boucle + les stratégies + le branchement RSN)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-21, 20 h 45 HNE (le branchement RSN testé : 7/7 invariants du m … [661 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 15 files changed, 72 insertions(+), 23 deletions(-)
+79a4f5a4 MOTEUR — LE BRANCHEMENT TESTÉ : 7/7 INVARIANTS, DEUX PARADIGMES (FLOU, 
+   a7db5614..79a4f5a4  s/v7 -> s/v7
+   a7db5614..79a4f5a4  master -> master
+pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
+  ```
+
+### 🤖 Assistant
+
+⏵ Mode nuit — trois tranches livrées, le 100 M tourne à 0,29 s/pas
+
+## Ce qui a été fait depuis le lancement
+
+| tranche | contenu | état |
+|---|---|---|
+| **les stratégies** (`9bdc1b3d`) | BFS (le plus ancien), DFS (le plus récent), glouton (le meilleur score) ; le contrat `select`/`expand` | ✅ |
+| **le branchement RSN** (`a7db5614`) | `MoteurRSN` : le moteur consomme les cinq verbes de l'interface, la décision porte son `explain` — 13 nouveaux, 11 répétitions évitées | ✅ |
+| **le branchement testé** (`79a4f5a4`) | 2 paradigmes (flou, provenance) rendent la **même structure de décision** — la substitution est mesurée | ✅ 7/7 |
+
+## L'état du 100 M (le run en cours)
+
+```
+pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
+```
+
+**0,29 s/pas** — 30 000 pas en **~2,4 h** (ETA ~22 h 56). Le GPU est à 99 %, la VRAM à 5,5 Go.
+
+## Les portes (passe légère)
+
+`revue_documentation` ✅ · `taille_documents` ✅ · `verifie_en_cours` ✅ · `verifie_journal` ✅ · `verifier_schemas` ✅ · `porte-tableaux` ✅ · **RSN 5/5** · **moteur 7/7** · **interface 3/3 CONFORME**.
+
+## La suite du mode nuit
+
+1. **Le 30 k du 100 M** (le run) → puis le **banc de génération** sur GPU (le même protocole que les 11/21/34 M).
+2. **La passe des 183 portes** quand le GPU sera libre (elle prend ~1 h de CPU).
+3. **Les fiches** : le rapport du 100 M à 30 k (la comparaison avec le 34 M est le vrai verdict).
+
+**Aucune requête DeepSeek** n'a été faite ; tout est local (le GPU pour le run, le CPU pour les tests). Je continue et je committerai chaque tranche.
+
+
+## Tour 232
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 1/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 /tmp/train-100m-30k.log 2>/dev/null; ps aux | grep -c \"[e]ntrainer_native\"; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader | head -1; git log -1 --format='%h %s' | cut -c1-70", "descrip … [32 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 20:34:47 EST
+pas 2050 · perte 1.5831 · PPL val 5.006 · 597 s · échelle 131072
+pas 2100 · perte 1.5730 · PPL val 4.887 · 611 s · échelle 131072
+2
+0, 5548 MiB, 99 %
+79a4f5a4 MOTEUR — LE BRANCHEMENT TESTÉ : 7/7 INVARIANTS, DEUX PARADIGM
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la work/n2ac/mix1024-100m.pt 2>/dev/null | awk '{print $5}'; nohup env PYTHONPATH=. /tmp/venv-gpu/bin/python tools/banc_generation.py --modele work/n2ac/mix1024-100m.pt --n 64 --device cuda --sortie reports/banc-generation-100m.j … [214 caractères tronqués]`
+
+  ```
+293509850
+PID 1426832
+greedy       mots_valides=0.882 distinct_2=0.753 repetition=6 echo=0.03 octets/s=78.4
+top40_0.8    mots_valides=0.583 distinct_2=1.000 repetition=1 echo=0.00 octets/s=78.8
+top20_0.5    mots_valides=0.708 distinct_2=0.970 repetition=2 echo=0.01 octets/s=78.8
+pas 2600 · perte 1.5256 · PPL val 4.318 · 775 s · échelle 131072
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('reports/rapport-banc-generation.md'); t = p.read_text()\nbloc = \"\"\"\n## Le 100 M — le banc à 3 000 pas (et à 30 000, en cours)\n\nLe **même protocole** (20 prompts, 3 réglage … [1621 caractères tronqués]`
+
+  ```
+section 100 M ajoutée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+pas 2700 · perte 1.4612 · PPL val 4.262 · 804 s · échelle 131072
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-21, 20 h 50 HNE (le banc du 100 M à 3 000 pas : 0,882 mots, rép … [736 caractères tronqués]`

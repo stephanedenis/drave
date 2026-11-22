@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 507.9 h |
-| Tours | 231 |
-| Messages | 4560 |
-| Appels d'outils | 4056 |
+| Durée | 508.0 h |
+| Tours | 232 |
+| Messages | 4566 |
+| Appels d'outils | 4060 |
 | Fichiers touchés | 25 |
-| Commandes | 3377 |
+| Commandes | 3381 |
 | Sous-agents | 43 |
-| Commits | 535 |
+| Commits | 536 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -537,6 +537,8 @@
 **Tour 230** — continue en mode léger (IA de nuit)
 
 **Tour 231** — continue jus'à 8h demain matin en étant en mode de nuit (économise les requêtes DeepSeek et maximise le travail local intensif(2CPU+2GPU)
+
+**Tour 232** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12224,6 +12226,47 @@ C'est une petite tranche (le moteur consomme une `RSN` au lieu d'un `Etat`), et 
 - bash — Tester le branchement du moteur
 - bash — Committer le test du branchement
 
+**Synthèse produite :**
+
+⏵ Mode nuit — trois tranches livrées, le 100 M tourne à 0,29 s/pas
+
+\## Ce qui a été fait depuis le lancement
+
+| tranche | contenu | état |
+|---|---|---|
+| **les stratégies** (`9bdc1b3d`) | BFS (le plus ancien), DFS (le plus récent), glouton (le meilleur score) ; le contrat `select`/`expand` | ✅ |
+| **le branchement RSN** (`a7db5614`) | `MoteurRSN` : le moteur consomme les cinq verbes de l'interface, la décision porte son `explain` — 13 nouveaux, 11 répétitions évitées | ✅ |
+| **le branchement testé** (`79a4f5a4`) | 2 paradigmes (flou, provenance) rendent la **même structure de décision** — la substitution est mesurée | ✅ 7/7 |
+
+\## L'état du 100 M (le run en cours)
+
+```
+pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
+```
+
+**0,29 s/pas** — 30 000 pas en **~2,4 h** (ETA ~22 h 56). Le GPU est à 99 %, la VRAM à 5,5 Go.
+
+\## Les portes (passe légère)
+
+`revue_documentation` ✅ · `taille_documents` ✅ · `verifie_en_cours` ✅ · `verifie_journal` ✅ · `verifier_schemas` ✅ · `porte-tableaux` ✅ · **RSN 5/5** · **moteur 7/7** · **interface 3/3 CONFORME**.
+
+\## La suite du mode nuit
+
+1. **Le 30 k du 100 M** (le run) → puis le **banc de génération** sur GPU (le même protocole que les 11/21/34 M).
+2. **La passe des 183 portes** quand le GPU sera libre (elle prend ~1 h de CPU).
+3. **Les fiches** : le rapport du 100 M à 30 k (la comparaison avec le 34 M est le vrai verdict).
+
+**Aucune requête DeepSeek** n'a été faite ; tout est local (le GPU pour le run, le CPU pour les tests). Je continue et je committerai chaque tranche.
+
+### Tour 232 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Vérifier l'état du run
+- bash — Lancer le banc du 100M (3000 pas)
+- bash — Mettre à jour le rapport du banc
+- bash — Committer le banc du 100M
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12344,7 +12387,7 @@ C'est une petite tranche (le moteur consomme une `RSN` au lieu d'un `Etat`), et 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3337 autres
+- … et 3341 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13027,4 +13070,5 @@ C'est une petite tranche (le moteur consomme une `RSN` au lieu d'un `Etat`), et 
 - MOTEUR, LES STRATÉGIES — BFS (LE PLUS ANCIEN), DFS (LE PLUS RÉCENT), GLOUTON (LE MEILLEUR SCORE) ; LE CONTRAT UNIFORME (select/expand) ET 6/6 INVARIANTS (MODE L
 - MOTEUR — LE BRANCHEMENT SUR L'INTERFACE RSN : LE MOTEUR CONSOMME LES CINQ VERBES (ASSERT/QUERY/EXPLAIN), LA DÉCISION PORTE SON EXPLAIN, 13 NOUVEAUX ET 11 RÉPÉTI
 - MOTEUR — LE BRANCHEMENT TESTÉ : 7/7 INVARIANTS, DEUX PARADIGMES (FLOU, PROVENANCE) RENDENT LA MÊME STRUCTURE DE DÉCISION (MODE NUIT)" 2>&1 | tail -1; git log -1
+- BANC — LE 100 M À 3 000 PAS EST MESURÉ DANS LE RAPPORT : 0,882 MOTS VALIDES (LE 34 M À 30 K : 0,870), RÉPÉTITION 6 CONTRE 15, 78 OCTETS/S SUR GPU ; LE 30 K TOUR
 

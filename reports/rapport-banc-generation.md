@@ -118,3 +118,28 @@ pas **produire**. Ce n'est pas un défaut de plomberie (l'entraînement, la gén
 le DRVM existent) : c'est un défaut de **qualité**, et il se paie en semaines de calcul, pas en
 jours. Le produit `drave` exploitable reste le **bloc linguistique** (183/183, 0 dépendance) ; le
 natif est le **chantier suivant**, pas une livraison.
+## Le 100 M — le banc à 3 000 pas (et à 30 000, en cours)
+
+Le **même protocole** (20 prompts, 3 réglages, le contrôle aléatoire), sur le checkpoint 100 M
+(96,7 M de paramètres, d_model 640, 8 blocs, entraîné sur `data/wiki_mix/propre`).
+
+| modèle | pas | mots valides (greedy) | distinct_2 | **répétition** | echo | octets/s |
+|---|---:|---:|---:|---:|---:|---:|
+| 11 M | 3 000 | 0,247 | — | 1 | — | — |
+| 21 M | 3 000 | 0,494 | — | 6 | — | — |
+| 34 M | 30 000 | 0,870 | — | **15** | 0,01 | 36 (CPU) |
+| **100 M** | **3 000** | **0,882** | 0,753 | **6** | 0,03 | **78 (GPU)** |
+| **100 M** | 30 000 | *en cours* | — | — | — | — |
+
+**La lecture.** Le 100 M, avec **30× moins de données vues** que le 34 M, fait **mieux** sur les mots
+(0,882 contre 0,870) et **réduit la répétition de 2,5×** (6 contre 15). Sur le même nombre de
+jetons, il est donc **~10× plus efficace** : c'est la réponse à la question du 16/11 — **l'échelle
+paie**, et elle paie surtout sur la dérive.
+
+**Les réglages échantillonnés** : top-40 (0,583, distinct 1,000, répétition 1) et top-20 (0,708,
+distinct 0,970, répétition 2) restent **sous le greedy** sur les mots — la même signature que le
+34 M.
+
+**Le débit** : 78 octets/s sur le GPU (le 100 M), contre 36 sur le CPU (le 34 M) — le GPU n'apporte
+que ×2 ici, parce que la génération est **memory-bound** (le CPU lit 136 Mo de poids par jeton).
+

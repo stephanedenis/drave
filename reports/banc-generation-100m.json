@@ -10,8 +10,8 @@
    "repetition": 6,
    "echo": 0.0266,
    "octets": 1280,
-   "secondes": 10.29,
-   "octets_s": 124.4,
+   "secondes": 16.33,
+   "octets_s": 78.4,
    "echantillons": [
     {
      "mots": 23,
@@ -248,184 +248,22 @@
    ]
   },
   "top40_0.8": {
-   "mots_valides": 0.5869,
-   "distinct_2": 0.9974,
+   "mots_valides": 0.5828,
+   "distinct_2": 1.0,
    "repetition": 1,
-   "echo": 0.0093,
-   "octets": 1233,
-   "secondes": 10.08,
-   "octets_s": 122.3,
+   "echo": 0.0,
+   "octets": 1265,
+   "secondes": 16.05,
+   "octets_s": 78.8,
    "echantillons": [
     {
-     "mots": 16,
-     "mots_valides": 0.5625,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "La France est un pays",
-     "texte": "La France est un pays de son dest de Sonans dge : landes salante dent alaux régiathu",
-     "octets": 64
-    },
-    {
-     "mots": 14,
-     "mots_valides": 0.4286,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Dans les années 1950",
-     "texte": "Dans les années 1950ismalesatres avie lese de ales Janse, ses auletin agist dales de",
-     "octets": 64
-    },
-    {
      "mots": 18,
      "mots_valides": 0.7222,
      "distinct_2": 1.0,
      "repetition": 1,
      "echo": 0.0,
-     "prompt": "Il était une fois",
-     "texte": "Il était une fois s ée é dis aut erill aist dé es enditale drans d polatis de ",
-     "octets": 64
-    }
-   ],
-   "lignes": [
-    {
-     "mots": 16,
-     "mots_valides": 0.5625,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
      "prompt": "La France est un pays",
-     "texte": "La France est un pays de son dest de Sonans dge : landes salante dent alaux régiathu",
-     "octets": 64
-    },
-    {
-     "mots": 14,
-     "mots_valides": 0.4286,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Dans les années 1950",
-     "texte": "Dans les années 1950ismalesatres avie lese de ales Janse, ses auletin agist dales de",
-     "octets": 64
-    },
-    {
-     "mots": 18,
-     "mots_valides": 0.7222,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Il était une fois",
-     "texte": "Il était une fois s ée é dis aut erill aist dé es enditale drans d polatis de ",
-     "octets": 64
-    },
-    {
-     "mots": 11,
-     "mots_valides": 0.4545,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Le chat",
-     "texte": "Le chatule thures on qus de danonale Pe fon déemiesitaullantitishel qu",
-     "octets": 64
-    },
-    {
-     "mots": 16,
-     "mots_valides": 0.5625,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "La mer",
-     "texte": "La merte in ansaumes, ce ala de pon poul ans ponale dïque can, de e l",
-     "octets": 64
-    },
-    {
-     "mots": 14,
-     "mots_valides": 0.6429,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Les enfants jouent",
-     "texte": "Les enfants jouent s, patiomiqusois ses e duminanes s émie daulagable tis vise é",
-     "octets": 64
-    },
-    {
-     "mots": 18,
-     "mots_valides": 0.6111,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Le gouvernement a décidé",
-     "texte": "Le gouvernement a décidé pulaland d pais que ond pande s fon déséralis é e e de éral",
-     "octets": 64
-    },
-    {
-     "mots": 13,
-     "mots_valides": 0.5385,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Paris est",
-     "texte": "Paris estaures des malem rans de s detionst restemétagale diqule le de c",
-     "octets": 64
-    },
-    {
-     "mots": 14,
-     "mots_valides": 0.4286,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Un homme",
-     "texte": "Un homme hon ton ves  male demes des agussonan semment s naticon semme m",
-     "octets": 64
-    },
-    {
-     "mots": 13,
-     "mots_valides": 0.5385,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "La musique",
-     "texte": "La musiques mationse tion  on ton alabulant gées e sthe cons aules tique ",
-     "octets": 64
-    },
-    {
-     "mots": 17,
-     "mots_valides": 0.6471,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.06666666666666667,
-     "prompt": "Le livre",
-     "texte": "Le livre ie d pre s ©me e sondion fre psideure c  de vile schale le de ",
-     "octets": 64
-    },
-    {
-     "mots": 15,
-     "mots_valides": 0.6,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "La guerre",
-     "texte": "La guerre ée phminée poré des 1 de pon selande ses chie és ale gnagia",
-     "octets": 64
-    },
-    {
-     "mots": 11,
-     "mots_valides": 0.4545,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "L'économie",
-     "texte": "L'économie »sé le Leson e elagre mponnat vechile al, milatistime demiati",
-     "octets": 64
-    },
-    {
-     "mots": 20,
-     "mots_valides": 0.8,
-     "distinct_2": 0.9474,
-     "repetition": 1,
-     "echo": 0.05263157894736842,
-     "prompt": "Le sport",
-     "texte": "Le sportene nd me s e e e dent dese h ragon lesem de de se e le. Sor sé",
+     "texte": "La France est un pays de e sonneleuist des on de . ernconsse, e de dernt sé leande p",
      "octets": 64
     },
     {
@@ -434,221 +272,70 @@
      "distinct_2": 1.0,
      "repetition": 1,
      "echo": 0.0,
-     "prompt": "La science",
-     "texte": "La science des es es fondeme ve dess, s semes milatiche essteurise e émes",
-     "octets": 64
-    },
-    {
-     "mots": 16,
-     "mots_valides": 0.625,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "La ville",
-     "texte": "La villes fice es on des s qure, ent des Caus se n millatith demin aties",
-     "octets": 64
-    },
-    {
-     "mots": 17,
-     "mots_valides": 0.7059,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.06666666666666667,
-     "prompt": "Le temps",
-     "texte": "Le temps de e f porem de des de meme anse des donsele chide nsemes de le",
-     "octets": 64
-    },
-    {
-     "mots": 10,
-     "mots_valides": 0.2,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "La vie",
-     "texte": "La vieais onsese soralos e lagorondes mons paque réesese trionsssolon",
-     "octets": 64
-    },
-    {
-     "mots": 11,
-     "mots_valides": 0.7273,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Le monde",
-     "texte": "Le monde s la s mis lats lande ralariqux de ranco\n",
-     "octets": 42
-    },
-    {
-     "mots": 12,
-     "mots_valides": 0.9167,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "La question",
-     "texte": "La question es le e dures de e que ses e demintal\n",
-     "octets": 39
-    }
-   ]
-  },
-  "top20_0.5": {
-   "mots_valides": 0.6529,
-   "distinct_2": 0.9857,
-   "repetition": 2,
-   "echo": 0.0263,
-   "octets": 1280,
-   "secondes": 10.37,
-   "octets_s": 123.4,
-   "echantillons": [
-    {
-     "mots": 19,
-     "mots_valides": 0.6842,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "La France est un pays",
-     "texte": "La France est un pays de ale des de mionse de de pos de des ansemisé lant de enantit",
-     "octets": 64
-    },
-    {
-     "mots": 16,
-     "mots_valides": 0.5,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.07692307692307693,
      "prompt": "Dans les années 1950",
-     "texte": "Dans les années 1950ales s ponemife desont emmese e nale mble ess mandons at es dans",
+     "texte": "Dans les années 1950onsie lalemes Ge ssstraumatemiles des de agiss e an, Jonsts rona",
      "octets": 64
     },
     {
-     "mots": 16,
-     "mots_valides": 0.5625,
+     "mots": 14,
+     "mots_valides": 0.7857,
      "distinct_2": 1.0,
      "repetition": 1,
      "echo": 0.0,
      "prompt": "Il était une fois",
-     "texte": "Il était une fois auré demioien llans s porétales t de ce quronales ande ps é ",
-     "octets": 64
+     "texte": "Il était une foisé dies de-paistique de é dées ée aux  es e p\n",
+     "octets": 49
     }
    ],
    "lignes": [
     {
-     "mots": 19,
-     "mots_valides": 0.6842,
+     "mots": 18,
+     "mots_valides": 0.7222,
      "distinct_2": 1.0,
      "repetition": 1,
      "echo": 0.0,
      "prompt": "La France est un pays",
-     "texte": "La France est un pays de ale des de mionse de de pos de des ansemisé lant de enantit",
+     "texte": "La France est un pays de e sonneleuist des on de . ernconsse, e de dernt sé leande p",
      "octets": 64
     },
     {
-     "mots": 16,
-     "mots_valides": 0.5,
+     "mots": 14,
+     "mots_valides": 0.5714,
      "distinct_2": 1.0,
      "repetition": 1,
-     "echo": 0.07692307692307693,
+     "echo": 0.0,
      "prompt": "Dans les années 1950",
-     "texte": "Dans les années 1950ales s ponemife desont emmese e nale mble ess mandons at es dans",
+     "texte": "Dans les années 1950onsie lalemes Ge ssstraumatemiles des de agiss e an, Jonsts rona",
      "octets": 64
     },
     {
-     "mots": 16,
-     "mots_valides": 0.5625,
+     "mots": 14,
+     "mots_valides": 0.7857,
      "distinct_2": 1.0,
      "repetition": 1,
      "echo": 0.0,
      "prompt": "Il était une fois",
-     "texte": "Il était une fois auré demioien llans s porétales t de ce quronales ande ps é ",
-     "octets": 64
+     "texte": "Il était une foisé dies de-paistique de é dées ée aux  es e p\n",
+     "octets": 49
     },
     {
-     "mots": 20,
-     "mots_valides": 0.8,
-     "distinct_2": 0.9474,
+     "mots": 17,
+     "mots_valides": 0.5294,
+     "distinct_2": 1.0,
      "repetition": 1,
      "echo": 0.0,
      "prompt": "Le chat",
-     "texte": "Le chate ée e sele s de ce prées de on de s de lande ce de ction de e",
+     "texte": "Le chathon dme  e e dens e lache gionan age qus s esa prise se e conde ",
      "octets": 64
     },
     {
-     "mots": 19,
-     "mots_valides": 0.5789,
+     "mots": 14,
+     "mots_valides": 0.5,
      "distinct_2": 1.0,
      "repetition": 1,
      "echo": 0.0,
      "prompt": "La mer",
-     "texte": "La mere s s e es ales es fe les fs anande des ce des ela antite ron le",
-     "octets": 64
-    },
-    {
-     "mots": 21,
-     "mots_valides": 0.8571,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Les enfants jouent",
-     "texte": "Les enfants jouent de le des lande s le m des de s seland s on de meron de e lenta",
-     "octets": 64
-    },
-    {
-     "mots": 17,
-     "mots_valides": 0.7059,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.07692307692307693,
-     "prompt": "Le gouvernement a décidé",
-     "texte": "Le gouvernement a décidé me de lalande roidess se de le de cte latistion ste é comilate",
-     "octets": 64
-    },
-    {
-     "mots": 17,
-     "mots_valides": 0.4706,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Paris est",
-     "texte": "Paris este de sest onele fe mmest anemes es ans e dest son dele ses ct qu",
-     "octets": 64
-    },
-    {
-     "mots": 17,
-     "mots_valides": 0.7059,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "Un homme",
-     "texte": "Un homme s dres de dance le randes lant est des de de lans s teurnde le ",
-     "octets": 64
-    },
-    {
-     "mots": 16,
-     "mots_valides": 0.75,
-     "distinct_2": 0.9333,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "La musique",
-     "texte": "La musique me le des de des lation de de s testitre ales de de ctipativion",
-     "octets": 64
-    },
-    {
-     "mots": 19,
-     "mots_valides": 0.7368,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.058823529411764705,
-     "prompt": "Le livre",
-     "texte": "Le livre aus che de e me, émes fis de cistre s aure le mis des lan s de",
-     "octets": 64
-    },
-    {
-     "mots": 17,
-     "mots_valides": 0.7059,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "La guerre",
-     "texte": "La guerre e d les des e de de mmes de rande stices de chonales de videre ",
+     "texte": "La merégion des s tones con e ponon 20pes entone ellatifin ques che m",
      "octets": 64
     },
     {
@@ -657,8 +344,8 @@
      "distinct_2": 1.0,
      "repetition": 1,
      "echo": 0.0,
-     "prompt": "L'économie",
-     "texte": "L'économie s e e en vile f fale de s pande te demise prée anse atilllant ",
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent-é dele gales cande des vin ale s rale s dem de ponéribose se ",
      "octets": 64
     },
     {
@@ -666,9 +353,79 @@
      "mots_valides": 0.5333,
      "distinct_2": 1.0,
      "repetition": 1,
-     "echo": 0.07142857142857142,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé lat vemité d lis de ate milonale velors, em, chteles dagratins",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.6471,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris estion orie on  pon t e demilase descton s ale s de des de lagis se",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.6667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme  s é dece rgaules e Fed ge conn d e ansé destrage ale. s de m",
+     "octets": 64
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.6,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musiques ponat des fe pondées de e es de gonon lemmmestemest s le elan",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.7059,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre e d 1de  ce de éeson des frenané e de me eséde Jeuland de co",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.6471,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre e ananté e demes latis e dérées es e sure de er e misedes 20",
+     "octets": 64
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.4615,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économiention fon est le dunaler es mele ve n danéeme lanteme  agaril e",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.4375,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
      "prompt": "Le sport",
-     "texte": "Le sporte de de cth coran le fise e f demmilatéris de secon de latisant",
+     "texte": "Le sportone s iton s pona re s males é ponon demié de latish aless pr�",
      "octets": 64
     },
     {
@@ -678,37 +435,27 @@
      "repetition": 1,
      "echo": 0.0,
      "prompt": "La science",
-     "texte": "La science qule pes e es able ches dre e antiesste de ponde dale s ponande",
-     "octets": 64
-    },
-    {
-     "mots": 17,
-     "mots_valides": 0.7647,
-     "distinct_2": 1.0,
-     "repetition": 1,
-     "echo": 0.0,
-     "prompt": "La ville",
-     "texte": "La villes e e ce s poin de sonde de le conde de gens ende de lantiverit ",
-     "octets": 64
-    },
-    {
-     "mots": 19,
-     "mots_valides": 0.8421,
-     "distinct_2": 0.8333,
-     "repetition": 2,
-     "echo": 0.11764705882352941,
-     "prompt": "Le temps",
-     "texte": "Le temps de de de de saude onde de le de de ntralande le s pors e de des",
+     "texte": "La science Pre e desqulones ritie de qume e eme lillan dede tis lant e pon",
      "octets": 64
     },
     {
      "mots": 14,
-     "mots_valides": 0.4286,
+     "mots_valides": 0.5714,
      "distinct_2": 1.0,
      "repetition": 1,
      "echo": 0.0,
-     "prompt": "La vie",
-     "texte": "La vies eres e esesese ponon s seme laleme des fandes lemes dantes dem",
+     "prompt": "La ville",
+     "texte": "La ville veme le lagiandes mes meses des de es deme tiesères le plandia",
+     "octets": 64
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.5333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps oré). pe de é, f lagioie m de), qudans, fe, élie ése dérim",
      "octets": 64
     },
     {
@@ -716,9 +463,262 @@
      "mots_valides": 0.6471,
      "distinct_2": 1.0,
      "repetition": 1,
-     "echo": 0.125,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie de e ne e ve s auele va em ile porde de dese ctaialitié destes",
+     "octets": 64
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.5333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
      "prompt": "Le monde",
-     "texte": "Le mondes de aurale cond de de e ctans e de le ckmande le de chatish qum",
+     "texte": "Le mondenoinde opphilone se don lem c ath onale ndes s sens coxates de r",
+     "octets": 64
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question e mes fion es ve mesestéons demiqus ese pon diplanistes le dre",
+     "octets": 64
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.7077,
+   "distinct_2": 0.9697,
+   "repetition": 2,
+   "echo": 0.0111,
+   "octets": 1280,
+   "secondes": 16.25,
+   "octets_s": 78.8,
+   "echantillons": [
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.8333,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de e de de de laux é e de de de ste des ale de lance de s te d",
+     "octets": 64
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.5333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950isess salemes les  estanses ses mes dese fonters ale demes s én",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.75,
+     "distinct_2": 0.9474,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois ce sude s é é é ale e des lans de cende pande lande cté de ",
+     "octets": 64
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.8333,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de e de de de laux é e de de de ste des ale de lance de s te d",
+     "octets": 64
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.5333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950isess salemes les  estanses ses mes dese fonters ale demes s én",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.75,
+     "distinct_2": 0.9474,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois ce sude s é é é ale e des lans de cende pande lande cté de ",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.7368,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chathie de me de s ce e file cone de de son aus lagande ss éon de l",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.6667,
+     "distinct_2": 0.9412,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La meres on les de nagis s eme de de de mectales fise es e dest é den",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.5625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouents d ant le des chibus éestrale de demmes lande le fist deme cta",
+     "octets": 64
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.5333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé latogies ime deure che desale, tatifiere de lans de po atilllet",
+     "octets": 64
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.4667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris este me tére ale dres e gemine athemes steme ates es de mistre ans",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.8333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de me use s on deans de te tes de les de dendande ses de conde ",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.8333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique e de ans pon don lagile des le de st des de lois de latistion d",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8421,
+     "distinct_2": 0.8889,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre e de de de me s de de des me ondesth ale destion de e stiste e ",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.7647,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.06666666666666667,
+     "prompt": "La guerre",
+     "texte": "La guerre s de es on des ate de s porérile des gionagnale me dess la de ",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.85,
+     "distinct_2": 0.8421,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de de en eran de qure s son de e de e de s e sulantie de e con ",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07142857142857142,
+     "prompt": "Le sport",
+     "texte": "Le sport auilles s fone deme ande des les s des auralandes ces de le pon",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.6875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La sciences des e s e es de pons conat s ationstiquest des des aureses ss ",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.6316,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville é s e e deme andes de demes de s pon demme lat ses de cté é ",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.9412,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps alandes des des des de me me se st de agent ans latie lles de c",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vies se fe deseme anes de s des gise e desanndeme des ales dans ée",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.7368,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde pon de pes d me de de se des deuc deme me lande s de mande ces ",
      "octets": 64
     },
     {
@@ -728,7 +728,7 @@
      "repetition": 1,
      "echo": 0.0,
      "prompt": "La question",
-     "texte": "La question ques es e des landes des de anses des ponses ponse e de cte e r",
+     "texte": "La question s ale de s de de mmes ale des des pons on estes de danste ales ",
      "octets": 64
     }
    ]

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-21, 20 h 45 HNE (le branchement RSN testé : 7/7 invariants du moteur, 2 paradigmes substituables)**
+**Mis à jour : 2026-11-21, 20 h 50 HNE (le banc du 100 M à 3 000 pas : 0,882 mots, répétition 6 — le 30 k tourne à PPL 4,26)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
