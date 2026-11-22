@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 508.7 h |
+| Durée | 510.3 h |
 | Tours | 232 |
-| Messages | 4576 |
-| Appels d'outils | 4070 |
+| Messages | 4603 |
+| Appels d'outils | 4090 |
 | Fichiers touchés | 25 |
-| Commandes | 3389 |
+| Commandes | 3408 |
 | Sous-agents | 43 |
-| Commits | 538 |
+| Commits | 539 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -12260,7 +12260,7 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 
 ### Tour 232 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état du run
 - bash — Lancer le banc du 100M (3000 pas)
@@ -12274,6 +12274,13 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 - bash — Committer la passerelle
 - bash — Écrire la fiche du run 30k
 - bash — Committer la fiche du run
+- bash — Attendre le run 30k
+- bash — Vérifier le run maintenant
+- … et 8 autres
+
+**Synthèse produite :**
+
+⏵ Le run est **fini** (30 000 pas en 2 h 26) — le banc est lancé
 
 ## 3. Travail accompli
 
@@ -12395,7 +12402,7 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3349 autres
+- … et 3368 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12523,7 +12530,7 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 
 ## 5. Erreurs rencontrées
 
-93 sorties en erreur ou divergentes. Les premières :
+94 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -13081,4 +13088,5 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 - BANC — LE 100 M À 3 000 PAS EST MESURÉ DANS LE RAPPORT : 0,882 MOTS VALIDES (LE 34 M À 30 K : 0,870), RÉPÉTITION 6 CONTRE 15, 78 OCTETS/S SUR GPU ; LE 30 K TOUR
 - PASSERELLE — L'ANNOTATION ENTRE DANS L'INTERFACE : 51 AFFIRMATIONS TYPÉES AVEC LEUR CONTEXTE SOURCE (TEXTE, SPAN, LANGUE, VERSION) ET LEUR DEGRÉ (0,796 MOYEN), 
 - RUN 100 M — LA FICHE AVEC LES HYPOTHÈSES ÉCRITES D'AVANCE (PPL < 2,0, MOTS ≥ 0,90, RÉPÉTITION ≤ 3) ET LES TROIS RAISONS DE POUVOIR LA RENDRE FAUSSE ; L'ÉTAT : 1
+- 100 M À 30 000 PAS — LE RÉSULTAT HONNÊTE : PPL 2,944 (L'HYPOTHÈSE ÉTAIT < 2,0), BANC 0,501 MOTS (L'HYPOTHÈSE ÉTAIT ≥ 0,90), RÉPÉTITION 1 ; L'ÉCHELLE NE PAIE PAS
 

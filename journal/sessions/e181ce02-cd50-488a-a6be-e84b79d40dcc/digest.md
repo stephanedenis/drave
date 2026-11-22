@@ -74415,3 +74415,225 @@ fiche créée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1050 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 reports/rapport-100m-30k.md
+ba112663 RUN 100 M — LA FICHE AVEC LES HYPOTHÈSES ÉCRITES D'AVANCE (PPL < 2,0, M
+   30a4d98a..ba112663  s/v7 -> s/v7
+   30a4d98a..ba112663  master -> master
+pas 12150 · perte 1.2552 · PPL val 3.175 · 3557 s · échelle 2097152
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -2 /tmp/train-100m-30k.log; nvidia-smi --query-gpu=memory.used,utilization.gpu --format=csv,noheader | head -1", "description": "Attendre le run 30k", "timeoutMs": 1900000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5624]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5624", "timeout_ms": 1500000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}'", "description": "Vérifier le run maintenant"}`
+
+  ```
+sam 21 nov 2026 21:44:22 EST
+pas 16300 · perte 1.1228 · PPL val 3.099 · 4765 s · échelle 1048576
+pas 16350 · perte 1.1863 · PPL val 3.110 · 4779 s · échelle 1048576
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -3 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}'", "description": "Attendre la fin du run", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5626]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5624 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -2 /tmp/train-100m-30k.log; nvidia-smi --query-gpu=memory.used,utilization.gpu --format=csv,noheader | head -1) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}'; ps aux | grep -c \"[e]ntrainer_native\"", "description": "Vérifier la fin du run"}`
+
+  ```
+sam 21 nov 2026 21:54:42 EST
+pas 18400 · perte 1.2388 · PPL val 3.055 · 5376 s · échelle 2097152
+pas 18450 · perte 1.1183 · PPL val 3.052 · 5391 s · échelle 2097152
+pas 18500 · perte 1.0722 · PPL val 3.047 · 5405 s · échelle 2097152
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 2400; date; tail -3 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}'", "description": "Attendre la fin du run 30k", "timeoutMs": 2500000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5628]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}'; ps aux | grep -c \"[e]ntrainer_native\"", "description": "Vérifier le run"}`
+
+  ```
+sam 21 nov 2026 22:05:06 EST
+pas 20550 · perte 1.2094 · PPL val 3.025 · 6002 s · échelle 1048576
+pas 20600 · perte 1.1893 · PPL val 3.030 · 6017 s · échelle 2097152
+pas 20650 · perte 1.0634 · PPL val 3.029 · 6031 s · échelle 2097152
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1700; date; tail -2 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}'", "description": "Attendre la fin du run", "timeoutMs": 1800000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5630]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5626 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -3 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt work/n2ac/mix1024-100m-30k.drvm 2>/dev/null | awk '{printf \"%.0f Mo %s\\n\", $5/1048576, $9}'; ps aux | grep -c \"[e]ntrainer_native\"", "description": "Vér … [14 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 22:15:28 EST
+pas 22650 · perte 1.1246 · PPL val 2.993 · 6613 s · échelle 1048576
+pas 22700 · perte 1.2078 · PPL val 2.994 · 6628 s · échelle 1048576
+pas 22750 · perte 1.0900 · PPL val 3.004 · 6642 s · échelle 1048576
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}'", "description": "Attendre la fin du run", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5632]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}'; ps aux | grep -c \"[e]ntrainer_native\"", "description": "Vérifier le run"}`
+
+  ```
+sam 21 nov 2026 22:25:53 EST
+pas 24800 · perte 1.0002 · PPL val 2.975 · 7239 s · échelle 1048576
+pas 24850 · perte 1.1003 · PPL val 2.985 · 7253 s · échelle 1048576
+pas 24900 · perte 1.1752 · PPL val 2.975 · 7268 s · échelle 1048576
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1100; date; tail -3 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}'; ps aux | grep -c \"[e]ntrainer_native\"", "description": "Attendre la fin du run", "timeoutMs": 1200000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5634]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5630 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1700; date; tail -2 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-5628 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 2400; date; tail -3 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -4 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt work/n2ac/mix1024-100m-30k.drvm 2>/dev/null | awk '{printf \"%.0f Mo %s\\n\", $5/1048576, $9}'; ps aux | grep -c \"[e]ntrainer_native\"", "description": "Vér … [21 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 22:36:12 EST
+pas 26900 · perte 1.0579 · PPL val 2.954 · 7850 s · échelle 1048576
+pas 26950 · perte 1.0611 · PPL val 2.957 · 7865 s · échelle 1048576
+pas 27000 · perte 1.1364 · PPL val 2.966 · 7879 s · échelle 1048576
+pas 27050 · perte 1.1115 · PPL val 2.966 · 7894 s · échelle 1048576
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 700; date; tail -4 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt work/n2ac/mix1024-100m-30k.drvm 2>/dev/null | awk '{printf \"%.0f Mo %s\\n\", $5/1048576, $9}'; ps aux | grep -c \"[e]ntrainer_native\"", "descrip … [53 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5636]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5632 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-5634 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1100; date; tail -3 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt 2>/dev/null | awk '{print $5}'; ps aux | grep -c "[e]ntrainer_native") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -5 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt work/n2ac/mix1024-100m-30k.drvm 2>/dev/null | awk '{printf \"%.0f Mo %s\\n\", $5/1048576, $9}'; ps aux | grep -c \"[e]ntrainer_native\"", "description": "Vér … [21 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 22:46:31 EST
+pas 28950 · perte 1.1281 · PPL val 2.947 · 8447 s · échelle 1048576
+pas 29000 · perte 1.1877 · PPL val 2.946 · 8462 s · échelle 1048576
+pas 29050 · perte 1.1412 · PPL val 2.943 · 8477 s · échelle 1048576
+pas 29100 · perte 1.0005 · PPL val 2.934 · 8491 s · échelle 1048576
+pas 29150 · perte 1.0024 · PPL val 2.931 · 8506 s · échelle 1048576
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 500; date; tail -6 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt work/n2ac/mix1024-100m-30k.drvm 2>/dev/null | awk '{printf \"%.0f Mo %s\\n\", $5/1048576, $9}'; ps aux | grep -c \"[e]ntrainer_native\"", "descrip … [53 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 22:55:05 EST
+  0.0020751953125
+ ],
+ "drvm": "work/n2ac/mix1024-100m-30k.drvm",
+ "sha256_drvm": "f6e9a80152b7a98f724430fa04514313d5bebc91c4bcf76a312f793f64d066cd",
+ "duree_s": 8758.927411794662
+}
+280 Mo work/n2ac/mix1024-100m-30k.drvm
+280 Mo work/n2ac/mix1024-100m-30k.pt
+0
+[exit code: 1]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5636 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 700; date; tail -4 /tmp/train-100m-30k.log; ls -la work/n2ac/mix1024-100m-30k.pt work/n2ac/mix1024-100m-30k.drvm 2>/dev/null | awk '{printf "%.0f Mo %s\n", $5/1048576, $9}'; ps aux | grep -c "[e]ntrainer_native") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -E \"pas 30000|PPL val|top-1|précision\" /tmp/train-100m-30k.log | tail -4; grep -E \"\\\"p_val\\\"|\\\"top1\\\"|\\\"prec\" /tmp/train-100m-30k.log | tail -3", "description": "Voir le résultat final du run"}`
+
+  ```
+sam 21 nov 2026 22:55:15 EST
+pas 29850 · perte 1.0529 · PPL val 2.944 · 8709 s · échelle 1048576
+pas 29900 · perte 1.0505 · PPL val 2.939 · 8724 s · échelle 1048576
+pas 29950 · perte 1.1779 · PPL val 2.927 · 8738 s · échelle 1048576
+pas 30000 · perte 1.1791 · PPL val 2.944 · 8753 s · échelle 1048576
+ "precision_main": 0.67645263671875,
+ "precision_early": [
+  ```
+
+### 🤖 Assistant
+
+⏵ Le run est **fini** (30 000 pas en 2 h 26) — le banc est lancé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env PYTHONPATH=. /tmp/venv-gpu/bin/python tools/banc_generation.py --modele work/n2ac/mix1024-100m-30k.pt --n 64 --device cuda --sortie reports/banc-generation-100m-30k.json > /tmp/banc-100m-30k.log 2>&1 & echo \"PID $!\"; slee … [206 caractères tronqués]`
+
+  ```
+PID 1480606
+écrit : reports/banc-generation-100m-30k.json
+greedy       mots_valides=0.501 distinct_2=1.000 repetition=1 echo=0.00 octets/s=100.6
+top40_0.8    mots_valides=0.505 distinct_2=1.000 repetition=1 echo=0.03 octets/s=98.8
+top20_0.5    mots_valides=0.452 distinct_2=1.000 repetition=1 echo=0.00 octets/s=98.5
+=== les précisions du run :
+ "precision_main": 0.67645263671875,
+ "precision_early": [
+  0.001708984375,
+  0.004180908203125,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-100m-30k.md'); t = p.read_text()\nbloc = \"\"\"\n## Le résultat du run (le 22/11, 02 h 55 UTC / 22 h 55 HNE)\n\n| mesure | valeur | l'hypothèse écrite d'avance | ver … [1834 caractères tronqués]`
+
+  ```
+résultat ajouté
+     · compteurs : en-cours.md dit 1142 JSON, le disque en a 1143
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1178 caractères tronqués]`
