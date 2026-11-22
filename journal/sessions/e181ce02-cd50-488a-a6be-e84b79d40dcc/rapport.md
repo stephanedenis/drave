@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 513.5 h |
-| Tours | 240 |
-| Messages | 4722 |
-| Appels d'outils | 4183 |
+| Durée | 513.7 h |
+| Tours | 241 |
+| Messages | 4728 |
+| Appels d'outils | 4187 |
 | Fichiers touchés | 25 |
-| Commandes | 3500 |
+| Commandes | 3504 |
 | Sous-agents | 43 |
-| Commits | 556 |
+| Commits | 557 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -555,6 +555,8 @@
 **Tour 239** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 **Tour 240** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
+
+**Tour 241** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [551 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12593,6 +12595,40 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 - bash — Écrire l'inventaire des corpus
 - bash — Committer l'inventaire
 
+**Synthèse produite :**
+
+⏵ La donnée du palier 1 est **déjà là** — 3,44 Go dans `data/corpus_wiki_fr_palier1/`
+
+\## L'inventaire (committé `2146d526`)
+
+**`data/` : 137 Go.** Et le point qui change tout : **`data/corpus_wiki_fr_palier1/train.txt` fait 3,44 Go** — c'est exactement le « 3–6 Go » du diagnostic du 16/11. Le corpus du 100 M actuel (`wiki_mix/propre`, 1,017 Go) en est **le tiers**.
+
+| corpus | volume |
+|---|---:|
+| `corpus_wiki_en_texte/` | 21 Go |
+| `corpus_wiki_ru_texte/` | 11 Go |
+| `corpus_wiki_de_texte/` | 10 Go |
+| `corpus_wiki_en/` | 9,3 Go |
+| … | … |
+| **`corpus_wiki_fr_palier1/`** | **3,6 Go (train 3,44)** |
+
+**Le verrou n'est donc pas la donnée** : c'est le **nettoyage** (déduplication, licence CC BY-SA, recette de mélange) — des heures de CPU, pas des jours de GPU.
+
+**La prédiction, écrite d'avance** : sur 3,44 Go (**27 tokens/paramètre** — le bon ratio, contre 30 au 30 k sur 1 Go), le 100 M devrait donner **mots > 0,85, répétition ≤ 5, non-UTF-8 ≈ 0, PPL < 2,5** — et **ne pas sur-apprendre** au 30 k.
+
+\## L'état (02 h 15)
+
+`HEAD 2146d526`, tout poussé. **25 commits** de nuit. Il reste **5 h 45** : la prochaine tranche locale est le **nettoyage du corpus palier 1** (le dédoublonnage et la recette), puis — si le temps le permet — le **run du 100 M sur 3,44 Go** (le vrai test du palier). Tout est local, zéro API.
+
+### Tour 241 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [831 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Examiner le corpus palier 1
+- bash — Vérifier le canal du corpus
+- bash — Lancer le 100M sur le palier 1
+- bash — Committer la fiche du palier 1
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12713,7 +12749,7 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3460 autres
+- … et 3464 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13417,4 +13453,5 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 - BANC 612 — LE CONTRÔLE NÉGATIF : UN MODÈLE À POIDS ALÉATOIRES OBTIENT 0,711 DE MOTS VALIDES (PRESQUE LE 0,755 DU 100 M) MAIS 60/60 SORTIES NON-UTF-8 CONTRE 0 — 
 - DIAGNOSTIC 16/11 RELU — LA NUIT LE CONFIRME ET LE CHIFFRE : LE 100 M SUR 1 GO PLAFONNE À 0,76 (LA BORNE VALIDE « 100-150 M SUR 3-6 GO »), « MOTS VALIDES » EST F
 - CORPUS — L'INVENTAIRE : 137 GO DANS DATA/, ET LE PALIER 1 (3,44 GO, CORPUS_WIKI_FR_PALIER1) EXISTE DÉJÀ ; LE VERROU N'EST PAS LA DONNÉE, C'EST LE NETTOYAGE (DÉD
+- PALIER 1 — LE RUN DU 100 M SUR LES 3,44 GO EST LANCÉ (ETA 04 H 40) : 27 TOKENS/PARAMÈTRE AU LIEU DE 30, L'HYPOTHÈSE ÉCRITE D'AVANCE (MOTS > 0,85, RÉPÉTITION ≤ 5
 

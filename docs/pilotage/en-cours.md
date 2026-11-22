@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 02 h 20 HNE (l'inventaire des corpus : 137 Go dans data/, et le palier 1 — 3,44 Go — existe déjà ; le verrou est le nettoyage, pas la donnée)**
+**Mis à jour : 2026-11-22, 02 h 22 HNE (le run du 100 M sur le palier 1 — 3,44 Go — est lancé ; ETA 04 h 40 ; l'hypothèse est écrite)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -61,7 +61,7 @@
 |---|---|---|
 | portes | **91** (dont `porte-a2.6-experts` le 18/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **833** / **1146** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **834** / **1146** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **131** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **21/11 04 h 10 → 06 h 12** : **91** portes, **88/3** — `indice` (848 s) et `melange` (105 s) structurelles, et `sessions` **rouge** (heartbeat de S périmé de 1 305 min), **corrigé et re-vérifié vert** ; machine chargée (deux runs) | `work/portes/roue-1121-0410/registre.txt` |
 

@@ -76095,3 +76095,92 @@ val.txt
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-corpus-disponibles.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"CORPUS — L'INVENTAIRE : 137 GO DANS DATA/, ET LE PALIER 1 (3,44 GO, CORPUS_WIKI_FR_PALIER1) EXISTE DÉJÀ ; LE VERROU N' … [381 caractères tronqués]`
+
+  ```
+create mode 100644 reports/rapport-corpus-disponibles.md
+2146d526 CORPUS — L'INVENTAIRE : 137 GO DANS DATA/, ET LE PALIER 1 (3,44 GO
+   bbddfefa..2146d526  s/v7 -> s/v7
+   bbddfefa..2146d526  master -> master
+dim 22 nov 2026 02:13:34 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ La donnée du palier 1 est **déjà là** — 3,44 Go dans `data/corpus_wiki_fr_palier1/`
+
+## L'inventaire (committé `2146d526`)
+
+**`data/` : 137 Go.** Et le point qui change tout : **`data/corpus_wiki_fr_palier1/train.txt` fait 3,44 Go** — c'est exactement le « 3–6 Go » du diagnostic du 16/11. Le corpus du 100 M actuel (`wiki_mix/propre`, 1,017 Go) en est **le tiers**.
+
+| corpus | volume |
+|---|---:|
+| `corpus_wiki_en_texte/` | 21 Go |
+| `corpus_wiki_ru_texte/` | 11 Go |
+| `corpus_wiki_de_texte/` | 10 Go |
+| `corpus_wiki_en/` | 9,3 Go |
+| … | … |
+| **`corpus_wiki_fr_palier1/`** | **3,6 Go (train 3,44)** |
+
+**Le verrou n'est donc pas la donnée** : c'est le **nettoyage** (déduplication, licence CC BY-SA, recette de mélange) — des heures de CPU, pas des jours de GPU.
+
+**La prédiction, écrite d'avance** : sur 3,44 Go (**27 tokens/paramètre** — le bon ratio, contre 30 au 30 k sur 1 Go), le 100 M devrait donner **mots > 0,85, répétition ≤ 5, non-UTF-8 ≈ 0, PPL < 2,5** — et **ne pas sur-apprendre** au 30 k.
+
+## L'état (02 h 15)
+
+`HEAD 2146d526`, tout poussé. **25 commits** de nuit. Il reste **5 h 45** : la prochaine tranche locale est le **nettoyage du corpus palier 1** (le dédoublonnage et la recette), puis — si le temps le permet — le **run du 100 M sur 3,44 Go** (le vrai test du palier). Tout est local, zéro API.
+
+
+## Tour 241
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 10/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls -la data/corpus_wiki_fr_palier1/train.txt | awk '{print $5}'; head -c 300 data/corpus_wiki_fr_palier1/train.txt; echo; echo \"=== lignes :\"; wc -l data/corpus_wiki_fr_palier1/train.txt 2>/dev/null; echo \"=== doublons (écha … [163 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 02:14:13 EST
+3691727067
+Antoine Meillet, né le à Moulins (Allier) et mort le à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du . Biographie Enfance et formation Paul Jules Antoine Meillet est d'origine bourbonnaise Sa famille paternelle est une famille 
+=== lignes :
+4899962 data/corpus_wiki_fr_palier1/train.txt
+=== doublons (échantillon 100k) :
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls data/corpus_wiki_fr_palier1/; echo \"=== le canal :\"; ls data/wiki_mix/propre/ 2>/dev/null; echo \"=== comparaison des tailles :\"; du -sh data/wiki_mix/propre/* 2>/dev/null | head -4", "description": "Vérifier le canal du  … [8 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 02:14:41 EST
+test.txt
+train.txt
+val.txt
+=== le canal :
+train.canal
+train.txt
+val.canal
+val.txt
+=== comparaison des tailles :
+971M	data/wiki_mix/propre/train.canal
+971M	data/wiki_mix/propre/train.txt
+9,9M	data/wiki_mix/propre/val.canal
+9,9M	data/wiki_mix/propre/val.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env PYTHONPATH=. /tmp/venv-gpu/bin/python -u tools/entrainer_native.py --corpus data/corpus_wiki_fr_palier1/train.txt --pas 30000 --seq 1024 --lot 8 --dim 640 --expert-hidden 640 --amp --no-tetes --device cuda --sortie work/n2a … [343 caractères tronqués]`
+
+  ```
+PID 2157819
+dim 22 nov 2026 02:19:41 EST
+pas  800 · perte 2.4712 · PPL val 11.963 · 233 s · échelle 65536
+pas  850 · perte 2.5729 · PPL val 12.034 · 247 s · échelle 65536
+pas  900 · perte 2.4294 · PPL val 11.973 · 262 s · échelle 65536
+5468 MiB, 99 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-100m-palier1.md <<'MD'\n# Le 100 M sur le palier 1 (3,44 Go) — le test de la donnée\n\n> **Ce que ce document est.** Le run du **100 M sur le corpus `corpus_wiki_fr_palier1` (3,44 Go)**\n> — le vrai test du pali … [3131 caractères tronqués]`
