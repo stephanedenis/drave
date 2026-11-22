@@ -39,3 +39,31 @@
 
 Le run est à **900 / 30 000 pas**, la PPL de validation à **11,97**, le GPU à 99 %. Le résultat
 sera dans ce document à la fin du run.
+## 5. Le résultat (le 22/11, 04 h 42)
+
+| mesure | valeur | l'hypothèse (écrite d'avance) | verdict |
+|---|---:|---|---|
+| la durée | **2 h 25** (8 721 s) | ~2 h 25 | ✅ |
+| la PPL de validation finale | **3,073** | < 2,5 | ❌ |
+| la précision top-1 | 0,672 | — | — |
+| **mots valides** (banc 612) | **0,854** | > 0,85 | ✅ (à 0,004 près) |
+| **répétition** | **2** | ≤ 5 | ✅ |
+| **non-UTF-8** | **13** / 602 (2,2 %) | ≈ 0 | ⚠️ (pas 0, mais 2× moins que le 30 k sur 1 Go) |
+| le débit | 124,3 octets/s | — | — |
+
+**Le verdict honnête : 3 hypothèses sur 4 tiennent, la PPL manque.**
+
+- **La donnée paie** : 0,854 de mots valides contre **0,755** pour le même modèle sur 1 Go (+10
+  points) et **0,763** pour le 30 k sur 1 Go (+9 points). **C'est le meilleur résultat jamais obtenu
+  par le natif** sur le gold 612.
+- **La dérive recule** : 13 non-UTF-8 contre 29 (le 30 k sur 1 Go) — le ratio 27 tokens/paramètre
+  vaut mieux que 30, mais n'élimine pas la dérive.
+- **La PPL reste haute** (3,073 contre 2,944 pour le 30 k sur 1 Go) : le corpus de 3,44 Go est
+  **plus dur** (wiki brut, pas le mix nettoyé), donc la PPL n'est **pas comparable** directement.
+
+**Ce qui change la conclusion** : le meilleur checkpoint du natif n'est **plus** le 100 M sur 1 Go
+(0,755) mais le **100 M sur 3,44 Go** (0,854). **La donnée était bien le verrou** — et le palier 1
+est **franchi**, avec une réserve sur la PPL.
+
+**Le prochain pas** : le **même run avec le corpus nettoyé et le canal** (le `train.canal` manquait) ;
+et le **banc 612 sur le 30 k du palier 1** pour voir si la dérive revient.

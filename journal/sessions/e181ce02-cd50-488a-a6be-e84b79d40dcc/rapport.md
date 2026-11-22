@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 513.7 h |
-| Tours | 241 |
-| Messages | 4728 |
-| Appels d'outils | 4187 |
+| Durée | 516.1 h |
+| Tours | 244 |
+| Messages | 4780 |
+| Appels d'outils | 4220 |
 | Fichiers touchés | 25 |
-| Commandes | 3504 |
+| Commandes | 3537 |
 | Sous-agents | 43 |
-| Commits | 557 |
+| Commits | 558 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -557,6 +557,12 @@
 **Tour 240** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 **Tour 241** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [551 caractères tronqués]
+
+**Tour 242** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [551 caractères tronqués]
+
+**Tour 243** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [551 caractères tronqués]
+
+**Tour 244** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [551 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12622,12 +12628,44 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 
 ### Tour 241 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [831 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Examiner le corpus palier 1
 - bash — Vérifier le canal du corpus
 - bash — Lancer le 100M sur le palier 1
 - bash — Committer la fiche du palier 1
+- bash — Attendre le run palier 1
+- bash — Vérifier le run palier 1
+- bash — Attendre la fin du run palier 1
+- bash — Vérifier la fin du run palier 1
+
+### Tour 242 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [831 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Vérifier la fin du run palier 1
+- bash — Attendre la fin du run palier 1
+
+### Tour 243 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [831 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Vérifier la fin du run palier 1
+- bash — Attendre la fin du run palier 1
+
+### Tour 244 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [831 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Vérifier la fin du run palier 1
+- bash — Attendre la fin du run palier 1
+- bash — Banc 612 sur le palier 1
+- bash — Écrire le résultat du palier 1
+- bash — Committer le palier 1 franchi
+
+**Synthèse produite :**
+
+⏵ Le run du palier 1 est **fini** — 2 h 25 sur les 3,44 Go, PPL 3,05 ; le banc est lancé
 
 ## 3. Travail accompli
 
@@ -12749,7 +12787,7 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3464 autres
+- … et 3497 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12877,7 +12915,7 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 
 ## 5. Erreurs rencontrées
 
-97 sorties en erreur ou divergentes. Les premières :
+98 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -13454,4 +13492,5 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 - DIAGNOSTIC 16/11 RELU — LA NUIT LE CONFIRME ET LE CHIFFRE : LE 100 M SUR 1 GO PLAFONNE À 0,76 (LA BORNE VALIDE « 100-150 M SUR 3-6 GO »), « MOTS VALIDES » EST F
 - CORPUS — L'INVENTAIRE : 137 GO DANS DATA/, ET LE PALIER 1 (3,44 GO, CORPUS_WIKI_FR_PALIER1) EXISTE DÉJÀ ; LE VERROU N'EST PAS LA DONNÉE, C'EST LE NETTOYAGE (DÉD
 - PALIER 1 — LE RUN DU 100 M SUR LES 3,44 GO EST LANCÉ (ETA 04 H 40) : 27 TOKENS/PARAMÈTRE AU LIEU DE 30, L'HYPOTHÈSE ÉCRITE D'AVANCE (MOTS > 0,85, RÉPÉTITION ≤ 5
+- PALIER 1 FRANCHI — LE 100 M SUR 3,44 Go DONNE 0,854 DE MOTS VALIDES SUR LE GOLD 612 : LE MEILLEUR RÉSULTAT DU NATIF (LE 1 Go : 0,755 ; LE 30 k : 0,763) ; 3 HYPO
 
