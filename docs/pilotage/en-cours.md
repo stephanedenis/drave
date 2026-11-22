@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 02 h 10 HNE (le contrôle négatif du banc 612 : poids aléatoires 0,711 de mots valides mais 60/60 non-UTF-8 — la métrique seule ment, le taux d'encodage discrimine)**
+**Mis à jour : 2026-11-22, 02 h 15 HNE (la relecture du diagnostic du 16/11 à la lumière de la nuit : la conclusion est validée par la borne, la priorité est la donnée)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

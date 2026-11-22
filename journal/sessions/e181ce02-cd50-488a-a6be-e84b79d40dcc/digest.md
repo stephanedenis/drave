@@ -75872,3 +75872,91 @@ contrôle négatif (poids aléatoires) : {"mots": 450, "mots_valides": 0.7111, "
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-banc-612.md'); t = p.read_text()\nbloc = \"\"\"\n## 7. Le contrôle négatif — et ce qu'il révèle sur la métrique\n\n**Le contrôle** : un modèle de **même architecture … [2395 caractères tronqués]`
+
+  ```
+contrôle négatif ajouté
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 12 files changed, 67 insertions(+), 19 deletions(-)
+e38f35b8 BANC 612 — LE CONTRÔLE NÉGATIF : UN MODÈLE À POIDS ALÉATOIRES OBTI
+   45dbd131..e38f35b8  s/v7 -> s/v7
+   45dbd131..e38f35b8  master -> master
+dim 22 nov 2026 02:04:51 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Le contrôle négatif a révélé une faiblesse de la métrique — et c'est une leçon utile
+
+## Le contrôle négatif du banc 612 (committé `e38f35b8`)
+
+| modèle | mots valides | **non-UTF-8** |
+|---|---:|---:|
+| **poids aléatoires** (100 M, non entraîné) | **0,711** | **60/60** |
+| 34 M (30 k pas) | 0,666 | 3 |
+| 100 M (3 000 pas) | 0,755 | **0** |
+
+**Le résultat qui compte** : un modèle **non entraîné** obtient **0,711** de « mots valides » — presque le niveau du 100 M entraîné (0,755). **La métrique « mots valides » est faible** : elle compte les mots qui existent dans le lexique, pas ceux qui **forment une phrase**.
+
+**Ce qui discrimine vraiment** : le **taux de sorties non-UTF-8**. Le modèle aléatoire produit **60/60** sorties invalides, le 100 M entraîné **0**. C'est la mesure qui attrape la différence entre « du texte » et « des octets ».
+
+**La leçon méthodologique** (à garder) : **un banc à une métrique ment**. « Mots valides » doit toujours être lu avec le taux d'encodage — sinon un générateur d'octets au hasard paraît presque aussi bon qu'un modèle entraîné.
+
+## L'état (02 h 05)
+
+`HEAD e38f35b8`, tout poussé. **23 commits** de nuit. Les tests : RSN 5/5, moteur 7/7, interface 3/3. Les portes : 89/87. Le journal du jour est régénéré (10 commits, 5 thèmes).
+
+Il reste **5 h 55** avant 8 h. Je continue en local : la prochaine tranche utile est la **relecture de la fiche du 16/11** (le diagnostic du natif) à la lumière des résultats de cette nuit — elle contient peut-être des conclusions à corriger ou à préciser.
+
+
+## Tour 239
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 8/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls reports/rapport-natif*.md reports/rapport-rsn*.md 2>/dev/null | head -5; grep -nE \"^## \" reports/rapport-natif-exploitable.md 2>/dev/null | head -8 | cut -c1-100", "description": "Voir la fiche du diagnostic natif"}`
+
+  ```
+dim 22 nov 2026 02:05:27 EST
+reports/rapport-natif-exploitable.md
+reports/rapport-natif-numpy.md
+reports/rapport-natif-val-deux-decoupages.md
+reports/rapport-rsn-comparables.md
+reports/rapport-rsn.md
+12:## 1. L'état, mesuré
+29:## 2. Les quatre leviers, chiffrés
+69:## 3. Ce que coûterait « exploitable »
+81:## 4. La conclusion
+92:## 5. Ce que ce document ne dit pas
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '81,100p' reports/rapport-natif-exploitable.md | cut -c1-150", "description": "Lire la conclusion du diagnostic"}`
+
+  ```
+## 4. La conclusion
+
+Le natif est un **prototype de recherche complet** : l'entraînement, la génération, le service
+(HTTP, Rust), le conteneur DRVM, la distillation, le SFT — tout existe et tourne. **Ce qui manque
+n'est pas la plomberie, c'est la qualité**, et elle se paie en **échelle + données + alignement**,
+pas en jours.
+
+**Le produit exploitable reste le bloc linguistique** (`drave`, 183/183, 0 dépendance, installable).
+Le natif est le **chantier suivant** : le premier pas utile est un **100–150 M sur 3–6 Go**, avec
+le DRVM et l'évaluation (ce banc) dès le début — pas la génération d'un 34 M.
+
+## 5. Ce que ce document ne dit pas
+
+- Il ne dit pas **quand** : le palier 2 dépend du temps CPU disponible et du corpus.
+- Il ne dit pas **comment** obtenir les 3–6 Go propres : c'est un chantier de données (le
+  corpus actuel est un wiki, la licence et le nettoyage comptent).
+- Il ne juge pas la **valeur** du natif : un modèle qui modélise (PPL 2,40) a des usages
+  (le scoring, les représentations, la lecture) qui ne demandent pas la génération.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-natif-exploitable.md'); t = p.read_text()\nbloc = \"\"\"\n## 6. Ce que la nuit du 21-22 a appris (le 22/11)\n\n**Trois faits mesurés qui précisent la conclusion du 1 … [2728 caractères tronqués]`

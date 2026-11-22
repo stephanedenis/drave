@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
 | Durée | 513.4 h |
-| Tours | 238 |
-| Messages | 4710 |
-| Appels d'outils | 4175 |
+| Tours | 239 |
+| Messages | 4715 |
+| Appels d'outils | 4178 |
 | Fichiers touchés | 25 |
-| Commandes | 3492 |
+| Commandes | 3495 |
 | Sous-agents | 43 |
-| Commits | 554 |
+| Commits | 555 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -551,6 +551,8 @@
 **Tour 237** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 **Tour 238** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
+
+**Tour 239** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12527,6 +12529,38 @@ Je continue, zéro API, et je commit chaque tranche.
 - bash — Contrôle négatif du banc 612
 - bash — Committer le contrôle négatif
 
+**Synthèse produite :**
+
+⏵ Le contrôle négatif a révélé une faiblesse de la métrique — et c'est une leçon utile
+
+\## Le contrôle négatif du banc 612 (committé `e38f35b8`)
+
+| modèle | mots valides | **non-UTF-8** |
+|---|---:|---:|
+| **poids aléatoires** (100 M, non entraîné) | **0,711** | **60/60** |
+| 34 M (30 k pas) | 0,666 | 3 |
+| 100 M (3 000 pas) | 0,755 | **0** |
+
+**Le résultat qui compte** : un modèle **non entraîné** obtient **0,711** de « mots valides » — presque le niveau du 100 M entraîné (0,755). **La métrique « mots valides » est faible** : elle compte les mots qui existent dans le lexique, pas ceux qui **forment une phrase**.
+
+**Ce qui discrimine vraiment** : le **taux de sorties non-UTF-8**. Le modèle aléatoire produit **60/60** sorties invalides, le 100 M entraîné **0**. C'est la mesure qui attrape la différence entre « du texte » et « des octets ».
+
+**La leçon méthodologique** (à garder) : **un banc à une métrique ment**. « Mots valides » doit toujours être lu avec le taux d'encodage — sinon un générateur d'octets au hasard paraît presque aussi bon qu'un modèle entraîné.
+
+\## L'état (02 h 05)
+
+`HEAD e38f35b8`, tout poussé. **23 commits** de nuit. Les tests : RSN 5/5, moteur 7/7, interface 3/3. Les portes : 89/87. Le journal du jour est régénéré (10 commits, 5 thèmes).
+
+Il reste **5 h 55** avant 8 h. Je continue en local : la prochaine tranche utile est la **relecture de la fiche du 16/11** (le diagnostic du natif) à la lumière des résultats de cette nuit — elle contient peut-être des conclusions à corriger ou à préciser.
+
+### Tour 239 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Voir la fiche du diagnostic natif
+- bash — Lire la conclusion du diagnostic
+- bash — Relire le diagnostic du 16/11
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12647,7 +12681,7 @@ Je continue, zéro API, et je commit chaque tranche.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3452 autres
+- … et 3455 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13349,4 +13383,5 @@ Je continue, zéro API, et je commit chaque tranche.
 - ROADMAP — L'ÉTAT DU 22/11 : LE 100 M BAT LE 34 M (30× MOINS DE JETONS VUS), PORTES 89/87, LE MOTEUR DE PENSÉE ET LA RSN POSÉS ; LA SYNTHÈSE DE LA NUIT EST LIÉE,
 - JOURNAL — LE 22/11 RÉGÉNÉRÉ : 10 COMMITS, 5 THÈMES (MÉMOIRE, MESURES, MODÈLE, MOTEUR, PORTES), LES LIENS ET LES SESSIONS VÉRIFIÉS" 2>&1 | tail -1; git log -1 --
 - BANC 612 — LE CONTRÔLE NÉGATIF : UN MODÈLE À POIDS ALÉATOIRES OBTIENT 0,711 DE MOTS VALIDES (PRESQUE LE 0,755 DU 100 M) MAIS 60/60 SORTIES NON-UTF-8 CONTRE 0 — 
+- DIAGNOSTIC 16/11 RELU — LA NUIT LE CONFIRME ET LE CHIFFRE : LE 100 M SUR 1 GO PLAFONNE À 0,76 (LA BORNE VALIDE « 100-150 M SUR 3-6 GO »), « MOTS VALIDES » EST F
 
