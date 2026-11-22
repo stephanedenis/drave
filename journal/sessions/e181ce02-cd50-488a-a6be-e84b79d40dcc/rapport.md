@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 513.2 h |
-| Tours | 237 |
-| Messages | 4702 |
-| Appels d'outils | 4169 |
+| Durée | 513.3 h |
+| Tours | 238 |
+| Messages | 4708 |
+| Appels d'outils | 4173 |
 | Fichiers touchés | 25 |
-| Commandes | 3486 |
+| Commandes | 3490 |
 | Sous-agents | 43 |
-| Commits | 552 |
+| Commits | 553 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -549,6 +549,8 @@
 **Tour 236** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 **Tour 237** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
+
+**Tour 238** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12483,6 +12485,46 @@ Je continue, zéro API, et je commit chaque tranche.
 - bash — Trim final de la roadmap
 - … et 4 autres
 
+**Synthèse produite :**
+
+⏵ La synthèse de la nuit est écrite, la roadmap mise à jour — 20 commits, tout poussé
+
+\## Le bilan de la nuit (21/11 20 h → 22/11 02 h)
+
+**20 commits**, tous poussés (`HEAD d0dbe24b`), regroupés dans [`rapport-nuit-21-22.md`](reports/rapport-nuit-21-22.md) :
+
+\### Les trois résultats mesurés
+
+1. **L'échelle paie par jeton vu.** Sur le **même banc** (602 phrases du gold gelé) : **100 M à 3 000 pas = 0,755**, **34 M à 30 000 pas = 0,666** — 9 points d'écart, avec **30× moins de jetons vus**.
+2. **La dérive est un problème de données.** 0 octet non-UTF-8 au 3 000 pas, **29** au 30 000 pas : c'est le **ratio données/paramètres** (30 contre 7), pas la taille.
+3. **Deux bancs, deux vérités.** Le banc de style mesure la **créativité** (3 k : 0,882 / 30 k : 0,501) ; le banc 612 mesure la **continuité** (3 k : 0,755 / 30 k : 0,763). **Un banc unique mentirait.**
+
+\### Les chantiers avancés
+
+| chantier | ce qui est posé |
+|---|---|
+| **le moteur de pensée** | l'anti-boucle (5 gardes, 5/5), les stratégies (BFS/DFS/glouton, 6/7), le branchement RSN (7/7) |
+| **la RSN** | les 3 niveaux (noyau, faits, affirmations), l'interface (5 verbes, 6 paradigmes), 3 adaptateurs conformes |
+| **les portes** | 89 lancées, **87 vertes**, 2 rouges **closes** par le diagnostic (le 0,5 B est trop petit) |
+| **les bancs** | 3 checkpoints mesurés sur les 602 phrases, la comparabilité établie |
+
+\### Ce qui reste ouvert (pour l'après-nuit)
+
+1. **La donnée du natif** : le 100 M plafonne par le corpus (1 Go). Le **même modèle avec 10× de données** est le test décisif — la prédiction est écrite (mots > 0,90, répétition ≤ 5, PPL < 2,0).
+2. **Le gold de pensée** : toujours absent.
+3. **La promotion RSN** : le noyau et le vérificateur restent à écrire — l'interface est prête.
+
+**Aucune requête DeepSeek** ; tout a été local (GPU + CPU). Je continue le mode nuit jusqu'à 8 h — les prochaines tranches seront le rangement des journaux et la relecture de la documentation, toujours sans API.
+
+### Tour 238 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Vérifier l'état et le journal
+- bash — Lire le journal du jour
+- bash — Régénérer le journal du jour
+- bash — Committer le journal
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12603,7 +12645,7 @@ Je continue, zéro API, et je commit chaque tranche.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3446 autres
+- … et 3450 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13303,4 +13345,5 @@ Je continue, zéro API, et je commit chaque tranche.
 - PORTES ROUGES — LE TERRAIN : MODELS/ N'A QUE DEUX QUANTIFICATIONS DU 0,5 B (Q4_0, Q8_0) ET UN DOSSIER VISION ; AUCUN 7 B NI 14 B LOCAL — LES DEUX PORTES SONT RO
 - NUIT 21-22 — LA SYNTHÈSE : 18 COMMITS, LES TROIS RÉSULTATS (L'ÉCHELLE PAIE PAR JETON VU, LA DÉRIVE EST UN PROBLÈME DE DONNÉES, DEUX BANCS DEUX VÉRITÉS), LES DEU
 - ROADMAP — L'ÉTAT DU 22/11 : LE 100 M BAT LE 34 M (30× MOINS DE JETONS VUS), PORTES 89/87, LE MOTEUR DE PENSÉE ET LA RSN POSÉS ; LA SYNTHÈSE DE LA NUIT EST LIÉE,
+- JOURNAL — LE 22/11 RÉGÉNÉRÉ : 10 COMMITS, 5 THÈMES (MÉMOIRE, MESURES, MODÈLE, MOTEUR, PORTES), LES LIENS ET LES SESSIONS VÉRIFIÉS" 2>&1 | tail -1; git log -1 --
 

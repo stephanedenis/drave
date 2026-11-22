@@ -191,6 +191,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-19](2026-11-19/distribue.md) | `156,9 ms` · `1,10 Go` · `6,99 Go` |
 | [2026-11-20](2026-11-20/distribue.md) | `7,2790` · `7,7044` |
 | [2026-11-21](2026-11-21/distribue.md) | — |
+| [2026-11-22](2026-11-22/distribue.md) | — |
 
 ### `modele` — Modèles, entraînement, parcimonie, biologie
 

@@ -5,12 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**9 commits** · **1 session(s)** · **4 thème(s)**
+**10 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
+| distribue | 1 | [distribue.md](distribue.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
@@ -20,7 +21,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 513.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 513.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -35,6 +36,7 @@
 | 01:37 | `78ba486c` | PORTES ROUGES — LA CAUSE COMMUNE : LES DEUX PORTES TESTENT QWEN2.5-0.5B, UN MODÈLE DE DÉMONSTRATION ; AUCUNE POSITION NE PORTE LE CODE (MELANGE) ET LA MÉMOIRE NE CONCLUT PAS (INDICE) — CE N'EST PAS UN BUG, C'EST UN MODÈLE TROP PETIT ; LES RENDRE VERTES DEMANDE UN CHOIX DE CAMPAGNE |
 | 01:41 | `49931b79` | PORTES ROUGES — LE TERRAIN : MODELS/ N'A QUE DEUX QUANTIFICATIONS DU 0,5 B (Q4_0, Q8_0) ET UN DOSSIER VISION ; AUCUN 7 B NI 14 B LOCAL — LES DEUX PORTES SONT ROUGES PAR CONSTRUCTION DU TERRAIN, PAS PAR DÉFAUT DE CODE |
 | 01:45 | `5df8bfe3` | NUIT 21-22 — LA SYNTHÈSE : 18 COMMITS, LES TROIS RÉSULTATS (L'ÉCHELLE PAIE PAR JETON VU, LA DÉRIVE EST UN PROBLÈME DE DONNÉES, DEUX BANCS DEUX VÉRITÉS), LES DEUX PORTES ROUGES CLOSES, ET LES TROIS CHANTIERS OUVERTS (LA DONNÉE, LE GOLD DE PENSÉE, LA PROMOTION RSN) |
+| 01:53 | `d0dbe24b` | ROADMAP — L'ÉTAT DU 22/11 : LE 100 M BAT LE 34 M (30× MOINS DE JETONS VUS), PORTES 89/87, LE MOTEUR DE PENSÉE ET LA RSN POSÉS ; LA SYNTHÈSE DE LA NUIT EST LIÉE, LES BLOCS REDONDANTS RETIRÉS (BUDGET 9 000 TENU) |
 
 ## Le récit de la journée (écrit à la main)
 

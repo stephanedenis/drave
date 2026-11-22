@@ -75723,3 +75723,131 @@ mots roadmap: 9444
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 02 h 10 HNE (la roadmap et la synthèse de la nuit : 18 comm … [704 caractères tronqués]`
+
+  ```
+11 files changed, 205 insertions(+), 25 deletions(-)
+d0dbe24b ROADMAP — L'ÉTAT DU 22/11 : LE 100 M BAT LE 34 M (30× MOINS DE JET
+   5df8bfe3..d0dbe24b  s/v7 -> s/v7
+   5df8bfe3..d0dbe24b  master -> master
+dim 22 nov 2026 01:55:59 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ La synthèse de la nuit est écrite, la roadmap mise à jour — 20 commits, tout poussé
+
+## Le bilan de la nuit (21/11 20 h → 22/11 02 h)
+
+**20 commits**, tous poussés (`HEAD d0dbe24b`), regroupés dans [`rapport-nuit-21-22.md`](reports/rapport-nuit-21-22.md) :
+
+### Les trois résultats mesurés
+
+1. **L'échelle paie par jeton vu.** Sur le **même banc** (602 phrases du gold gelé) : **100 M à 3 000 pas = 0,755**, **34 M à 30 000 pas = 0,666** — 9 points d'écart, avec **30× moins de jetons vus**.
+2. **La dérive est un problème de données.** 0 octet non-UTF-8 au 3 000 pas, **29** au 30 000 pas : c'est le **ratio données/paramètres** (30 contre 7), pas la taille.
+3. **Deux bancs, deux vérités.** Le banc de style mesure la **créativité** (3 k : 0,882 / 30 k : 0,501) ; le banc 612 mesure la **continuité** (3 k : 0,755 / 30 k : 0,763). **Un banc unique mentirait.**
+
+### Les chantiers avancés
+
+| chantier | ce qui est posé |
+|---|---|
+| **le moteur de pensée** | l'anti-boucle (5 gardes, 5/5), les stratégies (BFS/DFS/glouton, 6/7), le branchement RSN (7/7) |
+| **la RSN** | les 3 niveaux (noyau, faits, affirmations), l'interface (5 verbes, 6 paradigmes), 3 adaptateurs conformes |
+| **les portes** | 89 lancées, **87 vertes**, 2 rouges **closes** par le diagnostic (le 0,5 B est trop petit) |
+| **les bancs** | 3 checkpoints mesurés sur les 602 phrases, la comparabilité établie |
+
+### Ce qui reste ouvert (pour l'après-nuit)
+
+1. **La donnée du natif** : le 100 M plafonne par le corpus (1 Go). Le **même modèle avec 10× de données** est le test décisif — la prédiction est écrite (mots > 0,90, répétition ≤ 5, PPL < 2,0).
+2. **Le gold de pensée** : toujours absent.
+3. **La promotion RSN** : le noyau et le vérificateur restent à écrire — l'interface est prête.
+
+**Aucune requête DeepSeek** ; tout a été local (GPU + CPU). Je continue le mode nuit jusqu'à 8 h — les prochaines tranches seront le rangement des journaux et la relecture de la documentation, toujours sans API.
+
+
+## Tour 238
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 7/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %s' | cut -c1-60; git status --porcelain | grep -vE \"pensee|audit|gold_reel\" | head -3; ls journal/2026-11-22/ 2>/dev/null | head -5; wc -l journal/2026-11-22/*.md 2>/dev/null | tail -3", "description" … [34 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 01:56:39 EST
+d0dbe24b ROADMAP — L'ÉTAT DU 22/11 : LE 100 M BAT LE 34 M (3
+memoire.md
+mesures.md
+modele.md
+moteur.md
+README.md
+   23 journal/2026-11-22/moteur.md
+   43 journal/2026-11-22/README.md
+  154 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 journal/2026-11-22/README.md | cut -c1-140; echo \"=== les autres :\"; head -8 journal/2026-11-22/mesures.md | cut -c1-130", "description": "Lire le journal du jour"}`
+
+  ```
+# 2026-11-22
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-11-22/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
+
+**9 commits** · **1 session(s)** · **4 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| memoire | 3 | [memoire.md](memoire.md) |
+| mesures | 3 | [mesures.md](mesures.md) |
+| modele | 2 | [modele.md](modele.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
+
+## Sessions DSH
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 513.2 h | [rapport](..
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 00:50 | `aee709d9` | PORTES — LA PASSE DE NUIT : 89 PORTES, 87 VERTES, 2 ROUGES STRUCTURELLES TOLÉRÉES (INDICE, MÉLANGE) ; LE HEARTBEAT DE
+| 01:12 | `0559d721` | PORTES ROUGES — LE DIAGNOSTIC : MELANGE NE CALIBRE PAS (L'ÉTAT NE REND PAS LE CODE DANS UNE INVITE SANS CODE, LE PRÉA
+=== les autres :
+
+… [347 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 tools/journal_auto.py 2>&1 | tail -4; python3 tools/verifie_journal.py 2>&1 | tail -1; head -12 journal/2026-11-22/README.md | cut -c1-100", "description": "Régénérer le journal du jour", "timeoutMs": 700000}`
+
+  ```
+journal/2026-11-22/moteur.md
+  journal/2026-11-22/README.md
+  journal/THEMES.md
+7 fichiers écrits · 10 commits classés
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+# 2026-11-22
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-11-22/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
+
+**10 commits** · **1 session(s)** · **5 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 02 h 00 HNE (le journal du jour régénéré : 10 commits, 5 th … [539 caractères tronqués]`

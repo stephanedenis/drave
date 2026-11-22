@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 02 h 10 HNE (la roadmap et la synthèse de la nuit : 18 commits, les trois résultats, les deux portes closes)**
+**Mis à jour : 2026-11-22, 02 h 00 HNE (le journal du jour régénéré : 10 commits, 5 thèmes, les liens vérifiés)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
