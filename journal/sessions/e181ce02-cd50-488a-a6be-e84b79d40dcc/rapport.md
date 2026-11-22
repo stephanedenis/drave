@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 513.3 h |
+| Durée | 513.4 h |
 | Tours | 238 |
-| Messages | 4708 |
-| Appels d'outils | 4173 |
+| Messages | 4710 |
+| Appels d'outils | 4175 |
 | Fichiers touchés | 25 |
-| Commandes | 3490 |
+| Commandes | 3492 |
 | Sous-agents | 43 |
-| Commits | 553 |
+| Commits | 554 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -12518,12 +12518,14 @@ Je continue, zéro API, et je commit chaque tranche.
 
 ### Tour 238 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état et le journal
 - bash — Lire le journal du jour
 - bash — Régénérer le journal du jour
 - bash — Committer le journal
+- bash — Contrôle négatif du banc 612
+- bash — Committer le contrôle négatif
 
 ## 3. Travail accompli
 
@@ -12645,7 +12647,7 @@ Je continue, zéro API, et je commit chaque tranche.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3450 autres
+- … et 3452 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13346,4 +13348,5 @@ Je continue, zéro API, et je commit chaque tranche.
 - NUIT 21-22 — LA SYNTHÈSE : 18 COMMITS, LES TROIS RÉSULTATS (L'ÉCHELLE PAIE PAR JETON VU, LA DÉRIVE EST UN PROBLÈME DE DONNÉES, DEUX BANCS DEUX VÉRITÉS), LES DEU
 - ROADMAP — L'ÉTAT DU 22/11 : LE 100 M BAT LE 34 M (30× MOINS DE JETONS VUS), PORTES 89/87, LE MOTEUR DE PENSÉE ET LA RSN POSÉS ; LA SYNTHÈSE DE LA NUIT EST LIÉE,
 - JOURNAL — LE 22/11 RÉGÉNÉRÉ : 10 COMMITS, 5 THÈMES (MÉMOIRE, MESURES, MODÈLE, MOTEUR, PORTES), LES LIENS ET LES SESSIONS VÉRIFIÉS" 2>&1 | tail -1; git log -1 --
+- BANC 612 — LE CONTRÔLE NÉGATIF : UN MODÈLE À POIDS ALÉATOIRES OBTIENT 0,711 DE MOTS VALIDES (PRESQUE LE 0,755 DU 100 M) MAIS 60/60 SORTIES NON-UTF-8 CONTRE 0 — 
 

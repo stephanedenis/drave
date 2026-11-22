@@ -84,3 +84,25 @@ pas la taille : c'est le **ratio données/paramètres**.
 
 **Le protocole est reproductible** : le même outil (`tools/banc_612.py`), les mêmes 602 phrases,
 le même lexique (769 mots), sur les trois checkpoints.
+## 7. Le contrôle négatif — et ce qu'il révèle sur la métrique
+
+**Le contrôle** : un modèle de **même architecture** (100 M, d_model 640, 8 blocs) avec des poids
+**aléatoires**, sur 60 phrases du gold.
+
+| modèle | mots valides | non-UTF-8 | interprétation |
+|---|---:|---:|---|
+| **poids aléatoires** | **0,711** | **60/60** | la métrique « mots valides » **ne suffit pas** |
+| 34 M (30 k pas) | 0,666 | 3 | en dessous du hasard sur cette métrique |
+| 100 M (3 000 pas) | 0,755 | **0** | +4 points, et **aucune** dérive d'encodage |
+
+**Le résultat, honnête et important** : le modèle **aléatoire** obtient **0,711** de « mots
+valides » — presque le niveau du 100 M entraîné (0,755). **La métrique est faible** : elle compte
+les mots qui existent dans le lexique, pas ceux qui **forment une phrase**.
+
+**Ce que la métrique attrape quand même** : le **non-UTF-8**. Le modèle aléatoire produit
+**60/60** sorties invalides ; le 100 M à 3 000 pas en produit **0**. C'est la **vraie** mesure de
+la qualité d'encodage, et elle discrimine parfaitement.
+
+**La leçon méthodologique** : un banc à **une** métrique ment. « Mots valides » doit toujours être
+lu avec le **taux de sorties non-UTF-8** ; sinon, un modèle qui crache des octets au hasard paraît
+presque aussi bon qu'un modèle entraîné.

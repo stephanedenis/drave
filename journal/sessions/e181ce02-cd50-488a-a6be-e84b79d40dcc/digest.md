@@ -75851,3 +75851,24 @@ journal/2026-11-22/moteur.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 02 h 00 HNE (le journal du jour régénéré : 10 commits, 5 th … [539 caractères tronqués]`
+
+  ```
+create mode 100644 journal/2026-11-22/distribue.md
+45dbd131 JOURNAL — LE 22/11 RÉGÉNÉRÉ : 10 COMMITS, 5 THÈMES (MÉMOIRE, MESUR
+   d0dbe24b..45dbd131  s/v7 -> s/v7
+   d0dbe24b..45dbd131  master -> master
+dim 22 nov 2026 01:59:45 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 env PYTHONPATH=. /tmp/venv-gpu/bin/python tools/banc_612.py --modele work/n2ac/mix1024-60k.pt --n 16 --device cuda --json > /tmp/b34.json 2>/dev/null; python3 tools/banc_612.py --help 2>&1 | head -4; echo \"=== le 34M est … [858 caractères tronqués]`
+
+  ```
+usage: banc_612.py [-h] [--modele MODELE] [--n N] [--limite LIMITE]
+                   [--device DEVICE] [--json]
+
+options:
+=== le 34M est déjà mesuré : 0,666. On vérifie le contrôle négatif :
+contrôle négatif (poids aléatoires) : {"mots": 450, "mots_valides": 0.7111, "repetition_2grammes": 0, "sorties_non_utf8": 60, "sorties": 60}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-banc-612.md'); t = p.read_text()\nbloc = \"\"\"\n## 7. Le contrôle négatif — et ce qu'il révèle sur la métrique\n\n**Le contrôle** : un modèle de **même architecture … [2395 caractères tronqués]`
