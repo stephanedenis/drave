@@ -62,8 +62,9 @@ def _bloc_avec_cache(bloc, x, cache, i):
 @torch.no_grad()
 def passe(modele, ids: list[int], cache: list | None = None, pos_debut: int = 0):
     """Les logits du dernier jeton ; le cache (par bloc) est rempli ou prolongé."""
-    x = torch.tensor([ids], dtype=torch.long)
-    x = modele.embed(x) + modele.pos(torch.arange(len(ids), device=x.device) + pos_debut)[None]
+    dev = modele.embed.weight.device
+    x = torch.tensor([ids], dtype=torch.long, device=dev)
+    x = modele.embed(x) + modele.pos(torch.arange(len(ids), device=dev) + pos_debut)[None]
     nouveaux = [None] * len(modele.blocks) if cache is None else cache
     for i, bloc in enumerate(modele.blocks):
         x = _bloc_avec_cache(bloc, x, nouveaux, i)

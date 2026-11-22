@@ -75141,3 +75141,126 @@ M  reports/rapport-100m-30k.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 01 h 18 HNE (la leçon opérationnelle du 100 M : le 3 k est  … [773 caractères tronqués]`
+
+  ```
+8 files changed, 86 insertions(+), 16 deletions(-)
+06bf2cc2 100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTILE EST CELUI DE
+   0559d721..06bf2cc2  s/v7 -> s/v7
+   0559d721..06bf2cc2  master -> master
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois tranches de nuit bouclées — le dépôt est propre, les 87 portes vertes
+
+## Ce qui a été livré (01 h 20)
+
+| tranche | contenu | commit |
+|---|---|---|
+| **le run 100 M / 30 k** | fini en 2 h 26, PPL 2,944 — et son **banc** : 0,501 mots (contre **0,882** à 3 000 pas) | `41270f1f` |
+| **la passe des portes** | **89 portes, 87 vertes**, 2 rouges structurelles ; le heartbeat de la session S rafraîchi | `aee709d9` |
+| **le diagnostic des 2 rouges** | `melange` ne **calibre pas** (le préalable de recherche échoue), `indice` ne **conclut pas** (section 3) — structurelles, tolérées, comprises | `0559d721` |
+| **la leçon opérationnelle** | le **3 k** est la référence (0,882), le **30 k** le témoin du sur-apprentissage ; la prédiction pour 10× de données est écrite d'avance | `06bf2cc2` |
+
+## Le résultat de la nuit, en une phrase
+
+**L'échelle ne paie pas au-delà de 3 000 pas.** Le 100 M à 3 000 pas (0,882 mots, répétition 6) bat son propre 30 000 pas (0,501, répétition 1) et le 34 M (0,870, répétition 15). Le sur-apprentissage est l'explication la plus probable — **30 tokens/paramètre contre 7** pour le 34 M. **La donnée est le verrou, pas la taille.**
+
+## L'état du dépôt
+
+`HEAD 06bf2cc2`, `master` = `s/v7`, **poussés**, 0 divergence. Les tests : RSN 5/5, moteur 7/7, interface 3/3. La revue de documentation, les budgets et les tableaux sont verts.
+
+## La suite (le mode nuit continue, zéro API)
+
+Il reste ~6 h 40 avant 8 h. Les tranches locales utiles : le **banc du 3 k sur les 612 phrases du gold** (la génération mesurée sur le vrai corpus, pas 20 prompts), le **rangement des journaux** de la nuit, et la **préparation du palier donnée** (la liste des corpus disponibles, leurs licences, leurs volumes) — tout est local.
+
+Je continue et je commit chaque tranche.
+
+
+## Tour 235
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 4/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %s' | cut -c1-60; python3 -c \"\nimport json, pathlib\ng = json.loads(pathlib.Path('tools/tests/linguistique/gold.json').read_text())\nprint('gold :', len(g) if isinstance(g, list) else list(g)[:5])\n\"  … [129 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 01:19:36 EST
+06bf2cc2 100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTI
+gold : ['version', 'phrases', 'note']
+1 MiB
+1 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/banc_612.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"banc_612.py — la génération du modèle natif sur les 612 phrases du gold.\n\nPOURQUOI. Le `banc_generation` mesure 20 prompts écrits à la main : c'est un banc de **style**. … [4534 caractères tronqués]`
+
+  ```
+syntaxe OK
+    return torch.embedding(weight, input, padding_idx, scale_grad_by_freq, sparse)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Expected all tensors to be on the same device, but got index is on cpu, different from other tensors on cuda:0 (when checking argument in method wrapper_CUDA__index_select)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/native_cache.py'); t = p.read_text()\nt = t.replace('''    x = torch.tensor([ids], dtype=torch.long)\n    x = modele.embed(x) + modele.pos(torch.arange(len(ids), device=x.devi … [500 caractères tronqués]`
+
+  ```
+device corrigé
+20 phrases · 110.2 octets/s · mots valides 0.726 (212 mots) · répétition 2 · non-UTF-8 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 env PYTHONPATH=. /tmp/venv-gpu/bin/python tools/banc_612.py --modele work/n2ac/mix1024-100m-3k.pt --n 16 --device cuda --json --modele work/n2ac/mix1024-100m-3k.pt > /tmp/banc612.json 2>/tmp/banc612.err; tail -12 /tmp/ba … [129 caractères tronqués]`
+
+  ```
+{
+  "mots": 212,
+  "mots_valides": 0.7264,
+  "repetition_2grammes": 2,
+  "sorties_non_utf8": 0,
+  "sorties": 20,
+  "phrases": 20,
+  "octets_s": 91.0,
+  "s": 3.5,
+  "modele": "work/n2ac/mix1024-100m-3k.pt",
+  "lexique": 81
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la tools/tests/linguistique/gold*.json | awk '{print $5, $9}'; python3 -c \"\nimport json, pathlib\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json','gold_gele.json']:\n    p = pathlib.Path('tools/tests/linguistique … [204 caractères tronqués]`
+
+  ```
+450905 tools/tests/linguistique/gold_gele.json
+20009 tools/tests/linguistique/gold.json
+470149 tools/tests/linguistique/gold_reel.json
+14631 tools/tests/linguistique/gold_restitution_v2.json
+149211 tools/tests/linguistique/gold_synthetique.json
+gold.json 20
+gold_reel.json 432
+gold_synthetique.json 160
+gold_gele.json 602
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/banc_612.py'); t = p.read_text()\nt = t.replace('GOLD = pathlib.Path(__file__).resolve().parent / \"tests\" / \"linguistique\" / \"gold.json\"',\n              'GOLD = pathlib … [474 caractères tronqués]`
+
+  ```
+gold gelé (602 phrases)
+{
+  "mots": 6087,
+  "mots_valides": 0.7552,
+  "repetition_2grammes": 3,
+  "sorties_non_utf8": 0,
+  "sorties": 602,
+  "phrases": 602,
+  "octets_s": 127.5,
+  "s": 75.5,
+  "modele": "work/n2ac/mix1024-100m-3k.pt",
+  "lexique": 769
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-banc-612.md <<'MD'\n# Le banc du modèle natif sur le gold gelé (602 phrases)\n\n> **Ce que ce document est.** La génération du 100 M (checkpoint 3 000 pas, le meilleur) sur les\n> **602 phrases du gold gelé** —  … [3471 caractères tronqués]`

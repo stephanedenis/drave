@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 512.6 h |
-| Tours | 234 |
-| Messages | 4656 |
-| Appels d'outils | 4129 |
+| Durée | 512.7 h |
+| Tours | 235 |
+| Messages | 4665 |
+| Appels d'outils | 4136 |
 | Fichiers touchés | 25 |
-| Commandes | 3446 |
+| Commandes | 3453 |
 | Sous-agents | 43 |
-| Commits | 544 |
+| Commits | 545 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -543,6 +543,8 @@
 **Tour 233** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 **Tour 234** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
+
+**Tour 235** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12350,6 +12352,45 @@ Je reste en mode local, zéro API.
 - bash — Committer la leçon
 - bash — Committer la leçon avec l'état
 
+**Synthèse produite :**
+
+⏵ Trois tranches de nuit bouclées — le dépôt est propre, les 87 portes vertes
+
+\## Ce qui a été livré (01 h 20)
+
+| tranche | contenu | commit |
+|---|---|---|
+| **le run 100 M / 30 k** | fini en 2 h 26, PPL 2,944 — et son **banc** : 0,501 mots (contre **0,882** à 3 000 pas) | `41270f1f` |
+| **la passe des portes** | **89 portes, 87 vertes**, 2 rouges structurelles ; le heartbeat de la session S rafraîchi | `aee709d9` |
+| **le diagnostic des 2 rouges** | `melange` ne **calibre pas** (le préalable de recherche échoue), `indice` ne **conclut pas** (section 3) — structurelles, tolérées, comprises | `0559d721` |
+| **la leçon opérationnelle** | le **3 k** est la référence (0,882), le **30 k** le témoin du sur-apprentissage ; la prédiction pour 10× de données est écrite d'avance | `06bf2cc2` |
+
+\## Le résultat de la nuit, en une phrase
+
+**L'échelle ne paie pas au-delà de 3 000 pas.** Le 100 M à 3 000 pas (0,882 mots, répétition 6) bat son propre 30 000 pas (0,501, répétition 1) et le 34 M (0,870, répétition 15). Le sur-apprentissage est l'explication la plus probable — **30 tokens/paramètre contre 7** pour le 34 M. **La donnée est le verrou, pas la taille.**
+
+\## L'état du dépôt
+
+`HEAD 06bf2cc2`, `master` = `s/v7`, **poussés**, 0 divergence. Les tests : RSN 5/5, moteur 7/7, interface 3/3. La revue de documentation, les budgets et les tableaux sont verts.
+
+\## La suite (le mode nuit continue, zéro API)
+
+Il reste ~6 h 40 avant 8 h. Les tranches locales utiles : le **banc du 3 k sur les 612 phrases du gold** (la génération mesurée sur le vrai corpus, pas 20 prompts), le **rangement des journaux** de la nuit, et la **préparation du palier donnée** (la liste des corpus disponibles, leurs licences, leurs volumes) — tout est local.
+
+Je continue et je commit chaque tranche.
+
+### Tour 235 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Vérifier l'état et le gold
+- bash — Créer le banc 612 et le tester
+- bash — Corriger le device et relancer
+- bash — Lancer le banc 612 complet
+- bash — Voir les gold disponibles
+- bash — Banc sur le gold gelé 602
+- bash — Committer le banc 612
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12470,7 +12511,7 @@ Je reste en mode local, zéro API.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3406 autres
+- … et 3413 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13162,4 +13203,5 @@ Je reste en mode local, zéro API.
 - 100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTILE EST CELUI DE 3 000 PAS (0,882), LE 30 K SERT DE CONTRÔLE NÉGATIF ; LA PRÉDICTION POUR LA DONNÉE 10× EST ÉC
 - 100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTILE EST CELUI DE 3 000 PAS (0,882), LE 30 K SERT DE CONTRÔLE NÉGATIF ; LA PRÉDICTION POUR LA DONNÉE 10× EST ÉC
 - 100 M — LA LEÇON OPÉRATIONNELLE : LE CHECKPOINT UTILE EST CELUI DE 3 000 PAS (0,882), LE 30 K SERT DE CONTRÔLE NÉGATIF ; LA PRÉDICTION POUR LA DONNÉE 10× EST ÉC
+- BANC 612 — LE 100 M (3 000 PAS) SUR LES 602 PHRASES DU GOLD GELÉ : 0,755 DE MOTS VALIDES, RÉPÉTITION 3, ZÉRO NON-UTF-8, 127,5 OCTETS/S ; LE BANC DE STYLE (0,882
 

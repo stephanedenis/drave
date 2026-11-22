@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 01 h 18 HNE (la leçon opérationnelle du 100 M : le 3 k est la référence, le 30 k le témoin ; la prédiction pour 10× de données est écrite)**
+**Mis à jour : 2026-11-22, 01 h 30 HNE (le banc 612 : le 100 M à 3 000 pas, 0,755 de mots valides sur 602 phrases, répétition 3, 127 octets/s)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -61,7 +61,7 @@
 |---|---|---|
 | portes | **91** (dont `porte-a2.6-experts` le 18/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **830** / **1143** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **831** / **1144** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **131** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **21/11 04 h 10 → 06 h 12** : **91** portes, **88/3** — `indice` (848 s) et `melange` (105 s) structurelles, et `sessions` **rouge** (heartbeat de S périmé de 1 305 min), **corrigé et re-vérifié vert** ; machine chargée (deux runs) | `work/portes/roue-1121-0410/registre.txt` |
 
