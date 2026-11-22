@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 04 h 45 HNE (le palier 1 est franchi : le 100 M sur 3,44 Go donne 0,854 de mots valides — le meilleur résultat du natif ; 3 hypothèses sur 4 tiennent, la PPL manque)**
+**Mis à jour : 2026-11-22, 04 h 50 HNE (le palier 1 franchi — 0,854 de mots valides, le meilleur du natif ; la synthèse de la nuit est complète)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

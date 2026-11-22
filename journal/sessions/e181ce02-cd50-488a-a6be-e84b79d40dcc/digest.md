@@ -76569,3 +76569,27 @@ résultat ajouté
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [940 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/banc-612-palier1.json
+5b1b9fe0 PALIER 1 FRANCHI — LE 100 M SUR 3,44 Go DONNE 0,854 DE MOTS VALIDE
+   96ef8dbc..5b1b9fe0  s/v7 -> s/v7
+   96ef8dbc..5b1b9fe0  master -> master
+dim 22 nov 2026 04:49:11 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nuit-21-22.md'); t = p.read_text()\nbloc = \"\"\"\n## 6. La tranche du palier 1 (ajoutée en fin de nuit)\n\nLe **100 M sur le corpus `corpus_wiki_fr_palier1` (3,44 G … [1584 caractères tronqués]`
+
+  ```
+palier 1 ajouté à la synthèse
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     git add docs/pilotage/en-cours.md
+5b1b9fe0 PALIER 1 FRANCHI — LE 100 M SUR 3,44 Go DONNE 0,854 DE MOTS VALIDE
+Everything up-to-date
+Everything up-to-date
+dim 22 nov 2026 04:49:42 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 04 h 50 HNE (le palier 1 franchi — 0,854 de mots valides, l … [692 caractères tronqués]`

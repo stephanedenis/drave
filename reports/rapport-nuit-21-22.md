@@ -62,3 +62,19 @@ demande de **télécharger un modèle** — une décision humaine (règle 11).
 - **Les bancs sont des débits et des dérives**, pas des jugements de qualité linguistique.
 - **Le 100 M reste un modèle de 96,7 M** : il ne compose pas de phrase, même au 3 k (le défaut
   connu du natif, mesuré le 16/11).
+## 6. La tranche du palier 1 (ajoutée en fin de nuit)
+
+Le **100 M sur le corpus `corpus_wiki_fr_palier1` (3,44 Go)** — le test de la donnée — est lancé
+à 02 h 15, fini à 04 h 42 (**2 h 25**, PPL 3,073), et **mesuré** sur le gold 612 :
+
+| modèle | corpus | mots valides | répétition | non-UTF-8 |
+|---|---|---:|---:|---:|
+| 34 M | 1 Go (mix) | 0,666 | 3 | 3 |
+| 100 M, 3 k | 1 Go (mix) | 0,755 | 3 | 0 |
+| 100 M, 30 k | 1 Go (mix) | 0,763 | 3 | 29 |
+| **100 M, 30 k** | **3,44 Go (wiki brut)** | **0,854** | **2** | **13** |
+
+**Le palier 1 est franchi** : le **meilleur résultat du natif** (0,854) vient du **plus gros
+corpus** — la donnée était le verrou, comme le diagnostic du 16/11 le prédisait. La réserve : la
+PPL (3,073) n'est pas comparable (le corpus brut est plus dur que le mix), et les 13 non-UTF-8
+montrent que la dérive recule mais ne disparaît pas.

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 516.1 h |
+| Durée | 516.2 h |
 | Tours | 244 |
-| Messages | 4780 |
-| Appels d'outils | 4220 |
+| Messages | 4782 |
+| Appels d'outils | 4222 |
 | Fichiers touchés | 25 |
-| Commandes | 3537 |
+| Commandes | 3539 |
 | Sous-agents | 43 |
-| Commits | 558 |
+| Commits | 560 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -12655,13 +12655,15 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 
 ### Tour 244 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [831 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Vérifier la fin du run palier 1
 - bash — Attendre la fin du run palier 1
 - bash — Banc 612 sur le palier 1
 - bash — Écrire le résultat du palier 1
 - bash — Committer le palier 1 franchi
+- bash — Mettre à jour la synthèse
+- bash — Committer la synthèse
 
 **Synthèse produite :**
 
@@ -12787,7 +12789,7 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3497 autres
+- … et 3499 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13493,4 +13495,6 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 - CORPUS — L'INVENTAIRE : 137 GO DANS DATA/, ET LE PALIER 1 (3,44 GO, CORPUS_WIKI_FR_PALIER1) EXISTE DÉJÀ ; LE VERROU N'EST PAS LA DONNÉE, C'EST LE NETTOYAGE (DÉD
 - PALIER 1 — LE RUN DU 100 M SUR LES 3,44 GO EST LANCÉ (ETA 04 H 40) : 27 TOKENS/PARAMÈTRE AU LIEU DE 30, L'HYPOTHÈSE ÉCRITE D'AVANCE (MOTS > 0,85, RÉPÉTITION ≤ 5
 - PALIER 1 FRANCHI — LE 100 M SUR 3,44 Go DONNE 0,854 DE MOTS VALIDES SUR LE GOLD 612 : LE MEILLEUR RÉSULTAT DU NATIF (LE 1 Go : 0,755 ; LE 30 k : 0,763) ; 3 HYPO
+- SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3,44 Go DONNE 0,854 (LE MEILLEUR DU NATIF), RÉPÉTITION 2, 13 NON-UTF-8 CONTRE 29 ; LA DONNÉE ÉTAIT LE VERROU, 
+- SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3,44 Go DONNE 0,854 (LE MEILLEUR DU NATIF), RÉPÉTITION 2, 13 NON-UTF-8 CONTRE 29 ; LA DONNÉE ÉTAIT LE VERROU, 
 
