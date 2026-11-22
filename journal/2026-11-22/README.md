@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**6 commits** · **1 session(s)** · **3 thème(s)**
+**7 commits** · **1 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| memoire | 2 | [memoire.md](memoire.md) |
+| memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 
@@ -31,6 +31,7 @@
 | 01:23 | `3590e78b` | BANC 612 — LE 100 M (3 000 PAS) SUR LES 602 PHRASES DU GOLD GELÉ : 0,755 DE MOTS VALIDES, RÉPÉTITION 3, ZÉRO NON-UTF-8, 127,5 OCTETS/S ; LE BANC DE STYLE (0,882) EST PLUS FACILE QUE LE GOLD — LA COMPARAISON DES TROIS CHECKPOINTS EST LE PROCHAIN PAS |
 | 01:28 | `deedbb18` | BANC 612 — LE TÉMOIN 30 K : 0,763 CONTRE 0,755 AU 3 K SUR LES PHRASES RÉELLES (LA CONTINUITÉ), MAIS 29 SORTIES NON-UTF-8 CONTRE 0 (LA DÉRIVE) ; LE BANC DE STYLE (0,501 CONTRE 0,882) MESURE LA CRÉATIVITÉ — DEUX MESURES, DEUX VÉRITÉS |
 | 01:33 | `6e8bfec7` | BANC 612 — LE CLASSEMENT DES TROIS TÉMOINS : 34 M 0,666 · 100 M 3k 0,755 · 100 M 30k 0,763 ; LE 100 M BAT LE 34 M DE 9 POINTS AVEC 30× MOINS DE JETONS VUS (L'ÉCHELLE PAIE PAR JETON), LA DÉRIVE VIENT DU RATIO DONNÉES/PARAMÈTRES |
+| 01:37 | `78ba486c` | PORTES ROUGES — LA CAUSE COMMUNE : LES DEUX PORTES TESTENT QWEN2.5-0.5B, UN MODÈLE DE DÉMONSTRATION ; AUCUNE POSITION NE PORTE LE CODE (MELANGE) ET LA MÉMOIRE NE CONCLUT PAS (INDICE) — CE N'EST PAS UN BUG, C'EST UN MODÈLE TROP PETIT ; LES RENDRE VERTES DEMANDE UN CHOIX DE CAMPAGNE |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 01 h 45 HNE (la cause commune des 2 portes rouges : le modèle Qwen2.5-0.5B est trop petit pour les deux expériences — structurel, pas un bug)**
+**Mis à jour : 2026-11-22, 01 h 48 HNE (le terrain des portes rouges : models/ n'a que le 0,5 B — les deux portes sont rouges par construction, pas par défaut de code)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

@@ -75449,3 +75449,41 @@ dim 22 nov 2026 01:36:54 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-portes-rouges.md'); t = p.read_text()\nbloc = \"\"\"\n## 5. La cause commune : le modèle des deux portes est 0,5 B\n\nLes deux portes utilisent le **même modèle** :  … [2437 caractères tronqués]`
+
+  ```
+cause commune ajoutée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 journal/2026-11-22/modele.md
+78ba486c PORTES ROUGES — LA CAUSE COMMUNE : LES DEUX PORTES TESTENT QWEN2.5
+   6e8bfec7..78ba486c  s/v7 -> s/v7
+   6e8bfec7..78ba486c  master -> master
+dim 22 nov 2026 01:40:33 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la models/ 2>/dev/null | head -8 | awk '{printf \"%.1f Go %s\\n\", $5/1073741824, $9}'; du -sh models/ 2>/dev/null", "description": "Voir les modèles disponibles"}`
+
+  ```
+0.0 Go 
+0.0 Go .
+0.0 Go ..
+0.3 Go Qwen2.5-0.5B-Q4_0.gguf
+0.5 Go Qwen2.5-0.5B-Q8_0.gguf
+0.0 Go vision
+2,5G	models/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-portes-rouges.md'); t = p.read_text()\nbloc = \"\"\"\n## 6. Ce que le dépôt a, en fait de modèles\n\n`models/` contient **deux quantifications du même 0,5 B** (`Q4_0 … [1319 caractères tronqués]`
+
+  ```
+section modèles ajoutée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     git add docs/pilotage/en-cours.md
+78ba486c PORTES ROUGES — LA CAUSE COMMUNE : LES DEUX PORTES TESTENT QWEN2.5
+Everything up-to-date
+Everything up-to-date
+dim 22 nov 2026 01:41:21 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 01 h 48 HNE (le terrain des portes rouges : models/ n'a que … [713 caractères tronqués]`

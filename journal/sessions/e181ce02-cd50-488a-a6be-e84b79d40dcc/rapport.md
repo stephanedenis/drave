@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 513.0 h |
 | Tours | 236 |
-| Messages | 4676 |
-| Appels d'outils | 4145 |
+| Messages | 4679 |
+| Appels d'outils | 4148 |
 | Fichiers touchés | 25 |
-| Commandes | 3462 |
+| Commandes | 3465 |
 | Sous-agents | 43 |
-| Commits | 548 |
+| Commits | 550 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -12429,12 +12429,14 @@ Le sur-apprenti **prolonge** mieux une phrase connue mais **invente** moins bien
 
 ### Tour 236 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état
 - bash — Lire le script de la porte melange
 - bash — Voir les modèles des deux portes
 - bash — Committer la cause commune
+- bash — Voir les modèles disponibles
+- bash — Committer l'état du terrain
 
 ## 3. Travail accompli
 
@@ -12556,7 +12558,7 @@ Le sur-apprenti **prolonge** mieux une phrase connue mais **invente** moins bien
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3422 autres
+- … et 3425 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13252,4 +13254,6 @@ Le sur-apprenti **prolonge** mieux une phrase connue mais **invente** moins bien
 - BANC 612 — LE TÉMOIN 30 K : 0,763 CONTRE 0,755 AU 3 K SUR LES PHRASES RÉELLES (LA CONTINUITÉ), MAIS 29 SORTIES NON-UTF-8 CONTRE 0 (LA DÉRIVE) ; LE BANC DE STYLE
 - BANC 612 — LE CLASSEMENT DES TROIS TÉMOINS : 34 M 0,666 · 100 M 3k 0,755 · 100 M 30k 0,763 ; LE 100 M BAT LE 34 M DE 9 POINTS AVEC 30× MOINS DE JETONS VUS (L'ÉC
 - PORTES ROUGES — LA CAUSE COMMUNE : LES DEUX PORTES TESTENT QWEN2.5-0.5B, UN MODÈLE DE DÉMONSTRATION ; AUCUNE POSITION NE PORTE LE CODE (MELANGE) ET LA MÉMOIRE N
+- PORTES ROUGES — LE TERRAIN : MODELS/ N'A QUE DEUX QUANTIFICATIONS DU 0,5 B (Q4_0, Q8_0) ET UN DOSSIER VISION ; AUCUN 7 B NI 14 B LOCAL — LES DEUX PORTES SONT RO
+- PORTES ROUGES — LE TERRAIN : MODELS/ N'A QUE DEUX QUANTIFICATIONS DU 0,5 B (Q4_0, Q8_0) ET UN DOSSIER VISION ; AUCUN 7 B NI 14 B LOCAL — LES DEUX PORTES SONT RO
 

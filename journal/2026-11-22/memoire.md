@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 00:50 | `aee709d9` | PORTES — LA PASSE DE NUIT : 89 PORTES, 87 VERTES, 2 ROUGES STRUCTURELLES TOLÉRÉES (INDICE, MÉLANGE) ; LE HEARTBEAT DE LA SESSION S RAFRAÎCHI (LE MANDAT ÉTAIT PÉRIMÉ DE 1 114 MIN, LA PORTE SESSIONS PASSAIT ROUGE) | `en-cours.md`, `README.md`, `README.md` (+4) |
 | 01:12 | `0559d721` | PORTES ROUGES — LE DIAGNOSTIC : MELANGE NE CALIBRE PAS (L'ÉTAT NE REND PAS LE CODE DANS UNE INVITE SANS CODE, LE PRÉALABLE DE RECHERCHE ÉCHOUE) ; INDICE NE CONCLUT PAS (LA SECTION 3 S'ARRÊTE) ; LES DEUX SONT STRUCTURELLES, TOLÉRÉES, COMPRISES — PAS DES RÉGRESSIONS | `en-cours.md`, `README.md`, `memoire.md` (+6) |
+| 01:37 | `78ba486c` | PORTES ROUGES — LA CAUSE COMMUNE : LES DEUX PORTES TESTENT QWEN2.5-0.5B, UN MODÈLE DE DÉMONSTRATION ; AUCUNE POSITION NE PORTE LE CODE (MELANGE) ET LA MÉMOIRE NE CONCLUT PAS (INDICE) — CE N'EST PAS UN BUG, C'EST UN MODÈLE TROP PETIT ; LES RENDRE VERTES DEMANDE UN CHOIX DE CAMPAGNE | `en-cours.md`, `README.md`, `memoire.md` (+8) |
 
 ## Sessions actives ce jour
 

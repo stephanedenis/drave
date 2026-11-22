@@ -75,3 +75,12 @@ grand** (le 7 B/14 B déjà présents ?) — et c'est un **choix de campagne**, 
 **La conséquence pour le dépôt** : les deux portes **mesurent une hypothèse sur les états
 internes** ; elles sont rouges **par honnêteté**, pas par négligence. Les tolérer est le bon
 arbitrage tant que le modèle de campagne n'est pas changé.
+## 6. Ce que le dépôt a, en fait de modèles
+
+`models/` contient **deux quantifications du même 0,5 B** (`Q4_0`, `Q8_0`) et un dossier
+`vision/`. **Aucun 7 B, aucun 14 B** n'est présent localement. Les portes rouges ne peuvent donc
+pas être rendues vertes **sans télécharger un modèle** — et c'est une **décision de campagne**
+(la règle 11 réserve les GPU à Drave ; un téléchargement est une action humaine, pas un agent).
+
+**Ce que ça change** : les deux portes sont rouges **par construction du terrain**, pas par défaut
+de code. Le diagnostic est clos : il n'y a rien à corriger dans les scripts.
