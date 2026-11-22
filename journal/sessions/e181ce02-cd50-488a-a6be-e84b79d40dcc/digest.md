@@ -74093,3 +74093,119 @@ MOTEUR : 6/6 invariants (5 anti-boucle + les stratégies)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-21, 20 h 15 HNE (les stratégies du moteur : BFS, DFS, glouton — … [727 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 17 files changed, 278 insertions(+), 20 deletions(-)
+ create mode 100644 journal/2026-11-21/memoire.md
+9bdc1b3d MOTEUR, LES STRATÉGIES — BFS (LE PLUS ANCIEN), DFS (LE PLUS RÉCENT), GLOUTON
+   b3ace802..9bdc1b3d  s/v7 -> s/v7
+   b3ace802..9bdc1b3d  master -> master
+sam 21 nov 2026 20:11:33 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Mode léger — la tranche est faite, le moteur a maintenant ses stratégies
+
+## Ce qui a été ajouté (committé `9bdc1b3d`)
+
+**Les trois stratégies** du contrat (`select`/`expand`) :
+
+| stratégie | sélection | caractère |
+|---|---|---|
+| **BFS** | le plus **ancien** | exhaustif, lent, sûr |
+| **DFS** | le plus **récent** | rapide, peut s'enfoncer |
+| **Glouton** | le **meilleur score** | le défaut anytime (le tas du moteur) |
+
+**Le contrat uniforme** : chaque stratégie expose `select(frontiere)` et `expand(etat)` ; l'`Etat` a un `successeurs()` par défaut, pour que le portefeuille se branche sans adaptation.
+
+**Les tests : 6/6** — les 5 invariants d'anti-boucle + celui des stratégies (BFS prend `a`, DFS prend `c`, le glouton prend le meilleur).
+
+## L'état du moteur (le 21/11, 20 h 15)
+
+| pièce | état |
+|---|---|
+| **l'anti-boucle** (le `visited`, la nouveauté, les échecs, 3 terminaisons, la trace) | ✅ 5/5 |
+| **les stratégies** (BFS, DFS, glouton) | ✅ 6/6 |
+| **l'interface** (5 verbes, 6 paradigmes) | ✅ 3 adaptateurs conformes |
+| **la RSN** (candidats, état, Merkle, surface → RSN) | ✅ 95 % de couverture, 5/5 |
+| **la théorie des 3 niveaux** (noyau, faits, affirmations) | ✅ écrite, comparée aux travaux |
+
+## Le prochain pas (le plus utile)
+
+**Le branchement du moteur sur l'interface** : aujourd'hui le moteur prend des `Etat` bruts ; l'interface expose `assert`/`query`/`promote`/`explain`/`context`. Les brancher rend le moteur **substituable** (il ne saura pas quel paradigme il utilise) et **traçable** (`explain` à chaque décision).
+
+C'est une petite tranche (le moteur consomme une `RSN` au lieu d'un `Etat`), et elle **ferme la boucle** entre les deux chantiers — c'est ce que le mode léger peut faire ensuite, sans GPU ni API.
+
+
+## Tour 231
+
+### 👤 Utilisateur
+
+continue jus'à 8h demain matin en étant en mode de nuit (économise les requêtes DeepSeek et maximise le travail local intensif(2CPU+2GPU)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; ps aux | grep -cE \"[e]ntrainer|[p]ython3 tools\"; uptime | awk '{print $NF}'", "description": "Vérifier les GPU et la charge"}`
+
+  ```
+sam 21 nov 2026 20:21:44 EST
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+0
+0,72
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env PYTHONPATH=. /tmp/venv-gpu/bin/python -u tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --pas 30000 --seq 1024 --lot 8 --dim 640 --expert-hidden 640 --amp --no-tet … [256 caractères tronqués]`
+
+  ```
+PID 1418198
+sam 21 nov 2026 20:23:43 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 180; date; tail -3 /tmp/train-100m-30k.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader | head -2", "description": "Suivre le démarrage du 30k", "timeoutMs": 300000}`
+
+  ```
+sam 21 nov 2026 20:27:02 EST
+pas  400 · perte 2.4163 · PPL val 11.317 · 116 s · échelle 65536
+pas  450 · perte 2.4267 · PPL val 11.308 · 131 s · échelle 65536
+pas  500 · perte 2.4927 · PPL val 11.224 · 145 s · échelle 65536
+0, 5548 MiB, 99 %
+1, 4 MiB, 0 %
+  ```
+
+- **create_goal** `{"objective": "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du mot … [122 caractères tronqués]`
+
+> **Objectif** (create) : Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API.
+
+
+  ```
+{"goal":{"id":"goal-bff9b0aa-1ed2-424d-852b-6cf09ba4d2e2","revision":1,"objective":"Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API.","phase":"active","roundsStarted":0,"maxGoalRounds":60},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/verifie_journal.py 2>&1 | tail -1; python3 tools/verifier_schemas. … [320 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     sources et images relatives.
+  ✅ la page vivante date du dernier commit (2026-11-21)
+RSN : 5/5 invariants
+MOTEUR : 6/6 invariants (5 anti-boucle + les stratégies)
+RSNBase → CONFORME {'idempotent': True, 'inconnu_sur_absent': True, 'refus_sans_preuve': True, 'explain_complet': True, 'contexte_exact': True, 'conforme': True}
+RSNFlou → CONFORME {'idempotent': True, 'inconnu_sur_absent': True, 'refus_sans_preuve': True, 'explain_complet': True, 'contexte_exact': True, 'conforme': True}
+RSNProvenance → CONFORME {'idempotent': True, 'inconnu_sur_absent': True, 'refus_sans_preuve': True, 'explain_complet': True, 'contexte_exact': True, 'conforme': True}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> tools/moteur_pensee.py <<'PY'\n\n\n# ---------------------------------------------------------------------------\n# Le branchement sur l'interface RSN (le moteur ne sait plus quel paradigme il utilise)\n# --------------------- … [3063 caractères tronqués]`
+
+  ```
+syntaxe OK
+décision : {'type': 'question', 'n': 0}
+circularité : {'nouveaux': 13, 'repetitions_evitees': 11, 'echecs_evites': 0, 'contradictions': 0, 'taux_nouveaute': 0.5417, 'termine': 'budget', 'pas': 24}
+explain : {}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-21, 20 h 40 HNE (le moteur branché sur l'interface RSN — 13 nou … [813 caractères tronqués]`

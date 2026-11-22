@@ -257,3 +257,46 @@ class Glouton(Strategie):
 
     def expand(self, etat: Etat) -> list[Etat]:
         return etat.successeurs()
+
+
+# ---------------------------------------------------------------------------
+# Le branchement sur l'interface RSN (le moteur ne sait plus quel paradigme il utilise)
+# ---------------------------------------------------------------------------
+
+class MoteurRSN:
+    """Le moteur branché sur les cinq verbes de l'interface : `expand` lit la RSN.
+
+    Le moteur ne manipule plus des `Etat` bruts : il reçoit une **implémentation** de l'interface
+    (`RSNBase`, `RSNFlou`, `RSNProvenance`, un paradigme substitué) et un **opérateur** qui, pour
+    un état, rend les successeurs sous forme d'affirmations à `assert`er. La trace de la décision
+    porte l'`explain` de chaque affirmation retenue — la traçabilité ne se perd pas.
+    """
+
+    def __init__(self, rsn, budget_max: int = 50, seuil_nouveaute: float = 0.30):
+        self.rsn = rsn
+        self.m = Moteur(budget_max=budget_max, seuil_nouveaute=seuil_nouveaute)
+
+    def boucle(self, racine: dict, operateur, score_fn=None) -> dict:
+        """`racine` : une affirmation (corps + contexte). `operateur(corps) -> [corps]`."""
+        id_racine = self.rsn.assert_(racine)
+        etat_racine = Etat(empreinte=id_racine, corps=racine.get("corps", {}))
+        score_fn = score_fn or (lambda e: 0.0)
+
+        def expand(etat: Etat):
+            sorties = []
+            for corps in operateur(etat.corps):
+                id_ = self.rsn.assert_({"corps": corps,
+                                        "contexte": dict((racine.get("contexte") or {})),
+                                        "provenance": {"operateur": "expand", "parent": etat.empreinte}})
+                q = self.rsn.query(id_)
+                statut = "refute" if q["statut"] == "refute" else (
+                    "settled" if q["statut"] == "prouve" else "ouvert")
+                sorties.append(Etat(empreinte=id_, corps=corps, statut=statut))
+            return sorties
+
+        meilleur = self.m.boucle(etat_racine, expand, score_fn)
+        # la décision : le meilleur état, avec son explain (le pont RSN)
+        decision = {"id": meilleur.empreinte, "corps": meilleur.corps,
+                    "explain": self.rsn.explain(meilleur.empreinte),
+                    "circularite": self.m.circularite()}
+        return decision

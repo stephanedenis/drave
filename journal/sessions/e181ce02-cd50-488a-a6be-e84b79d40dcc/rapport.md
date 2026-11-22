@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 507.5 h |
-| Tours | 230 |
-| Messages | 4549 |
-| Appels d'outils | 4047 |
+| Durée | 507.8 h |
+| Tours | 231 |
+| Messages | 4558 |
+| Appels d'outils | 4054 |
 | Fichiers touchés | 25 |
-| Commandes | 3369 |
+| Commandes | 3375 |
 | Sous-agents | 43 |
-| Commits | 533 |
+| Commits | 534 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -71,6 +71,8 @@
 … [263 caractères tronqués]
 - **complete** — Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, sel
 … [263 caractères tronqués]
+- **create** — Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'inter
+… [82 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -533,6 +535,8 @@
 **Tour 229** — implémente ça
 
 **Tour 230** — continue en mode léger (IA de nuit)
+
+**Tour 231** — continue jus'à 8h demain matin en étant en mode de nuit (économise les requêtes DeepSeek et maximise le travail local intensif(2CPU+2GPU)
 
 ## 2. Déroulé, étape par étape
 
@@ -12172,6 +12176,52 @@ La différence entre **itérer** et **tourner en rond** n'est pas la structure (
 - bash — Corriger l'ordre des tests
 - bash — Committer les stratégies
 
+**Synthèse produite :**
+
+⏵ Mode léger — la tranche est faite, le moteur a maintenant ses stratégies
+
+\## Ce qui a été ajouté (committé `9bdc1b3d`)
+
+**Les trois stratégies** du contrat (`select`/`expand`) :
+
+| stratégie | sélection | caractère |
+|---|---|---|
+| **BFS** | le plus **ancien** | exhaustif, lent, sûr |
+| **DFS** | le plus **récent** | rapide, peut s'enfoncer |
+| **Glouton** | le **meilleur score** | le défaut anytime (le tas du moteur) |
+
+**Le contrat uniforme** : chaque stratégie expose `select(frontiere)` et `expand(etat)` ; l'`Etat` a un `successeurs()` par défaut, pour que le portefeuille se branche sans adaptation.
+
+**Les tests : 6/6** — les 5 invariants d'anti-boucle + celui des stratégies (BFS prend `a`, DFS prend `c`, le glouton prend le meilleur).
+
+\## L'état du moteur (le 21/11, 20 h 15)
+
+| pièce | état |
+|---|---|
+| **l'anti-boucle** (le `visited`, la nouveauté, les échecs, 3 terminaisons, la trace) | ✅ 5/5 |
+| **les stratégies** (BFS, DFS, glouton) | ✅ 6/6 |
+| **l'interface** (5 verbes, 6 paradigmes) | ✅ 3 adaptateurs conformes |
+| **la RSN** (candidats, état, Merkle, surface → RSN) | ✅ 95 % de couverture, 5/5 |
+| **la théorie des 3 niveaux** (noyau, faits, affirmations) | ✅ écrite, comparée aux travaux |
+
+\## Le prochain pas (le plus utile)
+
+**Le branchement du moteur sur l'interface** : aujourd'hui le moteur prend des `Etat` bruts ; l'interface expose `assert`/`query`/`promote`/`explain`/`context`. Les brancher rend le moteur **substituable** (il ne saura pas quel paradigme il utilise) et **traçable** (`explain` à chaque décision).
+
+C'est une petite tranche (le moteur consomme une `RSN` au lieu d'un `Etat`), et elle **ferme la boucle** entre les deux chantiers — c'est ce que le mode léger peut faire ensuite, sans GPU ni API.
+
+### Tour 231 — continue jus'à 8h demain matin en étant en mode de nuit (économise les requêtes DeepSeek et maximise le travail local in … [17 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Vérifier les GPU et la charge
+- bash — Lancer le 30k du 100M
+- bash — Suivre le démarrage du 30k
+- create_goal
+- bash — Lancer la passe des portes légères
+- bash — Brancher le moteur sur l'interface RSN
+- bash — Committer le branchement
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -12292,7 +12342,7 @@ La différence entre **itérer** et **tourner en rond** n'est pas la structure (
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3329 autres
+- … et 3335 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12973,4 +13023,5 @@ La différence entre **itérer** et **tourner en rond** n'est pas la structure (
 - INTERFACE RSN — CINQ VERBES (ASSERT, QUERY, PROMOTE, EXPLAIN, CONTEXT), SIX PARADIGMES (FORMEL, FLOU, PROBABILISTE, PROVENANCE, TMS, DUNG), LE TEST DE CONFORMIT
 - MOTEUR DE PENSÉE — L'ANTI-BOUCLE MESURÉE : LE VISITED EXPLICITE, LA NOUVEAUTÉ COMPTÉE (SEUIL 0,30), LA MÉMOIRE DES ÉCHECS, TROIS TERMINAISONS (BUDGET, FIXPOINT,
 - MOTEUR, LES STRATÉGIES — BFS (LE PLUS ANCIEN), DFS (LE PLUS RÉCENT), GLOUTON (LE MEILLEUR SCORE) ; LE CONTRAT UNIFORME (select/expand) ET 6/6 INVARIANTS (MODE L
+- MOTEUR — LE BRANCHEMENT SUR L'INTERFACE RSN : LE MOTEUR CONSOMME LES CINQ VERBES (ASSERT/QUERY/EXPLAIN), LA DÉCISION PORTE SON EXPLAIN, 13 NOUVEAUX ET 11 RÉPÉTI
 

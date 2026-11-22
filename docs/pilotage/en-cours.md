@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-21, 20 h 15 HNE (les stratégies du moteur : BFS, DFS, glouton — 6/6 invariants ; mode léger)**
+**Mis à jour : 2026-11-21, 20 h 40 HNE (le moteur branché sur l'interface RSN — 13 nouveaux, 11 répétitions évitées ; le 100 M en 30 k pas tourne, GPU 99 %)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
