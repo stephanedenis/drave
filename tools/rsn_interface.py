@@ -21,7 +21,7 @@ from __future__ import annotations
 import json
 from typing import Any, Protocol
 
-STATUTS = ("prouve", "refute", "inconnu")
+STATUTS = ("prouve", "refute", "inconnu", "hypothese", "retenu", "ouvert")
 
 
 class RSN(Protocol):
@@ -165,3 +165,44 @@ if __name__ == "__main__":
                       ("RSNProvenance", RSNProvenance())):
         r = conformite(impl)
         print(nom, "→", "CONFORME" if r["conforme"] else "NON CONFORME", r)
+
+
+# ---------------------------------------------------------------------------
+# La passerelle : la RSN d'une annotation entre DANS l'interface
+# ---------------------------------------------------------------------------
+
+def depuis_annotation_interface(annotation, impl: "RSNBase | None" = None) -> tuple["RSNBase", list[str]]:
+    """Le chemin complet : une `Annotation` (la surface) → les affirmations de l'interface.
+
+    Chaque fait et chaque prédication de la RSN devient une affirmation avec son **contexte
+    source** (le texte, le span, la langue) et son **degré** (la confiance de l'étiquette).
+    Rend l'implémentation et les ids — l'état est **rejouable** : la même annotation donne les
+    mêmes ids.
+    """
+    from tools.rsn import depuis_annotation
+
+    impl = impl or RSNFlou()
+    etat = depuis_annotation(annotation)
+    texte = getattr(annotation, "texte", "")
+    langue = getattr(annotation, "langue", "und")
+    ids = []
+    for c in etat.candidats:
+        corps = dict(c.corps)
+        span = [int(corps.get("debut", 0)), int(corps.get("fin", 0))]
+        ids.append(impl.assert_({
+            "corps": corps,
+            "contexte": {"texte": texte, "span": span, "langue": langue,
+                         "version": getattr(annotation, "source", "heuristique")},
+            "degre": float(c.annotation.get("confiance", 0.5)),
+            "provenance": dict(c.provenance),
+        }))
+    return impl, ids
+
+
+def requete_etat(impl: "RSNBase", ids: list[str]) -> dict:
+    """L'état d'une RSN : le tri-état de chaque affirmation, les degrés, le contexte."""
+    st = [impl.query(i)["statut"] for i in ids]
+    deg = [impl.query(i)["degre"] for i in ids]
+    return {"n": len(ids), "statuts": {s: st.count(s) for s in set(st)},
+            "degre_moyen": round(sum(d for d in deg if d is not None) / max(1, sum(1 for d in deg if d is not None)), 4),
+            "ids": ids}

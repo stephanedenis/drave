@@ -74317,3 +74317,64 @@ pas 2700 · perte 1.4612 · PPL val 4.262 · 804 s · échelle 131072
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-21, 20 h 50 HNE (le banc du 100 M à 3 000 pas : 0,882 mots, rép … [736 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 16 files changed, 351 insertions(+), 194 deletions(-)
+37216f50 BANC — LE 100 M À 3 000 PAS EST MESURÉ DANS LE RAPPORT : 0,882 MOTS VAL
+   79a4f5a4..37216f50  s/v7 -> s/v7
+   79a4f5a4..37216f50  master -> master
+sam 21 nov 2026 20:40:44 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -2 /tmp/train-100m-30k.log; nvidia-smi --query-gpu=memory.used,utilization.gpu --format=csv,noheader | head -1", "description": "Suivre le run 30k", "timeoutMs": 1000000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5616]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5616", "timeout_ms": 600000, "wait": true}`
+
+  ```
+sam 21 nov 2026 20:56:03 EST
+pas 6350 · perte 1.3037 · PPL val 3.475 · 1867 s · échelle 524288
+pas 6400 · perte 1.1870 · PPL val 3.468 · 1882 s · échelle 524288
+5708 MiB, 99 %
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 /tmp/train-100m-30k.log; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/tests/test_rsn.py 2>&1 | tail -1; python3 tools/tests/test_moteur.py 2>&1 | t … [76 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 20:56:21 EST
+pas 6450 · perte 1.1887 · PPL val 3.471 · 1897 s · échelle 524288
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+RSN : 5/5 invariants
+MOTEUR : 7/7 invariants (5 anti-boucle + les stratégies + le branchement RSN)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> tools/rsn_interface.py <<'PY'\n\n\n# ---------------------------------------------------------------------------\n# La passerelle : la RSN d'une annotation entre DANS l'interface\n# -------------------------------------------- … [2541 caractères tronqués]`
+
+  ```
+syntaxe OK
+affirmations : 51
+statuts : {'inconnu': 51} | degré moyen : 0.7959
+contexte : {'texte': 'Le chat de la voisine dort sur le toit.', 'span': [0, 2], 'langue': 'fr', 'version': 'heuristique'}
+explain : {'operateur': 'heuristique.etiquette', 'pas': 0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/rsn_interface.py'); t = p.read_text()\nt = t.replace('STATUTS = (\"prouve\", \"refute\", \"inconnu\")',\n              'STATUTS = (\"prouve\", \"refute\", \"inconnu\", \"hypot … [787 caractères tronqués]`
+
+  ```
+statuts étendus
+affirmations : 51 | statuts : {'hypothese': 51} | degré moyen : 0.7959
+conformité : True
+MOTEUR : 7/7 invariants (5 anti-boucle + les stratégies + le branchement RSN)
+RSNBase → CONFORME {'idempotent': True, 'inconnu_sur_absent': True, 'refus_sans_preuve': True, 'explain_complet': True, 'contexte_exact': True, 'conforme': True}
+RSNFlou → CONFORME {'idempotent': True, 'inconnu_sur_absent': True, 'refus_sans_preuve': True, 'explain_complet': True, 'contexte_exact': True, 'conforme': True}
+RSNProvenance → CONFORME {'idempotent': True, 'inconnu_sur_absent': True, 'refus_sans_preuve': True, 'explain_complet': True, 'contexte_exact': True, 'conforme': True}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-21, 21 h 05 HNE (la passerelle annotation → interface : 51 affi … [775 caractères tronqués]`

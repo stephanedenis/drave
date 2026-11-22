@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 508.0 h |
+| Durée | 508.3 h |
 | Tours | 232 |
-| Messages | 4566 |
-| Appels d'outils | 4060 |
+| Messages | 4572 |
+| Appels d'outils | 4066 |
 | Fichiers touchés | 25 |
-| Commandes | 3381 |
+| Commandes | 3386 |
 | Sous-agents | 43 |
-| Commits | 536 |
+| Commits | 537 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -12260,12 +12260,18 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 
 ### Tour 232 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
 
-*4 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état du run
 - bash — Lancer le banc du 100M (3000 pas)
 - bash — Mettre à jour le rapport du banc
 - bash — Committer le banc du 100M
+- bash — Suivre le run 30k
+- job_output
+- bash — Vérifier l'état et les tests
+- bash — Passerelle annotation → interface
+- bash — Corriger les statuts et tester
+- bash — Committer la passerelle
 
 ## 3. Travail accompli
 
@@ -12387,7 +12393,7 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3341 autres
+- … et 3346 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13071,4 +13077,5 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 - MOTEUR — LE BRANCHEMENT SUR L'INTERFACE RSN : LE MOTEUR CONSOMME LES CINQ VERBES (ASSERT/QUERY/EXPLAIN), LA DÉCISION PORTE SON EXPLAIN, 13 NOUVEAUX ET 11 RÉPÉTI
 - MOTEUR — LE BRANCHEMENT TESTÉ : 7/7 INVARIANTS, DEUX PARADIGMES (FLOU, PROVENANCE) RENDENT LA MÊME STRUCTURE DE DÉCISION (MODE NUIT)" 2>&1 | tail -1; git log -1
 - BANC — LE 100 M À 3 000 PAS EST MESURÉ DANS LE RAPPORT : 0,882 MOTS VALIDES (LE 34 M À 30 K : 0,870), RÉPÉTITION 6 CONTRE 15, 78 OCTETS/S SUR GPU ; LE 30 K TOUR
+- PASSERELLE — L'ANNOTATION ENTRE DANS L'INTERFACE : 51 AFFIRMATIONS TYPÉES AVEC LEUR CONTEXTE SOURCE (TEXTE, SPAN, LANGUE, VERSION) ET LEUR DEGRÉ (0,796 MOYEN), 
 
