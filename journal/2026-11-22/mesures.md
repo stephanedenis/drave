@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,10 +16,11 @@
 | 02:20 | `96ef8dbc` | PALIER 1 — LE RUN DU 100 M SUR LES 3,44 GO EST LANCÉ (ETA 04 H 40) : 27 TOKENS/PARAMÈTRE AU LIEU DE 30, L'HYPOTHÈSE ÉCRITE D'AVANCE (MOTS > 0,85, RÉPÉTITION ≤ 5, NON-UTF-8 ≈ 0, PPL < 2,5) ET LES TROIS RAISONS DE POUVOIR LA RENDRE FAUSSE | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 | 04:46 | `5b1b9fe0` | PALIER 1 FRANCHI — LE 100 M SUR 3,44 Go DONNE 0,854 DE MOTS VALIDES SUR LE GOLD 612 : LE MEILLEUR RÉSULTAT DU NATIF (LE 1 Go : 0,755 ; LE 30 k : 0,763) ; 3 HYPOTHÈSES SUR 4 TIENNENT (RÉPÉTITION 2, NON-UTF-8 13 CONTRE 29, MOTS > 0,85), LA PPL MANQUE (3,073 CONTRE < 2,5) — LE CORPUS EST PLUS DUR, PAS COMPARABLE | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 04:49 | `ab8ef491` | SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3,44 Go DONNE 0,854 (LE MEILLEUR DU NATIF), RÉPÉTITION 2, 13 NON-UTF-8 CONTRE 29 ; LA DONNÉE ÉTAIT LE VERROU, COMME PRÉVU — LA PPL (3,073) N'EST PAS COMPARABLE (CORPUS PLUS DUR) | `en-cours.md`, `README.md`, `distribue.md` (+10) |
+| 05:21 | `e08f8903` | PALIER 1, 3 000 PAS — 0,842 DE MOTS VALIDES EN 15 MINUTES CONTRE 0,854 EN 2 H 25 : LE MEILLEUR RAPPORT TEMPS/QUALITÉ DU NATIF, UN PLATEAU NET (ZÉRO RÉPÉTITION, 3 NON-UTF-8 CONTRE 13) ; LE CLASSEMENT DES CINQ CHECKPOINTS EST ÉCRIT | `en-cours.md`, `README.md`, `distribue.md` (+12) |
 
 ## Chiffres du jour
 
-`3,44 Go` · `0,854` · `3,073` · `1 Go` · `0,755` · `0,763` · `0,711` · `0,501` · `0,882`
+`0,842` · `0,854` · `3,44 Go` · `3,073` · `1 Go` · `0,755` · `0,763` · `0,711` · `0,501` · `0,882`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

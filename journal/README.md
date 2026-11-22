@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-11-22** | [2026-11-22/README.md](2026-11-22/README.md) | [distribue](2026-11-22/distribue.md) · [memoire](2026-11-22/memoire.md) · [mesures](2026-11-22/mesures.md) · [modele](2026-11-22/modele.md) · [moteur](2026-11-22/moteur.md) |
+| **2026-11-22** | [2026-11-22/README.md](2026-11-22/README.md) | [distribue](2026-11-22/distribue.md) · [docs](2026-11-22/docs.md) · [memoire](2026-11-22/memoire.md) · [mesures](2026-11-22/mesures.md) · [modele](2026-11-22/modele.md) · [moteur](2026-11-22/moteur.md) |
 | **2026-11-21** | [2026-11-21/README.md](2026-11-21/README.md) | [attention](2026-11-21/attention.md) · [distribue](2026-11-21/distribue.md) · [docs](2026-11-21/docs.md) · [memoire](2026-11-21/memoire.md) · [mesures](2026-11-21/mesures.md) · [moteur](2026-11-21/moteur.md) · [outils](2026-11-21/outils.md) · [portes](2026-11-21/portes.md) |
 | **2026-11-20** | [2026-11-20/README.md](2026-11-20/README.md) | [attention](2026-11-20/attention.md) · [distribue](2026-11-20/distribue.md) · [docs](2026-11-20/docs.md) · [mesures](2026-11-20/mesures.md) · [modele](2026-11-20/modele.md) · [moteur](2026-11-20/moteur.md) · [portes](2026-11-20/portes.md) |
 | **2026-11-19** | [2026-11-19/README.md](2026-11-19/README.md) | [distribue](2026-11-19/distribue.md) · [docs](2026-11-19/docs.md) · [memoire](2026-11-19/memoire.md) · [mesures](2026-11-19/mesures.md) · [moteur](2026-11-19/moteur.md) · [outils](2026-11-19/outils.md) · [portes](2026-11-19/portes.md) |
@@ -228,7 +228,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 516.7 h | 246 | 4234 | 25 | 564 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 516.7 h | 247 | 4236 | 25 | 565 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |

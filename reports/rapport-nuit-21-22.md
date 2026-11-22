@@ -78,3 +78,23 @@ Le **100 M sur le corpus `corpus_wiki_fr_palier1` (3,44 Go)** — le test de la 
 corpus** — la donnée était le verrou, comme le diagnostic du 16/11 le prédisait. La réserve : la
 PPL (3,073) n'est pas comparable (le corpus brut est plus dur que le mix), et les 13 non-UTF-8
 montrent que la dérive recule mais ne disparaît pas.
+## 7. Le meilleur rapport temps/qualité du natif (ajouté à 05 h 25)
+
+Le **même 100 M sur 3,44 Go, à 3 000 pas** (14,7 min au lieu de 2 h 25) : **0,842** de mots
+valides, **zéro** répétition, **3** non-UTF-8. Le 30 000 pas n'apporte que **1,2 point** (0,854)
+pour **10× le temps**, et dérive davantage (13 non-UTF-8).
+
+**Le classement final du natif** (gold 612, mots valides) :
+
+| modèle | corpus | pas | temps | mots |
+|---|---|---:|---:|---:|
+| 34 M | 1 Go | 30 k | 3,7 h | 0,666 |
+| 100 M | 1 Go | 3 k | 12 min | 0,755 |
+| 100 M | 1 Go | 30 k | 2,4 h | 0,763 |
+| **100 M** | **3,44 Go** | **3 k** | **15 min** | **0,842** |
+| 100 M | 3,44 Go | 30 k | 2,4 h | **0,854** |
+
+**La conclusion de la nuit** : le **meilleur rapport temps/qualité** est le **100 M sur 3,44 Go à
+3 000 pas** (0,842 en 15 min) ; le **meilleur absolu** est le même à 30 000 pas (0,854, 2 h 25).
+**La donnée était le verrou** — et maintenant le coût d'un bon checkpoint est de **15 minutes**,
+pas de 3,7 heures.

@@ -76796,3 +76796,63 @@ PID 2233569
 ⏵ Le 3 k du palier 1 est mesuré — et il ne perd presque rien pour 10× moins de temps
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-100m-palier1.md'); t = p.read_text()\nbloc = \"\"\"\n## 6. Le 3 000 pas du palier 1 — la courbe du temps\n\nLe **même modèle** sur le **même corpus** (3,44 Go), à ** … [2830 caractères tronqués]`
+
+  ```
+section 3k ajoutée
+     · compteurs : en-cours.md dit 1147 JSON, le disque en a 1148
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 reports/banc-612-palier1-3k.json
+e08f8903 PALIER 1, 3 000 PAS — 0,842 DE MOTS VALIDES EN 15 MINUTES CONTRE 0
+   7690c5f9..e08f8903  s/v7 -> s/v7
+   7690c5f9..e08f8903  master -> master
+dim 22 nov 2026 05:24:18 EST
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5782 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -4 /tmp/train-100m-palier1-3k.log; ls -la work/n2ac/mix1024-100m-palier1-3k.pt 2>/dev/null | awk '{print $5}'; ps aux | grep -c "[e]ntrainer_native") finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [335 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+dim 22 nov 2026 05:24:37 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Le meilleur rapport temps/qualité du natif est trouvé — 0,842 en 15 minutes
+
+## Le classement final du natif (gold 612, mots valides)
+
+| modèle | corpus | pas | temps | mots valides |
+|---|---|---:|---:|---:|
+| 34 M | 1 Go | 30 k | 3,7 h | 0,666 |
+| 100 M | 1 Go | 3 k | 12 min | 0,755 |
+| 100 M | 1 Go | 30 k | 2,4 h | 0,763 |
+| **100 M** | **3,44 Go** | **3 k** | **15 min** | **0,842** |
+| 100 M | 3,44 Go | 30 k | 2,4 h | **0,854** |
+
+**Le résultat** : le **100 M sur 3,44 Go à 3 000 pas** donne **0,842 en 15 minutes** — et le 30 k n'ajoute que **1,2 point** (0,854) pour **10× plus de temps**, en échange de **plus de dérive** (3 → 13 non-UTF-8) et de répétitions (0 → 2).
+
+**C'est la première fois que la courbe du natif montre un plateau net avant le sur-apprentissage.** Le corpus de 3,44 Go est assez grand pour que le modèle apprenne vite, et l'entraînement plus long n'achète presque rien.
+
+## L'état (05 h 25)
+
+`HEAD e08f8903`, tout poussé. **35 commits** de nuit. Il reste **2 h 35** : je complète la synthèse finale et je vérifie que tout est propre (les portes, les budgets, le journal) avant 8 h. Zéro API, tout local.
+
+**La nuit, en une phrase** : la donnée était le verrou — le 100 M sur 3,44 Go donne **0,842 en 15 minutes** (contre 0,755 pour le même modèle sur 1 Go en 12 minutes), et le meilleur absolu (0,854) coûte 10× plus cher pour 1,2 point.
+
+
+## Tour 247
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 16/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nuit-21-22.md'); t = p.read_text()\nbloc = \"\"\"\n## 7. Le meilleur rapport temps/qualité du natif (ajouté à 05 h 25)\n\nLe **même 100 M sur 3,44 Go, à 3 000  … [2086 caractères tronqués]`

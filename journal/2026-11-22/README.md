@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**19 commits** · **1 session(s)** · **6 thème(s)**
+**20 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 1 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
-| mesures | 8 | [mesures.md](mesures.md) |
+| mesures | 9 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 
@@ -47,6 +47,7 @@
 | 04:49 | `ab8ef491` | SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3,44 Go DONNE 0,854 (LE MEILLEUR DU NATIF), RÉPÉTITION 2, 13 NON-UTF-8 CONTRE 29 ; LA DONNÉE ÉTAIT LE VERROU, COMME PRÉVU — LA PPL (3,073) N'EST PAS COMPARABLE (CORPUS PLUS DUR) |
 | 04:56 | `f73c6d81` | JOURNAL — LE 22/11 RÉGÉNÉRÉ À 17 COMMITS : LA NUIT, LE PALIER 1 ET LES DIAGNOSTICS CLASSÉS ; LES LIENS ET LES SESSIONS VÉRIFIÉS |
 | 04:59 | `7690c5f9` | README — LE PALIER 1 DANS LA VITRINE : LE 34 M ÉCRIT 67 % DE MOTS RÉELS, LE 100 M 75 %, LE 100 M SUR 3,4 Go 85 % — LA DONNÉE EST LE LEVIER, PAS LA TAILLE (30× MOINS DE JETONS VUS) |
+| 05:21 | `e08f8903` | PALIER 1, 3 000 PAS — 0,842 DE MOTS VALIDES EN 15 MINUTES CONTRE 0,854 EN 2 H 25 : LE MEILLEUR RAPPORT TEMPS/QUALITÉ DU NATIF, UN PLATEAU NET (ZÉRO RÉPÉTITION, 3 NON-UTF-8 CONTRE 13) ; LE CLASSEMENT DES CINQ CHECKPOINTS EST ÉCRIT |
 
 ## Le récit de la journée (écrit à la main)
 

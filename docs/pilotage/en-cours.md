@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 05 h 25 HNE (le 3 k du palier 1 : 0,842 en 15 min contre 0,854 en 2 h 25 — le meilleur rapport temps/qualité du natif, plateau net)**
+**Mis à jour : 2026-11-22, 05 h 30 HNE (la synthèse de la nuit est complète : 7 sections, le classement des 5 checkpoints, le meilleur rapport 0,842 en 15 min)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
