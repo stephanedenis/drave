@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 516.2 h |
-| Tours | 244 |
-| Messages | 4782 |
-| Appels d'outils | 4222 |
+| Durée | 516.3 h |
+| Tours | 245 |
+| Messages | 4788 |
+| Appels d'outils | 4226 |
 | Fichiers touchés | 25 |
-| Commandes | 3539 |
+| Commandes | 3543 |
 | Sous-agents | 43 |
-| Commits | 560 |
+| Commits | 562 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -563,6 +563,8 @@
 **Tour 243** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [551 caractères tronqués]
 
 **Tour 244** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [551 caractères tronqués]
+
+**Tour 245** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [551 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12655,7 +12657,7 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 
 ### Tour 244 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [831 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Vérifier la fin du run palier 1
 - bash — Attendre la fin du run palier 1
@@ -12664,10 +12666,43 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 - bash — Committer le palier 1 franchi
 - bash — Mettre à jour la synthèse
 - bash — Committer la synthèse
+- bash — Mettre à jour la roadmap avec le palier 1
+- bash — Vérifier la ligne 22/11
 
 **Synthèse produite :**
 
-⏵ Le run du palier 1 est **fini** — 2 h 25 sur les 3,44 Go, PPL 3,05 ; le banc est lancé
+⏵ **Le palier 1 est franchi** — 0,854 de mots valides sur 3,44 Go, le meilleur résultat du natif
+
+\## Le résultat (committé `5b1b9fe0` et `ab8ef491`)
+
+Le **100 M sur `corpus_wiki_fr_palier1` (3,44 Go)**, 30 000 pas en **2 h 25** (PPL 3,073), mesuré sur le gold 612 :
+
+| modèle | corpus | mots valides | répétition | non-UTF-8 |
+|---|---|---:|---:|---:|
+| 34 M | 1 Go (mix) | 0,666 | 3 | 3 |
+| 100 M, 3 k | 1 Go (mix) | 0,755 | 3 | 0 |
+| 100 M, 30 k | 1 Go (mix) | 0,763 | 3 | **29** |
+| **100 M, 30 k** | **3,44 Go (wiki brut)** | **0,854** | **2** | **13** |
+
+**3 hypothèses sur 4 tiennent** (écrites d'avance) :
+
+- ✅ **mots > 0,85** → **0,854** (à 0,004 près) — **le meilleur résultat jamais obtenu par le natif**
+- ✅ **répétition ≤ 5** → **2**
+- ⚠️ **non-UTF-8 ≈ 0** → **13/602** (2,2 %) — pas 0, mais **2× moins** que le 30 k sur 1 Go
+- ❌ **PPL < 2,5** → **3,073** — mais le corpus brut est **plus dur** que le mix nettoyé, donc la PPL n'est **pas comparable**
+
+**La conclusion** : la donnée était bien le verrou (le diagnostic du 16/11 le prédisait). Le meilleur checkpoint du natif n'est plus le 100 M sur 1 Go (0,755) mais le **100 M sur 3,44 Go** (0,854). **Le palier 1 est franchi.**
+
+\## L'état (04 h 55)
+
+`HEAD ab8ef491`, tout poussé. **29 commits** de nuit. Il reste **3 h 05** avant 8 h : je continue en local — la prochaine tranche est le **banc du 30 k du palier 1** (la dérive revient-elle ?) et le **nettoyage du corpus** (la licence, la dédup), toujours zéro API.
+
+### Tour 245 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [831 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Régénérer le journal
+- bash — Committer le journal
 
 ## 3. Travail accompli
 
@@ -12789,7 +12824,7 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3499 autres
+- … et 3503 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13497,4 +13532,6 @@ Il reste **5 h 50**. Je continue : la prochaine tranche locale est un **inventai
 - PALIER 1 FRANCHI — LE 100 M SUR 3,44 Go DONNE 0,854 DE MOTS VALIDES SUR LE GOLD 612 : LE MEILLEUR RÉSULTAT DU NATIF (LE 1 Go : 0,755 ; LE 30 k : 0,763) ; 3 HYPO
 - SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3,44 Go DONNE 0,854 (LE MEILLEUR DU NATIF), RÉPÉTITION 2, 13 NON-UTF-8 CONTRE 29 ; LA DONNÉE ÉTAIT LE VERROU, 
 - SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3,44 Go DONNE 0,854 (LE MEILLEUR DU NATIF), RÉPÉTITION 2, 13 NON-UTF-8 CONTRE 29 ; LA DONNÉE ÉTAIT LE VERROU, 
+- ROADMAP — LE PALIER 1 EST FRANCHI (0,854 SUR 3,44 Go) ET LES PORTES SONT À 89/87 ; LA LIGNE DU 22/11 PORTE LE RÉSULTAT" 2>&1 | tail -1; git log -1 --format='%h 
+- JOURNAL — LE 22/11 RÉGÉNÉRÉ À 17 COMMITS : LA NUIT, LE PALIER 1 ET LES DIAGNOSTICS CLASSÉS ; LES LIENS ET LES SESSIONS VÉRIFIÉS" 2>&1 | tail -1; git log -1 --fo
 

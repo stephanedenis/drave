@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 04 h 50 HNE (le palier 1 franchi — 0,854 de mots valides, le meilleur du natif ; la synthèse de la nuit est complète)**
+**Mis à jour : 2026-11-22, 05 h 00 HNE (le journal du 22/11 régénéré : 17 commits, le palier 1 et la nuit classés)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

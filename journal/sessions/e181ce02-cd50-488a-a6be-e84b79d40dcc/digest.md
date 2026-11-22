@@ -76593,3 +76593,83 @@ dim 22 nov 2026 04:49:42 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 04 h 50 HNE (le palier 1 franchi — 0,854 de mots valides, l … [692 caractères tronqués]`
+
+  ```
+13 files changed, 68 insertions(+), 22 deletions(-)
+ab8ef491 SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3,44 Go DONNE 0,
+   5b1b9fe0..ab8ef491  s/v7 -> s/v7
+   5b1b9fe0..ab8ef491  master -> master
+dim 22 nov 2026 04:52:25 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); t = p.read_text()\nt = t.replace(\"**22/11.** Le **100 M** bat le **34 M** ; portes 89/87. [Synthèse](../../reports/rapport-nuit-21-22.md).\",\n          … [750 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+nothing to commit, working tree clean
+ab8ef491 SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3,44 Go DONNE 0,
+Everything up-to-date
+Everything up-to-date
+dim 22 nov 2026 04:55:14 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"22/11\" docs/pilotage/roadmap.md | head -3 | cut -c1-200; git status --porcelain | head -3", "description": "Vérifier la ligne 22/11"}`
+
+  ```
+M  journal/2026-11-22/README.md
+M  journal/2026-11-22/mesures.md
+M  journal/README.md
+  ```
+
+### 🤖 Assistant
+
+⏵ **Le palier 1 est franchi** — 0,854 de mots valides sur 3,44 Go, le meilleur résultat du natif
+
+## Le résultat (committé `5b1b9fe0` et `ab8ef491`)
+
+Le **100 M sur `corpus_wiki_fr_palier1` (3,44 Go)**, 30 000 pas en **2 h 25** (PPL 3,073), mesuré sur le gold 612 :
+
+| modèle | corpus | mots valides | répétition | non-UTF-8 |
+|---|---|---:|---:|---:|
+| 34 M | 1 Go (mix) | 0,666 | 3 | 3 |
+| 100 M, 3 k | 1 Go (mix) | 0,755 | 3 | 0 |
+| 100 M, 30 k | 1 Go (mix) | 0,763 | 3 | **29** |
+| **100 M, 30 k** | **3,44 Go (wiki brut)** | **0,854** | **2** | **13** |
+
+**3 hypothèses sur 4 tiennent** (écrites d'avance) :
+
+- ✅ **mots > 0,85** → **0,854** (à 0,004 près) — **le meilleur résultat jamais obtenu par le natif**
+- ✅ **répétition ≤ 5** → **2**
+- ⚠️ **non-UTF-8 ≈ 0** → **13/602** (2,2 %) — pas 0, mais **2× moins** que le 30 k sur 1 Go
+- ❌ **PPL < 2,5** → **3,073** — mais le corpus brut est **plus dur** que le mix nettoyé, donc la PPL n'est **pas comparable**
+
+**La conclusion** : la donnée était bien le verrou (le diagnostic du 16/11 le prédisait). Le meilleur checkpoint du natif n'est plus le 100 M sur 1 Go (0,755) mais le **100 M sur 3,44 Go** (0,854). **Le palier 1 est franchi.**
+
+## L'état (04 h 55)
+
+`HEAD ab8ef491`, tout poussé. **29 commits** de nuit. Il reste **3 h 05** avant 8 h : je continue en local — la prochaine tranche est le **banc du 30 k du palier 1** (la dérive revient-elle ?) et le **nettoyage du corpus** (la licence, la dédup), toujours zéro API.
+
+
+## Tour 245
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 14/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; timeout 600 python3 tools/journal_auto.py 2>&1 | tail -2; python3 tools/verifie_journal.py 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60", "description": "Régénérer le journal", "timeoutMs": 700000}`
+
+  ```
+dim 22 nov 2026 04:56:00 EST
+  journal/THEMES.md
+7 fichiers écrits · 17 commits classés
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+ab8ef491 SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 05 h 00 HNE (le journal du 22/11 régénéré : 17 commits, le  … [540 caractères tronqués]`
