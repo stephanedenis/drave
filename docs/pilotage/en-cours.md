@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-21, 20 h 40 HNE (le moteur branché sur l'interface RSN — 13 nouveaux, 11 répétitions évitées ; le 100 M en 30 k pas tourne, GPU 99 %)**
+**Mis à jour : 2026-11-21, 20 h 45 HNE (le branchement RSN testé : 7/7 invariants du moteur, 2 paradigmes substituables)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

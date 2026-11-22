@@ -74209,3 +74209,25 @@ explain : {}
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-21, 20 h 40 HNE (le moteur branché sur l'interface RSN — 13 nou … [813 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+pas  800 · perte 2.3985 · PPL val 11.062 · 233 s · échelle 65536
+[s/v7 a7db5614] MOTEUR — LE BRANCHEMENT SUR L'INTERFACE RSN : LE MOTEUR CONSOMME LES CINQ VERBES (ASSERT/QUERY/EXPLAIN), LA DÉCISION PORTE SON EXPLAIN, 13 NOUVEAUX ET 11 RÉPÉTITIONS ÉVITÉES SUR LE CAS DE TEST (MODE NUIT)
+ 15 files changed, 236 insertions(+), 24 deletions(-)
+a7db5614 MOTEUR — LE BRANCHEMENT SUR L'INTERFACE RSN : LE MOTEUR CONSOMME LES CINQ VE
+   9bdc1b3d..a7db5614  s/v7 -> s/v7
+   9bdc1b3d..a7db5614  master -> master
+sam 21 nov 2026 20:31:12 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/tests/test_moteur.py'); t = p.read_text()\nfunc = '''\n\ndef test_branchement_rsn():\n    \"\"\"Le moteur branché sur l'interface : la même boucle, un paradigme substituable.\ … [1515 caractères tronqués]`
+
+  ```
+OK stratégies : BFS (ancien), DFS (récent), Glouton (meilleur)
+OK branchement RSN : 2 paradigmes, la même structure de décision
+MOTEUR : 7/7 invariants (5 anti-boucle + les stratégies + le branchement RSN)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-21, 20 h 45 HNE (le branchement RSN testé : 7/7 invariants du m … [661 caractères tronqués]`

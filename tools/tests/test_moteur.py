@@ -99,6 +99,27 @@ def test_strategies():
     print("OK stratégies : BFS (ancien), DFS (récent), Glouton (meilleur)")
 
 
+def test_branchement_rsn():
+    """Le moteur branché sur l'interface : la même boucle, un paradigme substituable."""
+    from tools.moteur_pensee import MoteurRSN
+    from tools.rsn_interface import RSNFlou, RSNProvenance
+    racine = {"corps": {"type": "question", "n": 0},
+              "contexte": {"texte": "Le chat dort.", "span": [0, 3], "langue": "fr", "version": "t"}}
+    def operateur(corps):
+        n = corps.get("n", 0)
+        return [{"type": "question", "n": n + 1}, {"type": "question", "n": n + 2}]
+    resultats = []
+    for impl in (RSNFlou(), RSNProvenance()):
+        m = MoteurRSN(impl, budget_max=10)
+        d = m.boucle(racine, operateur)
+        assert d["circularite"]["nouveaux"] > 0, d
+        assert "explain" in d, d
+        resultats.append(d["circularite"])
+    # les deux paradigmes rendent la MÊME structure de circularité : ils sont substituables
+    assert set(resultats[0]) == set(resultats[1]), resultats
+    print("OK branchement RSN : 2 paradigmes, la même structure de décision")
+
+
 if __name__ == "__main__":
     test_boucle_pure()
     test_progres()
@@ -106,5 +127,6 @@ if __name__ == "__main__":
     test_contradiction()
     test_trace()
     test_strategies()
-    print("MOTEUR : 6/6 invariants (5 anti-boucle + les stratégies)")
+    test_branchement_rsn()
+    print("MOTEUR : 7/7 invariants (5 anti-boucle + les stratégies + le branchement RSN)")
 

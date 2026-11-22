@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 507.8 h |
+| Durée | 507.9 h |
 | Tours | 231 |
-| Messages | 4558 |
-| Appels d'outils | 4054 |
+| Messages | 4560 |
+| Appels d'outils | 4056 |
 | Fichiers touchés | 25 |
-| Commandes | 3375 |
+| Commandes | 3377 |
 | Sous-agents | 43 |
-| Commits | 534 |
+| Commits | 535 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -12212,7 +12212,7 @@ C'est une petite tranche (le moteur consomme une `RSN` au lieu d'un `Etat`), et 
 
 ### Tour 231 — continue jus'à 8h demain matin en étant en mode de nuit (économise les requêtes DeepSeek et maximise le travail local in … [17 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Vérifier les GPU et la charge
 - bash — Lancer le 30k du 100M
@@ -12221,6 +12221,8 @@ C'est une petite tranche (le moteur consomme une `RSN` au lieu d'un `Etat`), et 
 - bash — Lancer la passe des portes légères
 - bash — Brancher le moteur sur l'interface RSN
 - bash — Committer le branchement
+- bash — Tester le branchement du moteur
+- bash — Committer le test du branchement
 
 ## 3. Travail accompli
 
@@ -12342,7 +12344,7 @@ C'est une petite tranche (le moteur consomme une `RSN` au lieu d'un `Etat`), et 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3335 autres
+- … et 3337 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13024,4 +13026,5 @@ C'est une petite tranche (le moteur consomme une `RSN` au lieu d'un `Etat`), et 
 - MOTEUR DE PENSÉE — L'ANTI-BOUCLE MESURÉE : LE VISITED EXPLICITE, LA NOUVEAUTÉ COMPTÉE (SEUIL 0,30), LA MÉMOIRE DES ÉCHECS, TROIS TERMINAISONS (BUDGET, FIXPOINT,
 - MOTEUR, LES STRATÉGIES — BFS (LE PLUS ANCIEN), DFS (LE PLUS RÉCENT), GLOUTON (LE MEILLEUR SCORE) ; LE CONTRAT UNIFORME (select/expand) ET 6/6 INVARIANTS (MODE L
 - MOTEUR — LE BRANCHEMENT SUR L'INTERFACE RSN : LE MOTEUR CONSOMME LES CINQ VERBES (ASSERT/QUERY/EXPLAIN), LA DÉCISION PORTE SON EXPLAIN, 13 NOUVEAUX ET 11 RÉPÉTI
+- MOTEUR — LE BRANCHEMENT TESTÉ : 7/7 INVARIANTS, DEUX PARADIGMES (FLOU, PROVENANCE) RENDENT LA MÊME STRUCTURE DE DÉCISION (MODE NUIT)" 2>&1 | tail -1; git log -1
 
