@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 516.3 h |
 | Tours | 245 |
-| Messages | 4788 |
-| Appels d'outils | 4226 |
+| Messages | 4791 |
+| Appels d'outils | 4229 |
 | Fichiers touchés | 25 |
-| Commandes | 3543 |
+| Commandes | 3546 |
 | Sous-agents | 43 |
-| Commits | 562 |
+| Commits | 563 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -12699,10 +12699,13 @@ Le **100 M sur `corpus_wiki_fr_palier1` (3,44 Go)**, 30 000 pas en **2 h 25** (P
 
 ### Tour 245 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [831 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*5 appels d'outils.* Actions notables :
 
 - bash — Régénérer le journal
 - bash — Committer le journal
+- bash — Mettre à jour le README avec le palier 1
+- bash — Trimmer le README
+- bash — Committer le README
 
 ## 3. Travail accompli
 
@@ -12824,7 +12827,7 @@ Le **100 M sur `corpus_wiki_fr_palier1` (3,44 Go)**, 30 000 pas en **2 h 25** (P
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3503 autres
+- … et 3506 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -13534,4 +13537,5 @@ Le **100 M sur `corpus_wiki_fr_palier1` (3,44 Go)**, 30 000 pas en **2 h 25** (P
 - SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3,44 Go DONNE 0,854 (LE MEILLEUR DU NATIF), RÉPÉTITION 2, 13 NON-UTF-8 CONTRE 29 ; LA DONNÉE ÉTAIT LE VERROU, 
 - ROADMAP — LE PALIER 1 EST FRANCHI (0,854 SUR 3,44 Go) ET LES PORTES SONT À 89/87 ; LA LIGNE DU 22/11 PORTE LE RÉSULTAT" 2>&1 | tail -1; git log -1 --format='%h 
 - JOURNAL — LE 22/11 RÉGÉNÉRÉ À 17 COMMITS : LA NUIT, LE PALIER 1 ET LES DIAGNOSTICS CLASSÉS ; LES LIENS ET LES SESSIONS VÉRIFIÉS" 2>&1 | tail -1; git log -1 --fo
+- README — LE PALIER 1 DANS LA VITRINE : LE 34 M ÉCRIT 67 % DE MOTS RÉELS, LE 100 M 75 %, LE 100 M SUR 3,4 Go 85 % — LA DONNÉE EST LE LEVIER, PAS LA TAILLE (30× M
 

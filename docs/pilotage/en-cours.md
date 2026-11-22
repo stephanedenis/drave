@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-22, 05 h 00 HNE (le journal du 22/11 régénéré : 17 commits, le palier 1 et la nuit classés)**
+**Mis à jour : 2026-11-22, 05 h 05 HNE (le README intègre le palier 1 : 67 % → 75 % → 85 % de mots réels, la donnée est le levier)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

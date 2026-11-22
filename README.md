@@ -206,10 +206,9 @@ se rattache** — le tout **hors ligne, sur CPU, en 0,8 s pour 10 000 mots**. Il
 Sur le gold de 612 phrases : POS **86,25 %**, segmentation F1 **0,79**, attachement **99,58 %**.
 Avec l'option `--tagger` (l'API DeepSeek), le POS monte à **95,75 %** pour ~0,02 $ les 612 phrases.
 
-**Le modèle natif apprend, mais ne compose pas encore.** Le petit modèle maison (34 M) a une
-perplexité de 2,40 sur son corpus ; il **écrit des mots réels** (87 %) mais **répète** (la
-cohérence s'arrête à ~3 mots). Un modèle **100 M**, entraîné 10× moins longtemps, fait **mieux**
-(88 % de mots, répétition ÷2,5) : **l'échelle paie**, et c'est le prochain chantier.
+**Le modèle natif apprend, et la donnée paie.** Sur le gold 612, le 34 M écrit 67 % de mots
+réels, le **100 M 75 %**, et le **même 100 M sur 3,4 Go 85 %** — le meilleur du natif. **La donnée
+est le levier, pas la taille** : le 100 M bat le 34 M de 9 points avec 30× moins de jetons vus.
 
 **Ce qu'on ne sait pas encore.** Le modèle natif ne tient pas une phrase ; la génération reste un
 prototype. C'est mesuré, écrit, et le plan est dans [`natif-plan.md`](docs/pilotage/natif-plan.md).

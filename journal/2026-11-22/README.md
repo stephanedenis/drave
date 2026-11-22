@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**17 commits** · **1 session(s)** · **5 thème(s)**
+**18 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 1 | [distribue.md](distribue.md) |
+| distribue | 2 | [distribue.md](distribue.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
 | mesures | 8 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
@@ -44,6 +44,7 @@
 | 02:20 | `96ef8dbc` | PALIER 1 — LE RUN DU 100 M SUR LES 3,44 GO EST LANCÉ (ETA 04 H 40) : 27 TOKENS/PARAMÈTRE AU LIEU DE 30, L'HYPOTHÈSE ÉCRITE D'AVANCE (MOTS > 0,85, RÉPÉTITION ≤ 5, NON-UTF-8 ≈ 0, PPL < 2,5) ET LES TROIS RAISONS DE POUVOIR LA RENDRE FAUSSE |
 | 04:46 | `5b1b9fe0` | PALIER 1 FRANCHI — LE 100 M SUR 3,44 Go DONNE 0,854 DE MOTS VALIDES SUR LE GOLD 612 : LE MEILLEUR RÉSULTAT DU NATIF (LE 1 Go : 0,755 ; LE 30 k : 0,763) ; 3 HYPOTHÈSES SUR 4 TIENNENT (RÉPÉTITION 2, NON-UTF-8 13 CONTRE 29, MOTS > 0,85), LA PPL MANQUE (3,073 CONTRE < 2,5) — LE CORPUS EST PLUS DUR, PAS COMPARABLE |
 | 04:49 | `ab8ef491` | SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3,44 Go DONNE 0,854 (LE MEILLEUR DU NATIF), RÉPÉTITION 2, 13 NON-UTF-8 CONTRE 29 ; LA DONNÉE ÉTAIT LE VERROU, COMME PRÉVU — LA PPL (3,073) N'EST PAS COMPARABLE (CORPUS PLUS DUR) |
+| 04:56 | `f73c6d81` | JOURNAL — LE 22/11 RÉGÉNÉRÉ À 17 COMMITS : LA NUIT, LE PALIER 1 ET LES DIAGNOSTICS CLASSÉS ; LES LIENS ET LES SESSIONS VÉRIFIÉS |
 
 ## Le récit de la journée (écrit à la main)
 

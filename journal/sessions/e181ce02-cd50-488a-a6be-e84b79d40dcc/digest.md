@@ -76673,3 +76673,30 @@ ab8ef491 SYNTHÈSE — LE PALIER 1 EST FRANCHI : LE 100 M SUR 3
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 05 h 00 HNE (le journal du 22/11 régénéré : 17 commits, le  … [540 caractères tronqués]`
+
+  ```
+12 files changed, 143 insertions(+), 23 deletions(-)
+f73c6d81 JOURNAL — LE 22/11 RÉGÉNÉRÉ À 17 COMMITS : LA NUIT, LE PALIER 1 ET
+   ab8ef491..f73c6d81  s/v7 -> s/v7
+   ab8ef491..f73c6d81  master -> master
+dim 22 nov 2026 04:58:43 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('README.md'); t = p.read_text()\nt = t.replace(\"\"\"**Le modèle natif apprend, mais ne compose pas encore.** Le petit modèle maison (34 M) a une\nperplexité de 2,40 sur son corpus ; … [1040 caractères tronqués]`
+
+  ```
+README mis à jour
+README mots: 3512
+     · README.md : 3512 mots > budget 3500 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('README.md'); t = p.read_text()\nt = t.replace(\"\"\"**Le modèle natif apprend, et la donnée paie.** Le petit modèle maison (34 M) écrit des mots réels\n(67 % sur le gold 612) ; un m … [909 caractères tronqués]`
+
+  ```
+README mots: 3498
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 05 h 05 HNE (le README intègre le palier 1 : 67 % → 75 % →  … [608 caractères tronqués]`

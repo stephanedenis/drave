@@ -4,11 +4,12 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 01:53 | `d0dbe24b` | ROADMAP — L'ÉTAT DU 22/11 : LE 100 M BAT LE 34 M (30× MOINS DE JETONS VUS), PORTES 89/87, LE MOTEUR DE PENSÉE ET LA RSN POSÉS ; LA SYNTHÈSE DE LA NUIT EST LIÉE, LES BLOCS REDONDANTS RETIRÉS (BUDGET 9 000 TENU) | `en-cours.md`, `roadmap.md`, `README.md` (+8) |
+| 04:56 | `f73c6d81` | JOURNAL — LE 22/11 RÉGÉNÉRÉ À 17 COMMITS : LA NUIT, LE PALIER 1 ET LES DIAGNOSTICS CLASSÉS ; LES LIENS ET LES SESSIONS VÉRIFIÉS | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 
 ## Sessions actives ce jour
 
