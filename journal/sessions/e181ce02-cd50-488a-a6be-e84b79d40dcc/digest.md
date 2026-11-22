@@ -74378,3 +74378,40 @@ RSNProvenance → CONFORME {'idempotent': True, 'inconnu_sur_absent': True, 'ref
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-21, 21 h 05 HNE (la passerelle annotation → interface : 51 affi … [775 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 16 files changed, 145 insertions(+), 24 deletions(-)
+30a4d98a PASSERELLE — L'ANNOTATION ENTRE DANS L'INTERFACE : 51 AFFIRMATIONS TYPÉ
+   37216f50..30a4d98a  s/v7 -> s/v7
+   37216f50..30a4d98a  master -> master
+pas 7250 · perte 1.2031 · PPL val 3.395 · 2130 s · échelle 524288
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -2 /tmp/train-100m-30k.log; nvidia-smi --query-gpu=memory.used,utilization.gpu --format=csv,noheader | head -1", "description": "Suivre le run 30k", "timeoutMs": 1000000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5621]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5621", "timeout_ms": 900000, "wait": true}`
+
+  ```
+sam 21 nov 2026 21:20:31 EST
+pas 11400 · perte 1.2338 · PPL val 3.211 · 3339 s · échelle 2097152
+pas 11450 · perte 1.2045 · PPL val 3.202 · 3353 s · échelle 2097152
+5708 MiB, 99 %
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('reports/rapport-100m-30k.md')\np.write_text(\"\"\"# Le 100 M à 30 000 pas — le run de nuit\n\n> **Ce que ce document est.** Le suivi du run du 100 M (96,7 M de paramètres, d_mod … [1730 caractères tronqués]`
+
+  ```
+fiche créée
+     · compteurs : en-cours.md dit 828 fichiers, le disque en a 829
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+232
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1050 caractères tronqués]`

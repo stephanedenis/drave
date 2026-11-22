@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**22 commits** · **2 session(s)** · **8 thème(s)**
+**23 commits** · **2 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 5 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 3 | [docs.md](docs.md) |
+| docs | 4 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 4 | [mesures.md](mesures.md) |
 | moteur | 5 | [moteur.md](moteur.md) |
@@ -25,7 +25,7 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 95.1 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 508.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 508.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -53,6 +53,7 @@
 | 20:28 | `a7db5614` | MOTEUR — LE BRANCHEMENT SUR L'INTERFACE RSN : LE MOTEUR CONSOMME LES CINQ VERBES (ASSERT/QUERY/EXPLAIN), LA DÉCISION PORTE SON EXPLAIN, 13 NOUVEAUX ET 11 RÉPÉTITIONS ÉVITÉES SUR LE CAS DE TEST (MODE NUIT) |
 | 20:31 | `79a4f5a4` | MOTEUR — LE BRANCHEMENT TESTÉ : 7/7 INVARIANTS, DEUX PARADIGMES (FLOU, PROVENANCE) RENDENT LA MÊME STRUCTURE DE DÉCISION (MODE NUIT) |
 | 20:38 | `37216f50` | BANC — LE 100 M À 3 000 PAS EST MESURÉ DANS LE RAPPORT : 0,882 MOTS VALIDES (LE 34 M À 30 K : 0,870), RÉPÉTITION 6 CONTRE 15, 78 OCTETS/S SUR GPU ; LE 30 K TOURNE (PPL 4,26 À 2 700 PAS) |
+| 20:57 | `30a4d98a` | PASSERELLE — L'ANNOTATION ENTRE DANS L'INTERFACE : 51 AFFIRMATIONS TYPÉES AVEC LEUR CONTEXTE SOURCE (TEXTE, SPAN, LANGUE, VERSION) ET LEUR DEGRÉ (0,796 MOYEN), LE TRI-ÉTAT COMPLET (HYPOTHÈSE, RETENU) ; LA CONFORMITÉ RESTE 3/3 |
 
 ## Le récit de la journée (écrit à la main)
 
