@@ -74637,3 +74637,358 @@ résultat ajouté
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1178 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/banc-generation-100m-30k.json
+41270f1f 100 M À 30 000 PAS — LE RÉSULTAT HONNÊTE : PPL 2,944 (L'HYPOTHÈSE ÉTAIT
+   ba112663..41270f1f  s/v7 -> s/v7
+   ba112663..41270f1f  master -> master
+sam 21 nov 2026 23:02:22 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash tools/toutes-les-portes.sh > /tmp/portes-22.log 2>&1 & echo \"PID $!\"; sleep 120; date; tail -3 /tmp/portes-22.log 2>/dev/null; grep -cE \"REGISTRE\" /tmp/portes-22.log 2>/dev/null", "description": "Lancer la passe des po … [27 caractères tronqués]`
+
+  ```
+PID 1484818
+sam 21 nov 2026 23:04:37 EST
+    journaux : work/portes-1121-23h02
+  porte-a2.6-experts     ✅                           0 s    ✅ bande 4,93/6,99 Go/s · coût 156,9 ms pour 1,097 Go/jeton · refus nommé · trace
+  porte-adaptateur-sortie ✅                          65 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 /tmp/portes-22.log; awk '$2 != 0' work/portes-1121-23h02/registre.txt 2>/dev/null | head -5", "description": "Attendre la fin des portes", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5644]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/portes-22.log; ls work/ | grep portes | tail -2", "description": "Vérifier les portes"}`
+
+  ```
+sam 21 nov 2026 23:14:56 EST
+  porte-cerveau          ✅                           9 s    ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe)
+  porte-cic              ✅                          10 s  ✅ porte CIC verte : 42/42 verdicts, empreintes, de Bruijn, sha256 2e implémentation,
+  porte-consolidation    ✅                          70 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+portes-n3-cloture
+portes-w5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1100; date; tail -2 /tmp/portes-22.log; ls -d work/portes-* 2>/dev/null | tail -1 | xargs -I{} sh -c 'awk \"\\$2 != 0\" {}/registre.txt 2>/dev/null | head -8'", "description": "Attendre la fin des portes", "timeoutMs": 1200000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5646]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/portes-22.log; ls -d work/portes-* 2>/dev/null | tail -1", "description": "Vérifier les portes"}`
+
+  ```
+sam 21 nov 2026 23:25:14 EST
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          25 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+work/portes-w5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -2 /tmp/portes-22.log; ls -dt work/portes-* 2>/dev/null | head -1", "description": "Attendre la fin des portes", "timeoutMs": 1000000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5648]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5644 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 /tmp/portes-22.log; awk '$2 != 0' work/portes-1121-23h02/registre.txt 2>/dev/null | head -5) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-5646 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1100; date; tail -2 /tmp/portes-22.log; ls -d work/portes-* 2>/dev/null | tail -1 | xargs -I{} sh -c 'awk "\$2 != 0" {}/registre.txt 2>/dev/null | head -8') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -4 /tmp/portes-22.log; echo \"=== le registre :\"; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); echo $REG; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -10", "description": "Vérifier la fin des portes"}`
+
+  ```
+sam 21 nov 2026 23:35:32 EST
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          25 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         212 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+=== le registre :
+work/portes-1121-23h02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); echo \"REG=$REG\"; wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8", "description": "Attendre  … [41 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5650]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5648 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -2 /tmp/portes-22.log; ls -dt work/portes-* 2>/dev/null | head -1) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); echo \"REG=$REG\"; wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8", "description": "Vérifier la fin des  … [8 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 23:45:55 EST
+  porte-gain             ✅                         212 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  porte-greffe           ✅                         637 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-harnais-invariants ✅                         109 s  ✅ porte harnais : installer une reparamétrisation laisse le modèle intact, et l'élagage
+REG=work/portes-1121-23h02
+31 work/portes-1121-23h02/registre.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8", "description": "Attendre la fin des portes" … [23 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5652]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5650 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); echo "REG=$REG"; wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8", "description": "Vérifier la fin des portes"}`
+
+  ```
+sam 21 nov 2026 23:56:16 EST
+  porte-harnais-invariants ✅                         109 s  ✅ porte harnais : installer une reparamétrisation laisse le modèle intact, et l'élagage
+  porte-homeostasie      ✅                         507 s    ✅ porte tenue (×0 exact · activité monotone · dominance reproduite)
+  porte-horloge          ✅                          25 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+33 work/portes-1121-23h02/registre.txt
+  ```
+
+
+## Tour 233
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'appel API."
+Round: 2/60
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8; git log -1 --format='%h %s' | cut -c1-70", "description" … [31 caractères tronqués]`
+
+  ```
+sam 21 nov 2026 23:56:34 EST
+  porte-harnais-invariants ✅                         109 s  ✅ porte harnais : installer une reparamétrisation laisse le modèle intact, et l'élagage
+  porte-homeostasie      ✅                         507 s    ✅ porte tenue (×0 exact · activité monotone · dominance reproduite)
+  porte-horloge          ✅                          25 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+33 work/portes-1121-23h02/registre.txt
+41270f1f 100 M À 30 000 PAS — LE RÉSULTAT HONNÊTE : PPL 2,944 (L'HYPOT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -2 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8", "description": "Attendre la passe des porte … [25 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5655]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null", "description": "Vérifier les portes"}`
+
+  ```
+dim 22 nov 2026 00:06:56 EST
+  porte-n3-route         ✅                           4 s  PORTE TENUE : seuil 0 = flou bit-exact · seuil 10^9 = defaut bit-exact · mixte déterministe et d
+  porte-n3-routes        ✅                           4 s  PORTE TENUE : routage vivant · même modèle déterministe · config différente change la sortie
+59 work/portes-1121-23h02/registre.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -2 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8", "description": "Attendre la passe des porte … [25 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5657]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5652 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8", "description": "Vérifier les portes"}`
+
+  ```
+dim 22 nov 2026 00:17:13 EST
+  porte-occupation-moteur ✅                          54 s  ✅ porte occupation du moteur : la ligne « occupation des poids » est annoncée, elle COLLE à
+  porte-ocr-scans        ✅                         429 s  ✅ porte OCR-scans verte : familles, colonnes et tableaux tiennent leurs planchers
+68 work/portes-1121-23h02/registre.txt
+porte-indice 1 843
+porte-melange 1 105
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null", "description": "Attendre la fin des portes", "timeoutM … [12 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5659]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5655 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -2 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-5657 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -2 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null | head -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null; echo \"=== le nombre de vertes :\"; awk '$2 == 0' $REG/registre.tx … [61 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 00:27:38 EST
+  porte-peripherie       ✅                          15 s  PORTE TENUE : l'entrée est injectée, la sortie est écrite, le délai est exact, les refus sont
+  porte-poids-creux      ✅                         322 s  ✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité — paires divisées sur
+  porte-pont             ✅                          80 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+73 work/portes-1121-23h02/registre.txt
+porte-indice 1 843
+porte-melange 1 105
+=== le nombre de vertes :
+71
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null", "description": "Attendre la fin des portes", "timeoutM … [11 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5661]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5659 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null; echo \"vertes :\"; awk '$2 == 0' $REG/registre.txt 2>/dev/null | w … [44 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 00:37:57 EST
+  porte-pont             ✅                          80 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+  porte-prechargement    ✅                         205 s    PORTE TENUE
+  porte-produit          ✅                         164 s  ✅ porte produit verte
+75 work/portes-1121-23h02/registre.txt
+porte-indice 1 843
+porte-melange 1 105
+vertes :
+73
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5661 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null; echo \"vertes :\"; awk '$2 == 0' $REG/registre.txt 2>/d … [83 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5663]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null; echo \"vertes :\"; awk '$2 == 0' $REG/registre.txt 2>/dev/null | w … [44 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 00:48:16 EST
+  porte-tableaux         ✅                           1 s    ✅ la page vivante date du dernier commit (2026-11-21)
+  porte-tokenizer-kimi   ✅                           6 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                          95 s    ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topologie 30.4363 · relais 2 42.547
+89 work/portes-1121-23h02/registre.txt
+porte-indice 1 843
+porte-melange 1 105
+porte-sessions 1 0
+vertes :
+86
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5663 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 /tmp/portes-22.log; REG=$(ls -dt work/portes-* 2>/dev/null | head -1); wc -l $REG/registre.txt 2>/dev/null; awk '$2 != 0' $REG/registre.txt 2>/dev/null; echo "vertes :"; awk '$2 == 0' $REG/registre.txt 2>/dev/null | wc -l) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep \"porte-sessions\" work/portes-1121-23h02/*.log 2>/dev/null | tail -3 | cut -c1-250; ls tools/porte-sessions* 2>/dev/null; bash tools/porte-sessions.sh 2>&1 | tail -3", "description": "Voir la porte sessions", "timeoutMs": … [8 caractères tronqués]`
+
+  ```
+dim 22 nov 2026 00:48:35 EST
+tools/porte-sessions.sh
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ❌ mandat périmé (1114 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"29ad180d\" journal/ work/ 2>/dev/null | head -4 | cut -c1-150; echo \"=== les sessions actives :\"; python3 tools/sessions.py --check 2>&1 | tail -5 | cut -c1-160", "description": "Voir la session périmée", "timeoutMs": 20 … [5 caractères tronqués]`
+
+  ```
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md:37181:- **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6a
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md:5806:  ✅ accordé : 29ad180d / analyseur
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md:5944:| **S** (`29ad180d`) | `cpu1` 4, `ram` 8 | node 1 |
+journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/digest.md:6028:- **create_goal** `{"objective": "Coordonner le hub et les sessions actives (N2 0
+=== les sessions actives :
+  ⚠ mandat périmé (1114 min) : 29ad180d-38a5-4481-a9a7-ec6ab31c895f — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/sessions/ | grep 29ad180d; head -20 journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/README.md 2>/dev/null | cut -c1-150", "description": "Voir la session 29ad180d"}`
+
+  ```
+29ad180d-38a5-4481-a9a7-ec6ab31c895f
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/ | head -6; grep -n \"heartbeat\\|statut\\|mandat\" journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/*.md 2>/dev/null | head -5 | cut -c1-140", "description": "Voir le con … [20 caractères tronqués]`
+
+  ```
+digest.md
+plan.md
+rapport.md
+session.v4.jsonl.zstd
+journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md:13:Tu es la session S (les structures, CPU). Lis AGENTS.md, docs/pilotage/en
+journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md:232:16: > [`journal/sessions/`](../../journal/sessions/). Chaque session exp
+journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md:304:Chaque session active expose son mandat dans `journal/sessions/<id>/plan
+journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md:305:périmètre, fichiers réservés, heartbeat, prochaine action, état. Les aut
+journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md:307:les mandats incomplets, les identifiants dupliqués, les périmètres qui s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"heartbeat|Heartbeat|dernière|mis à jour|statut\" journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md 2>/dev/null | head -6 | cut -c1-150; head -25 journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md 2>/ … [69 caractères tronqués]`
+
+  ```
+6:> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+16:- **Heartbeat** : 2026-11-21 06:15 EST
+55:  contourné par un corpus de **référence** explicitement étiqueté `statut: reference`.
+# Plan de session — S, les structures (analyser, banquer, exporter)
+
+> **Mandat vivant.** Ouvert le 2026-11-02 16 h 19 HNE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md) (§ S) et
+> [`plan-travail.md`](../../../docs/pilotage/plan-travail.md) § 9.2.
+> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+> `en-cours` reste la seule source de l'état : ce plan est le **contrat de travail** qui le
+> précède ; sa section S y est **écrite** le 02/11 16 h 52 sur demande humaine, et le hub relit.
+
+- **Session** : `29ad180d-38a5-4481-a9a7-ec6ab31c895f`
+- **Rôle** : **S — les structures** : le banc d'interprétations candidates (outil web, générateur,
+  pragmatique, banque), l'**analyseur** (rôles, subordonnées) et l'**export au corpus**.
+- **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
+- **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
+  `reports/s-banque-*` ; 
+… [714 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md'); t = p.read_text()\nt = t.replace(\"- **Heartbeat** : 2026-11-21 06:15 EST\", \"- **Heartbeat** : 2026-11-22 00:50 ES … [302 caractères tronqués]`
+
+  ```
+heartbeat rafraîchi
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée a
+  ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md : heartbeat illisible
+  ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md : hear
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md'); t = p.read_text()\nt = t.replace(\"- **Heartbeat** : 2026-11-22 00:50 EST (rafraîchi par la session de nuit ; le man … [355 caractères tronqués]`
+
+  ```
+format corrigé
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+  ✅ plans cohérents
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-22, 00 h 55 HNE (la passe des portes : 89 portes, 87 vertes, 2  … [850 caractères tronqués]`

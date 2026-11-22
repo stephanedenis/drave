@@ -13,7 +13,7 @@
 - **Périmètre** : S (structures) — S-analyseur rôles/subordonnées · S-banque · S-export au corpus.
 - **Fichiers réservés** : `tools/structures/` ; `data/structures/` ; `reports/rapport-s-*` ;
   `reports/s-banque-*` ; `journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/`.
-- **Heartbeat** : 2026-11-21 06:15 EST
+- **Heartbeat** : 2026-11-22 00:50 EST
 - **Prochaine action** : **reprise** : poursuivre la validation sur `/paragraphes` (a001–a003
   faits, 8 restants), puis la rétro-traduction API et les 71 langues.
 - **État** : actif

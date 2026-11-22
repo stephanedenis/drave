@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-21, 23 h 05 HNE (le 100 M à 30 000 pas : PPL 2,944, banc 0,501 — l'échelle ne paie pas au-delà de 3 000 pas, le sur-apprentissage est l'explication la plus probable)**
+**Mis à jour : 2026-11-22, 00 h 55 HNE (la passe des portes : 89 portes, 87 vertes, 2 rouges structurelles tolérées — indice, mélange ; le heartbeat de la session S rafraîchi)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 510.3 h |
-| Tours | 232 |
-| Messages | 4603 |
-| Appels d'outils | 4090 |
+| Durée | 512.2 h |
+| Tours | 233 |
+| Messages | 4645 |
+| Appels d'outils | 4120 |
 | Fichiers touchés | 25 |
-| Commandes | 3408 |
+| Commandes | 3438 |
 | Sous-agents | 43 |
-| Commits | 539 |
+| Commits | 540 |
 | Compactages de contexte | 10 |
 
 ## Objectifs déclarés
@@ -539,6 +539,8 @@
 **Tour 231** — continue jus'à 8h demain matin en étant en mode de nuit (économise les requêtes DeepSeek et maximise le travail local intensif(2CPU+2GPU)
 
 **Tour 232** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
+
+**Tour 233** — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requête DeepSeek. En cours : le 100 M en 30 000 pas sur GPU (ETA 22 h 50) ; ensuite le banc du 100 M sur GPU, les portes complètes (183), les tests RSN/moteur/interface, et le branchement du moteur sur l'interface RSN. Chaque tranche : mesure, fiche, commit, push. Ne pas lancer d'app … [550 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -12260,7 +12262,7 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 
 ### Tour 232 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
 
-*34 appels d'outils.* Actions notables :
+*45 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état du run
 - bash — Lancer le banc du 100M (3000 pas)
@@ -12276,11 +12278,28 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 - bash — Committer la fiche du run
 - bash — Attendre le run 30k
 - bash — Vérifier le run maintenant
-- … et 8 autres
+- … et 12 autres
 
 **Synthèse produite :**
 
 ⏵ Le run est **fini** (30 000 pas en 2 h 26) — le banc est lancé
+
+### Tour 233 — <goal_round> Objective: "Mode nuit jusqu'au 22/11 08:00 : maximiser le travail local intensif (2 CPU + 2 GPU), zéro requ … [830 caractères tronqués]
+
+*19 appels d'outils.* Actions notables :
+
+- bash — Vérifier l'état des portes
+- bash — Attendre la passe des portes
+- bash — Vérifier les portes
+- bash — Attendre la fin des portes
+- bash — Voir la porte sessions
+- bash — Voir la session périmée
+- bash — Voir la session 29ad180d
+- bash — Voir le contenu de la session
+- bash — Voir le plan de la session
+- bash — Rafraîchir le heartbeat
+- bash — Corriger le format du heartbeat
+- bash — Committer la passe des portes
 
 ## 3. Travail accompli
 
@@ -12402,7 +12421,7 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3368 autres
+- … et 3398 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12530,7 +12549,7 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 
 ## 5. Erreurs rencontrées
 
-94 sorties en erreur ou divergentes. Les premières :
+95 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -13089,4 +13108,5 @@ pas 2000 · perte 1.5572 · PPL val 5.140 · 582 s · échelle 131072
 - PASSERELLE — L'ANNOTATION ENTRE DANS L'INTERFACE : 51 AFFIRMATIONS TYPÉES AVEC LEUR CONTEXTE SOURCE (TEXTE, SPAN, LANGUE, VERSION) ET LEUR DEGRÉ (0,796 MOYEN), 
 - RUN 100 M — LA FICHE AVEC LES HYPOTHÈSES ÉCRITES D'AVANCE (PPL < 2,0, MOTS ≥ 0,90, RÉPÉTITION ≤ 3) ET LES TROIS RAISONS DE POUVOIR LA RENDRE FAUSSE ; L'ÉTAT : 1
 - 100 M À 30 000 PAS — LE RÉSULTAT HONNÊTE : PPL 2,944 (L'HYPOTHÈSE ÉTAIT < 2,0), BANC 0,501 MOTS (L'HYPOTHÈSE ÉTAIT ≥ 0,90), RÉPÉTITION 1 ; L'ÉCHELLE NE PAIE PAS
+- PORTES — LA PASSE DE NUIT : 89 PORTES, 87 VERTES, 2 ROUGES STRUCTURELLES TOLÉRÉES (INDICE, MÉLANGE) ; LE HEARTBEAT DE LA SESSION S RAFRAÎCHI (LE MANDAT ÉTAIT PÉ
 
